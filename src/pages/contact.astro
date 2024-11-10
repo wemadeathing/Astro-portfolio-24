@@ -1,0 +1,147 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Contact">
+  <div class="container max-w-5xl mx-auto px-4 pt-32">
+    <div class="max-w-2xl mx-auto">
+      <h1 class="text-4xl font-bold mb-6 text-foreground">Get in Touch</h1>
+      <p class="text-xl text-muted-foreground mb-12">
+        Have a project in mind? Let's discuss how we can work together to bring your ideas to life.
+      </p>
+
+      <form 
+        action="/api/send-email"
+        method="POST"
+        id="contactForm" 
+        class="space-y-6"
+      >
+        <div>
+          <label for="name" class="block text-sm font-medium text-foreground mb-2">
+            Name
+          </label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            class="w-full rounded-lg bg-secondary/50 border border-primary/20 px-4 py-3 text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
+            required
+          />
+        </div>
+
+        <div>
+          <label for="email" class="block text-sm font-medium text-foreground mb-2">
+            Email
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            class="w-full rounded-lg bg-secondary/50 border border-primary/20 px-4 py-3 text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
+            required
+          />
+        </div>
+
+        <div>
+          <label for="message" class="block text-sm font-medium text-foreground mb-2">
+            Message
+          </label>
+          <textarea
+            id="message"
+            name="message"
+            rows="6"
+            class="w-full rounded-lg bg-secondary/50 border border-primary/20 px-4 py-3 text-foreground focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
+            required
+          ></textarea>
+        </div>
+
+        <div id="formStatus" class="hidden">
+          <p class="error hidden text-destructive">There was an error sending your message. Please try again.</p>
+          <p class="success hidden text-green-500">Message sent successfully!</p>
+        </div>
+
+        <button
+          type="submit"
+          id="submitButton"
+          class="inline-flex h-12 items-center justify-center rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          Send Message
+        </button>
+      </form>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  const form = document.getElementById('contactForm') as HTMLFormElement;
+  const formStatus = document.getElementById('formStatus');
+  const errorMessage = formStatus?.querySelector('.error');
+  const successMessage = formStatus?.querySelector('.success');
+  const submitButton = document.getElementById('submitButton') as HTMLButtonElement;
+
+  const showMessage = (type: 'error' | 'success') => {
+    if (formStatus && errorMessage && successMessage) {
+      formStatus.classList.remove('hidden');
+      if (type === 'error') {
+        errorMessage.classList.remove('hidden');
+        successMessage.classList.add('hidden');
+      } else {
+        successMessage.classList.remove('hidden');
+        errorMessage.classList.add('hidden');
+      }
+    }
+  };
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // Reset status
+    if (formStatus) {
+      formStatus.classList.add('hidden');
+    }
+    
+    // Disable submit button and show loading state
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.innerHTML = `
+        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        Sending...
+      `;
+    }
+
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData);
+
+    try {
+      const response = await fetch('/api/send-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        showMessage('success');
+        form.reset();
+        setTimeout(() => {
+          window.location.href = '/thank-you';
+        }, 1500);
+      } else {
+        showMessage('error');
+      }
+    } catch (error) {
+      showMessage('error');
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = 'Send Message';
+      }
+    }
+  });
+</script>

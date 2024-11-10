@@ -1,0 +1,87 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const skills = [
+  'Full Stack Development',
+  'System Architecture',
+  'UI/UX Design',
+  'Cloud Solutions (AWS)',
+  'React/Next.js',
+  'Node.js',
+  'TypeScript',
+  'Python',
+  'DevOps',
+  'Database Design',
+  'API Development',
+  'Performance Optimization',
+];
+
+const experience = [
+  {
+    role: 'Senior Full Stack Developer',
+    company: 'Tech Solutions Inc.',
+    period: '2021 - Present',
+    description: 'Lead developer for enterprise SaaS platforms, managing a team of 5 developers and architecting scalable solutions.',
+  },
+  {
+    role: 'Full Stack Developer',
+    company: 'Digital Innovations Co.',
+    period: '2019 - 2021',
+    description: 'Developed and maintained multiple client projects, focusing on performance optimization and user experience.',
+  },
+  {
+    role: 'Software Engineer',
+    company: 'StartUp Tech',
+    period: '2017 - 2019',
+    description: 'Full stack development of web applications, implementing modern technologies and best practices.',
+  },
+];
+---
+
+<Layout title="About Me | Full Stack Developer">
+  <div class="container max-w-5xl mx-auto px-4 pt-32">
+    <section class="mb-16">
+      <h1 class="text-4xl font-bold mb-6 text-foreground">About Me</h1>
+      <p class="text-xl text-muted-foreground max-w-2xl">
+        I'm a Full Stack Developer with 6+ years of experience in building enterprise-level applications.
+        Specializing in scalable architecture, cloud solutions, and intuitive user interfaces, I help businesses
+        transform their digital presence through technology.
+      </p>
+    </section>
+
+    <section class="mb-16">
+      <h2 class="text-2xl font-bold mb-6 text-foreground">Technical Expertise</h2>
+      <div class="flex flex-wrap gap-3">
+        {skills.map((skill) => (
+          <span class="px-4 py-2 bg-primary/10 text-primary rounded-full text-sm">
+            {skill}
+          </span>
+        ))}
+      </div>
+    </section>
+
+    <section class="mb-16">
+      <h2 class="text-2xl font-bold mb-6 text-foreground">Professional Experience</h2>
+      <div class="space-y-8">
+        {experience.map((item) => (
+          <div class="border-l-2 border-primary/20 pl-6 relative">
+            <div class="absolute w-3 h-3 bg-primary rounded-full -left-[7px] top-2"></div>
+            <h3 class="text-xl font-semibold text-foreground">{item.role}</h3>
+            <p class="text-muted-foreground">{item.company} • {item.period}</p>
+            <p class="mt-2 text-muted-foreground">{item.description}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section>
+      <h2 class="text-2xl font-bold mb-6 text-foreground">Let's Connect</h2>
+      <a
+        href="/contact"
+        class="inline-flex h-12 items-center justify-center rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80"
+      >
+        Schedule a Call
+      </a>
+    </section>
+  </div>
+</Layout>

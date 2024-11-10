@@ -1,0 +1,46 @@
+---
+interface Props {
+  content: string;
+}
+
+const { content } = Astro.props;
+
+function extractHeadings(content: string) {
+  const headings = [];
+  const lines = content.split('\n');
+  
+  for (const line of lines) {
+    const match = line.match(/^##\s+(.+)/);
+    if (match) {
+      const title = match[1].trim();
+      const slug = title
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/(^-|-$)/g, '');
+      headings.push({ title, slug });
+    }
+  }
+  
+  return headings;
+}
+
+const headings = extractHeadings(content);
+---
+
+{headings.length > 0 && (
+  <div class="bg-gray-50 rounded-lg p-6">
+    <h2 class="text-sm font-semibold text-gray-900 mb-4">Table of Contents</h2>
+    <ul class="space-y-3">
+      {headings.map((heading) => (
+        <li>
+          <a
+            href={`#${heading.slug}`}
+            class="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+          >
+            {heading.title}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+)}

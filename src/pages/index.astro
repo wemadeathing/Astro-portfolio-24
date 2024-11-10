@@ -1,0 +1,88 @@
+---
+import Layout from '../layouts/Layout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import HeroAnimation from '../components/HeroAnimation.astro';
+import { getCollection } from 'astro:content';
+
+const projects = await getCollection('projects');
+const featuredProjects = projects.filter(project => project.data.featured);
+---
+
+<Layout title="Nasif Salaam | Full Stack Developer">
+  <div class="absolute inset-0 h-screen bg-gradient-hero -z-10"></div>
+  <HeroAnimation />
+  <section class="relative min-h-[90vh] flex items-center">
+    <div class="container max-w-5xl mx-auto px-4 pt-32 relative">
+      <div class="max-w-2xl animate-slide-up">
+        <span class="text-sm font-medium text-primary mb-3 block">Full Stack Developer & System Architect</span>
+        <h1 class="text-5xl font-bold leading-tight mb-6 text-foreground">
+          Building Scalable Solutions for Modern Businesses
+        </h1>
+        <p class="text-lg text-muted-foreground mb-8">
+          I help businesses transform their ideas into robust, scalable applications. With expertise in full-stack development and system architecture, I create solutions that drive growth and enhance user experience.
+        </p>
+        <div class="flex gap-4">
+          <a
+            href="/contact"
+            class="inline-flex h-12 items-center justify-center rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80"
+          >
+            Discuss Your Project
+          </a>
+          <a
+            href="/about"
+            class="inline-flex h-12 items-center justify-center rounded-full bg-secondary px-8 text-sm font-medium text-secondary-foreground transition-colors hover:bg-secondary/80"
+          >
+            View Experience
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-32 bg-background relative">
+    <div class="container max-w-5xl mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-32">
+        <div class="p-6 rounded-xl bg-secondary/50 backdrop-blur-sm border border-secondary">
+          <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Scalable Architecture</h3>
+          <p class="text-muted-foreground">Building robust systems that grow with your business needs</p>
+        </div>
+        <div class="p-6 rounded-xl bg-secondary/50 backdrop-blur-sm border border-secondary">
+          <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">High Performance</h3>
+          <p class="text-muted-foreground">Optimized solutions that deliver lightning-fast experiences</p>
+        </div>
+        <div class="p-6 rounded-xl bg-secondary/50 backdrop-blur-sm border border-secondary">
+          <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <h3 class="text-xl font-semibold mb-2">Security First</h3>
+          <p class="text-muted-foreground">Enterprise-grade security practices for peace of mind</p>
+        </div>
+      </div>
+
+      <h2 class="text-3xl font-bold mb-16 text-foreground">Featured Projects</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-children">
+        {featuredProjects.map((project) => (
+          <ProjectCard
+            title={project.data.title}
+            description={project.data.description}
+            image={project.data.image}
+            tags={project.data.tags}
+            slug={project.slug}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+</Layout>
