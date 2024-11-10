@@ -31,3 +31,6 @@ pnpm-debug.log*
 
 # Astro
 .astro/
+
+# Netlify functions
+netlify/functions/*.js
