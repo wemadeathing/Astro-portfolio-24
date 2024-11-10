@@ -1,0 +1,5 @@
+{
+    "astro.language-server.ls.trace.server": "verbose",
+    "astro.typescript.enabled": true,
+    "astro.typescript.allowArbitraryAttributes": true
+} 
