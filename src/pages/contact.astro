@@ -13,7 +13,12 @@ import Layout from '../layouts/Layout.astro';
       <form 
         id="contact-form"
         class="space-y-4"
+        method="POST"
       >
+        <!-- Add the Web3Forms access key -->
+        <input type="hidden" name="access_key" value="cde5a769-51ab-47dc-9ca2-06c50b9da893">
+
+        <!-- Keep your existing form fields -->
         <div>
           <label for="name" class="block text-sm font-medium text-foreground mb-2">
             Name
@@ -53,7 +58,7 @@ import Layout from '../layouts/Layout.astro';
           ></textarea>
         </div>
 
-        <div id="formStatus" class="hidden">
+        <div id="formStatus" class="hidden text-sm">
           <p class="error hidden text-destructive">There was an error sending your message. Please try again.</p>
           <p class="success hidden text-green-500">Message sent successfully!</p>
         </div>
@@ -70,37 +75,51 @@ import Layout from '../layouts/Layout.astro';
   </div>
 </Layout>
 
-<script>
-  const form = document.getElementById('contact-form') as HTMLFormElement;
-  
-  form.addEventListener('submit', async (e) => {
+<script is:inline>
+  const form = document.getElementById('contact-form');
+  const formStatus = document.getElementById('formStatus');
+  const errorMessage = formStatus?.querySelector('.error');
+  const successMessage = formStatus?.querySelector('.success');
+  const submitButton = document.getElementById('submitButton');
+
+  form.addEventListener('submit', function(e) {
     e.preventDefault();
     
+    // Show loading state
+    if (submitButton) submitButton.disabled = true;
+    if (formStatus) formStatus.classList.remove('hidden');
+    if (errorMessage) errorMessage.classList.add('hidden');
+    if (successMessage) successMessage.classList.add('hidden');
+
     const formData = new FormData(form);
-    const data = {
-      name: formData.get('name'),
-      email: formData.get('email'),
-      message: formData.get('message'),
-    };
+    const object = Object.fromEntries(formData);
+    const json = JSON.stringify(object);
 
-    try {
-      const response = await fetch('/.netlify/functions/send-email', {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to send email');
+    fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: json
+    })
+    .then(async (response) => {
+      const json = await response.json();
+      if (response.status == 200) {
+        // Redirect to thank you page
+        window.location.href = '/thank-you';
+      } else {
+        console.log(response);
+        if (errorMessage) errorMessage.classList.remove('hidden');
       }
-
-      alert('Message sent successfully!');
+    })
+    .catch(error => {
+      console.log(error);
+      if (errorMessage) errorMessage.classList.remove('hidden');
+    })
+    .finally(() => {
+      if (submitButton) submitButton.disabled = false;
       form.reset();
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Failed to send message. Please try again.');
-    }
+    });
   });
 </script>
