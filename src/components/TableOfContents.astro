@@ -5,8 +5,13 @@ interface Props {
 
 const { content } = Astro.props;
 
-function extractHeadings(content: string) {
-  const headings = [];
+interface Heading {
+  title: string;
+  slug: string;
+}
+
+function extractHeadings(content: string): Heading[] {
+  const headings: Heading[] = [];
   const lines = content.split('\n');
   
   for (const line of lines) {
@@ -28,7 +33,7 @@ const headings = extractHeadings(content);
 ---
 
 {headings.length > 0 && (
-  <div class="bg-gray-50 rounded-lg p-6">
+  <div class="bg-gray-50 opacity-80 backdrop-blur-sm rounded-lg p-6">
     <h2 class="text-sm font-semibold text-gray-900 mb-4">Table of Contents</h2>
     <ul class="space-y-3">
       {headings.map((heading) => (

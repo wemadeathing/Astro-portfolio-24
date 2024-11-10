@@ -34,10 +34,18 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
           <Content />
         </div>
       </div>
-      <aside class="hidden lg:block space-y-8 sticky top-24">
-        <TableOfContents content={post.body} />
-        <ShareButtons title={post.data.title} vertical />
+      <aside class="hidden lg:block sticky top-24 h-fit max-h-[calc(100vh-6rem)] overflow-y-auto">
+        <div class="space-y-8">
+          <TableOfContents content={post.body} />
+        </div>
       </aside>
     </div>
   </article>
 </Layout>
+
+<style is:global>
+  /* Only styling the h2 headings in blog posts */
+  .prose h2 {
+    @apply text-xl font-bold mt-8 mb-4;
+  }
+</style>
