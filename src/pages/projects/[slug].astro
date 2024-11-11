@@ -3,7 +3,6 @@ import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import ShareButtons from '../../components/ShareButtons.astro';
-import TableOfContents from '../../components/TableOfContents.astro';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -19,41 +18,32 @@ const { Content } = await project.render();
 
 <Layout title={project.data.title}>
   <article class="container max-w-5xl mx-auto px-4 pt-32">
-    <div class="lg:grid lg:grid-cols-[1fr_250px] gap-12">
-      <div class="max-w-2xl">
-        <!-- Header Section -->
-        <h1 class="text-4xl font-bold mb-4">{project.data.title}</h1>
-        <p class="text-xl text-muted-foreground mb-6">{project.data.description}</p>
-        <div class="flex flex-wrap gap-2 mb-8">
-          {project.data.tags.map((tag) => (
-            <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">
-              {tag}
-            </span>
-          ))}
-        </div>
+    <div class="max-w-5xl mx-auto">
+      <!-- Header Section -->
+      <h1 class="text-4xl font-bold mb-4">{project.data.title}</h1>
+      <p class="text-xl text-muted-foreground mb-6">{project.data.description}</p>
+      <div class="flex flex-wrap gap-2 mb-8">
+        {project.data.tags.map((tag) => (
+          <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">
+            {tag}
+          </span>
+        ))}
+      </div>
 
-        <!-- Featured Image -->
-        <div class="rounded-xl overflow-hidden mb-12">
-          <img
-            src={project.data.image}
-            alt={project.data.title}
-            class="w-full aspect-video object-cover"
-          />
-        </div>
-        
-        <ShareButtons title={project.data.title} />
-        
-        <!-- Content -->
-        <div class="prose prose-lg max-w-none mt-12">
-          <Content />
-        </div>
+      <!-- Featured Image -->
+      <div class="rounded-xl overflow-hidden mb-12">
+        <img
+          src={project.data.image}
+          alt={project.data.title}
+          class="w-full aspect-video object-cover"
+        />
       </div>
       
-      <aside class="hidden lg:block sticky top-24 h-fit max-h-[calc(100vh-6rem)] overflow-y-auto">
-        <div class="space-y-8">
-          <TableOfContents content={project.body} />
-        </div>
-      </aside>
+      
+      <!-- Content -->
+      <div class="prose prose-lg max-w-none mt-12">
+        <Content />
+      </div>
     </div>
   </article>
 </Layout>
