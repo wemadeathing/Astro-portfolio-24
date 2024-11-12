@@ -9,3 +9,10 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+declare namespace JSX {
+  interface IntrinsicElements {
+    // Tell TypeScript that 'class' is valid for HTML elements in Astro
+    [elemName: string]: any;
+  }
+}

@@ -1,5 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import profileImage from '../images/NS-profile-2.png';
 
 const expertise = [
   {
@@ -89,9 +91,9 @@ const experience = [
   <div class="container max-w-5xl mx-auto px-4 pt-32">
     <section class="mb-16 flex flex-col md:flex-row gap-12 items-start">
       <div class="md:w-1/4">
-        <img 
-          src="/src/images/NS-profile-2.png" 
-          alt="Nasif Salaam" 
+        <Image 
+          src={profileImage}
+          alt="Nasif Salaam"
           class="rounded-2xl w-full max-w-[200px] shadow-lg border border-secondary"
         />
       </div>
