@@ -63,18 +63,11 @@ I chose technologies that would allow for rapid development and easy scaling:
 *Building the prototype in FlutterFlow*
 
 
-### Database Architecture
+### Database Schema
 
-```sql
-CREATE TABLE bikes (
-    id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-    user_id UUID REFERENCES auth.users,
-    brand TEXT NOT NULL,
-    model TEXT NOT NULL,
-    year INTEGER,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
-);
-```
+![Testing Process](../../images/bike-tune-db.png)
+*Database schema*
+
 
 ## Field Testing Insights
 
