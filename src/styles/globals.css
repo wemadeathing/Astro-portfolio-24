@@ -4,7 +4,7 @@
  
 @layer base {
   :root {
-    --background: 240 10% 3.9%;
+    --background: 0 0% 0%;
     --foreground: 0 0% 98%;
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
@@ -109,6 +109,7 @@
 .text-gradient {
   background: linear-gradient(to right, rgb(167, 139, 250), #c4b5fd);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -139,3 +140,4 @@
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--accent) / 0.5);
 }
+

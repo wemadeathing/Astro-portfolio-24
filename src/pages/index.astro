@@ -9,103 +9,58 @@ const featuredProjects = projects.filter(project => project.data.featured);
 ---
 
 <Layout title="Nasif Salaam | Visual Designer & AI Enablement Specialist">
-  <div class="absolute inset-0 h-screen bg-gradient-hero -z-10"></div>
+  <div class="absolute inset-0 h-screen bg-gradient-hero after:absolute after:inset-0 after:bg-gradient-to-b after:from-transparent after:to-black after:opacity-90 -z-10"></div>
   <HeroAnimation />
-  <section class="relative min-h-[70vh] flex items-center">
-    <div class="container max-w-5xl mx-auto px-4 pt-32 relative">
-      <div class="max-w-2xl animate-slide-up">
-        <span class="text-sm font-medium text-primary mb-3 block">Visual Designer & AI Enablement Specialist</span>
-        <h1 class="text-5xl font-bold leading-tight mb-6 text-foreground">
-          Building Tomorrow's Digital Experiences Today
+  <section class="relative min-h-[100vh] flex items-center pt-16 sm:pt-20">
+    <div class="container max-w-5xl mx-auto px-4">
+      <div class="max-w-4xl">
+        
+        <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-7xl font-bold mb-6 text-foreground leading-tight sm:leading-tight md:leading-tight lg:leading-tight">
+          I'm a designer who transforms ideas into working products using design, code, and AI.
         </h1>
-        <p class="text-lg text-muted-foreground mb-8">
-          I transform ideas into intuitive digital experiences by blending visual design expertise with modern development tools and AI capabilities. My approach combines creative problem-solving with technical innovation to build solutions that drive results.
+        <p class="text-lg text-muted-foreground mb-10 max-w-2xl">
+          I transform ideas into intuitive digital experiences by blending visual design expertise with modern development tools and AI capabilities. 
         </p>
         <div class="flex gap-4">
-          <a
-            href="/contact"
-            class="inline-flex h-12 items-center justify-center rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80"
-          >
-            Start Your Project
-          </a>
-          <a
-            href="/about"
-            class="inline-flex h-12 items-center justify-center rounded-full bg-secondary px-8 text-sm font-medium text-secondary-foreground transition-colors hover:bg-secondary/80"
-          >
-            My Experience
-          </a>
+          
         </div>
       </div>
     </div>
   </section>
 
-  <section class="py-28 bg-background relative">
-    <div class="container max-w-5xl mx-auto px-4">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-32">
-        <div class="p-6 rounded-xl bg-secondary/50 backdrop-blur-sm border border-secondary">
-          <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 19l7-7 3 3-7 7-3-3z"/>
-              <path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/>
-              <path d="M2 2l7.586 7.586"/>
-              <circle cx="11" cy="11" r="2"/>
-            </svg>
-          </div>
-          <h3 class="text-xl font-semibold mb-2">Design & Development</h3>
-          <p class="text-muted-foreground">Creating intuitive interfaces using modern development tools and frameworks. From concept to deployment, I build solutions that enhance user engagement</p>
-        </div>
-        <div class="p-6 rounded-xl bg-secondary/50 backdrop-blur-sm border border-secondary">
-          <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M12 2a4 4 0 00-4 4v2H6a2 2 0 00-2 2v8a2 2 0 002 2h12a2 2 0 002-2v-8a2 2 0 00-2-2h-2V6a4 4 0 00-4-4z"/>
-              <path d="M9 12h6"/>
-              <path d="M12 9v6"/>
-              <path d="M9 18h6"/>
-            </svg>
-          </div>
-          <h3 class="text-xl font-semibold mb-2">AI Implementation</h3>
-          <p class="text-muted-foreground">Leveraging AI technologies to streamline workflows and enhance digital solutions. I help teams implement AI tools effectively to boost productivity and innovation</p>
-        </div>
-        <div class="p-6 rounded-xl bg-secondary/50 backdrop-blur-sm border border-secondary">
-          <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/>
-              <path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/>
-              <path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/>
-              <path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/>
-            </svg>
-          </div>
-          <h3 class="text-xl font-semibold mb-2">Creative Problem-Solving</h3>
-          <p class="text-muted-foreground">Transforming complex challenges into elegant solutions through a combination of design thinking and technical expertise</p>
-        </div>
-      </div>
+  <div class="w-full" >
+    <img 
+      src="src/images/nasif-portfolio-grid.png" 
+      alt="Portfolio Grid" 
+      class="w-full object-cover"
+    />
+  </div>
 
-      <h2 class="text-3xl font-bold mb-16 text-foreground">Featured Projects</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 stagger-children">
-        {featuredProjects.map((project) => (
-          <ProjectCard
-            title={project.data.title}
-            description={project.data.description}
-            image={project.data.image}
-            tags={project.data.tags}
-            slug={project.slug}
-          />
-        ))}
-      </div>
-    </div>
-  </section>
-
-  <section class="pt-28 bg-secondary/20 -mb-32">
-    <div class="container max-w-5xl mx-auto px-4">
-      <h2 class="text-3xl font-bold mb-4 text-foreground">Ready to Transform Your Digital Presence?</h2>
+  <section class="bg-background">
+    <div class="container max-w-5xl mx-auto px-4 pt-40 pb-24">
+      <h2 class="text-4xl font-bold mb-4 text-foreground">Curious, Creative, and Always Learning</h2>
       <p class="text-lg text-muted-foreground mb-8 max-w-2xl">
-        Let's collaborate to create innovative solutions that elevate your business through design and AI integration.
+        I believe in making things better – for users, for teams, and for the future of how we work. My approach combines creative problem-solving with a passion for efficiency, always looking for smarter ways to build and improve.
+      </p>
+      <p class="text-lg text-muted-foreground mb-8 max-w-2xl">
+What drives me is the full journey of product creation. From initial concept through to final implementation, I love being hands-on in every phase. This curiosity led me to expand beyond design into development, and now into exploring how AI can enhance our creative process.
+      </p>
+      <p class="text-lg text-muted-foreground mb-8 max-w-2xl">
+I thrive in collaborative environments where ideas flow freely and everyone feels empowered to contribute. While I take the work seriously, I believe the best results come when teams feel comfortable enough to experiment, learn, and occasionally fail forward together.
+      </p>
+      
+    </div>
+  </section><section class="bg-background">
+    <div class="container max-w-5xl mx-auto px-4 pt-40 pb-24">
+      <h2 class="text-4xl font-bold mb-4 text-foreground">Currently Open to New Opportunities</h2>
+      <p class="text-lg text-muted-foreground mb-8 max-w-2xl">
+        I'm excited to bring my product design and development experience to a team that values innovation and impact. Whether it's joining a great team or exploring collaborative ventures, I'm interested in meaningful conversations.
       </p>
       <a
         href="/contact"
-        class="inline-flex h-12 items-center justify-center rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80 mb-16"
+        class="inline-flex h-12 items-center justify-center rounded-full bg-white px-8 text-sm font-medium text-black transition-colors hover:bg-white/90"
       >
-        Get in Touch
+        Let's Connect
       </a>
     </div>
   </section>

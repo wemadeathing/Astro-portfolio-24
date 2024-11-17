@@ -5,6 +5,12 @@
 
 <script>
 class Particle {
+  x: number;
+  y: number;
+  size: number;
+  speedX: number;
+  speedY: number;
+
   constructor(x, y) {
     this.x = x;
     this.y = y;
@@ -29,7 +35,13 @@ class Particle {
 }
 
 class ParticleNetwork {
-  constructor(canvas) {
+  private canvas: HTMLCanvasElement;
+  private ctx: CanvasRenderingContext2D;
+  private particles: Particle[];
+  private numberOfParticles: number;
+  private connectDistance: number;
+
+  constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.particles = [];
@@ -93,7 +105,7 @@ class ParticleNetwork {
 
 // Initialize animation when the document is ready
 document.addEventListener('DOMContentLoaded', () => {
-  const canvas = document.getElementById('heroAnimation');
+  const canvas = document.getElementById('heroAnimation') as HTMLCanvasElement;
   if (canvas) {
     new ParticleNetwork(canvas);
   }
