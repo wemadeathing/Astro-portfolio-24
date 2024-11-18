@@ -3,19 +3,20 @@ import Layout from '../layouts/Layout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import HeroAnimation from '../components/HeroAnimation.astro';
 import { getCollection } from 'astro:content';
+import portfolioGrid from '../images/nasif-portfolio-grid.png';
 
 const projects = await getCollection('projects');
 const featuredProjects = projects.filter(project => project.data.featured);
 ---
 
-<Layout title="Nasif Salaam | Visual Designer & AI Enablement Specialist">
+<Layout title="Nasif Salaam | Product Designer · Digital Innovation">
   <div class="absolute inset-0 h-screen bg-gradient-hero after:absolute after:inset-0 after:bg-gradient-to-b after:from-transparent after:to-black after:opacity-90 -z-10"></div>
   <HeroAnimation />
   <section class="relative min-h-[100vh] flex items-center pt-16 sm:pt-20">
     <div class="container max-w-5xl mx-auto px-4">
       <div class="max-w-4xl">
         
-        <h1 class="text-5xl sm:text-6xl md:text-7xl lg:text-7xl font-bold mb-6 text-foreground leading-tight sm:leading-tight md:leading-tight lg:leading-tight">
+        <h1 class="text-4xl sm:text-6xl md:text-6xl lg:text-6xl font-bold mb-6 text-foreground leading-tight sm:leading-tight md:leading-tight lg:leading-tight">
           I'm a product designer who brings 15 years of design craft to building thoughtful digital solutions.
         </h1>
         <p class="text-lg text-muted-foreground mb-10 max-w-2xl">
@@ -30,7 +31,7 @@ const featuredProjects = projects.filter(project => project.data.featured);
 
   <div class="w-full" >
     <img 
-      src="src/images/nasif-portfolio-grid.png" 
+      src={portfolioGrid.src}
       alt="Portfolio Grid" 
       class="w-full object-cover"
     />
