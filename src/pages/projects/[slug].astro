@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
-import ShareButtons from '../../components/ShareButtons.astro';
+import TableOfContents from '../../components/TableOfContents.astro';
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -13,37 +13,64 @@ export async function getStaticPaths() {
 }
 
 const { project } = Astro.props as { project: CollectionEntry<'projects'> };
-const { Content } = await project.render();
+const { Content, headings } = await project.render();
 ---
 
 <Layout title={project.data.title}>
-  <article class="container max-w-5xl mx-auto px-4 pt-32">
-    <div class="max-w-5xl mx-auto">
-      <!-- Header Section -->
-      <h1 class="text-4xl font-bold mb-4">{project.data.title}</h1>
-      <p class="text-xl text-muted-foreground mb-6">{project.data.description}</p>
-      <div class="flex flex-wrap gap-2 mb-8">
-        {project.data.tags.map((tag) => (
-          <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">
-            {tag}
-          </span>
-        ))}
+  <article class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32">
+    <div class="grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-8">
+      <div>
+        <!-- Header Section -->
+        <div class="mb-8">
+          <h1 class="text-4xl font-bold mb-4">{project.data.title}</h1>
+          <p class="text-xl text-muted-foreground mb-6">
+            {project.data.description}
+          </p>
+          <div class="flex flex-wrap gap-2">
+            {project.data.tags?.map((tag) => (
+              <span class="px-3 py-1 bg-primary/10 text-primary rounded-full text-sm">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <!-- Featured Image -->
+        {project.data.image && (
+          <div class="rounded-xl overflow-hidden mb-12">
+            <img
+              src={project.data.image}
+              alt={project.data.title}
+              class="w-full aspect-video object-cover"
+            />
+          </div>
+        )}
+        
+        <!-- Content -->
+        <div class="prose prose-lg max-w-none">
+          <Content />
+        </div>
       </div>
 
-      <!-- Featured Image -->
-      <div class="rounded-xl overflow-hidden mb-12">
-        <img
-          src={project.data.image}
-          alt={project.data.title}
-          class="w-full aspect-video object-cover"
-        />
-      </div>
-      
-      
-      <!-- Content -->
-      <div class="prose prose-lg max-w-none mt-12">
-        <Content />
-      </div>
+      <!-- Sidebar -->
+      <aside class="hidden lg:block">
+        <div class="sticky top-32">
+          <h2 class="text-lg font-semibold mb-4">On this page</h2>
+          <ul class="space-y-3 text-sm">
+            {headings.map((heading) => (
+              <li class="line-clamp-2">
+                <a 
+                  href={`#${heading.slug}`}
+                  class="text-muted-foreground hover:text-primary transition-colors"
+                  style={`margin-left: ${(heading.depth - 1) * 1}rem`}
+                >
+                  {heading.text}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </aside>
     </div>
   </article>
 </Layout>
@@ -54,11 +81,11 @@ const { Content } = await project.render();
   }
 
   .prose h2 {
-    @apply text-2xl font-semibold mt-12 mb-4;
+    @apply text-2xl font-semibold mt-12 mb-4 scroll-mt-32;
   }
   
   .prose h3 {
-    @apply text-xl font-semibold mt-8 mb-3;
+    @apply text-xl font-semibold mt-8 mb-3 scroll-mt-32;
   }
 
   .prose p {

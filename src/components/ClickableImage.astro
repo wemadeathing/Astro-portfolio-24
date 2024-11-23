@@ -1,0 +1,120 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  caption?: string;
+}
+
+const { src, alt, caption } = Astro.props;
+
+// Ensure the image source is correct
+const imageSrc = src.startsWith('/') ? src : `/${src}`;
+---
+
+<figure class="my-8 group">
+  <div 
+    class="rounded-xl overflow-hidden cursor-zoom-in"
+    data-image-src={imageSrc}
+    data-image-alt={alt}
+  >
+    <img
+      src={imageSrc}
+      alt={alt}
+      class="w-full aspect-video object-cover transition-transform duration-300 group-hover:scale-105"
+      loading="lazy"
+    />
+  </div>
+  {caption && (
+    <figcaption class="text-sm text-muted-foreground text-center mt-4 italic">
+      {caption}
+    </figcaption>
+  )}
+</figure>
+
+<!-- Modal -->
+<div id="imageModal" class="fixed inset-0 bg-black/90 z-50 hidden items-center justify-center">
+  <div class="relative max-w-7xl mx-auto px-4">
+    <img 
+      src="" 
+      alt=""
+      class="max-h-[90vh] w-auto object-contain"
+    />
+    <button 
+      class="absolute top-4 right-4 text-white hover:text-primary p-2"
+      onclick="closeModal()"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M18 6 6 18"/>
+        <path d="m6 6 12 12"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<script>
+  // Declare the type for closeModal on window
+  declare global {
+    interface Window {
+      closeModal: () => void;
+    }
+  }
+
+  const modal = document.getElementById('imageModal');
+  const modalImg = modal?.querySelector('img');
+
+  function initializeClickableImages() {
+    document.querySelectorAll('[data-image-src]').forEach(container => {
+      container.addEventListener('click', (e) => {
+        e.preventDefault();
+        const src = container.getAttribute('data-image-src');
+        const alt = container.getAttribute('data-image-alt');
+        if (src && modal && modalImg) {
+          modalImg.src = src;
+          modalImg.alt = alt || '';
+          modal.style.display = 'flex';
+          document.body.style.overflow = 'hidden';
+        }
+      });
+    });
+  }
+
+  // Close modal when clicking outside the image
+  modal?.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+
+  // Close modal with escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeModal();
+    }
+  });
+
+  function closeModal() {
+    if (modal) {
+      modal.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+  }
+
+  // Initialize on page load
+  initializeClickableImages();
+
+  // Re-initialize when content changes (for MDX hot reloading)
+  document.addEventListener('astro:after-swap', initializeClickableImages);
+
+  // Make closeModal available globally
+  window.closeModal = closeModal;
+</script>
