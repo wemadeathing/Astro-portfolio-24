@@ -7,6 +7,8 @@ import portfolioGrid from '../images/nasif-portfolio-grid.png';
 
 const projects = await getCollection('projects');
 const featuredProjects = projects.filter(project => project.data.featured);
+
+
 ---
 
 <Layout title="Nasif Salaam | Product Designer · Digital Innovation">
@@ -16,11 +18,12 @@ const featuredProjects = projects.filter(project => project.data.featured);
     <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="max-w-4xl">
         
-        <h1 class="text-4xl sm:text-6xl md:text-6xl lg:text-6xl font-bold mb-6 text-foreground leading-tight sm:leading-tight md:leading-tight lg:leading-tight">
-          I'm a product designer who brings 15 years of design craft to building thoughtful digital solutions.
+        <h1 class="text-4xl sm:text-6xl md:text-6xl lg:text-7xl font-bold mb-6 text-foreground leading-tight sm:leading-tight md:leading-tight lg:leading-tight">
+          <span id="changing-role">Product Designer</span><br>
+          with 15+ Years of Design Expertise.
         </h1>
-        <p class="text-lg text-muted-foreground mb-10 max-w-2xl">
-          I help teams turn complex challenges into intuitive experiences, combining modern tools with design thinking to deliver impactful results. 
+        <p class="text-xl sm:text-2xl text-muted-foreground mb-10 max-w-3xl leading-relaxed">
+          I craft visually stunning, user-centered solutions that communicate ideas with clarity, whether collaborating in a team or working independently. With expertise across print, digital, and product design, I use modern tools to deliver impactful results.
         </p>
         <div class="flex gap-4">
           
@@ -66,4 +69,88 @@ I thrive in collaborative environments where ideas flow freely and everyone feel
     </div>
   </section>
   <elevenlabs-convai agent-id="VAtr4lyC76FjdLqbj3kt"></elevenlabs-convai><script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
+
+  <!-- Then update your script for smoother animations -->
+  <script>
+    const roles = ["Product Designer ", "Design Engineer ", "Brand Designer "];
+    let currentIndex = 0;
+    const roleElement = document.getElementById("changing-role");
+    
+    // Smoother typing speed variables
+    const typingSpeedBase = 90; // slightly slower base typing
+    const typingVariation = 20; // less variation for smoother feel
+    const deletingSpeedBase = 50; // slightly slower deleting
+    const deletingVariation = 10; // less variation for smoother feel
+    const delayAfterTyping = 3000; // pause when fully typed
+    
+    let isDeleting = false;
+    let text = '';
+    let charIndex = 0;
+    
+    function getRandomSpeed(base: number, variation: number): number {
+      return Math.floor(base + Math.random() * variation - variation/2);
+    }
+  
+  function typeEffect() {
+    const currentRole = roles[currentIndex];
+    
+    if (!isDeleting) {
+      // Typing
+      text = currentRole.substring(0, charIndex + 1);
+      charIndex++;
+      
+      // If we've typed the full word
+      if (charIndex === currentRole.length) {
+        isDeleting = true;
+        setTimeout(typeEffect, delayAfterTyping);
+        return;
+      }
+    } else {
+      // Deleting
+      text = currentRole.substring(0, charIndex - 1);
+      charIndex--;
+      
+      // If we've deleted the full word
+      if (charIndex === 0) {
+        isDeleting = false;
+        currentIndex = (currentIndex + 1) % roles.length;
+      }
+    }
+    
+    if (roleElement) {
+      roleElement.innerHTML = text + '<span class="cursor">|</span>';
+    }
+    
+    // Get a slightly random speed for more natural typing
+    const speed = isDeleting 
+      ? getRandomSpeed(deletingSpeedBase, deletingVariation) 
+      : getRandomSpeed(typingSpeedBase, typingVariation);
+      
+    setTimeout(typeEffect, speed);
+  }
+  
+  // Start the typing effect when the page loads
+  document.addEventListener("DOMContentLoaded", () => {
+    if (roleElement) {
+      // Add CSS for the blinking cursor with purple color
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes blink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0; }
+        }
+        .cursor {
+          animation: blink 0.8s infinite;
+          font-weight: bold;
+          color: #8b5cf6; /* Purple color - adjust to match your site's purple */
+        }
+      `;
+      document.head.appendChild(style);
+      
+      // Start the typing effect
+      setTimeout(typeEffect, 500);
+    }
+  });
+</script>
+
 </Layout>
