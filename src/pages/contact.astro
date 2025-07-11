@@ -16,7 +16,7 @@ import Layout from '../layouts/Layout.astro';
         method="POST"
       >
         <!-- Add the Web3Forms access key -->
-        <input type="hidden" name="access_key" value="cde5a769-51ab-47dc-9ca2-06c50b9da893">
+        <input type="hidden" name="access_key" value={import.meta.env.WEB3FORMS_ACCESS_KEY}>
 
         <!-- Keep your existing form fields -->
         <div>
@@ -109,12 +109,10 @@ import Layout from '../layouts/Layout.astro';
         // Redirect to thank you page
         window.location.href = '/thank-you';
       } else {
-        console.log(response);
         if (errorMessage) errorMessage.classList.remove('hidden');
       }
     })
     .catch(error => {
-      console.log(error);
       if (errorMessage) errorMessage.classList.remove('hidden');
     })
     .finally(() => {

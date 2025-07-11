@@ -4,6 +4,7 @@
 interface ImportMetaEnv {
   readonly RESEND_API_KEY: string;
   readonly CONTACT_EMAIL: string;
+  readonly WEB3FORMS_ACCESS_KEY: string;
 }
 
 interface ImportMeta {
@@ -12,7 +13,12 @@ interface ImportMeta {
 
 declare namespace JSX {
   interface IntrinsicElements {
-    // Tell TypeScript that 'class' is valid for HTML elements in Astro
+    'elevenlabs-convai': any;
     [elemName: string]: any;
   }
+}
+
+declare module '*.astro' {
+  const Component: any;
+  export default Component;
 }

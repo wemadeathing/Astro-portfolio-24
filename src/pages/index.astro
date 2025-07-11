@@ -118,7 +118,11 @@ I thrive in collaborative environments where ideas flow freely and everyone feel
     }
     
     if (roleElement) {
-      roleElement.innerHTML = text + '<span class="cursor">|</span>';
+      roleElement.textContent = text;
+      const cursor = document.createElement('span');
+      cursor.className = 'cursor';
+      cursor.textContent = '|';
+      roleElement.appendChild(cursor);
     }
     
     // Get a slightly random speed for more natural typing

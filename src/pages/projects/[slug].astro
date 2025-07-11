@@ -1,8 +1,10 @@
 ---
-import { getCollection } from 'astro:content';
+import { getCollection, getEntry } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
+
+export const prerender = true;
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
@@ -12,7 +14,22 @@ export async function getStaticPaths() {
   }));
 }
 
-const { project } = Astro.props as { project: CollectionEntry<'projects'> };
+// For server-side rendering, get the project by slug
+const { slug } = Astro.params;
+let project: CollectionEntry<'projects'>;
+
+if (Astro.props?.project) {
+  // Static generation - use props
+  project = Astro.props.project;
+} else {
+  // Server-side rendering - fetch by slug
+  const projectEntry = await getEntry('projects', slug!);
+  if (!projectEntry) {
+    return Astro.redirect('/404');
+  }
+  project = projectEntry;
+}
+
 const { Content, headings } = await project.render();
 ---
 
