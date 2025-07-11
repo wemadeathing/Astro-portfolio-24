@@ -5,67 +5,72 @@ import profileImage from '../images/NS-profile-2.png';
 
 const expertise = [
   {
-    title: 'Digital Product Design',
-    description: 'Creating intuitive digital products that solve real user problems. I focus on the full product lifecycle, from research and design through to implementation and iteration.',
+    title: 'Strategic Design & Rapid Building',
+    description: 'Combining 15+ years of design thinking with rapid prototyping capabilities. I plan strategically in Figma then build functional products using modern frameworks and AI-augmented development.',
     icon: 'M2 6a2 2 0 012-2h16a2 2 0 012 2v12a2 2 0 01-2 2H4a2 2 0 01-2-2V6zm3.5 1a1.5 1.5 0 100 3 1.5 1.5 0 000-3zm9 6.75l-2.5-3-3 4-1.5-2-3.5 4.5h14l-3.5-3.5z'
   },
   {
-    title: 'AI Integration',
-    description: 'Leveraging AI tools to enhance creativity and streamline workflows. I help teams adopt and implement AI solutions that boost productivity while maintaining design quality.',
+    title: 'AI Training & Implementation',
+    description: 'Teaching teams how to use AI practically in their workflows while helping businesses implement AI solutions that enhance productivity without replacing human creativity.',
     icon: 'M13 2L3 14h9l-1 8 10-12h-9l1-8z'
   },
   {
-    title: 'Visual Development',
-    description: 'Turning designs into functional digital products using modern development tools and platforms. I bridge the gap between design and implementation.',
+    title: 'Functional Prototyping',
+    description: 'Building working prototypes that help validate business ideas quickly. I can integrate APIs, authentication, databases, and real functionality - not just static designs.',
     icon: 'M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zm0 8a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zm12 0a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z'
   },
   {
-    title: 'Innovation & Growth',
-    description: 'Bringing a proactive approach to problem-solving, combining creative thinking with technical possibilities. I thrive on learning new tools and sharing knowledge.',
+    title: 'Learning & Knowledge Sharing',
+    description: 'Constantly learning new tools and technologies while sharing knowledge with others. I believe in building while learning and helping teams adopt modern development approaches.',
     icon: 'M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4'
   }
 ];
 
 const skills = {
   design: [
-    'Brand Design',
-    'Graphic Design',
-    'Visual Communication',
-    'Typography'
-  ],
-  uiux: [
-    'Prototyping & Wireframing',
+    'Design Thinking',
     'User Research',
-    'Interface Design',
+    'Strategic Planning',
     'Design Systems'
   ],
-  visualDev: [
-    'FlutterFlow',
-    'Webflow',
-    'Framer',
-    'Wordpress'
+  building: [
+    'Rapid Prototyping',
+    'API Integration',
+    'Database Design',
+    'Authentication Systems'
   ],
-  aiIntegration: [
-    'Prompt Engineering',
-    'Workflow Optimization',
-    'AI Implementation',
-    'AI assisted development'
+  aiTools: [
+    'Cursor & Claude Code',
+    'Bolt, v0, Lovable',
+    'AI-Assisted Development',
+    'Prompt Engineering'
   ],
-  tools: [
+  frameworks: [
+    'React & Astro',
+    'Tailwind CSS',
+    'Supabase & Neon',
+    'Modern Tech Stacks'
+  ],
+  traditional: [
     'Figma',
     'Adobe Suite',
-    'Miro',
-    'Cursor'
-    
+    'Brand Design',
+    'Visual Communication'
   ]
 };
 
 const experience = [
   {
+    role: 'AI Training & Rapid Building',
+    company: 'Nexevo & Personal Projects',
+    period: '2025 - Present',
+    description: 'Training teams to use AI practically while building functional prototypes for businesses. Creating working applications with modern frameworks, AI integration, and real-world functionality.'
+  },
+  {
     role: 'Lead Designer',
     company: 'Immersion Group',
     period: '2022 - Present',
-    description: 'Leading design innovation and AI implementation initiatives. Specializing in creating design solutions and empowering teams with AI-enhanced workflows.'
+    description: 'Leading design innovation and strategic thinking. Developed expertise in translating user needs into functional solutions while exploring emerging technologies and development tools.'
   },
   {
     role: 'Digital Designer',
@@ -83,12 +88,12 @@ const experience = [
     role: 'Senior Graphic Designer',
     company: 'Musica & Clicks',
     period: '2009 - 2012',
-    description: 'Designed promotional campaigns and internal marketing material, including posters, banners, and catalogues. Managed a team of designers and copywriter while overseeing in-store point of sale materials.'
+    description: 'Designed promotional campaigns and internal marketing material. Managed teams and oversaw complete design processes, building strong foundations in visual communication and project management.'
   }
 ];
 ---
 
-<Layout title="About Me | Visual Designer & AI Enablement Specialist">
+<Layout title="About Me | Strategic Designer & Rapid Builder">
   <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32">
     <section class="mb-16 flex flex-col md:flex-row gap-12 items-start">
       <div class="md:w-1/4">
@@ -101,16 +106,13 @@ const experience = [
       <div class="md:w-3/4">
         <h1 class="text-4xl font-bold mb-6 text-foreground">About Me</h1>
         <p class="text-xl text-muted-foreground mb-8">
-          I started my journey in visual design, developing a strong foundation in craft and user experience. As digital products became more complex, I evolved with the industry - expanding into product design, development, and AI-enabled solutions.
-
+          With 15+ years of design experience, I've evolved from traditional visual design into someone who can both strategically plan and rapidly build functional products. My approach combines solid design thinking with modern development capabilities, using AI to augment rather than replace human creativity.
         </p>
         <p class="text-xl text-muted-foreground mb-8">
-          Today, as a Product Designer, I combine design thinking with technical capabilities to help teams create meaningful digital products. I bridge the gap between vision and implementation, using modern tools and AI to enhance our ability to solve complex challenges. Whether I'm designing user interfaces, building design systems, or improving team workflows, I focus on creating solutions that make a real difference for users.
-
+          This year I've been training teams to use AI practically in their workflows while building rapid prototypes for businesses looking to validate ideas quickly. I can plan strategically, then build working applications with real APIs, authentication, and databases - making design decisions during development that most coders can't.
         </p>
         <p class="text-xl text-muted-foreground">
-          What drives me is the opportunity to help teams innovate while maintaining focus on user needs. Through collaboration and knowledge sharing, I help create environments where design thinking and technical execution work together to produce exceptional products. This commitment to continuous learning and teaching others has become central to my approach to product design.
-
+          What excites me is helping teams move from concept to working product without getting stuck in endless planning cycles. I believe in learning by building and sharing knowledge openly. Whether it's training someone to use AI tools effectively or building a functional prototype in a week, I focus on practical outcomes that solve real problems.
         </p>
       </div>
     </section>
@@ -118,7 +120,7 @@ const experience = [
     <div class="w-full h-[2px] mb-16 bg-gradient-to-r from-primary/0 via-primary/50 to-primary/0"></div>
 
     <section class="mb-32">
-      <h2 class="text-2xl font-bold mb-8 text-foreground">Areas of Expertise</h2>
+      <h2 class="text-2xl font-bold mb-8 text-foreground">What I Do Now</h2>
       <div class="grid md:grid-cols-2 gap-8">
         {expertise.map((item) => (
           <div class="p-6 rounded-xl bg-secondary/50 backdrop-blur-sm border border-secondary">
@@ -142,10 +144,10 @@ const experience = [
     </section>
 
     <section class="mb-32">
-      <h2 class="text-2xl font-bold mb-8 text-foreground">Skills & Tools</h2>
+      <h2 class="text-2xl font-bold mb-8 text-foreground">Skills & Capabilities</h2>
       <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
         <div>
-          <h3 class="text-lg font-semibold mb-4 text-foreground">Visual Design</h3>
+          <h3 class="text-lg font-semibold mb-4 text-foreground">Design Foundation</h3>
           <ul class="space-y-2">
             {skills.design.map((skill) => (
               <li class="text-muted-foreground">{skill}</li>
@@ -153,33 +155,33 @@ const experience = [
           </ul>
         </div>
         <div>
-          <h3 class="text-lg font-semibold mb-4 text-foreground">Product Design</h3>
+          <h3 class="text-lg font-semibold mb-4 text-foreground">Rapid Building</h3>
           <ul class="space-y-2">
-            {skills.uiux.map((skill) => (
+            {skills.building.map((skill) => (
               <li class="text-muted-foreground">{skill}</li>
             ))}
           </ul>
         </div>
         <div>
-          <h3 class="text-lg font-semibold mb-4 text-foreground">Visual Dev</h3>
+          <h3 class="text-lg font-semibold mb-4 text-foreground">AI Tools</h3>
           <ul class="space-y-2">
-            {skills.visualDev.map((skill) => (
+            {skills.aiTools.map((skill) => (
               <li class="text-muted-foreground">{skill}</li>
             ))}
           </ul>
         </div>
         <div>
-          <h3 class="text-lg font-semibold mb-4 text-foreground">AI Integration</h3>
+          <h3 class="text-lg font-semibold mb-4 text-foreground">Tech Stack</h3>
           <ul class="space-y-2">
-            {skills.aiIntegration.map((skill) => (
+            {skills.frameworks.map((skill) => (
               <li class="text-muted-foreground">{skill}</li>
             ))}
           </ul>
         </div>
         <div>
-          <h3 class="text-lg font-semibold mb-4 text-foreground">Tools</h3>
+          <h3 class="text-lg font-semibold mb-4 text-foreground">Traditional Tools</h3>
           <ul class="space-y-2">
-            {skills.tools.map((skill) => (
+            {skills.traditional.map((skill) => (
               <li class="text-muted-foreground">{skill}</li>
             ))}
           </ul>

@@ -1,0 +1,31 @@
+---
+// Flexible button component that accepts props for URL and text
+interface Props {
+  href?: string;
+  text?: string;
+  external?: boolean;
+}
+
+const { 
+  href = "/contact", 
+  text = "Let's Connect",
+  external = false 
+} = Astro.props;
+---
+
+<a
+  href={href}
+  class="inline-flex h-12 items-center justify-center rounded-full bg-white px-8 text-sm font-medium transition-colors hover:bg-white/90"
+  style="color: #000 !important; text-decoration: none !important;"
+  target={external ? "_blank" : undefined}
+  rel={external ? "noopener noreferrer" : undefined}
+>
+  {text}
+</a>
+
+<style>
+  a:hover {
+    color: #000 !important;
+    text-decoration: none !important;
+  }
+</style>

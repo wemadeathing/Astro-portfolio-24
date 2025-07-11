@@ -73,12 +73,12 @@ const { Content, headings } = await project.render();
       <aside class="hidden lg:block">
         <div class="sticky top-32">
           <h2 class="text-lg font-semibold mb-4">On this page</h2>
-          <ul class="space-y-3 text-sm">
+          <ul class="space-y-1 text-sm">
             {headings.map((heading) => (
-              <li class="line-clamp-2">
+              <li>
                 <a 
                   href={`#${heading.slug}`}
-                  class="text-muted-foreground hover:text-primary transition-colors"
+                  class="toc-link text-muted-foreground hover:text-primary"
                   style={`margin-left: ${(heading.depth - 1) * 1}rem`}
                 >
                   {heading.text}
@@ -153,4 +153,99 @@ const { Content, headings } = await project.render();
   .prose a {
     @apply text-primary hover:underline;
   }
+
+  /* Smooth scroll for table of contents */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Enhanced TOC styling */
+  .toc-link {
+    display: block;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.375rem;
+    transition: all 0.2s ease-in-out;
+    position: relative;
+  }
+
+  .toc-link:hover {
+    background-color: hsl(var(--primary) / 0.1);
+    transform: translateX(4px);
+  }
+
+  .toc-link.active {
+    background-color: hsl(var(--primary) / 0.15);
+    color: hsl(var(--primary));
+    font-weight: 500;
+  }
 </style>
+
+<script>
+  // Enhanced smooth scroll and active link highlighting
+  document.addEventListener('DOMContentLoaded', function() {
+    const tocLinks = document.querySelectorAll('.toc-link');
+    const headings = document.querySelectorAll('.prose h2, .prose h3');
+    
+    // Add smooth scroll behavior to TOC links
+    tocLinks.forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href')?.slice(1);
+        const targetElement = document.getElementById(targetId!);
+        
+        if (targetElement) {
+          // Add a subtle loading state
+          this.style.opacity = '0.7';
+          
+          targetElement.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+          });
+          
+          // Reset opacity after scroll
+          setTimeout(() => {
+            this.style.opacity = '1';
+          }, 600);
+        }
+      });
+    });
+
+    // Highlight active section in TOC
+    function updateActiveToc() {
+      let activeHeading = null;
+      
+      headings.forEach(heading => {
+        const rect = heading.getBoundingClientRect();
+        if (rect.top <= 100 && rect.bottom >= 0) {
+          activeHeading = heading;
+        }
+      });
+      
+      // Remove all active classes
+      tocLinks.forEach(link => link.classList.remove('active'));
+      
+      // Add active class to current section
+      if (activeHeading) {
+        const activeLink = document.querySelector(`a[href="#${activeHeading.id}"]`);
+        if (activeLink) {
+          activeLink.classList.add('active');
+        }
+      }
+    }
+
+    // Update active TOC on scroll
+    let ticking = false;
+    window.addEventListener('scroll', function() {
+      if (!ticking) {
+        requestAnimationFrame(function() {
+          updateActiveToc();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    });
+
+    // Initial call
+    updateActiveToc();
+  });
+</script>
