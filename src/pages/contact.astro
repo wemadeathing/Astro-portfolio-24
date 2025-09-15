@@ -61,6 +61,7 @@ import Layout from '../layouts/Layout.astro';
         <div id="formStatus" class="hidden text-sm">
           <p class="error hidden text-destructive">There was an error sending your message. Please try again.</p>
           <p class="success hidden text-green-500">Message sent successfully!</p>
+          <p class="loading hidden text-blue-500">Sending message...</p>
         </div>
 
         <button
@@ -80,6 +81,7 @@ import Layout from '../layouts/Layout.astro';
   const formStatus = document.getElementById('formStatus');
   const errorMessage = formStatus?.querySelector('.error');
   const successMessage = formStatus?.querySelector('.success');
+  const loadingMessage = formStatus?.querySelector('.loading');
   const submitButton = document.getElementById('submitButton');
 
   form.addEventListener('submit', function(e) {
@@ -90,6 +92,7 @@ import Layout from '../layouts/Layout.astro';
     if (formStatus) formStatus.classList.remove('hidden');
     if (errorMessage) errorMessage.classList.add('hidden');
     if (successMessage) successMessage.classList.add('hidden');
+    if (loadingMessage) loadingMessage.classList.remove('hidden');
 
     const formData = new FormData(form);
     const object = Object.fromEntries(formData);
@@ -109,10 +112,13 @@ import Layout from '../layouts/Layout.astro';
         // Redirect to thank you page
         window.location.href = '/thank-you';
       } else {
+        if (loadingMessage) loadingMessage.classList.add('hidden');
         if (errorMessage) errorMessage.classList.remove('hidden');
       }
     })
     .catch(error => {
+      console.error('Form submission error:', error);
+      if (loadingMessage) loadingMessage.classList.add('hidden');
       if (errorMessage) errorMessage.classList.remove('hidden');
     })
     .finally(() => {

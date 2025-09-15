@@ -3,6 +3,7 @@ import '@fontsource/instrument-sans';
 import '../styles/globals.css';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
+import WhatsAppWidget from '../components/WhatsAppWidget.astro';
 import { ViewTransitions } from 'astro:transitions';
 
 interface Props {
@@ -98,6 +99,13 @@ const siteUrl = "https://www.nasifsalaam.com"; // Your actual domain
       <slot />
     </main>
     <Footer />
+    
+    <!-- WhatsApp Widget - appears on all pages -->
+    <WhatsAppWidget 
+      phoneNumber="0814623628"
+      message="Hi! I'd like to discuss a project with you."
+      position="bottom-right"
+    />
   </body>
 </html>
 

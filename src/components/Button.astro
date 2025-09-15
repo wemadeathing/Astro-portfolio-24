@@ -1,0 +1,48 @@
+---
+// Flexible button component that supports primary and secondary variants
+interface Props {
+  href?: string;
+  text?: string;
+  variant?: 'primary' | 'secondary';
+  external?: boolean;
+  class?: string;
+}
+
+const { 
+  href = "/contact", 
+  text = "Button",
+  variant = 'primary',
+  external = false,
+  class: className = ""
+} = Astro.props;
+
+// Define button styles based on variant
+const getButtonClasses = (variant: string) => {
+  const baseClasses = "inline-flex h-12 items-center justify-center rounded-full px-8 text-sm font-medium transition-colors";
+  
+  if (variant === 'primary') {
+    return `${baseClasses} bg-white text-black hover:bg-white/90`;
+  } else {
+    return `${baseClasses} border border-white/20 text-white hover:bg-white/10`;
+  }
+};
+---
+
+<a
+  href={href}
+  class={`${getButtonClasses(variant)} ${className}`}
+  target={external ? "_blank" : undefined}
+  rel={external ? "noopener noreferrer" : undefined}
+>
+  {text}
+</a>
+
+<style>
+  a {
+    text-decoration: none !important;
+  }
+  
+  a:hover {
+    text-decoration: none !important;
+  }
+</style>

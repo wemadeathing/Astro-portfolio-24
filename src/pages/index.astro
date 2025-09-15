@@ -2,13 +2,13 @@
 import Layout from '../layouts/Layout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 import HeroAnimation from '../components/HeroAnimation.astro';
+import Button from '../components/Button.astro';
+import LogoCarousel from '../components/LogoCarousel.astro';
 import { getCollection } from 'astro:content';
 import portfolioGrid from '../images/nasif-portfolio-grid.png';
 
 const projects = await getCollection('projects');
 const featuredProjects = projects.filter(project => project.data.featured);
-
-
 ---
 
 <Layout title="Nasif Salaam | Product Designer · Digital Innovation">
@@ -23,10 +23,22 @@ const featuredProjects = projects.filter(project => project.data.featured);
           with 15+ Years of Design Expertise.
         </h1>
         <p class="text-xl sm:text-2xl text-muted-foreground mb-10 max-w-3xl leading-relaxed">
-          I design and build ideas into working products, fast. Seasoned designer who now functional prototypes to help businesses validate concepts quickly. From design to development, I can help you get your idea from concept to working product.
+          Multidisciplinary designer with 15+ years building brands, interfaces, and production websites. I transform ideas into working products from concept through functional prototypes to market ready solutions. Currently taking on new projects.
         </p>
+        
+       
+        
         <div class="flex gap-4">
-          
+          <Button 
+            href="/contact"
+            text="Let's Build Something →"
+            variant="primary"
+          />
+          <Button 
+            href="/projects"
+            text="View My Work"
+            variant="secondary"
+          />
         </div>
       </div>
     </div>
@@ -44,46 +56,59 @@ const featuredProjects = projects.filter(project => project.data.featured);
     <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-40 pb-24">
       <h2 class="text-4xl font-bold mb-4 text-foreground">I Design and Build in Parallel</h2>
       <p class="text-lg text-muted-foreground mb-8 max-w-2xl">
-        My approach is grounded in solid design thinking and strategic frameworks, planning and user research. Now I augment these skills with AI and modern development tools, allowing me to design while I build. This lets me make informed design decisions and iterations during development that most coders can't - maintaining strategic design quality while moving fast.
+        My approach is grounded in solid design thinking and strategic frameworks, planning and user research. Now I augment these skills with AI and modern development tools, allowing me to design while I build.
       </p>
       <p class="text-lg text-muted-foreground mb-8 max-w-2xl">
-        Whether you need to validate a business idea, build a functional prototype, or create a solution that actually works, I can help you get there efficiently. I've integrated AI APIs, authentication systems, email integrations, MCPs, and databases into working applications that solve real problems.
+        This lets me make informed design decisions and iterations during development, maintaining design quality while moving fast.
       </p>
       <p class="text-lg text-muted-foreground mb-8 max-w-2xl">
-        My unique advantage is combining years of design expertise with rapid building capabilities. I understand both user experience and technical implementation, which means better design decisions and faster iterations.
+        Whether you need to validate a business idea, build a functional prototype, or create a solution that actually works, I can help you get there efficiently.
       </p>
-      
+      <p class="text-lg text-muted-foreground mb-8 max-w-2xl">
+        I've integrated AI APIs, authentication systems, email integrations, and databases into working applications that solve real problems.
+      </p>
+      <p class="text-lg text-muted-foreground mb-8 max-w-2xl">
+        My unique advantage is combining years of design expertise with AI-assisted building capabilities.
+      </p>
+      <p class="text-lg text-muted-foreground mb-8 max-w-2xl">
+        I understand both user experience and technical implementation, which means better design decisions and faster iterations.
+      </p>
     </div>
   </section>
+
+<section class="bg-background">
+  <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+    <div class="text-center mb-8">
+      <h2 class="text-2xl font-semibold text-muted-foreground mb-4">Some of the tools I work with</h2>
+    </div>
+    <LogoCarousel speed={20} />
+  </div>
+</section>
 
   <section class="bg-background">
-    <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-40 pb-24">
-      <h2 class="text-4xl font-bold mb-4 text-foreground">Let's Build Something That Works</h2>
-      <p class="text-lg text-muted-foreground mb-8 max-w-2xl">
+    <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-40 pb-24 text-center">
+      <h2 class="text-4xl font-bold mb-4 text-foreground">Ready to Discuss Your Project?</h2>
+      <p class="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
         Looking for rapid prototyping or functional builds without months of planning? I help solo founders and businesses turn ideas into working products quickly. If you need something built fast with design quality, let's talk.
       </p>
-      <a
+      <Button 
         href="/contact"
-        class="inline-flex h-12 items-center justify-center rounded-full bg-white px-8 text-sm font-medium text-black transition-colors hover:bg-white/90"
-      >
-        Let's Build →
-      </a>
+        text="Start a Project →"
+        variant="primary"
+      />
     </div>
   </section>
-  <elevenlabs-convai agent-id="VAtr4lyC76FjdLqbj3kt"></elevenlabs-convai><script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
 
-  <!-- Then update your script for smoother animations -->
   <script>
-    const roles = ["Product Designer ", "Design Engineer ", "Rapid Builder "];
+    const roles = ["Product Designer ", "Rapid Prototyper ", "Visual Designer "];
     let currentIndex = 0;
     const roleElement = document.getElementById("changing-role");
     
-    // Smoother typing speed variables
-    const typingSpeedBase = 90; // slightly slower base typing
-    const typingVariation = 20; // less variation for smoother feel
-    const deletingSpeedBase = 50; // slightly slower deleting
-    const deletingVariation = 10; // less variation for smoother feel
-    const delayAfterTyping = 3000; // pause when fully typed
+    const typingSpeedBase = 90;
+    const typingVariation = 20;
+    const deletingSpeedBase = 50;
+    const deletingVariation = 10;
+    const delayAfterTyping = 3000;
     
     let isDeleting = false;
     let text = '';
@@ -93,70 +118,76 @@ const featuredProjects = projects.filter(project => project.data.featured);
       return Math.floor(base + Math.random() * variation - variation/2);
     }
   
-  function typeEffect() {
-    const currentRole = roles[currentIndex];
-    
-    if (!isDeleting) {
-      // Typing
-      text = currentRole.substring(0, charIndex + 1);
-      charIndex++;
+    function typeEffect() {
+      const currentRole = roles[currentIndex];
       
-      // If we've typed the full word
-      if (charIndex === currentRole.length) {
-        isDeleting = true;
-        setTimeout(typeEffect, delayAfterTyping);
-        return;
-      }
-    } else {
-      // Deleting
-      text = currentRole.substring(0, charIndex - 1);
-      charIndex--;
-      
-      // If we've deleted the full word
-      if (charIndex === 0) {
-        isDeleting = false;
-        currentIndex = (currentIndex + 1) % roles.length;
-      }
-    }
-    
-    if (roleElement) {
-      roleElement.textContent = text;
-      const cursor = document.createElement('span');
-      cursor.className = 'cursor';
-      cursor.textContent = '|';
-      roleElement.appendChild(cursor);
-    }
-    
-    // Get a slightly random speed for more natural typing
-    const speed = isDeleting 
-      ? getRandomSpeed(deletingSpeedBase, deletingVariation) 
-      : getRandomSpeed(typingSpeedBase, typingVariation);
-      
-    setTimeout(typeEffect, speed);
-  }
-  
-  // Start the typing effect when the page loads
-  document.addEventListener("DOMContentLoaded", () => {
-    if (roleElement) {
-      // Add CSS for the blinking cursor with purple color
-      const style = document.createElement('style');
-      style.textContent = `
-        @keyframes blink {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0; }
+      if (!isDeleting) {
+        text = currentRole.substring(0, charIndex + 1);
+        charIndex++;
+        
+        if (charIndex === currentRole.length) {
+          isDeleting = true;
+          setTimeout(typeEffect, delayAfterTyping);
+          return;
         }
-        .cursor {
-          animation: blink 0.8s infinite;
-          font-weight: bold;
-          color: #8b5cf6; /* Purple color - adjust to match your site's purple */
+      } else {
+        text = currentRole.substring(0, charIndex - 1);
+        charIndex--;
+        
+        if (charIndex === 0) {
+          isDeleting = false;
+          currentIndex = (currentIndex + 1) % roles.length;
         }
-      `;
-      document.head.appendChild(style);
+      }
       
-      // Start the typing effect
-      setTimeout(typeEffect, 500);
+      if (roleElement) {
+        roleElement.textContent = text;
+        const cursor = document.createElement('span');
+        cursor.className = 'cursor';
+        cursor.textContent = '|';
+        roleElement.appendChild(cursor);
+      }
+      
+      const speed = isDeleting 
+        ? getRandomSpeed(deletingSpeedBase, deletingVariation) 
+        : getRandomSpeed(typingSpeedBase, typingVariation);
+        
+      setTimeout(typeEffect, speed);
     }
-  });
-</script>
+    
+    document.addEventListener("DOMContentLoaded", () => {
+      if (roleElement) {
+        const style = document.createElement('style');
+        style.textContent = `
+          @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+          }
+          .cursor {
+            animation: blink 0.8s infinite;
+            font-weight: bold;
+            color: #8b5cf6;
+          }
+          .logo-item {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+          }
+          .logo-item:hover {
+            background: rgba(139, 92, 246, 0.2);
+            color: #8b5cf6;
+            transform: translateY(-1px);
+          }
+        `;
+        document.head.appendChild(style);
+        
+        setTimeout(typeEffect, 500);
+      }
+    });
+  </script>
 
 </Layout>

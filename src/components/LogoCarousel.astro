@@ -1,0 +1,101 @@
+---
+// Logo carousel component with fade effects at edges
+interface Props {
+  logos?: string[];
+  speed?: number;
+  pauseOnHover?: boolean;
+}
+
+const { 
+  logos = [
+    "/images/logos/Claude_Logo_0 1.png",
+    "/images/logos/Cursor_Logo_0 1.png", 
+    "/images/logos/Figma_Symbol_0 1.png",
+    "/images/logos/Group 512819.png",
+    "/images/logos/Lovable_Logo_1 1.png",
+    "/images/logos/Perplexity Logo Off-White 1.png",
+    "/images/logos/Replit_idxDSDvFDM_0 1.png",
+    "/images/logos/StackBlitz_idLCk4jSTb_1 1.png",
+    "/images/logos/supabase-logo-DCC676FFE2-seeklogo.com 1.png",
+    "/images/logos/V0_Logo_0 1.png"
+  ],
+  speed = 30,
+  pauseOnHover = true
+} = Astro.props;
+---
+
+<div class="relative w-full overflow-hidden">
+  <!-- Fade overlay on the left -->
+  <div class="absolute left-0 top-0 h-full w-20 bg-gradient-to-r from-background to-transparent z-10 pointer-events-none"></div>
+  
+  <!-- Fade overlay on the right -->
+  <div class="absolute right-0 top-0 h-full w-20 bg-gradient-to-l from-background to-transparent z-10 pointer-events-none"></div>
+  
+  <!-- Carousel container -->
+  <div class="flex animate-scroll" style={`--speed: ${speed}s;`}>
+    <!-- First set of logos -->
+    <div class="flex items-center gap-12 px-8 flex-shrink-0">
+      {logos.map((logo, index) => {
+        const isV0Logo = logo.includes('V0_Logo');
+        return (
+          <div key={`first-${index}`} class="flex items-center justify-center h-20 w-auto opacity-60 hover:opacity-100 transition-opacity duration-300">
+            <img 
+              src={logo} 
+              alt={`Logo ${index + 1}`}
+              class={`object-contain filter grayscale hover:grayscale-0 transition-all duration-300 ${
+                isV0Logo ? 'max-h-10 max-w-16' : 'max-h-16 max-w-32'
+              }`}
+              loading="lazy"
+            />
+          </div>
+        );
+      })}
+    </div>
+    
+    <!-- Duplicate set for seamless loop -->
+    <div class="flex items-center gap-12 px-8 flex-shrink-0">
+      {logos.map((logo, index) => {
+        const isV0Logo = logo.includes('V0_Logo');
+        return (
+          <div key={`second-${index}`} class="flex items-center justify-center h-20 w-auto opacity-60 hover:opacity-100 transition-opacity duration-300">
+            <img 
+              src={logo} 
+              alt={`Logo ${index + 1}`}
+              class={`object-contain filter grayscale hover:grayscale-0 transition-all duration-300 ${
+                isV0Logo ? 'max-h-10 max-w-16' : 'max-h-16 max-w-32'
+              }`}
+              loading="lazy"
+            />
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</div>
+
+<style>
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+  
+  .animate-scroll {
+    animation: scroll var(--speed) linear infinite;
+  }
+  
+  /* Pause animation on hover */
+  .animate-scroll:hover {
+    animation-play-state: paused;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .animate-scroll {
+      animation-duration: calc(var(--speed) * 0.7);
+    }
+  }
+</style>
