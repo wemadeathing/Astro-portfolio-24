@@ -16,7 +16,7 @@ interface Props {
 const { 
   title,
   description = "Nasif Salaam - Portfolio and Insights. Professional design, development, and AI integration services.",
-  image = "/images/og-image.jpg",
+  image = "/images/NS-profile-2.png",
   canonicalURL = Astro.url.href
 } = Astro.props;
 
@@ -33,14 +33,13 @@ const siteUrl = "https://www.nasifsalaam.com"; // Your actual domain
     <title>{title}</title>
     <meta name="title" content={title} />
     <meta name="description" content={description} />
+    <meta name="keywords" content="Nasif Salaam, Product Designer, UI/UX Designer, Web Developer, AI Integration, Portfolio, Design Services, Development Services" />
+    <meta name="author" content="Nasif Salaam" />
     <meta name="google-site-verification" content="0AkXWv8ep3tS3TRVwSrSE670DTYpn--SyBuwlz1P9H8"/>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-    <link rel="manifest" href="/site.webmanifest">
+    <link rel="icon" type="image/png" href="/favicon.ico" />
+    <link rel="manifest" href="/Web Manifest.json">
     
     <!-- Canonical URL -->
     <link rel="canonical" href={canonicalURL} />
