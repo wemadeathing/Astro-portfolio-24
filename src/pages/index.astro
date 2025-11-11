@@ -1,7 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ProjectCard from '../components/ProjectCard.astro';
-import HeroAnimation from '../components/HeroAnimation.astro';
 import Button from '../components/Button.astro';
 import LogoCarousel from '../components/LogoCarousel.astro';
 import { getCollection } from 'astro:content';
@@ -13,7 +12,6 @@ const featuredProjects = projects.filter(project => project.data.featured);
 
 <Layout title="Nasif Salaam | Product Designer · Digital Innovation">
   <div class="absolute inset-0 h-screen bg-gradient-hero after:absolute after:inset-0 after:bg-gradient-to-b after:from-transparent after:to-black after:opacity-90 -z-10"></div>
-  <HeroAnimation />
   <section class="relative min-h-[100vh] flex items-center pt-16 sm:pt-20">
     <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="max-w-4xl">
@@ -23,7 +21,7 @@ const featuredProjects = projects.filter(project => project.data.featured);
           with 15+ Years of Design Expertise.
         </h1>
         <p class="text-xl sm:text-2xl text-muted-foreground mb-10 max-w-3xl leading-relaxed">
-          Multidisciplinary designer with 15+ years building <strong>brands, interfaces, and AI-augmented solutions</strong>. I transform ideas into <strong>functional, user-centered products</strong>—from concept to execution—while integrating <strong>AI tools and training</strong> to enhance workflows and creativity.
+          Multidisciplinary designer with 15+ years building brands, interfaces, and web solutions. I transform ideas into functional, user-centered products, from concept to execution. I also train individuals and teams on how to use AI tools safely and effectively.
         </p>
         
        
