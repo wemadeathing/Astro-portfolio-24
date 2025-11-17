@@ -1,0 +1,131 @@
+import { c as createComponent, a as createAstro, r as renderComponent, b as renderTemplate, m as maybeRenderHead, d as addAttribute } from '../chunks/astro/server_BmSrm4w3.mjs';
+import 'kleur/colors';
+import { $ as $$Layout } from '../chunks/Layout_XexBz5M9.mjs';
+import '@astrojs/internal-helpers/path';
+import '@astrojs/internal-helpers/remote';
+import { $ as $$Image } from '../chunks/_astro_assets_ijK5pMih.mjs';
+export { renderers } from '../renderers.mjs';
+
+const profileImage = new Proxy({"src":"/_astro/NS-profile-2.CSyv7mqe.png","width":400,"height":400,"format":"png"}, {
+						get(target, name, receiver) {
+							if (name === 'clone') {
+								return structuredClone(target);
+							}
+							if (name === 'fsPath') {
+								return "/Users/nasifsalaam/Documents/GitHub/Astro-portfolio-24/src/images/NS-profile-2.png";
+							}
+							
+							return target[name];
+						}
+					});
+
+const $$Astro = createAstro();
+const $$About = createComponent(($$result, $$props, $$slots) => {
+  const Astro2 = $$result.createAstro($$Astro, $$props, $$slots);
+  Astro2.self = $$About;
+  const expertise = [
+    {
+      title: "Enterprise Design Systems & Team Collaboration",
+      description: `I've designed and delivered a production design system for Bidvest Bank, including their website, mobile app, and secure dashboards. I led a team to design a new onboarding experience that balanced security with usability. For ABSA, I created a rapid prototype using FlutterFlow and Supabase that let stakeholders validate concepts before full development. I design systems that scale without creating implementation headaches.`,
+      icon: "M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+    },
+    {
+      title: "Building Real Solutions",
+      description: `I ship production applications, not just portfolio pieces. I've built apps using AstroJS, React, and Supabase, integrating APIs, authentication, and databases. This hands-on building experience informs every design decision I make because I understand what's easy to build versus what creates technical debt.`,
+      icon: "M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"
+    },
+    {
+      title: "Rapid Validation & Prototyping",
+      description: `I validate ideas quickly by building functional prototypes that go beyond clickable mockups. At Immersion Group, I led a self-initiated innovation project that upskilled six staff while creating an MVP we tested with real users. I use tools like FlutterFlow, Webflow, and code to move from concept to testable product fast.`,
+      icon: "M13 2L3 14h9l-1 8 10-12h-9l1-8z"
+    },
+    {
+      title: "Mentorship & Continuous Growth",
+      description: `I've mentored designers from junior to senior levels, including guiding someone from construction into UI design in six months. I'm always learning, recently earning my ISO 42001 certification to understand AI implementation at a governance level. I believe in building while learning and helping teams bridge knowledge gaps between design and engineering.`,
+      icon: "M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"
+    }
+  ];
+  const skills = {
+    design: [
+      "Design Systems",
+      "User-Centered Design",
+      "Design Thinking",
+      "Cross-functional Collaboration"
+    ],
+    technical: [
+      "React & Astro",
+      "Supabase & Neon",
+      "API Integration",
+      "Authentication & Security"
+    ],
+    prototyping: [
+      "FlutterFlow",
+      "Webflow",
+      "Functional Prototypes",
+      "Rapid Validation"
+    ],
+    aiTools: [
+      "Claude & Cursor",
+      "AI-Assisted Development",
+      "Bolt & v0",
+      "Workflow Automation"
+    ],
+    foundations: [
+      "Figma & FigJam",
+      "Git & Version Control",
+      "Agile Methodologies",
+      "Design Documentation"
+    ]
+  };
+  const experience = [
+    {
+      role: "AI & Design Specialist",
+      company: "Nexevo Studios",
+      period: "2025 - Present",
+      description: `Training users to use AI safely and effectively while designing solutions as client needs dictate, from branding to web solutions. Developing frameworks for responsible AI implementation and helping businesses navigate the gap between AI capability and practical application. Mentored a junior designer into a senior role, demonstrating my commitment to building up others while building solutions.`
+    },
+    {
+      role: "Lead UI Designer",
+      company: "Immersion Group",
+      period: "2022 - 2024",
+      description: `Designed production design systems and digital solutions for clients including Bidvest Bank, Old Mutual, and ABSA. Led a team to create a new secure onboarding experience for Bidvest, collaborating closely with external development teams throughout implementation. Created rapid prototypes using FlutterFlow and Supabase for ABSA that allowed stakeholders to validate concepts before full development. Initiated and led an innovation project that upskilled six staff members while building a tested MVP, establishing a rapid prototyping proposition that opened new client conversations.`
+    },
+    {
+      role: "Senior Digital Designer",
+      company: "Machete Creative",
+      period: "2019 - 2021",
+      description: `Created digital solutions including UI designs, websites, and digital assets that consistently hit sales targets in first-week launches. Conducted user research and implemented design strategies focused on solving real problems. Worked closely with development teams to ensure designs were technically feasible and delivered on business goals.`
+    },
+    {
+      role: "Visual Designer & Collaborator",
+      company: "Freelance",
+      period: "2014 - 2018",
+      description: `Collaborated with diverse clients on branding, digital design, and web development projects. Managed end-to-end design processes and built WordPress solutions for clients including Clicks, Musica, UCT Pathology, and ICCEG. Developed technical skills that allowed me to bridge the gap between design vision and implementation reality.`
+    },
+    {
+      role: "Senior Graphic Designer",
+      company: "Musica & Clicks",
+      period: "2009 - 2012",
+      description: `Designed promotional campaigns and internal marketing materials for major retail brands. Managed teams and oversaw design processes, building foundations in visual communication and project management. Introduced workflow automation that streamlined production processes and taught senior designers new tools like Adobe InDesign when the industry was transitioning from older software.`
+    }
+  ];
+  return renderTemplate`${renderComponent($$result, "Layout", $$Layout, { "title": "About Me | Strategic Designer & Rapid Builder" }, { "default": ($$result2) => renderTemplate` ${maybeRenderHead()}<div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32"> <section class="mb-16 flex flex-col md:flex-row gap-12 items-start"> <div class="md:w-1/4"> ${renderComponent($$result2, "Image", $$Image, { "src": profileImage, "alt": "Nasif Salaam", "class": "rounded-2xl w-full max-w-[200px] shadow-lg border border-secondary" })} </div> <div class="md:w-3/4"> <h1 class="text-4xl font-bold mb-6 text-foreground">About Me</h1> <p class="text-xl text-muted-foreground mb-8">
+If I were to choose a word to describe my approach, it would be "technical." Not technical in the way engineers are, but technical in understanding how things actually work. This fluency allows me to collaborate seamlessly with developers, turning ideas into solutions that don't just look good but are buildable, scalable, and grounded in reality. Over 15+ years, I've evolved from pure visual design to someone who designs, prototypes, and ships. I bring creativity and technical understanding together, which means fewer surprises in implementation and more value delivered to users.
+</p> </div> </section> <div class="w-full h-[2px] mb-16 bg-gradient-to-r from-primary/0 via-primary/50 to-primary/0"></div> <section class="mb-32"> <h2 class="text-2xl font-bold mb-8 text-foreground">What I Do Now</h2> <div class="grid md:grid-cols-2 gap-8"> ${expertise.map((item) => renderTemplate`<div class="p-6 rounded-xl bg-secondary/50 backdrop-blur-sm border border-secondary"> <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4"> <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"> <path${addAttribute(item.icon, "d")}></path> </svg> </div> <h3 class="text-xl font-semibold mb-3 text-foreground">${item.title}</h3> <p class="text-muted-foreground">${item.description}</p> </div>`)} </div> </section> <section class="mb-32"> <h2 class="text-2xl font-bold mb-8 text-foreground">Skills & Capabilities</h2> <div class="grid grid-cols-2 md:grid-cols-5 gap-8"> <div> <h3 class="text-lg font-semibold mb-4 text-foreground">Design Foundation</h3> <ul class="space-y-2"> ${skills.design.map((skill) => renderTemplate`<li class="text-muted-foreground">${skill}</li>`)} </ul> </div> <div> <h3 class="text-lg font-semibold mb-4 text-foreground">Technical</h3> <ul class="space-y-2"> ${skills.technical.map((skill) => renderTemplate`<li class="text-muted-foreground">${skill}</li>`)} </ul> </div> <div> <h3 class="text-lg font-semibold mb-4 text-foreground">Prototyping</h3> <ul class="space-y-2"> ${skills.prototyping.map((skill) => renderTemplate`<li class="text-muted-foreground">${skill}</li>`)} </ul> </div> <div> <h3 class="text-lg font-semibold mb-4 text-foreground">AI Tools</h3> <ul class="space-y-2"> ${skills.aiTools.map((skill) => renderTemplate`<li class="text-muted-foreground">${skill}</li>`)} </ul> </div> <div> <h3 class="text-lg font-semibold mb-4 text-foreground">Foundations</h3> <ul class="space-y-2"> ${skills.foundations.map((skill) => renderTemplate`<li class="text-muted-foreground">${skill}</li>`)} </ul> </div> </div> </section> <section class="mb-32"> <h2 class="text-2xl font-bold mb-6 text-foreground">Professional Journey</h2> <div class="space-y-8 max-w-4xl "> ${experience.map((item) => renderTemplate`<div class="border-l-2 border-primary/20 pl-6 relative"> <div class="absolute w-3 h-3 bg-primary rounded-full -left-[7px] top-2"></div> <h3 class="text-xl font-semibold text-foreground">${item.role}</h3> <p class="text-muted-foreground">${item.company} • ${item.period}</p> <p class="mt-2 text-muted-foreground">${item.description}</p> </div>`)} </div> </section> <section class="mb-32"> <div class="max-w-4xl"> <p class="text-xl text-muted-foreground">
+If you're building innovative teams and need a technical designer who solves problems, mentors effectively, and delivers results, let's connect.
+</p> </div> </section> </div> ` })}`;
+}, "/Users/nasifsalaam/Documents/GitHub/Astro-portfolio-24/src/pages/about.astro", void 0);
+
+const $$file = "/Users/nasifsalaam/Documents/GitHub/Astro-portfolio-24/src/pages/about.astro";
+const $$url = "/about";
+
+const _page = /*#__PURE__*/Object.freeze(/*#__PURE__*/Object.defineProperty({
+	__proto__: null,
+	default: $$About,
+	file: $$file,
+	url: $$url
+}, Symbol.toStringTag, { value: 'Module' }));
+
+const page = () => _page;
+
+export { page };

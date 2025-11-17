@@ -2,12 +2,11 @@
 import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import profileImage from '../images/NS-profile-2.png';
-import Button from '../components/Button.astro';
 
 const expertise = [
   {
     title: 'Enterprise Design Systems & Team Collaboration',
-    description: `I've designed and delivered a production design system for a major South African bank, including their website, mobile app, and secure dashboards. I led a team to design a new onboarding experience that balanced security with usability. For another major bank, I created a rapid prototype using FlutterFlow and Supabase that let stakeholders validate concepts before full development. I design systems that scale without creating implementation headaches.`,
+    description: `I've designed and delivered a production design system for Bidvest Bank, including their website, mobile app, and secure dashboards. I led a team to design a new onboarding experience that balanced security with usability. For ABSA, I created a rapid prototype using FlutterFlow and Supabase that let stakeholders validate concepts before full development. I design systems that scale without creating implementation headaches.`,
     icon: 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'
   },
   {
@@ -22,41 +21,41 @@ const expertise = [
   },
   {
     title: 'Mentorship & Continuous Growth',
-    description: `I've mentored designers from junior to intermediate levels, including guiding someone from construction into UI design in six months. I'm always learning, recently earning my ISO 42001 certification to understand AI implementation at a governance level. I believe in building while learning and helping teams bridge knowledge gaps between design and engineering.`,
+    description: `I've mentored designers from junior to senior levels, including guiding someone from construction into UI design in six months. I'm always learning, recently earning my ISO 42001 certification to understand AI implementation at a governance level. I believe in building while learning and helping teams bridge knowledge gaps between design and engineering.`,
     icon: 'M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75'
   }
 ];
 
 const skills = {
-  productDesign: [
+  design: [
     'Design Systems',
-    'User Research',
+    'User-Centered Design',
     'Design Thinking',
-    'Information Architecture'
+    'Cross-functional Collaboration'
   ],
-  technicalExecution: [
+  technical: [
     'React & Astro',
     'Supabase & Neon',
     'API Integration',
-    'MCPs'
+    'Authentication & Security'
+  ],
+  prototyping: [
+    'FlutterFlow',
+    'Webflow',
+    'Functional Prototypes',
+    'Rapid Validation'
   ],
   aiTools: [
-    'Cursor & Warp',
-    'Claude & Mistral',
-    'Replit & v0',
-    'Perplexity & Gemini'
+    'Claude & Cursor',
+    'AI-Assisted Development',
+    'Bolt & v0',
+    'Workflow Automation'
   ],
-  designTools: [
+  foundations: [
     'Figma & FigJam',
-    'Adobe Creative Suite',
-    'Affinity',
-    'Miro'
-  ],
-  leadership: [
-    'Team Mentorship',
-    'Stakeholder Management',
+    'Git & Version Control',
     'Agile Methodologies',
-    'Cross-functional Collaboration'
+    'Design Documentation'
   ]
 };
 
@@ -71,7 +70,7 @@ const experience = [
     role: 'Lead UI Designer',
     company: 'Immersion Group',
     period: '2022 - 2024',
-    description: `Designed production design systems and digital solutions for clients including Bidvest Bank, Old Mutual, and ABSA. Led a team to create a new secure onboarding experience for a major bank, collaborating closely with external development teams throughout implementation. Created rapid prototypes using FlutterFlow and Supabase for another major bank that allowed stakeholders to validate concepts before full development. Initiated and led an innovation project that upskilled six staff members while building a tested MVP, establishing a rapid prototyping proposition that opened new client conversations.`
+    description: `Designed production design systems and digital solutions for clients including Bidvest Bank, Old Mutual, and ABSA. Led a team to create a new secure onboarding experience for Bidvest, collaborating closely with external development teams throughout implementation. Created rapid prototypes using FlutterFlow and Supabase for ABSA that allowed stakeholders to validate concepts before full development. Initiated and led an innovation project that upskilled six staff members while building a tested MVP, establishing a rapid prototyping proposition that opened new client conversations.`
   },
   {
     role: 'Senior Digital Designer',
@@ -142,17 +141,25 @@ const experience = [
       <h2 class="text-2xl font-bold mb-8 text-foreground">Skills & Capabilities</h2>
       <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
         <div>
-          <h3 class="text-lg font-semibold mb-4 text-foreground">Product Design</h3>
+          <h3 class="text-lg font-semibold mb-4 text-foreground">Design Foundation</h3>
           <ul class="space-y-2">
-            {skills.productDesign.map((skill) => (
+            {skills.design.map((skill) => (
               <li class="text-muted-foreground">{skill}</li>
             ))}
           </ul>
         </div>
         <div>
-          <h3 class="text-lg font-semibold mb-4 text-foreground">Technical Execution</h3>
+          <h3 class="text-lg font-semibold mb-4 text-foreground">Technical</h3>
           <ul class="space-y-2">
-            {skills.technicalExecution.map((skill) => (
+            {skills.technical.map((skill) => (
+              <li class="text-muted-foreground">{skill}</li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-4 text-foreground">Prototyping</h3>
+          <ul class="space-y-2">
+            {skills.prototyping.map((skill) => (
               <li class="text-muted-foreground">{skill}</li>
             ))}
           </ul>
@@ -166,17 +173,9 @@ const experience = [
           </ul>
         </div>
         <div>
-          <h3 class="text-lg font-semibold mb-4 text-foreground">Design Tools</h3>
+          <h3 class="text-lg font-semibold mb-4 text-foreground">Foundations</h3>
           <ul class="space-y-2">
-            {skills.designTools.map((skill) => (
-              <li class="text-muted-foreground">{skill}</li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <h3 class="text-lg font-semibold mb-4 text-foreground">Leadership</h3>
-          <ul class="space-y-2">
-            {skills.leadership.map((skill) => (
+            {skills.foundations.map((skill) => (
               <li class="text-muted-foreground">{skill}</li>
             ))}
           </ul>
@@ -200,16 +199,10 @@ const experience = [
 
     <section class="mb-32">
       <div class="max-w-4xl">
-        <p class="text-xl text-muted-foreground mb-8">
+        <p class="text-xl text-muted-foreground">
           If you're building innovative teams and need a technical designer who solves problems, mentors effectively, and delivers results, let's connect.
         </p>
-        <Button
-          href="/contact"
-          text="Let's Connect"
-          variant="primary"
-        />
       </div>
-
     </section>
 
   </div>
