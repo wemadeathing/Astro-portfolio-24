@@ -16,13 +16,14 @@ interface Props {
 
 const { 
   title,
-  description = "Nasif Salaam - Portfolio and Insights. Professional design, development, and AI integration services.",
+  description = "Technical Product Designer & AI Integration Specialist. Building enterprise design systems, rapid prototypes, and AI-powered products. Designer who codes with 15+ years experience.",
   image = "/images/NS-profile-2.png",
   canonicalURL = Astro.url.href,
   robots = "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
 } = Astro.props;
 
 const siteUrl = "https://www.nasifsalaam.com"; // Your actual domain
+const siteName = "Nasif Salaam";
 ---
 
 <!DOCTYPE html>
@@ -35,12 +36,12 @@ const siteUrl = "https://www.nasifsalaam.com"; // Your actual domain
     <title>{title}</title>
     <meta name="title" content={title} />
     <meta name="description" content={description} />
-    <meta name="keywords" content="Nasif Salaam, Product Designer, UI/UX Designer, Web Developer, AI Integration, Portfolio, Design Services, Development Services" />
+    <meta name="keywords" content="Technical Product Designer, AI Product Designer, Design Systems Specialist, Full-stack Designer, AI-accelerated product design, Enterprise design systems, Designer who codes, Rapid prototyping with AI, Cursor AI, Claude AI, Design to development, Nasif Salaam" />
     <meta name="author" content="Nasif Salaam" />
     <meta name="google-site-verification" content="0AkXWv8ep3tS3TRVwSrSE670DTYpn--SyBuwlz1P9H8"/>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/favicon.ico" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="manifest" href="/Web Manifest.json">
     
     <!-- Canonical URL -->
@@ -48,19 +49,24 @@ const siteUrl = "https://www.nasifsalaam.com"; // Your actual domain
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteName} />
     <meta property="og:url" content={canonicalURL} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={new URL(image, siteUrl)} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={title} />
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:site" content="@nasifsalaam" />
+    <meta property="twitter:creator" content="@nasifsalaam" />
     <meta property="twitter:url" content={canonicalURL} />
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={new URL(image, siteUrl)} />
+    <meta property="twitter:image:alt" content={title} />
     
     <!-- Additional Meta Tags -->
     <meta name="generator" content={Astro.generator} />
@@ -78,8 +84,8 @@ const siteUrl = "https://www.nasifsalaam.com"; // Your actual domain
           "https://twitter.com/nasifsalaam",
           "https://github.com/nasifsalaam"
         ],
-        "jobTitle": "Designer & Developer",
-        "description": "Portfolio and Insights. Professional design, development, and AI integration services."
+        "jobTitle": "Technical Product Designer & AI Integration Specialist",
+        "description": "Technical Product Designer specializing in enterprise design systems, AI-accelerated development, and rapid prototyping. Designer who codes with 15+ years experience building production applications."
       }
     </script>
 

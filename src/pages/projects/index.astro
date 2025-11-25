@@ -7,7 +7,10 @@ const allProjects = await getCollection('projects');
 const projects = allProjects.filter(project => project.data.published !== false);
 ---
 
-<Layout title="Projects | Featured Work">
+<Layout 
+  title="Projects | Enterprise Design Systems & AI-Powered Products"
+  description="Portfolio of enterprise design systems, AI-powered applications, and rapid prototypes. Case studies featuring fintech platforms, WhatsApp Flow builders, and production SaaS products."
+>
   <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32">
     <h1 class="text-4xl font-bold mb-16">Work</h1>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-12 stagger-children">
