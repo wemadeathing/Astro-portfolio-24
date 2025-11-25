@@ -86,7 +86,7 @@ Server endpoints in `src/pages/api/`:
 - **Tailwind CSS** with custom theme in `tailwind.config.js`
 - **Dark mode only** design (no light mode toggle)
 - HSL-based color system with CSS custom properties in `src/styles/globals.css`
-- Primary color: `265 89% 78%` (purple/violet)
+- Primary color: `80.5 82.6% 72.9%` (lime green)
 - Font: Instrument Sans (`@fontsource/instrument-sans`)
 - Component library utilities: `class-variance-authority`, `clsx`, `tailwind-merge`
 

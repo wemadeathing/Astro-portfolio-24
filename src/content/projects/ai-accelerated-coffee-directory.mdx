@@ -1,0 +1,155 @@
+---
+title: "AI-Accelerated Coffee Directory"
+description: "Built a complete coffee shop directory for Cape Town from concept to production in two weeks, using AI across the entire workflow."
+image: "/images/work/findmeacoffee/findmeacoffee-thumbnail.jpeg"
+tags: ["Full Stack", "AI Development", "AstroJS", "Supabase", "Automation"]
+published: true
+---
+import ClickableImage from '../../components/ClickableImage.astro';
+import FeatureCard from '../../components/FeatureCard.astro';
+import ProjectStats from '../../components/ProjectStats.astro';
+import TechStack from '../../components/TechStack.astro';
+
+<ProjectStats
+  stats={[
+    { label: "Timeline", value: "2 Weeks" },
+    { label: "Role", value: "Solo (All Phases)" },
+    { label: "Status", value: "Live Production" },
+    { label: "Stack", value: "AstroJS + Supabase" }
+  ]}
+/>
+
+<div class="prose prose-lg max-w-none">
+
+## Project Overview
+
+I wanted to build a curated coffee directory for Cape Town while experimenting with an AI-accelerated workflow that could become a blueprint for future directory projects. After research on Perplexity showed no quality coffee-specific directories existed, and conversations with coffee enthusiasts confirmed demand, I decided to build it as both a learning opportunity and potential business model.
+
+## The Challenge
+
+**No Quality Local Directories**
+While Google Maps existed, coffee enthusiasts in WhatsApp communities mentioned wanting a curated, coffee-specific resource. General directories didn't capture the nuance of Cape Town's coffee scene.
+
+**Data Collection at Scale**
+Manually adding hundreds of coffee shops with details like hours, addresses, and reviews would take months. The process needed to be automated to be viable.
+
+**Speed of Execution**
+I wanted to validate the concept quickly. Traditional workflows with design mockups and lengthy development cycles wouldn't work for rapid validation.
+
+**Reusable Framework**
+The real goal was creating a blueprint that could be applied to other vertical directories. The structure needed to be category-agnostic from the start.
+
+## Role & Responsibilities
+
+I handled everything: strategy, research, design, development, deployment, and content creation. This was a solo project from concept to live production site.
+
+## Process & Approach
+
+### Research & Validation
+
+I used Perplexity to research existing coffee directories in Cape Town and similar markets. Nothing quality existed. I validated demand through conversations with coffee enthusiasts in WhatsApp communities who mentioned wanting exactly this kind of curated resource. The gap was clear.
+
+### Stack Selection
+
+I chose AstroJS for frontend performance and React Islands for server-side functionality. Supabase became the backend because it provides vector capabilities for future AI features like semantic search and recommendations. The stack needed to be fast, scalable, and AI-ready.
+
+### Design Approach
+
+I skipped Figma entirely. Designed directly in Cursor because structure and speed mattered more than high-fidelity mockups. AI helped generate component structures, iterate on layouts, and refine UI patterns rapidly. This eliminated the design-to-code translation step completely and let me move faster.
+
+### Building the Data Pipeline
+
+This is where the project got interesting. I needed hundreds of coffee shops with accurate information, and manual entry wasn't an option.
+
+First, I used Apify to scrape Cape Town coffee shops and extract Google Place IDs for each business. Then I built a custom tool in Replit that ingests the Place ID JSON and queries the Google Places API for detailed business information: name, address, coordinates, hours, phone, website, and reviews. The tool outputs a CSV formatted exactly to match my Supabase schema.
+
+<ClickableImage 
+  src="/images/work/findmeacoffee/findmeacoffee-apify-action.png"
+  alt="Apify Web Scraper Setup"
+  caption="Apify scraper configuration for extracting coffee shop data"
+/>
+
+<ClickableImage 
+  src="/images/work/findmeacoffee/findmeacoffee-extractor.jpeg"
+  alt="Custom Data Extractor Tool"
+  caption="Custom Replit tool for processing Google Places API data"
+/>
+
+Once I had the CSV, I imported it directly to Supabase, cleaned up the data, and added metadata with boolean flags for featured listings and premium listings. For premium listings, I used AI to generate descriptions as a value add. The entire process from scrape to live listing became automated. I could add new businesses in minutes instead of hours of manual entry.
+
+<ClickableImage 
+  src="/images/work/findmeacoffee/findmeacoffee-supabase-table.png"
+  alt="Supabase Database Structure"
+  caption="Database schema with imported coffee shop listings"
+/>
+
+### Content & SEO
+
+I used Claude and Perplexity to generate all frontend copy, page descriptions, and SEO-optimized content. AI handled meta descriptions, heading structure, and keyword integration while I focused on information architecture and user flow.
+
+### Deployment
+
+Built and deployed using Cursor for development and Netlify for hosting. I configured the custom domain through a separate registrar. Total deployment time was under an hour.
+
+## Technical Stack
+
+<TechStack 
+  items={[
+    { category: "Frontend", tools: ["AstroJS", "React Islands", "Tailwind CSS"] },
+    { category: "Backend", tools: ["Supabase", "PostgreSQL", "Authentication"] },
+    { category: "APIs", tools: ["Google Places API", "Apify"] },
+    { category: "Development", tools: ["Cursor", "Claude AI", "Perplexity"] },
+    { category: "Deployment", tools: ["Netlify", "Custom Domain"] }
+  ]}
+/>
+
+
+
+## Results & Impact
+
+**Live Production Site**
+Deployed at findmeacoffee.co.za with full functionality including search, filtering, and detailed business pages. Everything works as intended. After being live for a few weeks I noticed that I was getting good placement on Google as well as impressions, but not enough clicks to be considered successful. The next step is to improve the SEO and get more clicks.
+
+<ClickableImage 
+  src="/images/work/findmeacoffee/findmeacoffee-home.png"
+  alt="Coffee Directory Homepage"
+  caption="Live site homepage with search and featured listings"
+/>
+
+<ClickableImage 
+  src="/images/work/findmeacoffee/findmeacoffee-listing.png"
+  alt="Coffee Shop Listings"
+  caption="Directory listing page with coffee shop details"
+/>
+
+<ClickableImage 
+  src="/images/work/findmeacoffee/findmeacoffee-filter.png"
+  alt="Search and Filter Interface"
+  caption="Advanced filtering for coffee shop discovery"
+/>
+
+**SEO Performance**
+Achieved first-page Google rankings for target keywords including "coffee shops Cape Town" and related searches. Listings are indexed and appearing in organic search results.
+
+**Technical Validation**
+Proved that AI-accelerated full-stack development can compress timelines dramatically. What would traditionally take four to six weeks was accomplished in two weeks while maintaining quality.
+
+**Reusable Framework**
+Created a blueprint for directory sites that can be replicated for other verticals like restaurants, retail, or services. The data pipeline and architecture are category-agnostic.
+
+## Key Learnings
+
+- Designing directly in code eliminated the handoff gap and accelerated iteration. For projects where speed matters more than pixel perfection, this approach is helpful, however it is not always the best approach as planning is still needed. The constraint forced better systematic thinking about components and reusability.
+- Building the Replit extraction tool solved a unique problem faster than searching for existing solutions. When you understand the full stack, custom automation becomes a competitive advantage.
+- AI works best when you understand fundamentals. It accelerated execution without replacing strategic thinking about architecture, data modeling, or user experience. The decisions were mine. AI just made implementation faster.
+- SEO requires patience. While the technical foundation is solid and content is optimized, SEO results compound over time. The site is getting impressions but click-through rates need improvement through content refinement and backlink building.
+- The investment in building the data pipeline paid off immediately. Adding new listings takes minutes instead of hours. This automation makes the project sustainable long-term.
+
+## Future Enhancements
+
+I plan to implement vector search using Supabase AI capabilities, add user reviews and ratings, and create a submission form for businesses to self-list. Expanding to additional cities like Johannesburg and Durban makes sense. Monetization through featured listings and advertising is the next step, along with building a mobile app using the same backend. A recommendation engine based on user preferences would complete the experience.
+
+---
+
+
+</div>

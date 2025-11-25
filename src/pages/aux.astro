@@ -1,0 +1,288 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Button from '../components/Button.astro';
+import LogoCarousel from '../components/LogoCarousel.astro';
+
+// Images
+const fintechImage = '/images/fintech-feature.png';
+const placeholderImage = '/images/placeholder.png';
+
+// Image strip images - using actual work images
+const stripImages = [
+  '/images/fintech-ui-design.png',
+  '/images/work/ripple-app-1.png', 
+  '/images/work/everprompt-app1.png',
+  '/images/ri-ui-design.png'
+];
+
+const skills = {
+  "Product Design": ["Design Systems", "User Research", "Design Thinking", "Brand Development"],
+  "Technical Execution": ["HTML, CSS & Astro", "Supabase & Postgres", "API Integration", "MCPs"],
+  "AI Tools": ["Claude & Cursor", "Bolt & Replit", "Perplexity & Mistral", "ComfyUI"],
+  "Design Tools": ["Figma & FigJam", "Adobe Creative Suite", "Affinity", "FlutterFlow"],
+  "Soft Skills": ["Leadership", "Training & Mentorship", "Communication", "Cross-functional Collaboration"]
+};
+
+const featuredProjects = [
+  {
+    title: "Financial Institution Digital Transformation",
+    summary: "Led UI design and creative direction for a leading South African bank's digital transformation. Built a production design system spanning public web, secure platforms, and mobile app.",
+    tags: ["Design Systems", "Enterprise Collaboration", "Technical Constraints", "Longevity"],
+    image: fintechImage,
+    links: [
+      { text: "View Full Case Study", href: "/projects/financial-institution-digital-transformation", variant: "primary" }
+    ]
+  },
+  {
+    title: "AI-Accelerated Coffee Directory",
+    summary: "Built a complete directory from concept to production in two weeks using AI. Created a custom data pipeline and designed directly in code with Cursor for maximum speed.",
+    tags: ["AI Workflow", "Full-stack Development", "Rapid Execution", "Automation"],
+    image: "/images/work/findmeacoffee/findmeacoffee-thumbnail.jpeg",
+    links: [
+      { text: "View Full Case Study", href: "/projects/ai-accelerated-coffee-directory", variant: "primary" },
+      { text: "View Live Site", href: "https://findmeacoffee.co.za", variant: "secondary", external: true }
+    ]
+  },
+  {
+    title: "AI-Powered WhatsApp Flow Builder",
+    summary: "Built an AI-powered visual builder that evolved into a full SaaS platform with AI generation, Figma export, and endpoint simulation. Reduces flow creation time from days to minutes.",
+    tags: ["Product Thinking", "Cross-functional Workflow", "AI Integration", "SaaS Platform"],
+    image: "/images/work/flows/flows-feature.jpeg",
+    links: [
+      { text: "View Full Case Study", href: "/projects/ai-powered-whatsapp-flow-builder", variant: "primary" }
+    ]
+  }
+];
+---
+
+<Layout 
+  title="Nasif Salaam - Product Designer for AUX Studio"
+  description="Multidisciplinary designer with 15+ years experience in design systems, rapid prototyping, and AI-accelerated development. Specialized in enterprise applications and cross-functional collaboration."
+  robots="noindex, nofollow"
+>
+  <div class="absolute inset-0 h-screen bg-gradient-hero after:absolute after:inset-0 after:bg-gradient-to-b after:from-transparent after:to-background after:opacity-90 -z-10"></div>
+
+  <!-- Hero Section -->
+  <section class="relative min-h-[90vh] flex flex-col pt-16 sm:pt-20">
+    <div class="flex-1 flex items-center">
+      <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl">
+          <h1 class="text-4xl sm:text-6xl md:text-6xl lg:text-7xl font-bold mb-6 text-foreground leading-tight sm:leading-tight md:leading-tight lg:leading-tight">
+            Hi, I'm Nasif.<br/>
+            <span class="text-gradient">Multidisciplinary Designer.</span>
+          </h1>
+          <p class="text-xl sm:text-2xl text-muted-foreground mb-10 max-w-3xl leading-relaxed">
+            15+ years designing brands, print, and digital products. I love building, learning, experimenting, and solving problems. This mindset has been extremely valuable in learning AI, which has transformed every aspect of how I think and work. 
+          </p>
+          
+        </div>
+      </div>
+    </div>
+
+    <!-- Image Strip at Bottom -->
+    <div class="w-full overflow-hidden hidden">
+      <div class="flex gap-0 h-24 sm:h-32">
+        <div class="flex-1 min-w-0">
+          <img 
+            src="/images/placeholder.png" 
+            alt="Portfolio work 1"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <div class="flex-1 min-w-0">
+          <img 
+            src="/images/placeholder.png" 
+            alt="Portfolio work 2"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <div class="flex-1 min-w-0">
+          <img 
+            src="/images/placeholder.png" 
+            alt="Portfolio work 3"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <div class="flex-1 min-w-0">
+          <img 
+            src="/images/placeholder.png" 
+            alt="Portfolio work 4"
+            class="w-full h-full object-cover"
+          />
+        </div>
+        <div class="flex-1 min-w-0">
+          <img 
+            src="/images/placeholder.png" 
+            alt="Portfolio work 5"
+            class="w-full h-full object-cover"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Scroll Down Indicator -->
+    <a href="#why-aux" class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center opacity-60 hover:opacity-100 transition-opacity cursor-pointer z-10">
+      <span class="text-xs text-muted-foreground font-medium tracking-widest uppercase mb-2">Scroll</span>
+      <div class="w-6 h-10 rounded-full border-2 border-muted-foreground/30 flex items-start justify-center p-2">
+        <div class="w-1 h-2 bg-primary rounded-full"></div>
+      </div>
+    </a>
+  </section>
+
+  <!-- Why AUX & Why Me Section -->
+  <section id="why-aux" class="bg-background py-20 scroll-mt-20">
+    <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
+        
+        <!-- Why AUX? -->
+        <div class="bg-secondary/20 p-8 sm:p-10 rounded-3xl border border-white/5 hover:border-primary/20 transition-colors group h-full">
+          <div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center mb-8 text-primary group-hover:scale-110 transition-transform duration-500">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+            </svg>
+          </div>
+          <h2 class="text-3xl font-bold mb-6 text-foreground">Why AUX?</h2>
+          <div class="prose prose-invert text-muted-foreground text-lg leading-relaxed">
+            <p class="mb-4">
+              I've been looking for an AI startup or design studio that <span class="text-foreground font-medium">leverages AI, is future focused</span>, and values people, growth, and meaningful work. There's significant overlap with my diverse skillset.
+            </p>
+            <p>
+              I believe I can <span class="text-foreground font-medium">deliver value while learning</span> from the AUX team in the process. The quality of work is excellent, as is the frameworks used to achieve those results.
+            </p>
+          </div>
+        </div>
+
+        <!-- Why Me? -->
+        <div class="bg-secondary/20 p-8 sm:p-10 rounded-3xl border border-white/5 hover:border-primary/20 transition-colors group h-full">
+          <div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center mb-8 text-primary group-hover:scale-110 transition-transform duration-500">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>
+          <h2 class="text-3xl font-bold mb-6 text-foreground">Why Me?</h2>
+          <div class="prose prose-invert text-muted-foreground text-lg leading-relaxed">
+            <p class="mb-4">
+              I bring experience across your core services: <span class="text-foreground font-medium">brand, UI/UX, design systems, and AI prototyping</span>. I'm comfortable working end-to-end on independent projects or within larger teams.
+            </p>
+            <p>
+              I'm obsessed with optimization and learning, a mindset that has been invaluable in mastering AI-accelerated workflows and building products.
+            </p>  
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- How I Use AI Section -->
+  <section class="py-20 overflow-hidden">
+    <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+      <div class="max-w-4xl">
+        <h2 class="text-3xl font-bold mb-6 text-foreground">How I Use AI</h2>
+        <div class="prose prose-invert text-muted-foreground text-lg leading-relaxed">
+          <p class="mb-6">
+            I started using AI in early 2023 and immediately adjusted my workflow and processes. On occasion I train people how to get the most out of it while using it safely. I'm a bit of an AI nerd and Claude fanboy. I've used so many AI tools that I actually had to tell myself to slow down.
+          </p>
+          <p>
+            Today I use Perplexity, Claude, Gemini, and Mistral for strategic work: research, design, content, planning. MCPs with Notion and Linear for project docs and management. Cursor (Sonnet 4.5, Gemini 3, Codex) for building products. Then a bit of Replit, Lovable, and Bolt for prototyping or simple tools. I could go on and on about this topic, so it would be cool to chat. I am also ISO 42001 certified to help businesses implement AI responsibly.
+          </p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="w-full">
+      <LogoCarousel speed={40} />
+    </div>
+  </section>
+
+  <!-- Featured Work Section -->
+  <section class="bg-background py-24">
+    <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-4xl font-bold mb-12 text-foreground">Featured Work</h2>
+      
+      <div class="flex flex-col gap-24 sm:gap-32">
+        {featuredProjects.map((project, index) => {
+          const isEven = index % 2 === 0;
+          return (
+            <div class="group relative">
+              <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-center">
+                
+                <!-- Image Column -->
+                <div class={`relative aspect-video overflow-hidden rounded-2xl ${isEven ? 'lg:order-1' : 'lg:order-2'} shadow-2xl`}>
+                  <img 
+                    src={project.image} 
+                    alt={project.title}
+                    loading="eager"
+                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                </div>
+
+                <!-- Content Column -->
+                <div class={`flex flex-col justify-center ${isEven ? 'lg:order-2' : 'lg:order-1'}`}>
+                  
+                  <h3 class="text-3xl font-bold mb-4 text-foreground">{project.title}</h3>
+                  <p class="text-muted-foreground mb-8 leading-relaxed text-lg">
+                    {project.summary}
+                  </p>
+                  
+                  <div class="flex flex-wrap gap-4">
+                    {project.links.map((link) => (
+                      <Button 
+                        href={link.href}
+                        text={link.text}
+                        variant={link.variant as 'primary' | 'secondary'}
+                        external={link.external}
+                        class="!h-10 !px-6 !text-sm"
+                      />
+                    ))}
+                  </div>
+                </div>
+                
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section class="bg-secondary/30 py-24 border-t border-border/50">
+    <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-4xl font-bold mb-12 text-foreground">Skills</h2>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
+        {Object.entries(skills).map(([category, items]) => (
+          <div>
+            <h3 class="text-lg font-bold mb-6 text-foreground">{category}</h3>
+            <ul class="space-y-3">
+              {items.map((item) => (
+                <li class="text-muted-foreground text-base">{item}</li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Closing Section -->
+  <section class="bg-background py-24 text-center">
+    <div class="container max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="text-4xl font-bold mb-6 text-foreground">Let's Work Together</h2>
+      <p class="text-xl text-muted-foreground mb-8 leading-relaxed">
+        I bring 15+ years of experience designing and building experiences across a range of industries. I've led teams, shipped design systems, built functional products, and collaborated with engineering teams to deliver work that ships. If you're looking for someone like me, let's talk.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-6">
+        <Button 
+          href="/contact"
+          text="Schedule a Conversation"
+          variant="primary"
+        />
+       
+      </div>
+    </div>
+  </section>
+
+</Layout>

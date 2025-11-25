@@ -4,25 +4,25 @@
  
 @layer base {
   :root {
-    --background: 0 0% 0%;
+    --background: 0 0% 5%;
     --foreground: 0 0% 92%;
-    --card: 240 10% 3.9%;
+    --card: 240 10% 8%;
     --card-foreground: 0 0% 92%;
-    --popover: 240 10% 3.9%;
+    --popover: 240 10% 8%;
     --popover-foreground: 0 0% 92%;
-    --primary: 265 89% 78%;
+    --primary: 80.5 82.6% 72.9%;
     --primary-foreground: 240 5.9% 10%;
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 92%;
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 84.9%;
-    --accent: 265 89% 78%;
+    --accent: 80.5 82.6% 72.9%;
     --accent-foreground: 240 5.9% 10%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 92%;
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
-    --ring: 265 89% 78%;
+    --ring: 80.5 82.6% 72.9%;
     --radius: 0.75rem;
   }
 }
@@ -96,18 +96,18 @@
   background: 
     radial-gradient(
       circle at top right,
-      rgba(167, 139, 250, 0.15),
+      rgba(204, 243, 129, 0.15),
       rgba(0, 0, 0, 0) 50%
     ),
     radial-gradient(
       circle at bottom left,
-      rgba(167, 139, 250, 0.1),
+      rgba(204, 243, 129, 0.1),
       rgba(0, 0, 0, 0) 50%
     );
 }
 
 .text-gradient {
-  background: linear-gradient(to right, rgb(167, 139, 250), #c4b5fd);
+  background: linear-gradient(to right, rgb(204, 243, 129), #dffbc2);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -120,7 +120,7 @@
 
 .hover-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 20px 40px rgba(167, 139, 250, 0.1);
+  box-shadow: 0 20px 40px rgba(204, 243, 129, 0.1);
 }
 
 /* Custom scrollbar */
@@ -140,4 +140,3 @@
 ::-webkit-scrollbar-thumb:hover {
   background: hsl(var(--accent) / 0.5);
 }
-

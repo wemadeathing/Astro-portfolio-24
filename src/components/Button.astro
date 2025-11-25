@@ -18,10 +18,10 @@ const {
 
 // Define button styles based on variant
 const getButtonClasses = (variant: string) => {
-  const baseClasses = "inline-flex h-12 items-center justify-center rounded-full px-8 text-sm font-medium transition-colors";
+  const baseClasses = "inline-flex h-12 items-center justify-center rounded-full px-8 text-sm font-semibold transition-colors";
   
   if (variant === 'primary') {
-    return `${baseClasses} bg-white text-black hover:bg-white/90`;
+    return `${baseClasses} bg-primary text-primary-foreground hover:bg-primary/90`;
   } else {
     return `${baseClasses} border border-white/20 text-white hover:bg-white/10`;
   }

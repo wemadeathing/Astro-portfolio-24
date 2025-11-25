@@ -11,7 +11,7 @@ const featuredProjects = projects.filter(project => project.data.featured);
 ---
 
 <Layout title="Nasif Salaam | Technical Product Designer · Digital Innovation">
-  <div class="absolute inset-0 h-screen bg-gradient-hero after:absolute after:inset-0 after:bg-gradient-to-b after:from-transparent after:to-black after:opacity-90 -z-10"></div>
+  <div class="absolute inset-0 h-screen bg-gradient-hero after:absolute after:inset-0 after:bg-gradient-to-b after:from-transparent after:to-background after:opacity-90 -z-10"></div>
   <section class="relative min-h-[100vh] flex items-center pt-16 sm:pt-20">
     <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="max-w-4xl">
@@ -90,7 +90,7 @@ const featuredProjects = projects.filter(project => project.data.featured);
   </section>
 
   <script>
-    const roles = ["Product Designer ", "Rapid Prototyper ", "AI Design Specialist "];
+    const roles = ["Visual Designer ", "Product Designer ", "Rapid Prototyper ", "AI Design Specialist "];
     let currentIndex = 0;
     const roleElement = document.getElementById("changing-role");
     
@@ -156,7 +156,7 @@ const featuredProjects = projects.filter(project => project.data.featured);
           .cursor {
             animation: blink 0.8s infinite;
             font-weight: bold;
-            color: #8b5cf6;
+            color: #CCF381;
           }
           .logo-item {
             background: rgba(255, 255, 255, 0.1);
@@ -168,8 +168,8 @@ const featuredProjects = projects.filter(project => project.data.featured);
             transition: all 0.3s ease;
           }
           .logo-item:hover {
-            background: rgba(139, 92, 246, 0.2);
-            color: #8b5cf6;
+            background: rgba(204, 243, 129, 0.2);
+            color: #CCF381;
             transform: translateY(-1px);
           }
         `;

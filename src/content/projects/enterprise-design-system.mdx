@@ -6,13 +6,25 @@ tags: ["Design Systems", "UI Design", "Documentation", "Financial Services"]
 published: true
 ---
 import ClickableImage from '../../components/ClickableImage.astro';
+import FeatureCard from '../../components/FeatureCard.astro';
+import ProjectStats from '../../components/ProjectStats.astro';
+import TechStack from '../../components/TechStack.astro';
+
+<ProjectStats
+  stats={[
+    { label: "Role", value: "Senior UI Designer" },
+    { label: "Focus", value: "System Architecture" },
+    { label: "Output", value: "Web & Mobile System" },
+    { label: "Impact", value: "Unified Experience" }
+  ]}
+/>
 
 <div class="prose prose-lg max-w-none">
 
 ## Project Overview
 A South African financial institution needed a comprehensive design system to ensure consistency across their digital products while enabling rapid development and scaling. As Senior UI Designer, I architected and implemented a system that balanced brand consistency with platform-specific needs.
 
-<div class="flex items-center p-4 mb-6 text-sm rounded-lg bg-blue-50 text-blue-800 border border-blue-300">
+<div class="flex items-center p-4 mb-6 text-sm rounded-lg bg-blue-50 text-blue-800 border border-blue-300 not-prose">
   <svg class="flex-shrink-0 inline w-4 h-4 mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
   </svg>
@@ -21,52 +33,27 @@ A South African financial institution needed a comprehensive design system to en
 
 ## The Challenge
 
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 my-8">
-  <div class="relative overflow-hidden rounded-xl bg-card p-6 border border-primary/40">
-    <div class="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent"></div>
-    <h3 class="text-lg font-semibold mb-3 relative z-10">Multiple Products</h3>
-    <p class="relative z-10">Different digital products with unique requirements needed a unified design language while maintaining flexibility for specific needs.</p>
-  </div>
-  <div class="relative overflow-hidden rounded-xl bg-card p-6 border border-primary/40">
-    <div class="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent"></div>
-    <h3 class="text-lg font-semibold mb-3 relative z-10">Platform Diversity</h3>
-    <p class="relative z-10">Web, mobile, and secure platforms each required specific adaptations while maintaining brand consistency and user experience.</p>
-  </div>
-  <div class="relative overflow-hidden rounded-xl bg-card p-6 border border-primary/40">
-    <div class="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent"></div>
-    <h3 class="text-lg font-semibold mb-3 relative z-10">Scale & Speed</h3>
-    <p class="relative z-10">Rapid development needs required efficient, scalable design solutions without compromising quality or consistency.</p>
-  </div>
-  <div class="relative overflow-hidden rounded-xl bg-card p-6 border border-primary/40">
-    <div class="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent"></div>
-    <h3 class="text-lg font-semibold mb-3 relative z-10">Team Distribution</h3>
-    <p class="relative z-10">Teams across different departments and functions needed a unified design system to ensure consistency and collaboration.</p>
-  </div>
-</div>
+**Multiple Products**
+Different digital products with unique requirements needed a unified design language while maintaining flexibility for specific needs.
+
+**Platform Diversity**
+Web, mobile, and secure platforms each required specific adaptations while maintaining brand consistency and user experience.
+
+**Scale & Speed**
+Rapid development needs required efficient, scalable design solutions without compromising quality or consistency.
+
+**Team Distribution**
+Teams across different departments and functions needed a unified design system to ensure consistency and collaboration.
 
 ## Role & Responsibilities
-<ul>
-  <li>Led design system architecture and implementation</li>
-  <li>Created and maintained component libraries</li>
-  <li>Developed comprehensive documentation</li>
-  <li>Supported development teams</li>
-  <li>Collaborated with developers to ensure alignment</li>
-  <li>Established design standards and guidelines</li>
-</ul>
 
+I led design system architecture and implementation, creating and maintaining component libraries while developing comprehensive documentation. I supported development teams throughout the process, collaborated with developers to ensure alignment, and established design standards and guidelines that would scale across the organization.
 
 ## Process & Approach
 
 ### Foundation Building
-The foundation of our design system was built on proven methodologies and best practices:
 
-<ul>
-  <li>Atomic Design Methodology: Implemented a scalable architecture using atoms, molecules, and organisms</li>
-  <li>Design Tokens: Created a comprehensive set of tokens for colors, typography and spacing</li>
-  <li>Base Components: Developed core components that serve as building blocks for more complex patterns</li>
-  <li>Documentation Standards: Established clear naming conventions and documentation requirements</li>
-</ul>
-
+The foundation of our design system was built on proven methodologies and best practices. I implemented a scalable architecture using atomic design principles with atoms, molecules, and organisms to ensure modularity. I created a comprehensive set of design tokens for colors, typography, and spacing to enable theming across platforms. The base components I developed served as building blocks for more complex patterns. Throughout this phase, I established clear naming conventions, usage guidelines, and documentation requirements that would make the system accessible to teams across the organization.
 
 <ClickableImage 
   src="/images/card 03 - base components.jpg"
@@ -75,13 +62,8 @@ The foundation of our design system was built on proven methodologies and best p
 />
 
 ### Component Development
-Our component development process focused on creating a versatile and maintainable library:
 
-<ul>
-  <li>Reusable Components - Built an extensive library of components</li>
-  <li>Responsive Design - Created flexible layouts that adapt seamlessly to different screen sizes</li>
-  <li>Scalability - Built a system that can be easily extended or modified</li>
-</ul>
+Our component development process focused on creating a versatile and maintainable library. I built an extensive library of reusable components that could be combined in countless ways. Each component was designed with responsive principles, creating flexible layouts that adapt seamlessly to different screen sizes. The system was built with scalability in mind, allowing it to be easily extended or modified as new requirements emerged without breaking existing implementations.
 
 <ClickableImage 
   src="/images/card 02 - structure.jpg"
@@ -90,46 +72,41 @@ Our component development process focused on creating a versatile and maintainab
 />
 
 ### Platform Adaptation
-We carefully adapted the system for different platforms while maintaining consistency:
 
-<ul>
-  <li>Mobile & Flutter - Adapted designs to better suit the Flutter framework</li>
-  <li>Notification Framework - Developed a Notification Framework to guide cross-functional teams</li>
-  <li>Flexibility - Core aspects of the system were designed for different platforms</li>
-</ul>
+We carefully adapted the system for different platforms while maintaining consistency. For mobile, I adapted designs to better suit the Flutter framework, accounting for its specific constraints and capabilities. I developed a notification framework to guide cross-functional teams in implementing consistent communication patterns across all touchpoints. Core aspects of the system were designed with flexibility in mind, allowing them to work effectively across different platforms while maintaining the essential brand characteristics.
 
 ## Results & Impact
 
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 my-8">
-  <div class="relative overflow-hidden rounded-xl bg-card p-6 border border-primary/40">
-    <div class="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent"></div>
-    <h3 class="text-lg font-semibold mb-3 relative z-10">Unified Design</h3>
-    <p class="relative z-10">Achieved consistent brand experience across all digital platforms, resulting in improved brand recognition and trust.</p>
-  </div>
-  <div class="relative overflow-hidden rounded-xl bg-card p-6 border border-primary/40">
-    <div class="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent"></div>
-    <h3 class="text-lg font-semibold mb-3 relative z-10">Development Speed</h3>
-    <p class="relative z-10">Faster implementation of new features through standardized components and clear documentation.</p>
-  </div>
-  <div class="relative overflow-hidden rounded-xl bg-card p-6 border border-primary/40">
-    <div class="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent"></div>
-    <h3 class="text-lg font-semibold mb-3 relative z-10">Quality Improvement</h3>
-    <p class="relative z-10">Reduction in design time through pre-built components and clear documentation.</p>
-  </div>
-  <div class="relative overflow-hidden rounded-xl bg-card p-6 border border-primary/40">
-    <div class="absolute inset-0 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent"></div>
-    <h3 class="text-lg font-semibold mb-3 relative z-10">Team Efficiency</h3>
-    <p class="relative z-10">Significantly improved collaboration and reduced decision-making time across distributed teams.</p>
-  </div>
-</div>
+**Unified Design**
+Achieved consistent brand experience across all digital platforms, resulting in improved brand recognition and trust.
+
+**Development Speed**
+Faster implementation of new features through standardized components and clear documentation.
+
+**Quality Improvement**
+Reduction in design time through pre-built components and clear documentation.
+
+**Team Efficiency**
+Significantly improved collaboration and reduced decision-making time across distributed teams.
+
+## Technical Implementation
+
+<TechStack 
+  items={[
+    { category: "Methodology", tools: ["Atomic Design", "Design Tokens"] },
+    { category: "Tools", tools: ["Figma", "Documentation Platform"] },
+    { category: "Frameworks", tools: ["React (Web)", "Flutter (Mobile)"] },
+    { category: "Deliverables", tools: ["Component Library", "Usage Guidelines"] }
+  ]}
+/>
 
 ## Key Learnings
-- Early developer collaboration is crucial for successful implementation
-- Systematic documentation is as important as the design itself
-- Regular feedback loops ensure system relevance and adoption
-- Balance between flexibility and consistency is key
-- Insights into development frameworks are invaluable
-- Leverage leading design systems and trends as a foundation for system design
 
+- Early developer collaboration is crucial for successful implementation. I learned that involving engineers from the beginning prevents downstream issues and ensures the system actually works in code, not just in design files.
+- Systematic documentation proved as important as the design itself. Without clear guidelines and examples, even the best components won't be used correctly.
+- Regular feedback loops ensured system relevance and adoption. I maintained constant communication with teams using the system to understand pain points and opportunities for improvement.
+- The balance between flexibility and consistency is key. Too rigid and teams can't solve unique problems. Too flexible and consistency breaks down.
+- Insights into development frameworks are invaluable. Understanding React and Flutter constraints informed better design decisions from the start.
+- I also learned to leverage leading design systems and trends as a foundation, adapting proven patterns rather than reinventing everything from scratch.
 
 </div>

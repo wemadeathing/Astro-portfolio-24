@@ -15,10 +15,6 @@ import Layout from '../layouts/Layout.astro';
         class="space-y-4"
         method="POST"
       >
-        <!-- Add the Web3Forms access key -->
-        <input type="hidden" name="access_key" value={import.meta.env.WEB3FORMS_ACCESS_KEY}>
-
-        <!-- Keep your existing form fields -->
         <div>
           <label for="name" class="block text-sm font-medium text-foreground mb-2">
             Name
@@ -67,7 +63,7 @@ import Layout from '../layouts/Layout.astro';
         <button
           type="submit"
           id="submitButton"
-          class="inline-flex h-12 items-center justify-center rounded-full bg-white px-8 text-sm font-medium text-black transition-colors hover:bg-white/90"
+          class="inline-flex h-12 items-center justify-center rounded-full bg-primary px-8 text-sm font-bold text-black transition-colors hover:bg-primary/90"
         >
           Send Message
         </button>
@@ -98,7 +94,7 @@ import Layout from '../layouts/Layout.astro';
     const object = Object.fromEntries(formData);
     const json = JSON.stringify(object);
 
-    fetch('https://api.web3forms.com/submit', {
+    fetch('/api/send-email', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -108,10 +104,11 @@ import Layout from '../layouts/Layout.astro';
     })
     .then(async (response) => {
       const json = await response.json();
-      if (response.status == 200) {
+      if (response.ok && json.success) {
         // Redirect to thank you page
         window.location.href = '/thank-you';
       } else {
+        console.error('Form submission failed:', json.error);
         if (loadingMessage) loadingMessage.classList.add('hidden');
         if (errorMessage) errorMessage.classList.remove('hidden');
       }
@@ -123,7 +120,6 @@ import Layout from '../layouts/Layout.astro';
     })
     .finally(() => {
       if (submitButton) submitButton.disabled = false;
-      form.reset();
     });
   });
 </script>

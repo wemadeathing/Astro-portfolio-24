@@ -11,13 +11,15 @@ interface Props {
   description?: string;
   image?: string;
   canonicalURL?: string;
+  robots?: string;
 }
 
 const { 
   title,
   description = "Nasif Salaam - Portfolio and Insights. Professional design, development, and AI integration services.",
   image = "/images/NS-profile-2.png",
-  canonicalURL = Astro.url.href
+  canonicalURL = Astro.url.href,
+  robots = "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
 } = Astro.props;
 
 const siteUrl = "https://www.nasifsalaam.com"; // Your actual domain
@@ -62,7 +64,7 @@ const siteUrl = "https://www.nasifsalaam.com"; // Your actual domain
     
     <!-- Additional Meta Tags -->
     <meta name="generator" content={Astro.generator} />
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="robots" content={robots} />
 
     <!-- Structured Data - Personal Portfolio -->
     <script type="application/ld+json">
