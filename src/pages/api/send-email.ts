@@ -15,8 +15,8 @@ const resend = new Resend(import.meta.env.RESEND_API_KEY);
 export const prerender = false;
 
 export const POST: APIRoute = async ({ request }) => {
-  if (!import.meta.env.RESEND_API_KEY || !import.meta.env.CONTACT_EMAIL) {
-    console.error('Missing environment variables: RESEND_API_KEY or CONTACT_EMAIL');
+  if (!import.meta.env.RESEND_API_KEY || !import.meta.env.RESEND_FROM_EMAIL) {
+    console.error('Missing environment variables: RESEND_API_KEY or RESEND_FROM_EMAIL');
     return new Response(JSON.stringify({ 
       success: false, 
       error: 'Server configuration error. Please contact the site administrator.' 
@@ -42,7 +42,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     const { data, error } = await resend.emails.send({
       from: 'Contact Form <onboarding@resend.dev>',
-      to: [import.meta.env.CONTACT_EMAIL],
+      to: [import.meta.env.RESEND_FROM_EMAIL],
       replyTo: email,
       subject: `New Contact Form Submission from ${escapeHtml(name)}`,
       html: `
