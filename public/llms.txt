@@ -1,0 +1,18 @@
+# Nasif Salaam — Portfolio
+
+## Summary
+Technical Product Designer & AI Integration Specialist. Portfolio includes selected projects, writing, and contact info.
+
+## Key pages
+- / (AI chat experience)
+- /projects (work)
+- /about (background)
+- /blog (writing)
+- /contact (inquiries)
+
+## Sitemap
+- /sitemap.xml
+
+## Notes
+- Some routes may be marked noindex (e.g. internal/unlisted pages).
+- Preferred canonical domain: https://www.nasifsalaam.com

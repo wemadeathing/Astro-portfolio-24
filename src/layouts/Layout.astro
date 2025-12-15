@@ -27,6 +27,52 @@ const {
 
 const siteUrl = "https://www.nasifsalaam.com"; // Your actual domain
 const siteName = "Nasif Salaam";
+const themeColor = "#0b0b0b";
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      url: siteUrl,
+      name: siteName,
+      description:
+        "Technical Product Designer & AI Integration Specialist. Building enterprise design systems, rapid prototypes, and AI-powered products.",
+      publisher: { "@id": `${siteUrl}/#person` },
+      inLanguage: "en",
+    },
+    {
+      "@type": "Person",
+      "@id": `${siteUrl}/#person`,
+      name: "Nasif Salaam",
+      url: siteUrl,
+      image: `${siteUrl}/images/ns26/logo26w.png`,
+      sameAs: [
+        "https://linkedin.com/in/nasifsalaam",
+        "https://twitter.com/nasifsalaam",
+        "https://github.com/nasifsalaam",
+      ],
+      jobTitle: "Technical Product Designer & AI Integration Specialist",
+      description:
+        "Technical Product Designer specializing in enterprise design systems, AI-accelerated development, and rapid prototyping.",
+    },
+    {
+      "@type": "WebPage",
+      "@id": `${canonicalURL}#webpage`,
+      url: canonicalURL,
+      name: title,
+      description,
+      isPartOf: { "@id": `${siteUrl}/#website` },
+      about: { "@id": `${siteUrl}/#person` },
+      primaryImageOfPage: {
+        "@type": "ImageObject",
+        url: String(new URL(image, siteUrl)),
+      },
+      inLanguage: "en",
+    },
+  ],
+};
 ---
 
 <!DOCTYPE html>
@@ -43,9 +89,15 @@ const siteName = "Nasif Salaam";
     <meta name="author" content="Nasif Salaam" />
     <meta name="google-site-verification" content="0AkXWv8ep3tS3TRVwSrSE670DTYpn--SyBuwlz1P9H8"/>
     
-    <!-- Favicon -->
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/logos/favicon32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/logos/favicon16.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="manifest" href="/Web Manifest.json">
+    <link rel="shortcut icon" href="/images/logos/favicon32.png" />
+
+    <!-- PWA -->
+    <meta name="theme-color" content={themeColor} />
+    <link rel="manifest" href="/Web%20Manifest.json">
     
     <!-- Canonical URL -->
     <link rel="canonical" href={canonicalURL} />
@@ -75,22 +127,8 @@ const siteName = "Nasif Salaam";
     <meta name="generator" content={Astro.generator} />
     <meta name="robots" content={robots} />
 
-    <!-- Structured Data - Personal Portfolio -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Nasif Salaam", 
-        "url": "https://www.nasifsalaam.com",
-        "sameAs": [
-          "https://linkedin.com/in/nasifsalaam",
-          "https://twitter.com/nasifsalaam",
-          "https://github.com/nasifsalaam"
-        ],
-        "jobTitle": "Technical Product Designer & AI Integration Specialist",
-        "description": "Technical Product Designer specializing in enterprise design systems, AI-accelerated development, and rapid prototyping. Designer who codes with 15+ years experience building production applications."
-      }
-    </script>
+    <!-- Structured Data (Schema.org) -->
+    <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
 
     <ViewTransitions fallback="none" />
 
