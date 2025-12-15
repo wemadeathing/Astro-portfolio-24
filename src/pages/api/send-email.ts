@@ -13,11 +13,18 @@ function escapeHtml(unsafe: string): string {
 export const prerender = false;
 
 const getEnv = (key: string) => {
-  // Netlify SSR runs in Node where runtime env vars are available on process.env.
-  // Depending on bundling, `import.meta.env` can be inlined at build time, so prefer runtime.
-  const runtime = (globalThis as any)?.process?.env?.[key];
-  if (typeof runtime === 'string' && runtime.trim()) return runtime.trim();
+  // Runtime (Node)
+  const nodeVal = (globalThis as any)?.process?.env?.[key];
+  if (typeof nodeVal === 'string' && nodeVal.trim()) return nodeVal.trim();
 
+  // Runtime (Edge / Deno)
+  const denoGet = (globalThis as any)?.Deno?.env?.get;
+  if (typeof denoGet === 'function') {
+    const denoVal = denoGet.call((globalThis as any).Deno.env, key);
+    if (typeof denoVal === 'string' && denoVal.trim()) return denoVal.trim();
+  }
+
+  // Build-time (Vite/Astro) fallback
   const buildTime = (import.meta as any)?.env?.[key];
   return typeof buildTime === 'string' ? buildTime.trim() : '';
 };
