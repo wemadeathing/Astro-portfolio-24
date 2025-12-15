@@ -13,8 +13,13 @@ function escapeHtml(unsafe: string): string {
 export const prerender = false;
 
 const getEnv = (key: string) => {
-  const v = (import.meta as any)?.env?.[key];
-  return typeof v === 'string' ? v.trim() : '';
+  // Netlify SSR runs in Node where runtime env vars are available on process.env.
+  // Depending on bundling, `import.meta.env` can be inlined at build time, so prefer runtime.
+  const runtime = (globalThis as any)?.process?.env?.[key];
+  if (typeof runtime === 'string' && runtime.trim()) return runtime.trim();
+
+  const buildTime = (import.meta as any)?.env?.[key];
+  return typeof buildTime === 'string' ? buildTime.trim() : '';
 };
 
 const formatFrom = (emailOrFrom: string) => {
