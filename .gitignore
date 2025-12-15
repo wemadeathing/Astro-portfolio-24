@@ -32,5 +32,18 @@ pnpm-debug.log*
 # Astro
 .astro/
 
+# Netlify
+.netlify/
+
 # Netlify functions
 netlify/functions/*.js
+
+# Internal docs (local-only)
+UX_REVIEW.md
+IMPROVEMENTS_IMPLEMENTED.md
+
+# Drafts / backups
+src/drafts/
+
+# Netlify local state (should not be tracked)
+.netlify/state.json

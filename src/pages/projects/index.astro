@@ -2,38 +2,120 @@
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
+const activeTag = Astro.url.searchParams.get('tag');
+
 // Only get published projects
 const allProjects = await getCollection('projects');
-const projects = allProjects.filter(project => project.data.published !== false);
+const projects = allProjects.filter((project) => project.data.published !== false);
+
+const tagCounts = projects
+  .flatMap((p) => p.data.tags ?? [])
+  .map((t) => String(t).trim())
+  .filter(Boolean)
+  .reduce((acc, tag) => {
+    acc.set(tag, (acc.get(tag) ?? 0) + 1);
+    return acc;
+  }, new Map<string, number>());
+
+const topTags = Array.from(tagCounts.entries())
+  .sort((a, b) => {
+    // higher count first, then alpha
+    if (b[1] !== a[1]) return b[1] - a[1];
+    return a[0].localeCompare(b[0]);
+  })
+  .slice(0, 8)
+  .map(([tag]) => tag);
+
+// Keep current filter visible even if it's not in the top list.
+const visibleTags = activeTag && !topTags.includes(activeTag) ? [activeTag, ...topTags] : topTags;
+
+const filteredProjects = activeTag
+  ? projects.filter((p) => (p.data.tags ?? []).includes(activeTag))
+  : projects;
+
+const buildTagHref = (tag: string | null) => {
+  const url = new URL(Astro.url);
+  if (!tag) url.searchParams.delete('tag');
+  else url.searchParams.set('tag', tag);
+  return `${url.pathname}${url.search}`;
+};
 ---
 
 <Layout 
   title="Projects | Enterprise Design Systems & AI-Powered Products"
   description="Portfolio of enterprise design systems, AI-powered applications, and rapid prototypes. Case studies featuring fintech platforms, WhatsApp Flow builders, and production SaaS products."
 >
-  <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32">
-    <h1 class="text-4xl font-bold mb-16">Work</h1>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 stagger-children">
-      {projects.map((project) => (
-        <a 
-          href={`/projects/${project.slug}`}
-          class="group block"
-        >
-          <div class="rounded-xl overflow-hidden mb-4">
-            <img
-              src={project.data.image}
-              alt={project.data.title}
-              class="w-full aspect-video object-cover transition-transform duration-300 group-hover:scale-105"
-            />
+  <section class="py-10 sm:py-14">
+    <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-[68ch]">
+        <h1 class="type-h1 text-white/95">Work</h1>
+        <p class="mt-4 type-lead text-white/70">
+          Selected projects across design systems, rapid prototyping, and practical AI integration.
+        </p>
+      </div>
+
+      {visibleTags.length > 0 && (
+        <div class="mt-7">
+          <div class="flex flex-wrap items-center gap-2 overflow-x-auto pb-1">
+            <a
+              href={buildTagHref(null)}
+              class:list={[
+                'inline-flex items-center rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors',
+                !activeTag
+                  ? 'bg-primary/15 text-white/90 border-primary/30'
+                  : 'bg-white/[0.03] text-white/70 border-white/10 hover:bg-white/[0.06] hover:text-white',
+              ]}
+              aria-current={!activeTag ? 'true' : undefined}
+            >
+              All
+            </a>
+            {visibleTags.map((tag) => {
+              const isActive = activeTag === tag;
+              return (
+                <a
+                  href={buildTagHref(tag)}
+                  class:list={[
+                    'inline-flex items-center rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors',
+                    isActive
+                      ? 'bg-primary/15 text-white/90 border-primary/30'
+                      : 'bg-white/[0.03] text-white/70 border-white/10 hover:bg-white/[0.06] hover:text-white',
+                  ]}
+                  aria-current={isActive ? 'true' : undefined}
+                  title={`Filter by ${tag}`}
+                >
+                  {tag}
+                </a>
+              );
+            })}
           </div>
-          <h2 class="text-xl font-semibold mb-2 group-hover:text-primary transition-colors">
-            {project.data.title}
-          </h2>
-          <p class="text-muted-foreground line-clamp-2">
-            {project.data.description}
-          </p>
-        </a>
-      ))}
+        </div>
+      )}
+
+      <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 stagger-children">
+        {filteredProjects.map((project) => (
+          <a
+            href={`/projects/${project.slug}`}
+            class="group block rounded-2xl border border-white/10 bg-white/[0.03] overflow-hidden transition-all hover:bg-white/[0.05] hover:border-white/20 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+          >
+            <div class="aspect-video overflow-hidden bg-white/5">
+              <img
+                src={project.data.image}
+                alt={project.data.title}
+                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                loading="lazy"
+              />
+            </div>
+            <div class="p-5">
+              <h2 class="text-base sm:text-lg font-semibold text-white/92 group-hover:text-primary transition-colors">
+                {project.data.title}
+              </h2>
+              <p class="mt-2 text-sm text-white/70 line-clamp-2">
+                {project.data.description}
+              </p>
+            </div>
+          </a>
+        ))}
+      </div>
     </div>
-  </div>
+  </section>
 </Layout> 

@@ -3,8 +3,9 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout title="Thank You | Message Sent">
-  <div class="container max-w-5xl mx-auto px-4 pt-32">
-    <div class="max-w-2xl mx-auto text-center">
+  <section class="py-12 sm:py-16">
+    <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-2xl mx-auto text-center">
       <div class="mb-8 flex justify-center">
         <div class="rounded-full bg-primary/10 p-4">
           <svg 
@@ -21,17 +22,18 @@ import Layout from '../layouts/Layout.astro';
         </div>
       </div>
       
-      <h1 class="text-4xl font-bold mb-6 text-foreground">Thank You!</h1>
-      <p class="text-xl text-muted-foreground mb-12">
+      <h1 class="type-h1 mb-6 text-foreground">Thank You!</h1>
+      <p class="type-lead text-muted-foreground mb-12">
         Your message has been sent successfully. I'll get back to you as soon as possible.
       </p>
       
       <a
         href="/"
-        class="inline-flex h-12 items-center justify-center rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80"
+        class="inline-flex h-12 items-center justify-center rounded-full bg-primary px-8 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
       >
         Back to Home
       </a>
+      </div>
     </div>
-  </div>
+  </section>
 </Layout>

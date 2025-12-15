@@ -3,26 +3,92 @@ import Layout from '../../layouts/Layout.astro';
 import BlogCard from '../../components/BlogCard.astro';
 import { getCollection } from 'astro:content';
 
+const activeTag = Astro.url.searchParams.get('tag');
+
 const posts = await getCollection('blog');
 const sortedPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const allTags = Array.from(
+  new Set(
+    sortedPosts
+      .flatMap((p) => p.data.tags ?? [])
+      .map((t) => String(t).trim())
+      .filter(Boolean)
+  )
+).sort((a, b) => a.localeCompare(b));
+
+const filteredPosts = activeTag
+  ? sortedPosts.filter((p) => (p.data.tags ?? []).includes(activeTag))
+  : sortedPosts;
+
+const buildTagHref = (tag: string | null) => {
+  const url = new URL(Astro.url);
+  if (!tag) url.searchParams.delete('tag');
+  else url.searchParams.set('tag', tag);
+  return `${url.pathname}${url.search}`;
+};
 ---
 
 <Layout 
   title="Blog | AI-Accelerated Design & Development Insights"
   description="Insights on AI-powered design workflows, rapid prototyping, design systems, and technical product design. Learn how to integrate AI tools like Claude, Cursor, and modern development practices."
 >
-  <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32">
-    <h1 class="text-4xl font-bold mb-16">Insights</h1>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 stagger-children">
-      {sortedPosts.map((post) => (
-        <BlogCard
-          title={post.data.title}
-          excerpt={post.data.description}
-          date={post.data.pubDate}
-          image={post.data.image}
-          slug={post.slug}
-        />
-      ))}
+  <section class="py-10 sm:py-14">
+    <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-[68ch]">
+        <h1 class="type-h1 text-white/95">Insights</h1>
+        <p class="mt-4 type-lead text-white/70">
+          Notes on AI-powered workflows, product craft, and the practical side of shipping.
+        </p>
+      </div>
+
+      {allTags.length > 0 && (
+        <div class="mt-7">
+          <div class="flex flex-wrap items-center gap-2 overflow-x-auto pb-1">
+            <a
+              href={buildTagHref(null)}
+              class:list={[
+                'inline-flex items-center rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors',
+                !activeTag
+                  ? 'bg-primary/15 text-white/90 border-primary/30'
+                  : 'bg-white/[0.03] text-white/70 border-white/10 hover:bg-white/[0.06] hover:text-white',
+              ]}
+              aria-current={!activeTag ? 'true' : undefined}
+            >
+              All
+            </a>
+            {allTags.map((tag) => {
+              const isActive = activeTag === tag;
+              return (
+                <a
+                  href={buildTagHref(tag)}
+                  class:list={[
+                    'inline-flex items-center rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors',
+                    isActive
+                      ? 'bg-primary/15 text-white/90 border-primary/30'
+                      : 'bg-white/[0.03] text-white/70 border-white/10 hover:bg-white/[0.06] hover:text-white',
+                  ]}
+                  aria-current={isActive ? 'true' : undefined}
+                >
+                  {tag}
+                </a>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 stagger-children">
+        {filteredPosts.map((post) => (
+          <BlogCard
+            title={post.data.title}
+            excerpt={post.data.description}
+            date={post.data.pubDate}
+            image={post.data.image}
+            slug={post.slug}
+          />
+        ))}
+      </div>
     </div>
-  </div>
+  </section>
 </Layout>

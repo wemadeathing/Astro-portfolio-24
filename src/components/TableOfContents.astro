@@ -8,24 +8,30 @@ const { content } = Astro.props;
 interface Heading {
   title: string;
   slug: string;
+  depth: 2 | 3;
 }
 
 function extractHeadings(content: string): Heading[] {
   const headings: Heading[] = [];
   const lines = content.split('\n');
-  
+
   for (const line of lines) {
-    const match = line.match(/^##\s+(.+)/);
-    if (match) {
-      const title = match[1].trim();
-      const slug = title
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/(^-|-$)/g, '');
-      headings.push({ title, slug });
-    }
+    const match = line.match(/^(#{2,3})\s+(.+)/);
+    if (!match) continue;
+
+    const hashes = match[1];
+    const title = match[2].trim();
+    const depth = (hashes.length as 2 | 3);
+
+    // Astro markdown uses GitHub-style slugs; this is close enough for typical headings.
+    const slug = title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+
+    headings.push({ title, slug, depth });
   }
-  
+
   return headings;
 }
 
@@ -33,14 +39,15 @@ const headings = extractHeadings(content);
 ---
 
 {headings.length > 0 && (
-  <div class="bg-gray-50 opacity-80 backdrop-blur-sm rounded-lg p-6">
-    <h2 class="text-sm font-semibold text-gray-900 mb-4">Table of Contents</h2>
-    <ul class="space-y-3">
+  <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+    <h2 class="text-xs tracking-wide uppercase text-white/60 mb-4">On this page</h2>
+    <ul class="space-y-2">
       {headings.map((heading) => (
         <li>
           <a
             href={`#${heading.slug}`}
-            class="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+            class="toc-link block rounded-lg px-2 py-1.5 text-sm text-white/70 hover:text-white/90 hover:bg-white/5 transition-colors"
+            style={`margin-left: ${(heading.depth - 2) * 1}rem`}
           >
             {heading.title}
           </a>
@@ -49,3 +56,11 @@ const headings = extractHeadings(content);
     </ul>
   </div>
 )}
+
+<style>
+  .toc-link.active {
+    background-color: rgba(255, 255, 255, 0.06);
+    color: rgba(255, 255, 255, 0.92);
+    font-weight: 500;
+  }
+</style>

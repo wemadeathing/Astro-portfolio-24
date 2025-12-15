@@ -1,42 +1,85 @@
 ---
 const navItems = [
-  { href: '/projects', label: 'Work' },
-  { href: '/about', label: 'About' },
-  { href: '/blog', label: 'Insights' },
-  { href: '/contact', label: 'Contact' },
+  { href: '/', label: 'Home', description: 'Back to the chat experience' },
+  { href: '/projects', label: 'Work', description: 'Browse featured case studies' },
+  { href: '/about', label: 'About', description: 'Background and approach' },
+  { href: '/blog', label: 'Insights', description: 'Writing on AI and product craft' },
+  { href: '/contact', label: 'Contact', description: 'Send a message or start a project' },
+  {
+    href: 'https://wa.me/0814623628?text=Hi!%20I%27d%20like%20to%20discuss%20a%20project%20with%20you.',
+    label: 'WhatsApp',
+    description: 'Message me directly on WhatsApp',
+    external: true,
+  },
 ];
+
+const pathname = Astro.url.pathname;
+const isHome = pathname === '/' || pathname === '';
 ---
 
-<header class="fixed w-full z-50">
-  <div class="absolute inset-0  backdrop-blur-xl"></div>
-  <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-    <nav class="flex items-center justify-between h-16">
-      <a 
-        href="/" 
-        class="text-2xl font-semibold text-white"
-      >
-        Nasif Salaam
-      </a>
+<header class="fixed top-4 left-0 right-0 z-50 px-4">
+  <div class="max-w-[1100px] mx-auto relative">
+    <nav class="flex items-center justify-between h-14 rounded-full bg-card/80 border border-border/60 backdrop-blur-xl px-2">
+      <div class="flex items-center gap-3">
+        {!isHome && (
+          <a 
+            href="/" 
+            class="w-8 h-8 flex items-center justify-center rounded-full bg-muted/50 hover:bg-muted text-foreground/70 hover:text-foreground transition-colors"
+            aria-label="Back to Home"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m15 18-6-6 6-6"/>
+            </svg>
+          </a>
+        )}
+        <a 
+          href="/" 
+          class="flex items-center hover:opacity-80 transition-opacity"
+        >
+          <img 
+            src="/images/ns26/logo26w-gradient.svg" 
+            alt="Nasif Salaam" 
+            class="h-7 sm:h-8 w-auto"
+          />
+        </a>
+      </div>
       
-      <!-- Desktop Menu -->
-      <ul class="hidden md:flex items-center gap-8">
-        {navItems.map((item) => (
-          <li>
-            <a
-              href={item.href}
-              class="text-sm font-bold text-muted-foreground transition-colors duration-200 hover:text-primary"
-            >
-              {item.label}
-            </a>
-          </li>
-        ))}
-      </ul>
-
-      <!-- Mobile Menu Button -->
+      <!-- Desktop Navigation (hidden on mobile) -->
+      <nav class="hidden md:flex items-center gap-6">
+        <a 
+          href="/projects" 
+          class="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
+        >
+          Work
+        </a>
+        <a 
+          href="/about" 
+          class="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
+        >
+          About
+        </a>
+        <a 
+          href="/blog" 
+          class="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
+        >
+          Insights
+        </a>
+        <a 
+          href="/contact" 
+          class="inline-flex h-10 items-center justify-center rounded-full bg-white/80 px-4 text-sm font-semibold text-black/90 transition-colors hover:bg-white/90 focus:outline-none focus-visible:ring-4 focus-visible:ring-white/20 border border-white/15 shadow-sm"
+        >
+          Contact
+        </a>
+      </nav>
+      
+      <!-- Burger (mobile only) -->
       <button
         id="menuButton"
-        class="md:hidden p-2 hover:bg-secondary rounded-lg transition-colors duration-200"
+        class="md:hidden w-10 h-10 flex items-center justify-center rounded-full bg-muted/30 border border-border/60 text-foreground/80 hover:bg-muted/45 transition-colors duration-200"
         aria-label="Toggle menu"
+        aria-expanded="false"
+        aria-controls="site-menu"
+        type="button"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -54,69 +97,203 @@ const navItems = [
           <line x1="4" x2="20" y1="18" y2="18"/>
         </svg>
       </button>
-
-      <!-- Mobile Menu -->
-      <div
-        id="mobileMenu"
-        class="fixed inset-0 bg-background/95 backdrop-blur-xl z-50 md:hidden opacity-0 pointer-events-none transition-opacity duration-300"
-      >
-        <div class="flex justify-between items-center p-4">
-          <span class="text-xl font-semibold text-gradient">Menu</span>
-          <button
-            id="closeButton"
-            class="p-2 hover:bg-secondary rounded-lg transition-colors duration-200"
-            aria-label="Close menu"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path d="M18 6 6 18"/>
-              <path d="m6 6 12 12"/>
-            </svg>
-          </button>
-        </div>
-        <ul class="p-4 space-y-4">
-          {navItems.map((item) => (
-            <li>
-              <a
-                href={item.href}
-                class="block text-lg font-medium text-muted-foreground hover:text-primary transition-colors duration-200 py-2"
-              >
-                {item.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
     </nav>
   </div>
 </header>
 
 <script>
-  const menuButton = document.getElementById('menuButton');
-  const closeButton = document.getElementById('closeButton');
-  const mobileMenu = document.getElementById('mobileMenu');
+  const initNavMenu = () => {
+    const menuButton = document.getElementById('menuButton') as HTMLButtonElement | null;
+    const menuRoot = document.getElementById('site-menu') as HTMLDivElement | null;
+    const closeButton = document.getElementById('site-menu-close') as HTMLButtonElement | null;
+    const panel = menuRoot?.querySelector('[data-menu-panel]') as HTMLDivElement | null;
 
-  const toggleMenu = (show: boolean) => {
-    if (mobileMenu) {
-      mobileMenu.style.opacity = show ? '1' : '0';
-      mobileMenu.style.pointerEvents = show ? 'auto' : 'none';
-      document.body.style.overflow = show ? 'hidden' : '';
-    }
+    if (!menuButton || !menuRoot) return;
+
+    let lastFocused: Element | null = null;
+
+    const getFocusable = (root: Element | null) => {
+      if (!root) return [] as HTMLElement[];
+      const all = Array.from(
+        root.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+        )
+      );
+      return all.filter((el) => {
+        const style = window.getComputedStyle(el);
+        return style.visibility !== 'hidden' && style.display !== 'none';
+      });
+    };
+
+    const setBodyScrollLock = (lock: boolean) => {
+      const w = window as any;
+      const b = document.body;
+
+      // Ref-counted lock so multiple overlays can coexist.
+      if (typeof w.__scrollLockCount !== 'number') w.__scrollLockCount = 0;
+
+      if (lock) {
+        if (w.__scrollLockCount === 0) {
+          w.__scrollLockPrevOverflow = b.style.overflow;
+          w.__scrollLockPrevPaddingRight = b.style.paddingRight;
+          const sbw = window.innerWidth - document.documentElement.clientWidth;
+          if (sbw > 0) b.style.paddingRight = `${sbw}px`;
+          b.style.overflow = 'hidden';
+        }
+        w.__scrollLockCount += 1;
+      } else {
+        w.__scrollLockCount = Math.max(0, w.__scrollLockCount - 1);
+        if (w.__scrollLockCount === 0) {
+          b.style.overflow = w.__scrollLockPrevOverflow ?? '';
+          b.style.paddingRight = w.__scrollLockPrevPaddingRight ?? '';
+        }
+      }
+    };
+
+    const setOpen = (open: boolean) => {
+      menuRoot.dataset.open = open ? 'true' : 'false';
+      menuButton.setAttribute('aria-expanded', open ? 'true' : 'false');
+      setBodyScrollLock(open);
+
+      if (open) {
+        lastFocused = document.activeElement;
+        // Move focus into the dialog on open.
+        requestAnimationFrame(() => {
+          const focusables = getFocusable(panel);
+          (closeButton || focusables[0] || panel)?.focus?.();
+        });
+      } else {
+        // Restore focus back to trigger when closing.
+        requestAnimationFrame(() => {
+          if (lastFocused && (lastFocused as HTMLElement).focus) {
+            (lastFocused as HTMLElement).focus();
+          } else {
+            menuButton.focus();
+          }
+          lastFocused = null;
+        });
+      }
+    };
+
+    // Reset state on each page load (ViewTransitions-safe)
+    setOpen(false);
+
+    menuButton.onclick = () => {
+      const isOpen = menuRoot.dataset.open === 'true';
+      setOpen(!isOpen);
+    };
+
+    closeButton && (closeButton.onclick = () => setOpen(false));
+
+    // Backdrop click closes
+    const backdrop = menuRoot.querySelector('[data-menu-backdrop]') as HTMLDivElement | null;
+    backdrop && (backdrop.onclick = () => setOpen(false));
+
+    // Link click closes (but external links still open in a new tab)
+    menuRoot.querySelectorAll('a').forEach((a) => {
+      (a as HTMLAnchorElement).onclick = () => setOpen(false);
+    });
+
+    // Esc closes (avoid duplicates)
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false);
+
+      // Trap focus within the open menu.
+      if (e.key === 'Tab' && menuRoot.dataset.open === 'true') {
+        const focusables = getFocusable(panel);
+        if (!focusables.length) return;
+
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        const active = document.activeElement as HTMLElement | null;
+
+        if (e.shiftKey) {
+          if (active === first || !panel?.contains(active)) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (active === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      }
+    };
+    const w = window as any;
+    if (w.__navMenuOnKeyDown) document.removeEventListener('keydown', w.__navMenuOnKeyDown);
+    w.__navMenuOnKeyDown = onKeyDown;
+    document.addEventListener('keydown', onKeyDown);
   };
 
-  menuButton?.addEventListener('click', () => toggleMenu(true));
-  closeButton?.addEventListener('click', () => toggleMenu(false));
-
-  mobileMenu?.querySelectorAll('a').forEach(link => {
-    link.addEventListener('click', () => toggleMenu(false));
-  });
+  initNavMenu();
+  document.addEventListener('astro:page-load', initNavMenu);
 </script>
+
+<!-- Menu Flyout (Twingate-style) -->
+<div
+  id="site-menu"
+  data-open="false"
+  role="dialog"
+  aria-modal="true"
+  class="fixed inset-0 z-[60] transition-opacity duration-200 opacity-0 pointer-events-none"
+>
+  <div data-menu-backdrop class="absolute inset-0 bg-black/45 backdrop-blur-[2px]"></div>
+  <div class="absolute top-4 left-0 right-0 px-4">
+    <div class="max-w-[1100px] mx-auto flex justify-end">
+      <div
+        class="origin-top-right rounded-2xl border border-border/60 bg-popover/92 backdrop-blur-xl shadow-2xl w-full max-w-[560px] overflow-hidden transition-all duration-300 ease-out opacity-0 -translate-y-2 scale-[0.98]"
+        data-menu-panel
+      >
+        <div class="px-4 py-3 border-b border-border/60 flex items-center justify-between">
+          <div class="text-xs tracking-wide uppercase text-foreground/60">Menu</div>
+          <button
+            id="site-menu-close"
+            type="button"
+            aria-label="Close menu"
+            class="w-9 h-9 rounded-full bg-muted/30 border border-border/60 text-foreground/80 flex items-center justify-center hover:bg-muted/45 transition-colors"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 6 6 18"></path>
+              <path d="m6 6 12 12"></path>
+            </svg>
+          </button>
+        </div>
+
+        <div class="p-3 md:p-4 max-h-[calc(100vh-7rem)] overflow-auto">
+          <div class="grid grid-cols-1 gap-2">
+            {navItems.map((item) => (
+              <a
+                href={item.href}
+                target={item.external ? '_blank' : undefined}
+                rel={item.external ? 'noopener noreferrer' : undefined}
+                class="group flex items-start justify-between gap-4 rounded-xl p-3 hover:bg-muted/30 transition-colors"
+              >
+                <div class="flex items-start gap-3">
+                  <div class="mt-2 w-2 h-2 rounded-full bg-primary opacity-70 group-hover:opacity-100 transition-opacity"></div>
+                  <div class="text-left">
+                    <div class="text-foreground/92 font-medium leading-tight">{item.label}</div>
+                    <div class="text-foreground/60 text-sm leading-snug">{item.description}</div>
+                  </div>
+                </div>
+                <div class="shrink-0 text-foreground/40 group-hover:text-foreground/70 transition-colors">↘</div>
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Toggle menu open state via data attribute */
+  #site-menu[data-open="true"] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  #site-menu[data-open="true"] [data-menu-panel] {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+</style>

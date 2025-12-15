@@ -25,7 +25,7 @@ const imageSrc = src.startsWith('/') ? src : `/${src}`;
     />
   </div>
   {caption && (
-    <figcaption class="text-sm text-zinc-600 text-center mt-4 italic">
+    <figcaption class="text-sm text-white/60 text-center mt-4 italic">
       {caption}
     </figcaption>
   )}
@@ -53,10 +53,33 @@ const imageSrc = src.startsWith('/') ? src : `/${src}`;
       const modalImg = modal.querySelector('img')!;
       const closeBtn = document.getElementById('closeModalBtn')!;
 
+      function setBodyScrollLock(lock) {
+        const w = window;
+        const b = document.body;
+        if (typeof w.__scrollLockCount !== 'number') w.__scrollLockCount = 0;
+
+        if (lock) {
+          if (w.__scrollLockCount === 0) {
+            w.__scrollLockPrevOverflow = b.style.overflow;
+            w.__scrollLockPrevPaddingRight = b.style.paddingRight;
+            const sbw = window.innerWidth - document.documentElement.clientWidth;
+            if (sbw > 0) b.style.paddingRight = `${sbw}px`;
+            b.style.overflow = 'hidden';
+          }
+          w.__scrollLockCount += 1;
+        } else {
+          w.__scrollLockCount = Math.max(0, w.__scrollLockCount - 1);
+          if (w.__scrollLockCount === 0) {
+            b.style.overflow = w.__scrollLockPrevOverflow || '';
+            b.style.paddingRight = w.__scrollLockPrevPaddingRight || '';
+          }
+        }
+      }
+
       function closeModal() {
         modal.classList.add('hidden');
         modal.classList.remove('flex');
-        document.body.style.overflow = '';
+        setBodyScrollLock(false);
       }
 
       // Close on button click
@@ -88,7 +111,7 @@ const imageSrc = src.startsWith('/') ? src : `/${src}`;
             modalImg.alt = alt || '';
             modal.classList.remove('hidden');
             modal.classList.add('flex');
-            document.body.style.overflow = 'hidden';
+            setBodyScrollLock(true);
           }
         }
       });

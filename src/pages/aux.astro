@@ -5,15 +5,6 @@ import LogoCarousel from '../components/LogoCarousel.astro';
 
 // Images
 const fintechImage = '/images/fintech-feature.png';
-const placeholderImage = '/images/placeholder.png';
-
-// Image strip images - using actual work images
-const stripImages = [
-  '/images/fintech-ui-design.png',
-  '/images/work/ripple-app-1.png', 
-  '/images/work/everprompt-app1.png',
-  '/images/ri-ui-design.png'
-];
 
 const skills = {
   "Product Design": ["Design Systems", "User Research", "Design Thinking", "Brand Development"],
@@ -65,63 +56,24 @@ const featuredProjects = [
   <!-- Hero Section -->
   <section class="relative min-h-[90vh] flex flex-col pt-16 sm:pt-20">
     <div class="flex-1 flex items-center">
-      <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="max-w-4xl">
-          <h1 class="text-4xl sm:text-6xl md:text-6xl lg:text-7xl font-bold mb-6 text-foreground leading-tight sm:leading-tight md:leading-tight lg:leading-tight">
-            Hi, I'm Nasif.<br/>
-            <span class="text-gradient">Multidisciplinary Designer.</span>
+      <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="max-w-[68ch]">
+          <h1 class="mt-6 type-h1 text-foreground">
+            Hi, I'm Nasif.
+            <span class="block text-gradient">Multidisciplinary Designer.</span>
           </h1>
-          <p class="text-xl sm:text-2xl text-muted-foreground mb-10 max-w-3xl leading-relaxed">
-            15+ years designing brands, print, and digital products. I love building, learning, experimenting, and solving problems. This mindset has been extremely valuable in learning AI, which has transformed every aspect of how I think and work. 
+          <p class="mt-6 type-lead text-muted-foreground">
+            15+ years designing brands, print, and digital products. I love building, learning, experimenting, and solving problems. This mindset has been extremely valuable in learning AI, which has transformed how I think and work.
           </p>
-          
-        </div>
-      </div>
-    </div>
-
-    <!-- Image Strip at Bottom -->
-    <div class="w-full overflow-hidden hidden">
-      <div class="flex gap-0 h-24 sm:h-32">
-        <div class="flex-1 min-w-0">
-          <img 
-            src="/images/placeholder.png" 
-            alt="Portfolio work 1"
-            class="w-full h-full object-cover"
-          />
-        </div>
-        <div class="flex-1 min-w-0">
-          <img 
-            src="/images/placeholder.png" 
-            alt="Portfolio work 2"
-            class="w-full h-full object-cover"
-          />
-        </div>
-        <div class="flex-1 min-w-0">
-          <img 
-            src="/images/placeholder.png" 
-            alt="Portfolio work 3"
-            class="w-full h-full object-cover"
-          />
-        </div>
-        <div class="flex-1 min-w-0">
-          <img 
-            src="/images/placeholder.png" 
-            alt="Portfolio work 4"
-            class="w-full h-full object-cover"
-          />
-        </div>
-        <div class="flex-1 min-w-0">
-          <img 
-            src="/images/placeholder.png" 
-            alt="Portfolio work 5"
-            class="w-full h-full object-cover"
-          />
         </div>
       </div>
     </div>
 
     <!-- Scroll Down Indicator -->
-    <a href="#why-aux" class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center opacity-60 hover:opacity-100 transition-opacity cursor-pointer z-10">
+    <a
+      href="#why-aux"
+      class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center opacity-60 hover:opacity-100 transition-opacity cursor-pointer z-10 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20 rounded-xl px-3 py-2"
+    >
       <span class="text-xs text-muted-foreground font-medium tracking-widest uppercase mb-2">Scroll</span>
       <div class="w-6 h-10 rounded-full border-2 border-muted-foreground/30 flex items-start justify-center p-2">
         <div class="w-1 h-2 bg-primary rounded-full"></div>
@@ -130,8 +82,8 @@ const featuredProjects = [
   </section>
 
   <!-- Why AUX & Why Me Section -->
-  <section id="why-aux" class="bg-background py-20 scroll-mt-20">
-    <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <section id="why-aux" class="bg-background py-12 sm:py-14 scroll-mt-20">
+    <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
         
         <!-- Why AUX? -->
@@ -141,8 +93,8 @@ const featuredProjects = [
               <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
             </svg>
           </div>
-          <h2 class="text-3xl font-bold mb-6 text-foreground">Why AUX?</h2>
-          <div class="prose prose-invert text-muted-foreground text-lg leading-relaxed">
+          <h2 class="type-h2 mb-6 text-foreground">Why AUX?</h2>
+          <div class="prose prose-invert text-muted-foreground text-base leading-7">
             <p class="mb-4">
               I've been looking for an AI startup or design studio that <span class="text-foreground font-medium">leverages AI, is future focused</span>, and values people, growth, and meaningful work. There's significant overlap with my diverse skillset.
             </p>
@@ -159,8 +111,8 @@ const featuredProjects = [
               <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
             </svg>
           </div>
-          <h2 class="text-3xl font-bold mb-6 text-foreground">Why Me?</h2>
-          <div class="prose prose-invert text-muted-foreground text-lg leading-relaxed">
+          <h2 class="type-h2 mb-6 text-foreground">Why Me?</h2>
+          <div class="prose prose-invert text-muted-foreground text-base leading-7">
             <p class="mb-4">
               I bring experience across your core services: <span class="text-foreground font-medium">brand, UI/UX, design systems, and AI prototyping</span>. I'm comfortable working end-to-end on independent projects or within larger teams.
             </p>
@@ -175,11 +127,11 @@ const featuredProjects = [
   </section>
 
   <!-- How I Use AI Section -->
-  <section class="py-20 overflow-hidden">
-    <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-      <div class="max-w-4xl">
-        <h2 class="text-3xl font-bold mb-6 text-foreground">How I Use AI</h2>
-        <div class="prose prose-invert text-muted-foreground text-lg leading-relaxed">
+  <section class="py-12 sm:py-14 overflow-hidden">
+    <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+      <div class="max-w-[68ch]">
+        <h2 class="type-h2 mb-6 text-foreground">How I Use AI</h2>
+        <div class="prose prose-invert text-muted-foreground text-base leading-7">
           <p class="mb-6">
             I started using AI in early 2023 and immediately adjusted my workflow and processes. On occasion I train people how to get the most out of it while using it safely. I'm a bit of an AI nerd and Claude fanboy. I've used so many AI tools that I actually had to tell myself to slow down.
           </p>
@@ -196,11 +148,11 @@ const featuredProjects = [
   </section>
 
   <!-- Featured Work Section -->
-  <section class="bg-background py-24">
-    <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-4xl font-bold mb-12 text-foreground">Featured Work</h2>
+  <section class="bg-background py-14 sm:py-20">
+    <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="type-h2 mb-12 text-foreground">Featured Work</h2>
       
-      <div class="flex flex-col gap-24 sm:gap-32">
+      <div class="flex flex-col gap-20 sm:gap-28">
         {featuredProjects.map((project, index) => {
           const isEven = index % 2 === 0;
           return (
@@ -212,7 +164,7 @@ const featuredProjects = [
                   <img 
                     src={project.image} 
                     alt={project.title}
-                    loading="eager"
+                    loading={index === 0 ? "eager" : "lazy"}
                     class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                 </div>
@@ -220,7 +172,7 @@ const featuredProjects = [
                 <!-- Content Column -->
                 <div class={`flex flex-col justify-center ${isEven ? 'lg:order-2' : 'lg:order-1'}`}>
                   
-                  <h3 class="text-3xl font-bold mb-4 text-foreground">{project.title}</h3>
+                  <h3 class="type-h3 mb-4 text-foreground">{project.title}</h3>
                   <p class="text-muted-foreground mb-8 leading-relaxed text-lg">
                     {project.summary}
                   </p>
@@ -247,9 +199,9 @@ const featuredProjects = [
   </section>
 
   <!-- Skills Section -->
-  <section class="bg-secondary/30 py-24 border-t border-border/50">
-    <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-4xl font-bold mb-12 text-foreground">Skills</h2>
+  <section class="bg-secondary/30 py-14 sm:py-20 border-t border-border/50">
+    <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
+      <h2 class="type-h2 mb-12 text-foreground">Skills</h2>
       
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
         {Object.entries(skills).map(([category, items]) => (
@@ -267,10 +219,11 @@ const featuredProjects = [
   </section>
 
   <!-- Closing Section -->
-  <section class="bg-background py-24 text-center">
-    <div class="container max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-4xl font-bold mb-6 text-foreground">Let's Work Together</h2>
-      <p class="text-xl text-muted-foreground mb-8 leading-relaxed">
+  <section class="bg-background py-14 sm:py-20 text-center">
+    <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-2xl mx-auto">
+      <h2 class="type-h2 mb-6 text-foreground">Let's Work Together</h2>
+      <p class="text-base sm:text-lg text-muted-foreground mb-8 leading-relaxed">
         I bring 15+ years of experience designing and building experiences across a range of industries. I've led teams, shipped design systems, built functional products, and collaborated with engineering teams to deliver work that ships. If you're looking for someone like me, let's talk.
       </p>
       
@@ -281,6 +234,7 @@ const featuredProjects = [
           variant="primary"
         />
        
+      </div>
       </div>
     </div>
   </section>

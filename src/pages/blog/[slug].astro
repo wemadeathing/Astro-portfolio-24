@@ -3,6 +3,7 @@ import { getCollection, getEntry } from 'astro:content';
 import Layout from '../../layouts/Layout.astro';
 import ShareButtons from '../../components/ShareButtons.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
+import Breadcrumb from '../../components/Breadcrumb.astro';
 import type { CollectionEntry } from 'astro:content';
 
 export const prerender = true;
@@ -40,29 +41,128 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
 });
 ---
 
-<Layout title={post.data.title}>
-  <article class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32">
-    <div class="grid grid-cols-1 lg:grid-cols-[1fr_250px] gap-8">
-      <div>
-        <h1 class="text-4xl font-bold mb-4">{post.data.title}</h1>
-        <p class="text-gray-500 mb-8">{formattedDate}</p>
-        <ShareButtons title={post.data.title} />
-        <div class="prose prose-lg mt-12">
-          <Content />
+<Layout title={post.data.title} description={post.data.description} image={post.data.image}>
+  <article class="min-h-screen bg-background">
+    <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 pb-16">
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_240px] gap-10">
+        <div class="rounded-2xl border border-white/10 bg-white/[0.03] shadow-sm px-6 sm:px-8 md:px-12 py-7 md:py-10">
+          <Breadcrumb 
+            items={[
+              { label: 'Home', href: '/' },
+              { label: 'Insights', href: '/blog' },
+              { label: post.data.title }
+            ]}
+          />
+
+          <div class="mb-8">
+            <h1 class="type-h1 mb-4 text-white/95">{post.data.title}</h1>
+            <p class="text-sm text-white/60 mb-6">{formattedDate}</p>
+            <ShareButtons title={post.data.title} />
+          </div>
+
+          <div class="prose max-w-none">
+            <Content />
+          </div>
         </div>
+
+        <aside class="hidden lg:block">
+          <div class="sticky top-32 h-fit max-h-[calc(100vh-8rem)] overflow-y-auto">
+            <div class="space-y-6">
+              <TableOfContents content={post.body} />
+            </div>
+          </div>
+        </aside>
       </div>
-      <aside class="hidden lg:block sticky top-24 h-fit max-h-[calc(100vh-6rem)] overflow-y-auto">
-        <div class="space-y-8">
-          <TableOfContents content={post.body} />
-        </div>
-      </aside>
     </div>
   </article>
 </Layout>
 
 <style is:global>
-  /* Only styling the h2 headings in blog posts */
+  /* Dark-first prose styles for insight pages */
+  .prose {
+    @apply text-base leading-7 text-white/85;
+  }
+
   .prose h2 {
-    @apply text-xl font-bold mt-8 mb-4;
+    @apply text-2xl font-semibold mt-12 mb-4 scroll-mt-32 text-white/95;
+  }
+
+  .prose h3 {
+    @apply text-xl font-semibold mt-8 mb-3 scroll-mt-32 text-white/90;
+  }
+
+  .prose p {
+    @apply mb-6 text-white/75;
+  }
+
+  .prose a {
+    color: hsl(var(--primary));
+    @apply underline decoration-2 underline-offset-2 transition-all;
+    text-decoration-color: hsl(var(--primary) / 0.35);
+  }
+
+  .prose a:hover {
+    text-decoration-color: hsl(var(--primary) / 0.95);
+  }
+
+  .prose strong {
+    @apply text-white/95 font-semibold;
+  }
+
+  .prose img {
+    @apply rounded-xl my-12;
+  }
+
+  .prose pre {
+    @apply bg-black/30 border border-white/10 rounded-xl p-6 my-8 overflow-x-auto;
+  }
+
+  .prose code {
+    @apply text-sm text-white/90;
   }
 </style>
+
+<script>
+  // TOC active link highlighting (blog detail) — ViewTransitions-safe
+  const initActiveToc = () => {
+    const tocLinks = Array.from(document.querySelectorAll('.toc-link')) as HTMLAnchorElement[];
+    const headings = Array.from(document.querySelectorAll('.prose h2, .prose h3')) as HTMLElement[];
+    if (!tocLinks.length || !headings.length) return;
+
+    const updateActive = () => {
+      let activeHeading: HTMLElement | null = null;
+      for (const heading of headings) {
+        const rect = heading.getBoundingClientRect();
+        if (rect.top <= 140) activeHeading = heading;
+      }
+
+      tocLinks.forEach((link) => link.classList.remove('active'));
+      if (activeHeading?.id) {
+        const activeLink = document.querySelector(`a[href="#${activeHeading.id}"]`);
+        if (activeLink) activeLink.classList.add('active');
+      }
+    };
+
+    const onScroll = (() => {
+      let ticking = false;
+      return () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          updateActive();
+          ticking = false;
+        });
+      };
+    })();
+
+    const w = window as any;
+    if (w.__blogTocOnScroll) window.removeEventListener('scroll', w.__blogTocOnScroll);
+    w.__blogTocOnScroll = onScroll;
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    updateActive();
+  };
+
+  initActiveToc();
+  document.addEventListener('astro:page-load', initActiveToc);
+</script>

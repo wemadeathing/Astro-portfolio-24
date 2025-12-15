@@ -1,28 +1,26 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import { Image } from 'astro:assets';
-import profileImage from '../images/NS-profile-2.png';
 import Button from '../components/Button.astro';
 
 const expertise = [
   {
     title: 'Enterprise Design Systems & Team Collaboration',
-    description: `I've designed and delivered a production design system for a major South African bank, including their website, mobile app, and secure dashboards. I led a team to design a new onboarding experience that balanced security with usability. For another major bank, I created a rapid prototype using FlutterFlow and Supabase that let stakeholders validate concepts before full development. I design systems that scale without creating implementation headaches.`,
+    description: `I build design systems that scale across teams and channels, with enough implementation detail to keep delivery fast and consistent.`,
     icon: 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'
   },
   {
     title: 'Building Real Solutions',
-    description: `I ship production applications, not just portfolio pieces. I've built apps using AstroJS, React, and Supabase, integrating APIs, authentication, and databases. This hands-on building experience informs every design decision I make because I understand what's easy to build versus what creates technical debt.`,
+    description: `I design with build constraints in mind, and I can ship alongside engineers (or solo) when prototypes need to become product.`,
     icon: 'M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z'
   },
   {
     title: 'Rapid Validation & Prototyping',
-    description: `I validate ideas quickly by building functional prototypes that go beyond clickable mockups. At Immersion Group, I led a self-initiated innovation project that upskilled six staff while creating an MVP we tested with real users. I use tools like FlutterFlow, Webflow, and code to move from concept to testable product fast.`,
+    description: `I move from idea to testable prototype quickly, so teams can validate early and reduce risk before committing engineering time.`,
     icon: 'M13 2L3 14h9l-1 8 10-12h-9l1-8z'
   },
   {
     title: 'Mentorship & Continuous Growth',
-    description: `I've mentored designers from junior to intermediate levels, including guiding someone from construction into UI design in six months. I'm always learning, recently earning my ISO 42001 certification to understand AI implementation at a governance level. I believe in building while learning and helping teams bridge knowledge gaps between design and engineering.`,
+    description: `I mentor designers and help teams align on quality, process, and practical AI adoption.`,
     icon: 'M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75'
   }
 ];
@@ -98,122 +96,210 @@ const experience = [
   title="About | Technical Product Designer & Full-Stack Developer"
   description="15+ years building enterprise design systems, AI-powered applications, and production-ready prototypes. Designer who codes with expertise in Figma, React, Astro, and AI integration."
 >
-  <div class="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32">
-    <section class="mb-16 flex flex-col md:flex-row gap-12 items-start">
-      <div class="md:w-1/4">
-        <Image 
-          src={profileImage}
-          alt="Nasif Salaam"
-          class="rounded-2xl w-full max-w-[200px] shadow-lg border border-secondary"
-        />
-      </div>
-      <div class="md:w-3/4">
-        <h1 class="text-4xl font-bold mb-6 text-foreground">About Me</h1>
-        <p class="text-xl text-muted-foreground mb-8">
-          If I were to choose a word to describe my approach, it would be "technical." Not technical in the way engineers are, but technical in understanding how things actually work. This fluency allows me to collaborate seamlessly with developers, turning ideas into solutions that don't just look good but are buildable, scalable, and grounded in reality. Over 15+ years, I've evolved from pure visual design to someone who designs, prototypes, and ships. I bring creativity and technical understanding together, which means fewer surprises in implementation and more value delivered to users.
-        </p>
-      </div>
-    </section>
+  <!-- Hero (wider / near full-width) -->
+  <section class="py-10 sm:py-14">
+    <!-- Match gutters with the main page container -->
+    <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8 sm:gap-10 items-center">
+        <div class="max-w-[68ch]">
+          <h1 class="text-4xl sm:text-5xl md:text-[54px] font-medium tracking-[-0.03em] leading-[1.05] text-white/95">
+            Product Designer who does more than design.
+          </h1>
+          <p class="mt-5 type-lead text-white/75">
+            I design brands, build products, and ship apps using AI-accelerated tools. 15+ years spanning multiple disciplines means I can take projects from early concepts through to working solutions. Less handoff, more execution.
+          </p>
+          <div class="mt-8 flex flex-wrap items-center gap-3">
+            <Button href="/contact" text="Let's Connect" variant="primary" />
+            <a
+              href="/projects"
+              class="inline-flex h-12 items-center justify-center rounded-full border border-white/10 bg-white/5 px-6 text-sm font-semibold text-white/80 transition-colors hover:bg-white/10 hover:text-white"
+            >
+              View work
+            </a>
+          </div>
+        </div>
 
-    <div class="w-full h-[2px] mb-16 bg-gradient-to-r from-primary/0 via-primary/50 to-primary/0"></div>
+        <!-- Right-side visual (desktop) -->
+        <div class="hidden lg:flex justify-end self-center">
+          <img
+            src="https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=800&auto=format&fit=crop"
+            alt=""
+            class="w-full max-w-[360px] aspect-square object-cover rounded-3xl"
+            loading="lazy"
+            decoding="async"
+            referrerpolicy="no-referrer"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <section class="mb-32">
-      <h2 class="text-2xl font-bold mb-8 text-foreground">What I Do Now</h2>
-      <div class="grid md:grid-cols-2 gap-8">
+  <div class="h-px bg-white/10"></div>
+
+  <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
+
+    <!-- What I do -->
+    <section class="py-12 sm:py-14">
+      <div class="flex items-end justify-between gap-6 mb-8">
+        <div>
+          <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-3">Now</div>
+          <h2 class="type-h2 text-white/90">What I do</h2>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10">
         {expertise.map((item) => (
-          <div class="p-6 rounded-xl bg-secondary/50 backdrop-blur-sm border border-secondary">
-            <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                class="w-6 h-6 text-primary" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
+          <div class="max-w-[56ch]">
+            <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="w-5 h-5 text-primary"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
                 stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
               >
                 <path d={item.icon} />
               </svg>
             </div>
-            <h3 class="text-xl font-semibold mb-3 text-foreground">{item.title}</h3>
-            <p class="text-muted-foreground">{item.description}</p>
+            <h3 class="mt-4 text-lg sm:text-xl font-semibold text-white/92">{item.title}</h3>
+            <p class="mt-2 text-sm sm:text-base leading-[1.65] text-white/70">
+              {item.description}
+            </p>
           </div>
         ))}
       </div>
     </section>
 
-    <section class="mb-32">
-      <h2 class="text-2xl font-bold mb-8 text-foreground">Skills & Capabilities</h2>
-      <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
-        <div>
-          <h3 class="text-lg font-semibold mb-4 text-foreground">Product Design</h3>
-          <ul class="space-y-2">
-            {skills.productDesign.map((skill) => (
-              <li class="text-muted-foreground">{skill}</li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <h3 class="text-lg font-semibold mb-4 text-foreground">Technical Execution</h3>
-          <ul class="space-y-2">
-            {skills.technicalExecution.map((skill) => (
-              <li class="text-muted-foreground">{skill}</li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <h3 class="text-lg font-semibold mb-4 text-foreground">AI Tools</h3>
-          <ul class="space-y-2">
-            {skills.aiTools.map((skill) => (
-              <li class="text-muted-foreground">{skill}</li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <h3 class="text-lg font-semibold mb-4 text-foreground">Design Tools</h3>
-          <ul class="space-y-2">
-            {skills.designTools.map((skill) => (
-              <li class="text-muted-foreground">{skill}</li>
-            ))}
-          </ul>
-        </div>
-        <div>
-          <h3 class="text-lg font-semibold mb-4 text-foreground">Leadership</h3>
-          <ul class="space-y-2">
-            {skills.leadership.map((skill) => (
-              <li class="text-muted-foreground">{skill}</li>
-            ))}
-          </ul>
+    <div class="h-px bg-white/10"></div>
+
+    <!-- Skills -->
+    <section class="py-12 sm:py-14">
+      <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-3">Capabilities</div>
+      <h2 class="type-h2 text-white/90">Skills</h2>
+
+      <div class="mt-8 rounded-2xl border border-white/10 bg-white/[0.03] p-6 sm:p-7">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div>
+            <div class="text-sm font-semibold text-white/85 mb-3">Product Design</div>
+            <div class="flex flex-wrap gap-2">
+              {skills.productDesign.map((skill) => (
+                <span class="text-xs px-2.5 py-1 rounded-full border border-white/10 bg-white/5 text-white/70">
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <div class="text-sm font-semibold text-white/85 mb-3">Technical Execution</div>
+            <div class="flex flex-wrap gap-2">
+              {skills.technicalExecution.map((skill) => (
+                <span class="text-xs px-2.5 py-1 rounded-full border border-white/10 bg-white/5 text-white/70">
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <div class="text-sm font-semibold text-white/85 mb-3">AI Tools</div>
+            <div class="flex flex-wrap gap-2">
+              {skills.aiTools.map((skill) => (
+                <span class="text-xs px-2.5 py-1 rounded-full border border-white/10 bg-white/5 text-white/70">
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <div class="text-sm font-semibold text-white/85 mb-3">Design Tools</div>
+            <div class="flex flex-wrap gap-2">
+              {skills.designTools.map((skill) => (
+                <span class="text-xs px-2.5 py-1 rounded-full border border-white/10 bg-white/5 text-white/70">
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <div class="text-sm font-semibold text-white/85 mb-3">Leadership</div>
+            <div class="flex flex-wrap gap-2">
+              {skills.leadership.map((skill) => (
+                <span class="text-xs px-2.5 py-1 rounded-full border border-white/10 bg-white/5 text-white/70">
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="mb-32">
-      <h2 class="text-2xl font-bold mb-6 text-foreground">Professional Journey</h2>
-      <div class="space-y-8 max-w-4xl ">
+    <div class="h-px bg-white/10"></div>
+
+    <!-- Experience -->
+    <section class="py-12 sm:py-14">
+      <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-3">Career</div>
+      <h2 class="type-h2 text-white/90">Professional journey</h2>
+
+      <div class="mt-8 space-y-3">
         {experience.map((item) => (
-          <div class="border-l-2 border-primary/20 pl-6 relative">
-            <div class="absolute w-3 h-3 bg-primary rounded-full -left-[7px] top-2"></div>
-            <h3 class="text-xl font-semibold text-foreground">{item.role}</h3>
-            <p class="text-muted-foreground">{item.company} • {item.period}</p>
-            <p class="mt-2 text-muted-foreground">{item.description}</p>
-          </div>
+          <details class="group rounded-2xl border border-white/10 bg-white/[0.03] px-6 py-5 transition-colors hover:bg-white/[0.05] hover:border-white/20">
+            <summary class="cursor-pointer select-none list-none focus:outline-none">
+              <div class="flex items-start justify-between gap-4">
+                <div>
+                  <h3 class="text-lg font-semibold text-white/92">{item.role}</h3>
+                  <p class="text-sm text-white/65 mt-1">{item.company}</p>
+                </div>
+                <div class="flex items-center gap-3 shrink-0">
+                  <div class="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/65">
+                    {item.period}
+                  </div>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-4 h-4 text-white/60 transition-transform duration-200 group-open:rotate-90"
+                    aria-hidden="true"
+                  >
+                    <path d="M9 18l6-6-6-6"></path>
+                  </svg>
+                </div>
+              </div>
+              <div class="mt-3 text-xs text-white/45 group-open:hidden">Click to expand</div>
+            </summary>
+            <div class="pt-4">
+              <div class="h-px bg-white/10"></div>
+              <p class="mt-4 text-sm sm:text-base leading-[1.65] text-white/70">{item.description}</p>
+            </div>
+          </details>
         ))}
       </div>
     </section>
 
-    <section class="mb-32">
-      <div class="max-w-4xl">
-        <p class="text-xl text-muted-foreground mb-8">
-          If you're building innovative teams and need a technical designer who solves problems, mentors effectively, and delivers results, let's connect.
-        </p>
-        <Button
-          href="/contact"
-          text="Let's Connect"
-          variant="primary"
-        />
+    <!-- CTA -->
+    <section class="pb-14 sm:pb-20">
+      <div class="rounded-3xl border border-white/10 bg-[#121212]/70 backdrop-blur-xl p-8 sm:p-10">
+        <div class="max-w-[72ch]">
+          <h2 class="type-h2 text-white/92">
+            Let’s build something useful.
+          </h2>
+          <p class="mt-3 text-base sm:text-lg leading-[1.65] text-white/70">
+            If you're building innovative teams and need a technical designer who solves problems, mentors effectively, and delivers results, let's connect.
+          </p>
+          <div class="mt-6">
+            <Button href="/contact" text="Let's Connect" variant="primary" />
+          </div>
+        </div>
       </div>
-
     </section>
-
   </div>
 </Layout>

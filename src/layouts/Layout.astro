@@ -1,9 +1,8 @@
 ---
-import '@fontsource/instrument-sans';
+import '@fontsource/dm-sans';
 import '../styles/globals.css';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
-import WhatsAppWidget from '../components/WhatsAppWidget.astro';
 import { ViewTransitions } from 'astro:transitions';
 
 interface Props {
@@ -12,6 +11,8 @@ interface Props {
   image?: string;
   canonicalURL?: string;
   robots?: string;
+  hideNav?: boolean;
+  hideFooter?: boolean;
 }
 
 const { 
@@ -19,7 +20,9 @@ const {
   description = "Technical Product Designer & AI Integration Specialist. Building enterprise design systems, rapid prototypes, and AI-powered products. Designer who codes with 15+ years experience.",
   image = "/images/NS-profile-2.png",
   canonicalURL = Astro.url.href,
-  robots = "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+  robots = "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
+  hideNav = false,
+  hideFooter = false
 } = Astro.props;
 
 const siteUrl = "https://www.nasifsalaam.com"; // Your actual domain
@@ -27,7 +30,7 @@ const siteName = "Nasif Salaam";
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
@@ -100,33 +103,176 @@ const siteName = "Nasif Salaam";
       gtag('config', 'G-FMSF6Y2DYL');
     </script>
   </head>
-  <body class="min-h-screen bg-background font-sans antialiased">
-    <Navbar />
-    <main class="page-content">
+  <body class="min-h-screen bg-background font-sans antialiased flex flex-col relative overflow-x-hidden text-sm leading-6">
+    <!-- Skip to content link for keyboard accessibility -->
+    <a 
+      href="#main-content" 
+      class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[60] focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded-lg focus:shadow-lg focus:outline-none focus:ring-4 focus:ring-primary/20"
+    >
+      Skip to main content
+    </a>
+
+    <!-- Global loader overlay (logo-based) -->
+    <div id="site-loader" class="site-loader" data-open="false" aria-hidden="true">
+      <div class="site-loader__backdrop"></div>
+      <div class="site-loader__content">
+        <img
+          src="/images/ns26/logo26w.svg"
+          alt=""
+          class="site-loader__logo"
+          loading="eager"
+          decoding="async"
+        />
+      </div>
+    </div>
+    {!hideNav && <div class="site-backdrop" aria-hidden="true"></div>}
+    {!hideNav && <Navbar />}
+    <main id="main-content" class={`page-content flex-1 ${!hideNav ? 'pt-24 sm:pt-28' : ''}`}>
       <slot />
     </main>
-    <Footer />
-    
-    <!-- WhatsApp Widget - appears on all pages -->
-    <WhatsAppWidget 
-      phoneNumber="0814623628"
-      message="Hi! I'd like to discuss a project with you."
-      position="bottom-right"
-    />
+    {!hideFooter && <Footer />}
   </body>
 </html>
 
 <script>
-  // Smooth scroll behavior
-  document.addEventListener('click', (e) => {
-    const target = e.target as HTMLElement;
-    if (target.tagName === 'A' && target.getAttribute('href')?.startsWith('#')) {
+  // Smooth scroll behavior (idempotent, ViewTransitions-safe)
+  const initSmoothScroll = () => {
+    const w = window as any;
+    if (w.__smoothScrollInit) return;
+    w.__smoothScrollInit = true;
+
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement | null;
+      const link = target?.closest('a');
+      const href = link?.getAttribute('href');
+      if (!link || !href || !href.startsWith('#')) return;
+
       e.preventDefault();
-      const id = target.getAttribute('href')?.slice(1);
-      const element = document.getElementById(id!);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
+      const id = href.slice(1);
+      const element = document.getElementById(id);
+      if (element) element.scrollIntoView({ behavior: 'smooth' });
+    });
+  };
+
+  initSmoothScroll();
+  document.addEventListener('astro:page-load', initSmoothScroll);
+
+  // Respect prefers-reduced-motion for accessibility
+  const initReducedMotion = () => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('reduce-motion');
     }
-  });
+  };
+
+  initReducedMotion();
+  document.addEventListener('astro:page-load', initReducedMotion);
+
+  // Global loader (logo) for client-side navigations (non-forced)
+  const initSiteLoader = () => {
+    const w = window as any;
+
+    // Always re-bind to the current DOM node (Astro swaps the DOM during view transitions).
+    const loader = document.getElementById('site-loader') as HTMLDivElement | null;
+    if (!loader) return;
+
+    // Create singleton controller + listeners once.
+    if (!w.__siteLoader) {
+      w.__siteLoader = {
+        loader: null as HTMLDivElement | null,
+        shownAt: Date.now(),
+        safetyTimer: null as number | null,
+        pendingShowTimer: null as number | null,
+        MIN_MS: 160,
+        MAX_MS: 6000,
+        DELAY_MS: 200, // only show if navigation isn't instant
+        showNow() {},
+        hideNow() {},
+        scheduleShow() {},
+        cancelPendingShow() {},
+      };
+
+      const ctrl = w.__siteLoader;
+
+      ctrl.showNow = () => {
+        if (!ctrl.loader) return;
+        ctrl.shownAt = Date.now();
+        ctrl.loader.dataset.open = 'true';
+
+        if (ctrl.safetyTimer) window.clearTimeout(ctrl.safetyTimer);
+        ctrl.safetyTimer = window.setTimeout(() => {
+          if (ctrl.loader) ctrl.loader.dataset.open = 'false';
+        }, ctrl.MAX_MS);
+      };
+
+      ctrl.hideNow = () => {
+        if (!ctrl.loader) return;
+        ctrl.loader.dataset.open = 'false';
+        if (ctrl.safetyTimer) window.clearTimeout(ctrl.safetyTimer);
+        ctrl.safetyTimer = null;
+      };
+
+      ctrl.cancelPendingShow = () => {
+        if (ctrl.pendingShowTimer) window.clearTimeout(ctrl.pendingShowTimer);
+        ctrl.pendingShowTimer = null;
+      };
+
+      ctrl.scheduleShow = () => {
+        ctrl.cancelPendingShow();
+        ctrl.pendingShowTimer = window.setTimeout(() => {
+          ctrl.pendingShowTimer = null;
+          ctrl.showNow();
+        }, ctrl.DELAY_MS);
+      };
+
+      // Hide loader on completion signals.
+      const onDone = () => {
+        ctrl.cancelPendingShow();
+
+        // If it did show, keep it up for a tiny minimum so it doesn't flicker.
+        const elapsed = Date.now() - ctrl.shownAt;
+        const wait = Math.max(0, ctrl.MIN_MS - elapsed);
+        window.setTimeout(() => {
+          ctrl.hideNow();
+        }, wait);
+      };
+
+      document.addEventListener('astro:after-swap', onDone);
+      document.addEventListener('astro:page-load', onDone);
+      window.addEventListener('pageshow', onDone);
+
+      // Only schedule show for internal same-origin navigations.
+      document.addEventListener(
+        'click',
+        (e) => {
+          const target = e.target as HTMLElement | null;
+          const a = target?.closest('a') as HTMLAnchorElement | null;
+          if (!a) return;
+
+          if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+          if (a.target && a.target !== '_self') return;
+          if (a.hasAttribute('download')) return;
+
+          const href = a.getAttribute('href') || '';
+          if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+
+          const url = new URL(a.href, window.location.href);
+          if (url.origin !== window.location.origin) return;
+
+          const isSamePath = url.pathname === window.location.pathname && url.search === window.location.search;
+          if (isSamePath && url.hash) return;
+
+          // Don't force loader: only show if navigation isn't instant.
+          ctrl.scheduleShow();
+        },
+        { capture: true }
+      );
+    }
+
+    // Update current loader element for this page and ensure it's not stuck open.
+    w.__siteLoader.loader = loader;
+    w.__siteLoader.cancelPendingShow();
+    w.__siteLoader.hideNow();
+  };
+
+  initSiteLoader();
 </script>
