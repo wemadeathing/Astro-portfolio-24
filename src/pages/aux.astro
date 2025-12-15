@@ -4,6 +4,8 @@ import Button from '../components/Button.astro';
 import LogoCarousel from '../components/LogoCarousel.astro';
 
 // Images
+const heroImage =
+  'https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=800&auto=format&fit=crop';
 const fintechImage = '/images/fintech-feature.png';
 
 const skills = {
@@ -18,7 +20,6 @@ const featuredProjects = [
   {
     title: "Financial Institution Digital Transformation",
     summary: "Led UI design and creative direction for a leading South African bank's digital transformation. Built a production design system spanning public web, secure platforms, and mobile app.",
-    tags: ["Design Systems", "Enterprise Collaboration", "Technical Constraints", "Longevity"],
     image: fintechImage,
     links: [
       { text: "View Full Case Study", href: "/projects/financial-institution-digital-transformation", variant: "primary" }
@@ -27,17 +28,14 @@ const featuredProjects = [
   {
     title: "AI-Accelerated Coffee Directory",
     summary: "Built a complete directory from concept to production in two weeks using AI. Created a custom data pipeline and designed directly in code with Cursor for maximum speed.",
-    tags: ["AI Workflow", "Full-stack Development", "Rapid Execution", "Automation"],
     image: "/images/work/findmeacoffee/findmeacoffee-thumbnail.jpeg",
     links: [
-      { text: "View Full Case Study", href: "/projects/ai-accelerated-coffee-directory", variant: "primary" },
-      { text: "View Live Site", href: "https://findmeacoffee.co.za", variant: "secondary", external: true }
+      { text: "View Full Case Study", href: "/projects/ai-accelerated-coffee-directory", variant: "primary" }
     ]
   },
   {
     title: "AI-Powered WhatsApp Flow Builder",
     summary: "Built an AI-powered visual builder that evolved into a full SaaS platform with AI generation, Figma export, and endpoint simulation. Reduces flow creation time from days to minutes.",
-    tags: ["Product Thinking", "Cross-functional Workflow", "AI Integration", "SaaS Platform"],
     image: "/images/work/flows/flows-feature.jpeg",
     links: [
       { text: "View Full Case Study", href: "/projects/ai-powered-whatsapp-flow-builder", variant: "primary" }
@@ -77,11 +75,12 @@ const featuredProjects = [
         <!-- Right-side visual (desktop) -->
         <div class="hidden lg:flex justify-end self-center">
           <img
-            src={fintechImage}
+            src={heroImage}
             alt=""
             class="w-full max-w-[360px] aspect-square object-cover rounded-3xl"
             loading="eager"
             decoding="async"
+            referrerpolicy="no-referrer"
           />
         </div>
       </div>
@@ -150,13 +149,6 @@ const featuredProjects = [
             <div class="p-5">
               <h3 class="text-base sm:text-lg font-semibold text-white/92">{project.title}</h3>
               <p class="mt-2 text-sm text-white/70">{project.summary}</p>
-              <div class="mt-4 flex flex-wrap gap-2">
-                {project.tags.map((tag) => (
-                  <span class="text-xs px-2.5 py-1 rounded-full border border-white/10 bg-white/5 text-white/70">
-                    {tag}
-                  </span>
-                ))}
-              </div>
               <div class="mt-5 flex flex-wrap gap-3">
                 {project.links.map((link) => (
                   <Button
