@@ -75,7 +75,7 @@ import Layout from '../layouts/Layout.astro';
           <div id="formStatus" class="hidden text-sm" role="status" aria-live="polite" aria-atomic="true">
             <p class="error hidden text-destructive">
               <span class="sr-only">Error:</span>
-              There was an error sending your message. Please try again.
+              <span data-error-text>There was an error sending your message. Please try again.</span>
             </p>
             <p class="success hidden text-green-500">
               <span class="sr-only">Success:</span>
@@ -110,6 +110,7 @@ import Layout from '../layouts/Layout.astro';
   const form = document.getElementById('contact-form');
   const formStatus = document.getElementById('formStatus');
   const errorMessage = formStatus?.querySelector('.error');
+  const errorText = errorMessage?.querySelector('[data-error-text]');
   const successMessage = formStatus?.querySelector('.success');
   const loadingMessage = formStatus?.querySelector('.loading');
   const submitButton = document.getElementById('submitButton');
@@ -146,6 +147,13 @@ import Layout from '../layouts/Layout.astro';
           window.location.href = '/thank-you';
           return;
         }
+
+        const msg = typeof json?.error === 'string' && json.error.trim().length
+          ? json.error
+          : 'There was an error sending your message. Please try again.';
+
+        if (errorText) errorText.textContent = msg;
+
         loadingMessage?.classList.add('hidden');
         errorMessage?.classList.remove('hidden');
       })

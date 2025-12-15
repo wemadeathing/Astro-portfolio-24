@@ -10,20 +10,50 @@ function escapeHtml(unsafe: string): string {
     .replace(/'/g, "&#039;");
 }
 
-const resend = new Resend(import.meta.env.RESEND_API_KEY);
-
 export const prerender = false;
 
+const getEnv = (key: string) => {
+  const v = (import.meta as any)?.env?.[key];
+  return typeof v === 'string' ? v.trim() : '';
+};
+
+const formatFrom = (emailOrFrom: string) => {
+  if (!emailOrFrom) return '';
+  // If already formatted like "Name <email@...>", keep it.
+  if (emailOrFrom.includes('<') && emailOrFrom.includes('>')) return emailOrFrom;
+  return `Contact Form <${emailOrFrom}>`;
+};
+
 export const POST: APIRoute = async ({ request }) => {
-  if (!import.meta.env.RESEND_API_KEY || !import.meta.env.CONTACT_EMAIL) {
-    return new Response(JSON.stringify({ 
-      success: false, 
-      error: 'Server configuration error. Please contact the site administrator.' 
-    }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
+  const resendApiKey = getEnv('RESEND_API_KEY');
+  const contactEmail = getEnv('CONTACT_EMAIL');
+  const resendFromEmail = getEnv('RESEND_FROM_EMAIL');
+
+  // Destination inbox fallback: if CONTACT_EMAIL isn't set, use RESEND_FROM_EMAIL.
+  const toEmail = (contactEmail || resendFromEmail).trim();
+  const from = formatFrom(resendFromEmail || 'onboarding@resend.dev');
+
+  if (!resendApiKey) {
+    return new Response(
+      JSON.stringify({
+        success: false,
+        error: 'Server configuration error: RESEND_API_KEY is not set.',
+      }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
+    );
   }
+
+  if (!toEmail) {
+    return new Response(
+      JSON.stringify({
+        success: false,
+        error: 'Server configuration error: CONTACT_EMAIL is not set.',
+      }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
+    );
+  }
+
+  const resend = new Resend(resendApiKey);
 
   try {
     const formData = await request.json();
@@ -68,8 +98,8 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     const { data, error } = await resend.emails.send({
-      from: 'Contact Form <onboarding@resend.dev>',
-      to: [import.meta.env.CONTACT_EMAIL],
+      from,
+      to: [toEmail],
       replyTo: safeEmail,
       subject: `New Contact Form Submission from ${escapeHtml(safeName)}`,
       html: `
@@ -96,13 +126,19 @@ export const POST: APIRoute = async ({ request }) => {
       headers: { 'Content-Type': 'application/json' }
     });
   } catch (error) {
-    return new Response(JSON.stringify({ 
-      success: false, 
-      error: 'An unexpected error occurred. Please try again later.',
-      details: error instanceof Error ? error.message : String(error)
-    }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    const isDev = Boolean((import.meta as any)?.env?.DEV);
+    const details = error instanceof Error ? error.message : String(error);
+
+    return new Response(
+      JSON.stringify({
+        success: false,
+        error: 'An unexpected error occurred. Please try again later.',
+        ...(isDev ? { details } : {}),
+      }),
+      {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
   }
 }

@@ -3,7 +3,8 @@
 
 interface ImportMetaEnv {
   readonly RESEND_API_KEY: string;
-  readonly CONTACT_EMAIL: string;
+  readonly RESEND_FROM_EMAIL?: string;
+  readonly CONTACT_EMAIL?: string;
   readonly WEB3FORMS_ACCESS_KEY: string;
   readonly OPENAI_API_KEY?: string;
 }
