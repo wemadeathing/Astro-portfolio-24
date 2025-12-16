@@ -6,6 +6,7 @@ const blog = defineCollection({
     title: z.string(),
     description: z.string(),
     pubDate: z.coerce.date(),
+    updatedDate: z.coerce.date().optional(),
     image: z.string().url(),
     tags: z.array(z.string()).default([]),
     // AI-facing metadata (optional)
@@ -30,6 +31,25 @@ const projects = defineCollection({
   }),
 });
 
+const resources = defineCollection({
+  type: 'content',
+  schema: z.object({
+    url: z.string().url(),
+    // Optional overrides (auto-generated otherwise)
+    title: z.string().optional(),
+    description: z.string().optional(),
+    image: z.string().optional(),
+
+    type: z
+      .enum(['video', 'article', 'tool', 'paper', 'template', 'repo', 'podcast', 'other'])
+      .optional()
+      .default('other'),
+    tags: z.array(z.string()).default([]),
+    addedDate: z.coerce.date().optional(),
+    featured: z.boolean().default(false),
+  }),
+});
+
 // Knowledge base for the chat assistant
 const assistant = defineCollection({
   type: 'content',
@@ -41,5 +61,5 @@ const assistant = defineCollection({
   }),
 });
 
-export const collections = { blog, projects, assistant };
+export const collections = { blog, projects, resources, assistant };
 

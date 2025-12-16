@@ -1,0 +1,132 @@
+---
+title: "Your Website Works for Google. But Does It Work for AI?"
+description: "Why many business websites are effectively invisible to AI systems — and what to change so your site is readable by modern assistants."
+pubDate: 2025-12-16
+image: "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?q=80&w=1600&auto=format&fit=crop"
+tags: ["AI", "SEO", "Web", "Business Strategy", "Digital Transformation", "Tech Trends"]
+topics: ["AI optimization (AIO)", "Technical SEO", "AI readiness"]
+---
+
+Ever since Anthropic released Claude Artefacts just over a year ago, Ive been designing and building websites/apps using all sorts of AI tools: Claude, Bolt, Lovable, Cursor, Windsurf and the list goes on.
+
+Before that it was with builders like Wordpress, Framer, Webflow, WIX etc. An important step in creating a website has always been in SEO and still is. Now, however, we have AIO(AI Optimization), and this will change how I approach websites forever.
+
+I heard about AIO, but it didn't click until I built a site using Cursor, an AI-powered editor. Realizing I use AI search like Perplexity more than Google, I checked if my new site was visible to it. I quickly discovered that AI search bots follow different rules than Google's crawlers, which prompted me to dive deep into AI optimization. I initially just asked Cursor(Sonnet4) about it and it became clear that this is a new concept that needed some understanding and a change in my approach.
+
+## The Shift That's Happening Right Under Our Noses
+Heres a stat that really made me second-guess my current approach to websites: nearly 60% of Google searches now end without anyone clicking on a website. People are getting their answers directly in the search results.
+
+But that's just the beginning. There's a whole new layer of search happening through ChatGPT, Claude, and Perplexity. These AI systems are becoming the new Google for millions of users, I know I’m one of them.
+
+I think its still early with Google still owning a giant piece of the market, but if your target customer is an AI user then this is something to consider. Many websites are completely invisible to these AI systems.
+
+## SEO vs AIO: The Game Has
+We've been playing by SEO rules for 20+ years. But AI optimization (AIO) is a completely different game:
+
+## The Numbers That Made Me Pay Attention
+Google's AI Overviews cause a 34.5% drop in click-through rates when they appear.
+
+But websites that GET CITED in Google's AI responses actually see their CTR increase from 0.74% to 1.02%.
+
+ChatGPT processes over 2.5 billion prompts daily, that's a massive audience you could be missing.
+
+The message is clear: if you're not optimized for AI, you're becoming invisible to a growing audience.
+
+## The Easiest Win: Fix Your Robots.txt File (5-Minute Implementation)
+Here's something you can literally fix today. Most websites accidentally BLOCK AI crawlers from accessing their content.
+
+Add these lines to your robots.txt file (or ask your developer to):
+
+```txt
+# Allow AI search and agent use
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: PerplexityBot
+User-agent: ClaudeBot
+Allow: /
+```
+
+This tells AI systems they're welcome to read your content. Many websites block these crawlers by default, which is like putting a "Closed" sign on your digital storefront.
+
+Where to find your robots.txt file: Go to `yourwebsite.com/robots.txt` if it doesn't exist, you need to create one.
+
+This single change could make your website visible to AI searches immediately. The reality is that a lot these bots didn’t ask for permission in the past, but as rules get defined it helps to try and optimize for better outcomes.
+
+## Why Your Website Might Be Invisible to AI (The Technical Reality)
+But even if AI crawlers can access your site, they might not be able to read it. Here's something I found interesting: AI crawlers cannot run JavaScript at all. Zero. None.
+
+Most modern websites are built in a way that AI systems literally cannot understand.
+
+Think about your website: Do your product prices, inventory status, or key content load after the page opens? Does information appear when you click tabs or scroll down?
+
+If yes, AI crawlers probably can't see any of that crucial information.
+
+Here's a real example:
+
+Imagine an e-commerce site showing product details. When a human visits, they see everything perfectly. But when an AI crawler visits the same page:
+
+The AI crawler literally cannot see any of the important information because it loads with JavaScript after the page opens. This is happening across millions of websites right now.
+
+## Questions to Ask Your Developer or Agency
+If you're working with a development team, here are the key questions that will determine if your website works with AI:
+
+Ask them:
+
+- "Can AI crawlers read our content without running JavaScript?"
+- "Is our key business information visible immediately when the page loads?"
+- "Are we using server-side rendering or static generation?"
+
+Red flags to watch for:
+
+- If they mention your site is a "Single Page Application" (SPA).
+- If key content only appears after clicking or scrolling.
+- If they say "everything loads dynamically."
+
+Good signs:
+
+- Your content loads immediately when you visit the page.
+- Disabling JavaScript doesn't break your core information.
+- They talk about "pre-rendering" or "static generation."
+
+## The New Reality: AI Complements SEO (It Doesn't Replace It)
+To be clear: Google still drives around 89% of search traffic. Traditional SEO isn't dead, it's still essential. However, AI systems are increasingly becoming the first stop for information seekers. While AI platforms currently send only about 0.17% of referral traffic directly, their influence is much bigger than that number suggests.
+
+Why? Because AI shapes decisions before people ever click.
+
+When someone asks ChatGPT for product recommendations or Claude for business advice, they're forming opinions based on what the AI tells them, whether or not they click through to your site.
+
+## What You Need to Do Right Now
+### Immediate Actions (Do Today)
+- Fix your robots.txt file — add the AI crawler permissions above.
+- Test your website — disable JavaScript in your browser and see what disappears.
+- Check what AI sees — ask ChatGPT or Claude about your business and see if they mention your website.
+
+### For Business Owners
+- Audit your key content — can AI see your prices, services, contact info?
+- Talk to your development team using the questions above.
+- Structure your content as Q&A — AI systems love direct questions and answers.
+- Add FAQ sections with schema markup for better AI understanding.
+
+### For Your Development Team
+- Ensure core content loads immediately without waiting for JavaScript.
+- Implement server-side rendering for dynamic content.
+- Add structured data (schema.org) to help AI understand your content.
+- Test with AI crawlers to verify what they can actually see.
+
+## The Real Business Impact
+Here’s some more interesting info: while AI platforms send minimal direct traffic, AI search visitors convert 4.4 times better than traditional organic visitors according to recent data.
+
+## The Bottom Line
+We're at another interesting point in the AI revolution. We now have to not only use AI, but design for AI and whether we like it or not, it’s here to stay. The most successful businesses will optimize for both human visitors and AI systems, beautiful experiences for people, clear information for machines.
+
+Start with fixing your robots.txt file today. It takes 5 minutes and could open your business to millions of AI queries. Then work on the bigger architectural changes.
+
+Remember, AI optimisation doesn't replace SEO, it enhances it.
+
+What are you seeing in your industry? Have you come across this new way of optimising your website?
+
+Building AI-optimised websites and providing practical training on AI at Nexevo.io. Always learning, always sharing what I discover.
+
+This article was researched and written with assistance from Perplexity, Claude AI, and Grok.
+
+Originally published on LinkedIn: https://www.linkedin.com/posts/nasifsalaam_i-found-out-why-ai-systems-cant-see-most-activity-7366440054954557444-pfPx

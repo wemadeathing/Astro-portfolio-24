@@ -1,0 +1,382 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ResourceCard from '../../components/resources/ResourceCard.astro';
+import { getCollection } from 'astro:content';
+import { getResourceMeta } from '../../lib/resource-meta';
+
+export const prerender = false;
+
+const activeTag = Astro.url.searchParams.get('tag') || '';
+const activeType = Astro.url.searchParams.get('type') || '';
+
+const resources = await getCollection('resources');
+
+const sorted = resources
+  .slice()
+  .sort((a, b) => {
+    // featured first
+    const af = Number(Boolean(a.data.featured));
+    const bf = Number(Boolean(b.data.featured));
+    if (bf !== af) return bf - af;
+
+    const ad = a.data.addedDate ? a.data.addedDate.valueOf() : 0;
+    const bd = b.data.addedDate ? b.data.addedDate.valueOf() : 0;
+    return bd - ad;
+  });
+
+const allTags = Array.from(
+  new Set(
+    sorted
+      .flatMap((r) => r.data.tags ?? [])
+      .map((t) => String(t).trim())
+      .filter(Boolean)
+  )
+).sort((a, b) => a.localeCompare(b));
+
+const allTypes = Array.from(
+  new Set(sorted.map((r) => String(r.data.type || 'other')).filter(Boolean))
+).sort((a, b) => a.localeCompare(b));
+
+const typeCounts = new Map<string, number>();
+for (const r of sorted) {
+  const t = String(r.data.type || 'other');
+  typeCounts.set(t, (typeCounts.get(t) ?? 0) + 1);
+}
+
+const tagCounts = new Map<string, number>();
+for (const r of sorted) {
+  for (const tag of (r.data.tags ?? []).map(String)) {
+    const t = tag.trim();
+    if (!t) continue;
+    tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1);
+  }
+}
+
+const filtered = sorted.filter((r) => {
+  const hasTag = activeTag ? (r.data.tags ?? []).includes(activeTag) : true;
+  const hasType = activeType ? String(r.data.type || 'other') === activeType : true;
+  return hasTag && hasType;
+});
+
+const buildHref = (next: { tag?: string | null; type?: string | null }) => {
+  const url = new URL(Astro.url);
+  if (next.tag === null) url.searchParams.delete('tag');
+  else if (typeof next.tag === 'string') url.searchParams.set('tag', next.tag);
+
+  if (next.type === null) url.searchParams.delete('type');
+  else if (typeof next.type === 'string') url.searchParams.set('type', next.type);
+
+  return `${url.pathname}${url.search}`;
+};
+
+const cards = await Promise.all(
+  filtered.map(async (r) => {
+    const meta =
+      r.data.title || r.data.description || r.data.image
+        ? {}
+        : await getResourceMeta(r.data.url);
+
+    const title = r.data.title || meta.title || r.data.url;
+    const description = r.data.description || meta.description;
+    const image = r.data.image || meta.image;
+    const siteName = meta.siteName;
+
+    return {
+      href: r.data.url,
+      title,
+      description,
+      image,
+      siteName,
+      type: r.data.type,
+    };
+  })
+);
+
+const typeLabel = activeType || 'All types';
+const topicLabel = activeTag || 'All topics';
+
+const ChevronDown = () => `
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="m6 9 6 6 6-6" />
+  </svg>
+`;
+---
+
+<Layout
+  title="Resources | Tools, videos, and links for designers who ship"
+  description="Curated resources: tools, videos, articles, and templates for designers and builders working in AI and product." 
+>
+  <section class="py-10 sm:py-14">
+    <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-[68ch]">
+        <h1 class="type-h1 text-white/95">Resources</h1>
+        <p class="mt-4 type-lead text-white/70">
+          Curated resources: tools, videos, and articles I actually use.
+        </p>
+      </div>
+
+      <!-- Featured tools section -->
+      <div class="mt-8 rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5">
+        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div class="max-w-[50ch]">
+            <div class="text-xs tracking-[0.22em] uppercase text-emerald-300/80">Tool</div>
+            <h2 class="mt-2 text-base sm:text-lg font-semibold text-white/95">
+              AI Readiness Audit
+            </h2>
+            <p class="mt-1 text-sm text-white/70">
+              Run a quick technical check to see if your site is readable to AI systems and modern search:
+              indexability, metadata, structured data, and basic accessibility.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-3 sm:flex-col sm:items-end sm:gap-2">
+            <a
+              href="/audit"
+              class="inline-flex h-10 items-center justify-center rounded-xl bg-primary px-4 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+            >
+              Open audit tool
+            </a>
+            <p class="text-xs text-white/45 max-w-[32ch] sm:text-right">
+              Free mini audit, no signup required.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {(allTags.length > 0 || allTypes.length > 0) && (
+        <div class="mt-8 rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5">
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-[1.2fr_1fr_1fr_auto] sm:items-end">
+            <div>
+              <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-2">Search</div>
+              <div class="relative">
+                <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-white/45">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="7" />
+                    <path d="m20 20-3.5-3.5" />
+                  </svg>
+                </span>
+                <input
+                  id="resource_search"
+                  type="search"
+                  placeholder="Search resources…"
+                  class="w-full h-11 rounded-xl bg-[#131313]/60 border border-white/10 pl-10 pr-3 text-sm text-white/85 placeholder:text-white/40 focus:border-primary/70 focus:outline-none focus:ring-4 focus:ring-primary/15"
+                  autocomplete="off"
+                  aria-label="Search resources"
+                />
+              </div>
+            </div>
+
+            <div>
+              <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-2">Type</div>
+              <details class="group relative">
+                <summary
+                  class="list-none cursor-pointer select-none w-full h-11 rounded-xl bg-[#131313]/60 border border-white/10 px-3 text-sm text-white/85 flex items-center justify-between gap-3 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/15"
+                  aria-label="Filter by type"
+                >
+                  <span class="truncate">{typeLabel}</span>
+                  <span class="text-white/50 group-open:rotate-180 transition-transform">
+                    <Fragment set:html={ChevronDown()} />
+                  </span>
+                </summary>
+
+                <div class="absolute z-20 mt-2 w-full rounded-xl border border-white/10 bg-[#0f0f10]/95 backdrop-blur p-2 shadow-2xl">
+                  <a
+                    href={buildHref({ type: null })}
+                    class:list={[
+                      'flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors',
+                      !activeType ? 'bg-white/[0.05] text-white/90' : 'text-white/70 hover:bg-white/[0.04] hover:text-white',
+                    ]}
+                  >
+                    <span>All types</span>
+                  </a>
+
+                  <div class="my-2 h-px bg-white/10"></div>
+
+                  <div class="max-h-64 overflow-auto pr-1">
+                    {allTypes.map((t) => (
+                      <a
+                        href={buildHref({ type: t })}
+                        class:list={[
+                          'flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors',
+                          activeType === t
+                            ? 'bg-white/[0.05] text-white/90'
+                            : 'text-white/70 hover:bg-white/[0.04] hover:text-white',
+                        ]}
+                      >
+                        <span class="capitalize">{t}</span>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </details>
+            </div>
+
+            <div>
+              <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-2">Topic</div>
+              <details class="group relative">
+                <summary
+                  class="list-none cursor-pointer select-none w-full h-11 rounded-xl bg-[#131313]/60 border border-white/10 px-3 text-sm text-white/85 flex items-center justify-between gap-3 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/15"
+                  aria-label="Filter by topic"
+                >
+                  <span class="truncate">{topicLabel}</span>
+                  <span class="text-white/50 group-open:rotate-180 transition-transform">
+                    <Fragment set:html={ChevronDown()} />
+                  </span>
+                </summary>
+
+                <div class="absolute z-20 mt-2 w-full rounded-xl border border-white/10 bg-[#0f0f10]/95 backdrop-blur p-2 shadow-2xl">
+                  <a
+                    href={buildHref({ tag: null })}
+                    class:list={[
+                      'flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors',
+                      !activeTag ? 'bg-white/[0.05] text-white/90' : 'text-white/70 hover:bg-white/[0.04] hover:text-white',
+                    ]}
+                  >
+                    <span>All topics</span>
+                  </a>
+
+                  <div class="my-2 h-px bg-white/10"></div>
+
+                  <div class="max-h-64 overflow-auto pr-1">
+                    {allTags.map((t) => (
+                      <a
+                        href={buildHref({ tag: t })}
+                        class:list={[
+                          'flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors',
+                          activeTag === t
+                            ? 'bg-white/[0.05] text-white/90'
+                            : 'text-white/70 hover:bg-white/[0.04] hover:text-white',
+                        ]}
+                      >
+                        <span>{t}</span>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </details>
+            </div>
+
+            <div class="flex items-end justify-end gap-2">
+              {(activeTag || activeType) ? (
+                <a
+                  href="/resources"
+                  class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-white/70 transition-colors hover:bg-white/[0.06] hover:text-white focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/15"
+                  aria-label="Clear filters"
+                  title="Clear filters"
+                >
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M18 6 6 18" />
+                    <path d="m6 6 12 12" />
+                  </svg>
+                </a>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <style>
+        /* Hide default marker in Safari */
+        details > summary::-webkit-details-marker { display: none; }
+      </style>
+
+      <div class="mt-10">
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 items-start"
+          data-resource-list
+        >
+          {cards.map((c) => (
+            <ResourceCard
+              href={c.href}
+              title={c.title}
+              description={c.description}
+              image={c.image}
+              siteName={c.siteName}
+              type={c.type}
+            />
+          ))}
+        </div>
+
+        <div
+          class="hidden mt-10 rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-white/70"
+          data-resource-empty
+        >
+          No matches.
+        </div>
+
+        {cards.length === 0 && (
+          <div class="mt-10 rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-white/70">
+            No resources yet.
+          </div>
+        )}
+      </div>
+
+      <script is:inline>
+        const input = document.getElementById('resource_search');
+        const list = document.querySelector('[data-resource-list]');
+        const empty = document.querySelector('[data-resource-empty]');
+
+        const getQ = () => {
+          try {
+            const url = new URL(window.location.href);
+            return (url.searchParams.get('q') || '').trim();
+          } catch {
+            return '';
+          }
+        };
+
+        const setQ = (q) => {
+          try {
+            const url = new URL(window.location.href);
+            if (!q) url.searchParams.delete('q');
+            else url.searchParams.set('q', q);
+            window.history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
+          } catch {
+            // ignore
+          }
+        };
+
+        const apply = (q) => {
+          const query = String(q || '').toLowerCase().trim();
+          const cards = Array.from(document.querySelectorAll('[data-resource-card]'));
+          let shown = 0;
+
+          for (const el of cards) {
+            const hay = (el.getAttribute('data-search') || '').toLowerCase();
+            const match = !query || hay.includes(query);
+            el.classList.toggle('hidden', !match);
+            if (match) shown += 1;
+          }
+
+          if (empty) empty.classList.toggle('hidden', shown !== 0);
+        };
+
+        const init = () => {
+          if (!(input instanceof HTMLInputElement)) return;
+          const initial = getQ();
+          if (initial) input.value = initial;
+          apply(input.value);
+
+          input.addEventListener('input', () => {
+            const q = input.value.trim();
+            setQ(q);
+            apply(q);
+          });
+        };
+
+        init();
+        document.addEventListener('astro:page-load', init);
+      </script>
+    </div>
+  </section>
+</Layout>

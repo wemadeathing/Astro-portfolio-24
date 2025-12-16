@@ -411,17 +411,11 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
   };
 
   const menuLinks = [
-    { title: 'Home', description: 'Back to the chat experience', href: '/' },
     { title: 'Work', description: 'Browse featured case studies', href: '/projects' },
     { title: 'About', description: 'Background and approach', href: '/about' },
     { title: 'Insights', description: 'Writing on AI and product craft', href: '/blog' },
+    { title: 'Resources', description: 'Curated tools, videos, and links', href: '/resources' },
     { title: 'Contact', description: 'Send a message or start a project', href: '/contact' },
-    {
-      title: 'WhatsApp',
-      description: 'Message me directly on WhatsApp',
-      href: "https://wa.me/0814623628?text=Hi!%20I%27d%20like%20to%20discuss%20a%20project%20with%20you.",
-      external: true,
-    },
   ] as const;
 
   const typingMessageId =

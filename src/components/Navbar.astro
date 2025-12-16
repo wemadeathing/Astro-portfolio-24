@@ -1,16 +1,10 @@
 ---
 const navItems = [
-  { href: '/', label: 'Home', description: 'Back to the chat experience' },
   { href: '/projects', label: 'Work', description: 'Browse featured case studies' },
   { href: '/about', label: 'About', description: 'Background and approach' },
   { href: '/blog', label: 'Insights', description: 'Writing on AI and product craft' },
+  { href: '/resources', label: 'Resources', description: 'Curated tools, videos, and links' },
   { href: '/contact', label: 'Contact', description: 'Send a message or start a project' },
-  {
-    href: 'https://wa.me/0814623628?text=Hi!%20I%27d%20like%20to%20discuss%20a%20project%20with%20you.',
-    label: 'WhatsApp',
-    description: 'Message me directly on WhatsApp',
-    external: true,
-  },
 ];
 
 const pathname = Astro.url.pathname;
@@ -63,6 +57,12 @@ const isHome = pathname === '/' || pathname === '';
           class="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
         >
           Insights
+        </a>
+        <a 
+          href="/resources" 
+          class="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors"
+        >
+          Resources
         </a>
         <a 
           href="/contact" 

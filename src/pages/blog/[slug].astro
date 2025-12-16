@@ -5,6 +5,9 @@ import ShareButtons from '../../components/ShareButtons.astro';
 import TableOfContents from '../../components/TableOfContents.astro';
 import Breadcrumb from '../../components/Breadcrumb.astro';
 import NewsletterForm from '../../components/NewsletterForm.astro';
+import BlogCard from '../../components/BlogCard.astro';
+import { readingTime } from '../../lib/reading-time';
+import { tagToSlug } from '../../lib/tag-utils';
 import type { CollectionEntry } from 'astro:content';
 
 export const prerender = true;
@@ -35,11 +38,51 @@ if (Astro.props?.post) {
 
 const { Content } = await post.render();
 
+const rt = readingTime(post.body);
+
 const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
   year: 'numeric',
   month: 'long',
   day: 'numeric',
 });
+
+const formattedUpdated = post.data.updatedDate
+  ? post.data.updatedDate.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    })
+  : null;
+
+const allPosts = await getCollection('blog');
+const sortedPosts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const currentIndex = sortedPosts.findIndex((p) => p.slug === post.slug);
+const prevPost = currentIndex > 0 ? sortedPosts[currentIndex - 1] : null;
+const nextPost = currentIndex >= 0 && currentIndex < sortedPosts.length - 1 ? sortedPosts[currentIndex + 1] : null;
+
+const overlapScore = (a: string[], b: string[]) => {
+  const A = new Set(a.map((x) => String(x).toLowerCase().trim()).filter(Boolean));
+  const B = new Set(b.map((x) => String(x).toLowerCase().trim()).filter(Boolean));
+  let inter = 0;
+  for (const t of A) if (B.has(t)) inter += 1;
+  return inter;
+};
+
+const currentTags = (post.data.tags ?? []).map(String);
+const currentTopics = (post.data.topics ?? []).map(String);
+
+const relatedPosts = sortedPosts
+  .filter((p) => p.slug !== post.slug)
+  .map((p) => {
+    const score =
+      overlapScore(currentTags, (p.data.tags ?? []).map(String)) +
+      overlapScore(currentTopics, (p.data.topics ?? []).map(String));
+    return { post: p, score };
+  })
+  .filter((x) => x.score > 0)
+  .sort((a, b) => b.score - a.score || b.post.data.pubDate.valueOf() - a.post.data.pubDate.valueOf())
+  .slice(0, 3)
+  .map((x) => x.post);
 ---
 
 <Layout title={post.data.title} description={post.data.description} image={post.data.image}>
@@ -57,13 +100,49 @@ const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
 
           <div class="mb-8">
             <h1 class="type-h1 mb-4 text-white/95">{post.data.title}</h1>
-            <p class="text-sm text-white/60 mb-6">{formattedDate}</p>
+            <p class="text-sm text-white/60 mb-3">
+              {formattedDate} • {rt.label}
+              {formattedUpdated ? ` • Updated ${formattedUpdated}` : ''}
+            </p>
+
+            {(post.data.tags?.length || post.data.topics?.length) ? (
+              <div class="mb-6 flex flex-wrap gap-2">
+                {(post.data.tags ?? []).map((t) => (
+                  <a
+                    href={`/blog/tags/${tagToSlug(String(t))}`}
+                    class="inline-flex items-center rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs font-semibold text-white/70 hover:bg-white/[0.06] hover:text-white transition-colors"
+                  >
+                    {t}
+                  </a>
+                ))}
+              </div>
+            ) : null}
             <ShareButtons title={post.data.title} />
           </div>
 
           <div class="prose max-w-none">
             <Content />
           </div>
+
+          {relatedPosts.length > 0 ? (
+            <div class="mt-10 pt-8 border-t border-white/10">
+              <div class="text-xs tracking-[0.22em] uppercase text-white/50">Keep reading</div>
+              <h2 class="mt-2 text-lg sm:text-xl font-semibold text-white/92">Related posts</h2>
+              <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {relatedPosts.map((p) => (
+                  <BlogCard
+                    title={p.data.title}
+                    excerpt={p.data.description}
+                    date={p.data.pubDate}
+                    image={p.data.image}
+                    slug={p.slug}
+                    readingTime={readingTime(p.body).label}
+                  />
+                ))}
+              </div>
+            </div>
+          ) : null}
+
 
           <div class="mt-10 pt-8 border-t border-white/10">
             <div class="text-xs tracking-[0.22em] uppercase text-white/50">Newsletter</div>

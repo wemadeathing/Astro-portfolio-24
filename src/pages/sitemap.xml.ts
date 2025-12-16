@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
+import { tagToSlug } from '../lib/tag-utils';
 
 export const GET: APIRoute = async ({ site }) => {
   const baseUrl = String(site || 'https://www.nasifsalaam.com').replace(/\/$/, '');
@@ -9,7 +10,7 @@ export const GET: APIRoute = async ({ site }) => {
   
   // Get all projects
   const projects = await getCollection('projects');
-  
+
   // Static pages
   const staticPages = [
     {
@@ -41,15 +42,37 @@ export const GET: APIRoute = async ({ site }) => {
       lastmod: new Date().toISOString().split('T')[0],
       changefreq: 'weekly',
       priority: '0.8'
+    },
+    {
+      url: '/resources',
+      lastmod: new Date().toISOString().split('T')[0],
+      changefreq: 'weekly',
+      priority: '0.7'
     }
   ];
 
   // Blog post pages
   const blogPages = blogPosts.map(post => ({
     url: `/blog/${post.slug}`,
-    lastmod: post.data.pubDate.toISOString().split('T')[0],
+    lastmod: (post.data.updatedDate || post.data.pubDate).toISOString().split('T')[0],
     changefreq: 'monthly',
     priority: '0.6'
+  }));
+
+  const blogTagPages = Array.from(
+    new Set(
+      blogPosts
+        .flatMap((p) => p.data.tags ?? [])
+        .map((t) => String(t).trim())
+        .filter(Boolean)
+        .map((t) => tagToSlug(t))
+        .filter(Boolean)
+    )
+  ).map((slug) => ({
+    url: `/blog/tags/${slug}`,
+    lastmod: new Date().toISOString().split('T')[0],
+    changefreq: 'weekly',
+    priority: '0.4'
   }));
 
   // Project pages
@@ -63,7 +86,7 @@ export const GET: APIRoute = async ({ site }) => {
     }));
 
   // Combine all pages
-  const allPages = [...staticPages, ...blogPages, ...projectPages];
+  const allPages = [...staticPages, ...blogPages, ...blogTagPages, ...projectPages];
 
   // Generate XML sitemap
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
