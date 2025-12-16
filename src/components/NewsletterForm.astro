@@ -1,0 +1,126 @@
+---
+interface Props {
+  class?: string;
+  placeholder?: string;
+}
+
+const {
+  class: className = '',
+  placeholder = 'you@company.com',
+} = Astro.props;
+---
+
+<form
+  class={`newsletter-form ${className}`.trim()}
+  aria-label="Newsletter signup"
+  data-newsletter-form
+>
+  <!-- Honeypot -->
+  <div class="hidden" aria-hidden="true">
+    <label for="newsletter_company">Company</label>
+    <input id="newsletter_company" name="company" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+
+  <div class="flex flex-col sm:flex-row gap-3">
+    <label class="sr-only" for="newsletter_email">Email</label>
+    <input
+      id="newsletter_email"
+      name="email"
+      type="email"
+      inputmode="email"
+      autocomplete="email"
+      required
+      placeholder={placeholder}
+      class="w-full rounded-full bg-[#131313]/60 border border-white/10 px-4 py-3 text-white/90 placeholder:text-white/40 focus:border-primary/70 focus:outline-none focus:ring-4 focus:ring-primary/15 transition-colors"
+    />
+
+    <button
+      type="submit"
+      class="inline-flex h-12 items-center justify-center rounded-full bg-primary px-8 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-60 disabled:cursor-not-allowed focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+      data-newsletter-submit
+    >
+      Subscribe
+    </button>
+  </div>
+
+  <div class="mt-3 hidden text-sm" role="status" aria-live="polite" aria-atomic="true" data-newsletter-status>
+    <p class="hidden text-destructive" data-newsletter-error></p>
+    <p class="hidden text-green-500" data-newsletter-success>Thanks — you’re subscribed.</p>
+    <p class="hidden text-primary" data-newsletter-loading>Subscribing…</p>
+  </div>
+
+  <p class="mt-2 text-xs text-white/60">
+    No spam. Unsubscribe anytime.
+  </p>
+</form>
+
+<script is:inline>
+  const initNewsletterForms = () => {
+    const forms = Array.from(document.querySelectorAll('[data-newsletter-form]'));
+    for (const form of forms) {
+      if (!(form instanceof HTMLFormElement)) continue;
+      if (form.dataset.newsletterBound === 'true') continue;
+      form.dataset.newsletterBound = 'true';
+
+      const status = form.querySelector('[data-newsletter-status]');
+      const err = form.querySelector('[data-newsletter-error]');
+      const ok = form.querySelector('[data-newsletter-success]');
+      const loading = form.querySelector('[data-newsletter-loading]');
+      const submit = form.querySelector('[data-newsletter-submit]');
+
+      const setBusy = (busy) => {
+        if (submit instanceof HTMLButtonElement) submit.disabled = busy;
+        form.setAttribute('aria-busy', busy ? 'true' : 'false');
+      };
+
+      const show = (el) => el && el.classList.remove('hidden');
+      const hide = (el) => el && el.classList.add('hidden');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const fd = new FormData(form);
+        const payload = Object.fromEntries(fd.entries());
+
+        setBusy(true);
+        show(status);
+        hide(err);
+        hide(ok);
+        show(loading);
+
+        try {
+          const res = await fetch('/api/newsletter/subscribe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify(payload),
+          });
+
+          const json = await res.json().catch(() => ({}));
+          if (res.ok && json.success) {
+            hide(loading);
+            show(ok);
+            form.reset();
+            return;
+          }
+
+          const msg = typeof json?.error === 'string' && json.error.trim().length
+            ? json.error
+            : 'Unable to subscribe right now. Please try again later.';
+
+          if (err) err.textContent = msg;
+          hide(loading);
+          show(err);
+        } catch {
+          if (err) err.textContent = 'Unable to subscribe right now. Please try again later.';
+          hide(loading);
+          show(err);
+        } finally {
+          setBusy(false);
+        }
+      });
+    }
+  };
+
+  initNewsletterForms();
+  document.addEventListener('astro:page-load', initNewsletterForms);
+</script>

@@ -6,6 +6,9 @@ interface ImportMetaEnv {
   readonly RESEND_FROM_EMAIL?: string;
   readonly CONTACT_EMAIL?: string;
   readonly WEB3FORMS_ACCESS_KEY: string;
+  readonly MAILERLITE_API_TOKEN?: string;
+  readonly MAILERLITE_GROUP_ID?: string;
+  readonly MAILERLITE_API_BASE_URL?: string;
   readonly OPENAI_API_KEY?: string;
 }
 
