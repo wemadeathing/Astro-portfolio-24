@@ -179,329 +179,331 @@ const checks = [
   </section>
 
   <script is:inline>
-    const $ = (id) => document.getElementById(id);
+    (() => {
+      const $ = (id) => document.getElementById(id);
 
-    const escapeHtml = (s) =>
-      String(s || '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+      const escapeHtml = (s) =>
+        String(s || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
 
-    const severityBadge = (sev) => {
-      const v = String(sev || 'info');
-      const base = 'inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide';
-      if (v === 'critical') return `${base} border-red-500/30 bg-red-500/10 text-red-200`;
-      if (v === 'high') return `${base} border-orange-500/30 bg-orange-500/10 text-orange-200`;
-      if (v === 'medium') return `${base} border-yellow-500/30 bg-yellow-500/10 text-yellow-200`;
-      if (v === 'low') return `${base} border-white/15 bg-white/[0.03] text-white/70`;
-      return `${base} border-white/15 bg-white/[0.03] text-white/60`;
-    };
-
-    const scoreColor = (n) => {
-      const x = Number(n) || 0;
-      if (x >= 85) return 'text-primary';
-      if (x >= 70) return 'text-emerald-300';
-      if (x >= 50) return 'text-yellow-200';
-      return 'text-red-200';
-    };
-
-    const bar = (label, value, help) => {
-      const v = Math.max(0, Math.min(100, Number(value) || 0));
-      const tip = String(help || '').trim();
-
-      const InfoIcon = `
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10" />
-          <path d="M12 16v-4" />
-          <path d="M12 8h.01" />
-        </svg>
-      `;
-
-      return `
-        <div class="rounded-xl border border-white/10 bg-white/[0.02] p-4">
-          <div class="flex items-start justify-between gap-3">
-            <div class="flex items-start gap-2 min-w-0">
-              <div class="text-sm text-white/80 font-semibold">${escapeHtml(label)}</div>
-
-              ${tip ? `
-                <div class="group relative">
-                  <button
-                    type="button"
-                    class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-md border border-white/10 bg-white/[0.03] text-white/55 hover:text-white/80 hover:bg-white/[0.06] focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
-                    aria-label="More info"
-                  >
-                    ${InfoIcon}
-                  </button>
-                  <div
-                    class="pointer-events-none absolute left-0 top-7 z-30 hidden w-64 rounded-xl border border-white/10 bg-[#0f0f10]/95 p-3 text-xs leading-relaxed text-white/75 shadow-2xl backdrop-blur group-hover:block group-focus-within:block"
-                    role="tooltip"
-                  >
-                    ${escapeHtml(tip)}
-                  </div>
-                </div>
-              ` : ''}
-            </div>
-
-            <div class="text-sm text-white/60">${v}</div>
-          </div>
-
-          <progress
-            class="mt-2 h-2 w-full overflow-hidden rounded-full bg-white/10 [appearance:none] [&::-webkit-progress-bar]:bg-white/10 [&::-webkit-progress-value]:bg-emerald-600/70 [&::-moz-progress-bar]:bg-emerald-600/70"
-            max="100"
-            value="${v}"
-          ></progress>
-        </div>
-      `;
-    };
-
-    const setStatus = (html, show = true) => {
-      const statusEl = $('audit_status');
-      if (!statusEl) return;
-      statusEl.innerHTML = html;
-      statusEl.classList.toggle('hidden', !show);
-    };
-
-    const setResults = (html, show = true) => {
-      const resultsEl = $('audit_results');
-      if (!resultsEl) return;
-      resultsEl.innerHTML = html;
-      resultsEl.classList.toggle('hidden', !show);
-    };
-
-    const setLoading = (on) => {
-      const submitBtn = $('audit_submit');
-      if (!(submitBtn instanceof HTMLButtonElement)) return;
-
-      const spinner = $('audit_spinner');
-      const label = $('audit_btn_label');
-
-      submitBtn.disabled = Boolean(on);
-
-      if (spinner instanceof HTMLElement) {
-        spinner.classList.toggle('hidden', !on);
-        // Reuse the global loader spin keyframes.
-        spinner.style.animation = on ? 'loaderSpin 900ms linear infinite' : '';
-      }
-
-      if (label instanceof HTMLElement) {
-        label.textContent = on ? 'Running…' : 'Run audit';
-      }
-    };
-
-    const render = (payload) => {
-      const audit = payload?.audit;
-      if (!audit) return;
-
-      const score = audit?.score?.overall ?? 0;
-      const cats = audit?.score?.categories || {};
-      const findings = Array.isArray(audit?.findings) ? audit.findings : [];
-      const ai = payload?.ai;
-
-      const topFindings = findings.slice(0, 8);
-
-      const aiBlock = ai
-        ? ai.disabled
-          ? `
-            <div class="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5">
-              <div class="text-xs tracking-[0.22em] uppercase text-white/50">AI explanation</div>
-              <div class="mt-2 text-sm text-white/70 leading-relaxed">
-                AI explanation is enabled, but isn’t available right now.
-              </div>
-              <div class="mt-2 text-xs text-white/45 break-words">
-                ${escapeHtml(ai.reason || 'Not configured')}
-              </div>
-            </div>
-          `
-          : `
-            <div class="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5">
-              <div class="text-xs tracking-[0.22em] uppercase text-white/50">AI explanation</div>
-              <div class="mt-2 text-white/85 leading-relaxed">${escapeHtml(ai.summary || '')}</div>
-              ${Array.isArray(ai.top_priorities) && ai.top_priorities.length ? `
-                <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  ${ai.top_priorities.slice(0, 4).map((p) => `
-                    <div class="rounded-xl border border-white/10 bg-white/[0.02] p-4">
-                      <div class="text-white/90 font-semibold">${escapeHtml(p.title || '')}</div>
-                      <div class="mt-2 text-sm text-white/70"><span class="text-white/80 font-semibold">Why:</span> ${escapeHtml(p.why || '')}</div>
-                      <div class="mt-2 text-sm text-white/70"><span class="text-white/80 font-semibold">How:</span> ${escapeHtml(p.how || '')}</div>
-                    </div>
-                  `).join('')}
-                </div>
-              ` : ''}
-              ${Array.isArray(ai.quick_wins) && ai.quick_wins.length ? `
-                <div class="mt-4">
-                  <div class="text-xs tracking-[0.22em] uppercase text-white/50">Quick wins</div>
-                  <ul class="mt-2 space-y-2 text-sm text-white/70">
-                    ${ai.quick_wins.slice(0, 6).map((q) => `<li class="flex gap-2"><span class="text-primary">•</span><span>${escapeHtml(q)}</span></li>`).join('')}
-                  </ul>
-                </div>
-              ` : ''}
-            </div>
-          `
-        : '';
-
-      setResults(`
-        <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5">
-          <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-            <div class="min-w-0">
-              <div class="text-xs tracking-[0.22em] uppercase text-white/50">Overall score</div>
-              <div class="mt-2 text-4xl font-semibold ${scoreColor(score)}">${Number(score) || 0}</div>
-              <div class="mt-2 text-sm text-white/60 break-words">
-                <span class="text-white/70">Fetched:</span> ${escapeHtml(audit.finalUrl)}
-              </div>
-              <div class="mt-1 text-xs text-white/50">
-                HTTP ${escapeHtml(audit.status)} • ${escapeHtml(audit.contentType || 'unknown')} • ${escapeHtml(audit.bytes)} bytes
-              </div>
-            </div>
-
-            <div class="w-full sm:max-w-[420px]">
-              <div class="text-xs tracking-[0.22em] uppercase text-white/50">Discovery files</div>
-              <div class="mt-2 grid grid-cols-3 gap-2 text-xs">
-                ${['robotsTxt', 'sitemap', 'llmsTxt'].map((k) => {
-                  const c = audit?.checks?.[k];
-                  const ok = c && c.ok;
-                  const label = k === 'robotsTxt' ? 'robots.txt' : k === 'sitemap' ? 'sitemap.xml' : 'llms.txt';
-                  return `
-                    <div class="rounded-xl border border-white/10 bg-white/[0.02] p-3">
-                      <div class="text-white/70">${label}</div>
-                      <div class="mt-1 ${ok ? 'text-emerald-200' : 'text-white/45'}">${ok ? 'OK' : 'Missing'}</div>
-                    </div>
-                  `;
-                }).join('')}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="mt-6">
-          <div class="text-xs tracking-[0.22em] uppercase text-white/50">Category scores</div>
-          <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            ${bar(
-              'Indexability',
-              cats.indexability,
-              'Checks whether the page can be indexed and fetched cleanly (HTTP status + robots/noindex signals + HTTPS basics).'
-            )}
-            ${bar(
-              'Metadata',
-              cats.metadata,
-              'Checks whether key page metadata exists (title, meta description, canonical URL, and social preview tags).'
-            )}
-            ${bar(
-              'Structured data',
-              cats.structuredData,
-              'Checks for machine-readable structured data (JSON-LD) and discovery helpers like sitemap.xml.'
-            )}
-            ${bar(
-              'Content structure',
-              cats.contentStructure,
-              'Checks semantic structure: main landmark + heading hierarchy (H1/H2/H3) for easy extraction.'
-            )}
-            ${bar(
-              'Accessibility',
-              cats.accessibility,
-              'Quick accessibility heuristics: image alt text coverage and structural landmarks.'
-            )}
-            ${bar(
-              'AI-friendliness',
-              cats.aiFriendliness,
-              'Estimates how readable the page is to AI/crawlers that do not run JavaScript (SSR vs SPA signals + discovery files).'
-            )}
-          </div>
-        </div>
-
-        <div class="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5">
-          <div class="text-xs tracking-[0.22em] uppercase text-white/50">Prioritized findings</div>
-          ${topFindings.length ? `
-            <div class="mt-3 space-y-3">
-              ${topFindings.map((f) => `
-                <div class="rounded-xl border border-white/10 bg-white/[0.02] p-4">
-                  <div class="flex flex-wrap items-center justify-between gap-3">
-                    <div class="text-white/90 font-semibold">${escapeHtml(f.title || '')}</div>
-                    <span class="${severityBadge(f.severity)}">${escapeHtml(f.severity || 'info')}</span>
-                  </div>
-                  <div class="mt-2 text-sm text-white/70 leading-relaxed">${escapeHtml(f.details || '')}</div>
-                  <div class="mt-2 text-sm text-white/80"><span class="text-white/60">Fix:</span> ${escapeHtml(f.recommendation || '')}</div>
-                </div>
-              `).join('')}
-            </div>
-          ` : `
-            <div class="mt-3 text-sm text-white/70">No major issues detected.</div>
-          `}
-        </div>
-
-        ${aiBlock}
-      `, true);
-    };
-
-    const run = async (url, includeAi) => {
-      setStatus('Running audit…', true);
-      setResults('', false);
-      setLoading(true);
-
-      try {
-        const res = await fetch('/api/audit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ url, includeAi: Boolean(includeAi) }),
-        });
-
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok || !data?.success) {
-          const msg = data?.error || 'Audit failed. Please try again.';
-          const details = data?.details ? `<div class="mt-2 text-xs text-white/45 break-words">${escapeHtml(data.details)}</div>` : '';
-          setStatus(`<span class="text-red-200">${escapeHtml(msg)}</span>${details}`, true);
-          return;
-        }
-
-        setStatus('', false);
-        render(data);
-      } catch {
-        setStatus('<span class="text-red-200">Audit failed. Please try again.</span>', true);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    const init = () => {
-      const form = $('audit_form');
-      if (!(form instanceof HTMLFormElement)) return;
-
-      // Avoid double-binding when Astro swaps pages.
-      if (form.dataset.bound === '1') return;
-      form.dataset.bound = '1';
-
-      const updateAiState = () => {
-        const aiToggle = $('audit_ai');
-        const stateEl = $('audit_ai_state');
-        if (!(stateEl instanceof HTMLElement)) return;
-        const on = aiToggle instanceof HTMLInputElement ? aiToggle.checked : false;
-        stateEl.textContent = on ? 'On' : 'Off';
+      const severityBadge = (sev) => {
+        const v = String(sev || 'info');
+        const base = 'inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide';
+        if (v === 'critical') return `${base} border-red-500/30 bg-red-500/10 text-red-200`;
+        if (v === 'high') return `${base} border-orange-500/30 bg-orange-500/10 text-orange-200`;
+        if (v === 'medium') return `${base} border-yellow-500/30 bg-yellow-500/10 text-yellow-200`;
+        if (v === 'low') return `${base} border-white/15 bg-white/[0.03] text-white/70`;
+        return `${base} border-white/15 bg-white/[0.03] text-white/60`;
       };
 
-      // Keep the little “AI: On/Off” label in sync.
-      updateAiState();
-      const aiToggleEl = $('audit_ai');
-      if (aiToggleEl instanceof HTMLInputElement && aiToggleEl.dataset.bound !== '1') {
-        aiToggleEl.dataset.bound = '1';
-        aiToggleEl.addEventListener('change', updateAiState);
-      }
+      const scoreColor = (n) => {
+        const x = Number(n) || 0;
+        if (x >= 85) return 'text-primary';
+        if (x >= 70) return 'text-emerald-300';
+        if (x >= 50) return 'text-yellow-200';
+        return 'text-red-200';
+      };
 
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
+      const bar = (label, value, help) => {
+        const v = Math.max(0, Math.min(100, Number(value) || 0));
+        const tip = String(help || '').trim();
 
-        const urlInput = $('audit_url');
-        const aiToggle = $('audit_ai');
+        const InfoIcon = `
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" />
+            <path d="M12 16v-4" />
+            <path d="M12 8h.01" />
+          </svg>
+        `;
 
-        const url = urlInput instanceof HTMLInputElement ? urlInput.value.trim() : '';
-        const includeAi = aiToggle instanceof HTMLInputElement ? aiToggle.checked : false;
+        return `
+          <div class="rounded-xl border border-white/10 bg-white/[0.02] p-4">
+            <div class="flex items-start justify-between gap-3">
+              <div class="flex items-start gap-2 min-w-0">
+                <div class="text-sm text-white/80 font-semibold">${escapeHtml(label)}</div>
 
-        if (!url) return;
-        run(url, includeAi);
-      });
-    };
+                ${tip ? `
+                  <div class="group relative">
+                    <button
+                      type="button"
+                      class="mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-md border border-white/10 bg-white/[0.03] text-white/55 hover:text-white/80 hover:bg-white/[0.06] focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+                      aria-label="More info"
+                    >
+                      ${InfoIcon}
+                    </button>
+                    <div
+                      class="pointer-events-none absolute left-0 top-7 z-30 hidden w-64 rounded-xl border border-white/10 bg-[#0f0f10]/95 p-3 text-xs leading-relaxed text-white/75 shadow-2xl backdrop-blur group-hover:block group-focus-within:block"
+                      role="tooltip"
+                    >
+                      ${escapeHtml(tip)}
+                    </div>
+                  </div>
+                ` : ''}
+              </div>
 
-    init();
-    document.addEventListener('astro:page-load', init);
+              <div class="text-sm text-white/60">${v}</div>
+            </div>
+
+            <progress
+              class="mt-2 h-2 w-full overflow-hidden rounded-full bg-white/10 [appearance:none] [&::-webkit-progress-bar]:bg-white/10 [&::-webkit-progress-value]:bg-emerald-600/70 [&::-moz-progress-bar]:bg-emerald-600/70"
+              max="100"
+              value="${v}"
+            ></progress>
+          </div>
+        `;
+      };
+
+      const setStatus = (html, show = true) => {
+        const statusEl = $('audit_status');
+        if (!statusEl) return;
+        statusEl.innerHTML = html;
+        statusEl.classList.toggle('hidden', !show);
+      };
+
+      const setResults = (html, show = true) => {
+        const resultsEl = $('audit_results');
+        if (!resultsEl) return;
+        resultsEl.innerHTML = html;
+        resultsEl.classList.toggle('hidden', !show);
+      };
+
+      const setLoading = (on) => {
+        const submitBtn = $('audit_submit');
+        if (!(submitBtn instanceof HTMLButtonElement)) return;
+
+        const spinner = $('audit_spinner');
+        const label = $('audit_btn_label');
+
+        submitBtn.disabled = Boolean(on);
+
+        if (spinner instanceof HTMLElement) {
+          spinner.classList.toggle('hidden', !on);
+          // Reuse the global loader spin keyframes.
+          spinner.style.animation = on ? 'loaderSpin 900ms linear infinite' : '';
+        }
+
+        if (label instanceof HTMLElement) {
+          label.textContent = on ? 'Running…' : 'Run audit';
+        }
+      };
+
+      const render = (payload) => {
+        const audit = payload?.audit;
+        if (!audit) return;
+
+        const score = audit?.score?.overall ?? 0;
+        const cats = audit?.score?.categories || {};
+        const findings = Array.isArray(audit?.findings) ? audit.findings : [];
+        const ai = payload?.ai;
+
+        const topFindings = findings.slice(0, 8);
+
+        const aiBlock = ai
+          ? ai.disabled
+            ? `
+              <div class="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5">
+                <div class="text-xs tracking-[0.22em] uppercase text-white/50">AI explanation</div>
+                <div class="mt-2 text-sm text-white/70 leading-relaxed">
+                  AI explanation is enabled, but isn’t available right now.
+                </div>
+                <div class="mt-2 text-xs text-white/45 break-words">
+                  ${escapeHtml(ai.reason || 'Not configured')}
+                </div>
+              </div>
+            `
+            : `
+              <div class="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5">
+                <div class="text-xs tracking-[0.22em] uppercase text-white/50">AI explanation</div>
+                <div class="mt-2 text-white/85 leading-relaxed">${escapeHtml(ai.summary || '')}</div>
+                ${Array.isArray(ai.top_priorities) && ai.top_priorities.length ? `
+                  <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    ${ai.top_priorities.slice(0, 4).map((p) => `
+                      <div class="rounded-xl border border-white/10 bg-white/[0.02] p-4">
+                        <div class="text-white/90 font-semibold">${escapeHtml(p.title || '')}</div>
+                        <div class="mt-2 text-sm text-white/70"><span class="text-white/80 font-semibold">Why:</span> ${escapeHtml(p.why || '')}</div>
+                        <div class="mt-2 text-sm text-white/70"><span class="text-white/80 font-semibold">How:</span> ${escapeHtml(p.how || '')}</div>
+                      </div>
+                    `).join('')}
+                  </div>
+                ` : ''}
+                ${Array.isArray(ai.quick_wins) && ai.quick_wins.length ? `
+                  <div class="mt-4">
+                    <div class="text-xs tracking-[0.22em] uppercase text-white/50">Quick wins</div>
+                    <ul class="mt-2 space-y-2 text-sm text-white/70">
+                      ${ai.quick_wins.slice(0, 6).map((q) => `<li class="flex gap-2"><span class="text-primary">•</span><span>${escapeHtml(q)}</span></li>`).join('')}
+                    </ul>
+                  </div>
+                ` : ''}
+              </div>
+            `
+          : '';
+
+        setResults(`
+          <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5">
+            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+              <div class="min-w-0">
+                <div class="text-xs tracking-[0.22em] uppercase text-white/50">Overall score</div>
+                <div class="mt-2 text-4xl font-semibold ${scoreColor(score)}">${Number(score) || 0}</div>
+                <div class="mt-2 text-sm text-white/60 break-words">
+                  <span class="text-white/70">Fetched:</span> ${escapeHtml(audit.finalUrl)}
+                </div>
+                <div class="mt-1 text-xs text-white/50">
+                  HTTP ${escapeHtml(audit.status)} • ${escapeHtml(audit.contentType || 'unknown')} • ${escapeHtml(audit.bytes)} bytes
+                </div>
+              </div>
+
+              <div class="w-full sm:max-w-[420px]">
+                <div class="text-xs tracking-[0.22em] uppercase text-white/50">Discovery files</div>
+                <div class="mt-2 grid grid-cols-3 gap-2 text-xs">
+                  ${['robotsTxt', 'sitemap', 'llmsTxt'].map((k) => {
+                    const c = audit?.checks?.[k];
+                    const ok = c && c.ok;
+                    const label = k === 'robotsTxt' ? 'robots.txt' : k === 'sitemap' ? 'sitemap.xml' : 'llms.txt';
+                    return `
+                      <div class="rounded-xl border border-white/10 bg-white/[0.02] p-3">
+                        <div class="text-white/70">${label}</div>
+                        <div class="mt-1 ${ok ? 'text-emerald-200' : 'text-white/45'}">${ok ? 'OK' : 'Missing'}</div>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6">
+            <div class="text-xs tracking-[0.22em] uppercase text-white/50">Category scores</div>
+            <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              ${bar(
+                'Indexability',
+                cats.indexability,
+                'Checks whether the page can be indexed and fetched cleanly (HTTP status + robots/noindex signals + HTTPS basics).'
+              )}
+              ${bar(
+                'Metadata',
+                cats.metadata,
+                'Checks whether key page metadata exists (title, meta description, canonical URL, and social preview tags).'
+              )}
+              ${bar(
+                'Structured data',
+                cats.structuredData,
+                'Checks for machine-readable structured data (JSON-LD) and discovery helpers like sitemap.xml.'
+              )}
+              ${bar(
+                'Content structure',
+                cats.contentStructure,
+                'Checks semantic structure: main landmark + heading hierarchy (H1/H2/H3) for easy extraction.'
+              )}
+              ${bar(
+                'Accessibility',
+                cats.accessibility,
+                'Quick accessibility heuristics: image alt text coverage and structural landmarks.'
+              )}
+              ${bar(
+                'AI-friendliness',
+                cats.aiFriendliness,
+                'Estimates how readable the page is to AI/crawlers that do not run JavaScript (SSR vs SPA signals + discovery files).'
+              )}
+            </div>
+          </div>
+
+          <div class="mt-6 rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5">
+            <div class="text-xs tracking-[0.22em] uppercase text-white/50">Prioritized findings</div>
+            ${topFindings.length ? `
+              <div class="mt-3 space-y-3">
+                ${topFindings.map((f) => `
+                  <div class="rounded-xl border border-white/10 bg-white/[0.02] p-4">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                      <div class="text-white/90 font-semibold">${escapeHtml(f.title || '')}</div>
+                      <span class="${severityBadge(f.severity)}">${escapeHtml(f.severity || 'info')}</span>
+                    </div>
+                    <div class="mt-2 text-sm text-white/70 leading-relaxed">${escapeHtml(f.details || '')}</div>
+                    <div class="mt-2 text-sm text-white/80"><span class="text-white/60">Fix:</span> ${escapeHtml(f.recommendation || '')}</div>
+                  </div>
+                `).join('')}
+              </div>
+            ` : `
+              <div class="mt-3 text-sm text-white/70">No major issues detected.</div>
+            `}
+          </div>
+
+          ${aiBlock}
+        `, true);
+      };
+
+      const run = async (url, includeAi) => {
+        setStatus('Running audit…', true);
+        setResults('', false);
+        setLoading(true);
+
+        try {
+          const res = await fetch('/api/audit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url, includeAi: Boolean(includeAi) }),
+          });
+
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok || !data?.success) {
+            const msg = data?.error || 'Audit failed. Please try again.';
+            const details = data?.details ? `<div class="mt-2 text-xs text-white/45 break-words">${escapeHtml(data.details)}</div>` : '';
+            setStatus(`<span class="text-red-200">${escapeHtml(msg)}</span>${details}`, true);
+            return;
+          }
+
+          setStatus('', false);
+          render(data);
+        } catch {
+          setStatus('<span class="text-red-200">Audit failed. Please try again.</span>', true);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      const init = () => {
+        const form = $('audit_form');
+        if (!(form instanceof HTMLFormElement)) return;
+
+        // Avoid double-binding when Astro swaps pages.
+        if (form.dataset.bound === '1') return;
+        form.dataset.bound = '1';
+
+        const updateAiState = () => {
+          const aiToggle = $('audit_ai');
+          const stateEl = $('audit_ai_state');
+          if (!(stateEl instanceof HTMLElement)) return;
+          const on = aiToggle instanceof HTMLInputElement ? aiToggle.checked : false;
+          stateEl.textContent = on ? 'On' : 'Off';
+        };
+
+        // Keep the little “AI: On/Off” label in sync.
+        updateAiState();
+        const aiToggleEl = $('audit_ai');
+        if (aiToggleEl instanceof HTMLInputElement && aiToggleEl.dataset.bound !== '1') {
+          aiToggleEl.dataset.bound = '1';
+          aiToggleEl.addEventListener('change', updateAiState);
+        }
+
+        form.addEventListener('submit', (e) => {
+          e.preventDefault();
+
+          const urlInput = $('audit_url');
+          const aiToggle = $('audit_ai');
+
+          const url = urlInput instanceof HTMLInputElement ? urlInput.value.trim() : '';
+          const includeAi = aiToggle instanceof HTMLInputElement ? aiToggle.checked : false;
+
+          if (!url) return;
+          run(url, includeAi);
+        });
+      };
+
+      init();
+      document.addEventListener('astro:page-load', init);
+    })();
   </script>
 </Layout>

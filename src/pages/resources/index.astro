@@ -322,60 +322,62 @@ const ChevronDown = () => `
       </div>
 
       <script is:inline>
-        const input = document.getElementById('resource_search');
-        const list = document.querySelector('[data-resource-list]');
-        const empty = document.querySelector('[data-resource-empty]');
+        (() => {
+          const input = document.getElementById('resource_search');
+          const list = document.querySelector('[data-resource-list]');
+          const empty = document.querySelector('[data-resource-empty]');
 
-        const getQ = () => {
-          try {
-            const url = new URL(window.location.href);
-            return (url.searchParams.get('q') || '').trim();
-          } catch {
-            return '';
-          }
-        };
+          const getQ = () => {
+            try {
+              const url = new URL(window.location.href);
+              return (url.searchParams.get('q') || '').trim();
+            } catch {
+              return '';
+            }
+          };
 
-        const setQ = (q) => {
-          try {
-            const url = new URL(window.location.href);
-            if (!q) url.searchParams.delete('q');
-            else url.searchParams.set('q', q);
-            window.history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
-          } catch {
-            // ignore
-          }
-        };
+          const setQ = (q) => {
+            try {
+              const url = new URL(window.location.href);
+              if (!q) url.searchParams.delete('q');
+              else url.searchParams.set('q', q);
+              window.history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
+            } catch {
+              // ignore
+            }
+          };
 
-        const apply = (q) => {
-          const query = String(q || '').toLowerCase().trim();
-          const cards = Array.from(document.querySelectorAll('[data-resource-card]'));
-          let shown = 0;
+          const apply = (q) => {
+            const query = String(q || '').toLowerCase().trim();
+            const cards = Array.from(document.querySelectorAll('[data-resource-card]'));
+            let shown = 0;
 
-          for (const el of cards) {
-            const hay = (el.getAttribute('data-search') || '').toLowerCase();
-            const match = !query || hay.includes(query);
-            el.classList.toggle('hidden', !match);
-            if (match) shown += 1;
-          }
+            for (const el of cards) {
+              const hay = (el.getAttribute('data-search') || '').toLowerCase();
+              const match = !query || hay.includes(query);
+              el.classList.toggle('hidden', !match);
+              if (match) shown += 1;
+            }
 
-          if (empty) empty.classList.toggle('hidden', shown !== 0);
-        };
+            if (empty) empty.classList.toggle('hidden', shown !== 0);
+          };
 
-        const init = () => {
-          if (!(input instanceof HTMLInputElement)) return;
-          const initial = getQ();
-          if (initial) input.value = initial;
-          apply(input.value);
+          const init = () => {
+            if (!(input instanceof HTMLInputElement)) return;
+            const initial = getQ();
+            if (initial) input.value = initial;
+            apply(input.value);
 
-          input.addEventListener('input', () => {
-            const q = input.value.trim();
-            setQ(q);
-            apply(q);
-          });
-        };
+            input.addEventListener('input', () => {
+              const q = input.value.trim();
+              setQ(q);
+              apply(q);
+            });
+          };
 
-        init();
-        document.addEventListener('astro:page-load', init);
+          init();
+          document.addEventListener('astro:page-load', init);
+        })();
       </script>
     </div>
   </section>
