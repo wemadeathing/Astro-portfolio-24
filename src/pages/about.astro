@@ -4,91 +4,150 @@ import Button from '../components/Button.astro';
 
 const expertise = [
   {
-    title: 'Enterprise Design Systems & Team Collaboration',
-    description: `I build design systems that scale across teams and channels, with enough implementation detail to keep delivery fast and consistent.`,
-    icon: 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'
+    title: 'AI-Powered Design & Product Development',
+    description: `Ship functional products with AI integration using Astro, React, Supabase, and Claude. Recent projects: EverPrompt (prompt management platform), WhatsApp Flow Builder (Figma plugin integration), and findmeacoffee.co.za (coffee directory with custom scraping).`,
+    icon: 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5',
   },
   {
-    title: 'Building Real Solutions',
-    description: `I design with build constraints in mind, and I can ship alongside engineers (or solo) when prototypes need to become product.`,
-    icon: 'M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z'
+    title: 'AI Training & Consulting',
+    description: `Deliver AI implementation workshops focused on practical adoption, workflow automation, and responsible use of tools like Claude, Cursor, and other AI platforms.`,
+    icon: 'M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z',
   },
   {
-    title: 'Rapid Validation & Prototyping',
-    description: `I move from idea to testable prototype quickly, so teams can validate early and reduce risk before committing engineering time.`,
-    icon: 'M13 2L3 14h9l-1 8 10-12h-9l1-8z'
+    title: 'End-to-End Product Design',
+    description: `Take products from research to launch, either building the MVP or collaborating closely with dev teams to shape and ship production-ready work.`,
+    icon: 'M13 2L3 14h9l-1 8 10-12h-9l1-8z',
   },
   {
-    title: 'Mentorship & Continuous Growth',
-    description: `I mentor designers and help teams align on quality, process, and practical AI adoption.`,
-    icon: 'M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75'
-  }
+    title: 'Design & Web Development',
+    description: `Design brand identities, marketing materials, and responsive websites. Build and ship custom sites using AstroJS, Webflow, Framer, WordPress, and HTML/CSS/JavaScript.`,
+    icon: 'M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75',
+  },
 ];
 
-const skills = {
-  productDesign: [
-    'Design Systems',
-    'User Research',
-    'Design Thinking',
-    'Information Architecture'
-  ],
-  technicalExecution: [
-    'React & Astro',
-    'Supabase & Neon',
-    'API Integration',
-    'MCPs'
-  ],
-  aiTools: [
-    'Cursor & Warp',
-    'Claude & Mistral',
-    'Replit & v0',
-    'Perplexity & Gemini'
-  ],
-  designTools: [
-    'Figma & FigJam',
-    'Adobe Creative Suite',
-    'Affinity',
-    'Miro'
-  ],
-  leadership: [
-    'Team Mentorship',
-    'Stakeholder Management',
-    'Agile Methodologies',
-    'Cross-functional Collaboration'
-  ]
-};
+const skills = [
+  {
+    title: 'Product Design & Execution',
+    items: [
+      'UI/UX design for web and mobile',
+      'Brand identity development',
+      'Design system creation',
+      'High-fidelity prototyping',
+      'Responsive web design',
+      'End-to-end product design (research to launch)',
+    ],
+  },
+  {
+    title: 'AI-Assisted Development',
+    items: [
+      'AI-assisted frontend development',
+      'AI feature integration (APIs)',
+      'Rapid MVP prototyping',
+      'MCP integrations',
+      'Supabase/Convex/Neon backends + auth (Supabase/Clerk)',
+      'AI adoption workshops',
+    ],
+  },
+  {
+    title: 'Technical Implementation',
+    items: [
+      'React',
+      'AstroJS',
+      'HTML/CSS',
+      'PostgreSQL',
+      'WordPress',
+      'API Integration',
+      'Third-party API integration and data scraping',
+      'Cross-functional collaboration with dev teams',
+    ],
+  },
+  {
+    title: 'Design Tools',
+    items: ['Figma', 'Adobe Creative Suite (Photoshop, Illustrator, InDesign)', 'Affinity', 'Canva'],
+  },
+  {
+    title: 'AI Tools & Platforms',
+    items: [
+      'Claude AI',
+      'Mistral',
+      'Cursor',
+      'OpenAI Integration',
+      'Perplexity',
+      'Replit',
+      'Lovable',
+      'Bolt',
+      'Claude Code',
+      'Warp',
+      'Gamma',
+    ],
+  },
+  {
+    title: 'Collaboration & Workflow',
+    items: [
+      'Git/GitHub',
+      'Agile/Scrum',
+      'Developer Handoff',
+      'Cross-functional collaboration',
+      'User Research',
+      'Usability Testing',
+    ],
+  },
+];
+
+const industry = [
+  {
+    title: 'Financial Services',
+    items: ['ABSA', 'Bidvest Bank', 'Old Mutual', 'Standard Bank'],
+  },
+  {
+    title: 'Retail & Consumer',
+    items: ['Clicks', 'Musica', 'PEP', 'Shoprite', 'Checkers', "Sportsman's Warehouse"],
+  },
+  {
+    title: 'Property & Real Estate',
+    items: ['Rabie Property Group', 'Signatûra'],
+  },
+  {
+    title: 'Technology & SaaS',
+    items: ['EverPrompt', 'FindMeACoffee', 'Micro apps'],
+  },
+  {
+    title: 'Small Business',
+    items: ['Travel', 'Hospitality', 'Events', 'FMCG', 'Services'],
+  },
+];
 
 const experience = [
   {
-    role: 'AI & Design Specialist',
+    role: 'Independent Product Designer & AI Developer',
     company: 'Nexevo Studios',
     period: '2025 - Present',
-    description: `Training users to use AI safely and effectively while designing solutions as client needs dictate, from branding to web solutions. Developing frameworks for responsible AI implementation and helping businesses navigate the gap between AI capability and practical application. Mentored a junior designer into a senior role, demonstrating my commitment to building up others while building solutions.`
+    description: `AI-powered product development, AI training workshops, design and web development for select clients`,
   },
   {
-    role: 'Lead UI Designer',
+    role: 'Lead Designer',
     company: 'Immersion Group',
-    period: '2022 - 2024',
-    description: `Designed production design systems and digital solutions for clients including Bidvest Bank, Old Mutual, and ABSA. Led a team to create a new secure onboarding experience for a major bank, collaborating closely with external development teams throughout implementation. Created rapid prototypes using FlutterFlow and Supabase for another major bank that allowed stakeholders to validate concepts before full development. Initiated and led an innovation project that upskilled six staff members while building a tested MVP, establishing a rapid prototyping proposition that opened new client conversations.`
+    period: '2022 - 2024 | Remote',
+    description: `Banking suite development across mobile, web, and dashboard. Led design system creation spanning three product streams. Delivered rapid innovation projects for Old Mutual and ABSA using FlutterFlow and Supabase. Initiated and led internal innovation program with cross-functional team of 6 throughout 2024.`,
   },
   {
-    role: 'Senior Digital Designer',
+    role: 'Senior Web Designer',
     company: 'Machete Creative',
-    period: '2019 - 2021',
-    description: `Created digital solutions including UI designs, websites, and digital assets that consistently hit sales targets in first-week launches. Conducted user research and implemented design strategies focused on solving real problems. Worked closely with development teams to ensure designs were technically feasible and delivered on business goals.`
+    period: '2019 - 2022 | Cape Town',
+    description: `Brand identity design from concept to completion, WordPress development and customization, responsive web design for multi-property real estate portfolio. Collaborated directly with development teams on website solutions and digital assets.`,
   },
   {
-    role: 'Visual Designer & Collaborator',
-    company: 'Freelance',
+    role: 'Freelance Designer',
+    company: 'Self-employed',
     period: '2014 - 2018',
-    description: `Collaborated with diverse clients on branding, digital design, and web development projects. Managed end-to-end design processes and built WordPress solutions for clients including Clicks, Musica, UCT Pathology, and ICCEG. Developed technical skills that allowed me to bridge the gap between design vision and implementation reality.`
+    description: `Brand identity, digital design, and marketing collateral for clients across travel, hospitality, events, FMCG, and service industries. Built responsive websites and handled end-to-end design projects.`,
   },
   {
     role: 'Senior Graphic Designer',
     company: 'Musica & Clicks',
     period: '2009 - 2012',
-    description: `Designed promotional campaigns and internal marketing materials for major retail brands. Managed teams and oversaw design processes, building foundations in visual communication and project management. Introduced workflow automation that streamlined production processes and taught senior designers new tools like Adobe InDesign when the industry was transitioning from older software.`
-  }
+    description: `In-house design for retail marketing materials, promotional campaigns, and brand assets across multiple product lines.`,
+  },
 ];
 ---
 
@@ -103,20 +162,18 @@ const experience = [
       <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8 sm:gap-10 items-center">
         <div class="max-w-[68ch]">
           <h1 class="text-4xl sm:text-5xl md:text-[54px] font-medium tracking-[-0.03em] leading-[1.05] text-white/95">
-            Product Designer who does more than design.
+            Product Designer who builds.
           </h1>
-          <p class="mt-5 type-lead text-white/75">
-            I design brands, build products, and ship apps using AI-accelerated tools. 15+ years spanning multiple disciplines means I can take projects from early concepts through to working solutions. Less handoff, more execution.
-          </p>
-          <div class="mt-8 flex flex-wrap items-center gap-3">
-            <Button href="/contact" text="Let's Connect" variant="primary" />
-            <a
-              href="/projects"
-              class="inline-flex h-12 items-center justify-center rounded-full border border-white/10 bg-white/5 px-6 text-sm font-semibold text-white/80 transition-colors hover:bg-white/10 hover:text-white"
-            >
-              View work
-            </a>
+          <div class="mt-4 text-xs tracking-[0.22em] uppercase text-white/55">
+            15+ years • Design + build • AI-integrated MVPs
           </div>
+          <p class="mt-5 type-lead text-white/75">
+            I design brands, build products, and ship working MVPs using AI-accelerated tools. 15+ years spanning multiple disciplines means I can take projects from concept to deployed solution.
+          </p>
+          <p class="mt-3 text-base sm:text-lg leading-[1.65] text-white/70">
+            I can execute end-to-end or collaborate closely with dev teams.
+          </p>
+
         </div>
 
         <!-- Right-side visual (desktop) -->
@@ -139,7 +196,7 @@ const experience = [
   <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
 
     <!-- What I do -->
-    <section class="py-12 sm:py-14">
+    <section id="now" class="py-12 sm:py-14 scroll-mt-28">
       <div class="flex items-end justify-between gap-6 mb-8">
         <div>
           <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-3">Now</div>
@@ -175,66 +232,40 @@ const experience = [
     <div class="h-px bg-white/10"></div>
 
     <!-- Skills -->
-    <section class="py-12 sm:py-14">
+    <section id="capabilities" class="py-12 sm:py-14 scroll-mt-28">
       <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-3">Capabilities</div>
       <h2 class="type-h2 text-white/90">Skills</h2>
 
       <div class="mt-8 rounded-2xl border border-white/10 bg-white/[0.03] p-6 sm:p-7">
         <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div>
-            <div class="text-sm font-semibold text-white/85 mb-3">Product Design</div>
-            <div class="flex flex-wrap gap-2">
-              {skills.productDesign.map((skill) => (
-                <span class="text-xs px-2.5 py-1 rounded-full border border-white/10 bg-white/5 text-white/70">
-                  {skill}
-                </span>
-              ))}
+          {skills.map((group) => (
+            <div>
+              <div class="text-sm font-semibold text-white/85 mb-3">{group.title}</div>
+              <p class="text-sm text-white/70 leading-[1.75]">
+                {group.items.join(' • ')}
+              </p>
             </div>
-          </div>
+          ))}
+        </div>
+      </div>
+    </section>
 
-          <div>
-            <div class="text-sm font-semibold text-white/85 mb-3">Technical Execution</div>
-            <div class="flex flex-wrap gap-2">
-              {skills.technicalExecution.map((skill) => (
-                <span class="text-xs px-2.5 py-1 rounded-full border border-white/10 bg-white/5 text-white/70">
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </div>
+    <div class="h-px bg-white/10"></div>
 
-          <div>
-            <div class="text-sm font-semibold text-white/85 mb-3">AI Tools</div>
-            <div class="flex flex-wrap gap-2">
-              {skills.aiTools.map((skill) => (
-                <span class="text-xs px-2.5 py-1 rounded-full border border-white/10 bg-white/5 text-white/70">
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </div>
+    <!-- Industry experience -->
+    <section id="industry" class="py-12 sm:py-14 scroll-mt-28">
+      <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-3">Industry experience</div>
 
-          <div>
-            <div class="text-sm font-semibold text-white/85 mb-3">Design Tools</div>
-            <div class="flex flex-wrap gap-2">
-              {skills.designTools.map((skill) => (
-                <span class="text-xs px-2.5 py-1 rounded-full border border-white/10 bg-white/5 text-white/70">
-                  {skill}
-                </span>
-              ))}
+      <div class="mt-8 rounded-2xl border border-white/10 bg-white/[0.03] p-6 sm:p-7">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          {industry.map((group) => (
+            <div>
+              <div class="text-sm font-semibold text-white/85 mb-3">{group.title}</div>
+              <p class="text-sm text-white/70 leading-[1.75]">
+                {group.items.join(', ')}
+              </p>
             </div>
-          </div>
-
-          <div>
-            <div class="text-sm font-semibold text-white/85 mb-3">Leadership</div>
-            <div class="flex flex-wrap gap-2">
-              {skills.leadership.map((skill) => (
-                <span class="text-xs px-2.5 py-1 rounded-full border border-white/10 bg-white/5 text-white/70">
-                  {skill}
-                </span>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
@@ -242,7 +273,7 @@ const experience = [
     <div class="h-px bg-white/10"></div>
 
     <!-- Experience -->
-    <section class="py-12 sm:py-14">
+    <section id="career" class="py-12 sm:py-14 scroll-mt-28">
       <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-3">Career</div>
       <h2 class="type-h2 text-white/90">Professional journey</h2>
 
@@ -293,7 +324,7 @@ const experience = [
             Let’s build something useful.
           </h2>
           <p class="mt-3 text-base sm:text-lg leading-[1.65] text-white/70">
-            If you're building innovative teams and need a technical designer who solves problems, mentors effectively, and delivers results, let's connect.
+            If you're looking for a designer who can take ideas from concept to working product, let's connect.
           </p>
           <div class="mt-6">
             <Button href="/contact" text="Let's Connect" variant="primary" />

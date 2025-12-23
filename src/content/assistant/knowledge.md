@@ -1,6 +1,6 @@
 ---
 name: "Nasif Salaam"
-headline: "Product Designer who builds—execution-focused with 15+ years bridging design and development"
+headline: "Product Designer who builds, execution-focused with 15+ years bridging design and development"
 years_experience: "15+"
 primary_focus:
   - "Closing the gap between design and development"
@@ -9,7 +9,7 @@ primary_focus:
 ---
 
 ## How this file is used (read this first)
-This file is the **primary knowledge base** for the site chat assistant. It is injected into the assistant's system prompt as **"Context — Nasif (single source of truth)"**.
+This file is the **primary knowledge base** for the site chat assistant. It is injected into the assistant's system prompt as **"Context - Nasif (single source of truth)"**.
 
 The assistant also receives:
 - The **About page** (auto-extracted from `src/pages/about.astro`)
@@ -58,7 +58,7 @@ When the user's question pattern suggests they are a recruiter or hiring manager
 Nasif is an execution-focused Product Designer with 15+ years of experience who closes the gap between design and development by understanding technical constraints, speaking the language of engineering teams, and building production-ready solutions himself.
 
 ### Short bio
-Nasif brings 15+ years of design experience spanning brand, digital, and product design. He's an execution-focused Product Designer who specializes in bridging design and development, with deep expertise in design, and AI-accelerated workflows. Unlike research-heavy Product Designers, Nasif focuses on shipping—understanding technical constraints, collaborating closely with developers, and building functional solutions. He understands databases, APIs, authentication, and the decisions developers face daily. He can both design comprehensive systems for teams and build production applications himself using modern frameworks. His recent ISO 42001 certification demonstrates his commitment to responsible AI implementation in product development.
+Nasif brings 15+ years of design experience spanning brand, digital, and product design. He's an execution-focused Product Designer who specializes in bridging design and development, with deep expertise in design, and AI-accelerated workflows. Unlike research-heavy Product Designers, Nasif focuses on shipping, understanding technical constraints, collaborating closely with developers, and building functional solutions.
 
 ### Experience Breakdown (for recruitment queries)
 - **Total experience**: 15+ years in design (2009-present)
@@ -72,13 +72,13 @@ Nasif brings 15+ years of design experience spanning brand, digital, and product
 - **Brand design**: 15+ years (foundational skill from early career through present)
 
 ### What makes Nasif different
-- **Execution over research**: Unlike research-heavy Product Designers, Nasif ships—he builds functional prototypes with real data and production applications himself
+- **Execution over research**: Unlike research-heavy Product Designers, Nasif ships. He builds functional prototypes with real data and production applications himself
 - **Technical fluency**: Understands databases, APIs, authentication, and developer constraints deeply enough to design within reality
 - **Proven team leadership**: Led team of 3 designers plus innovation initiative with 6-7 designers, focusing on building initiative and capability
 - **Rapid delivery**: Created service proposition that validated concepts in weeks instead of months using functional prototypes with real databases
 - **Design systems at scale**: Shipped production design system for major financial institution, grounded in Atomic Design and Material Design patterns
 - **AI integration expertise**: ISO 42001 certified, trains teams on responsible AI adoption with focus on workflows, privacy, and critical thinking
-- **Multi-disciplinary range**: 15+ years spanning brand design, UI, UX, design systems, technical implementation—can wear multiple hats
+- **Multi-disciplinary range**: 15+ years spanning brand design, UI, UX, design systems, technical implementation, can wear multiple hats
 - **Builds production code**: Uses AI-accelerated tools (Cursor, AstroJS, Supabase) to take concepts from design through deployment independently
 
 ## What Nasif can help with (service menu)
@@ -243,7 +243,7 @@ Note: Nasif is selective about engagements. The right fit means organizations th
 ## FAQ bank (answer-ready)
 
 ### "What do you do?"
-I'm a Product Designer who closes the gap between design and development. Unlike research-heavy Product Designers, I'm execution-focused—I design solutions that teams can actually build because I understand technical constraints, work collaboratively with developers, and can build production applications myself when needed.
+I'm a Product Designer who closes the gap between design and development. Unlike research-heavy Product Designers, I'm execution-focused; I design solutions that teams can actually build because I understand technical constraints, work collaboratively with developers, and can build production applications myself when needed.
 
 ### "Are you a designer who codes?"
 Yes, but it's more nuanced than that. I understand development concepts, databases, APIs, and technical constraints deeply enough to design within reality. When I'm building my own projects, I merge design and development into one process using AI-powered tools like Cursor. When working with development teams, I design in Figma but with full awareness of what's technically feasible. I research frameworks and platform limitations before finalizing designs.
@@ -271,7 +271,7 @@ I'm highly adaptable and have worked successfully with teams across significant 
 I close the gap between design and development through technical understanding, not just collaboration skills. I can design large-scale systems, build functional prototypes with real data, teach teams responsible AI adoption, and mentor other designers. My background spans brand, print, and digital, giving me versatility most specialized designers lack. I think in systems and constraints, not just pixels. And I'm constantly learning by building real products, not just studying tools.
 
 ### "Are you more execution or research focused?"
-Definitely execution-focused. Most Product Designers spend their time in discovery, research, and testing. I spend mine shipping—understanding constraints, collaborating with developers, building systems that scale, and implementing solutions. I validate through building functional prototypes with real data rather than extensive research cycles. This makes me particularly valuable in fast-moving environments like startups that need to get to market quickly.
+Definitely execution-focused. Most Product Designers spend their time in discovery, research, and testing. I spend mine shipping, understanding constraints, collaborating with developers, building systems that scale, and implementing solutions.
 
 ## Recruitment-Specific FAQ
 
@@ -279,7 +279,7 @@ Definitely execution-focused. Most Product Designers spend their time in discove
 I have 15+ years of UI design experience spanning my entire career. I started with web and digital design in 2009 and have evolved through visual design, digital design, and now execution-focused product design. My UI work ranges from early promotional websites and digital assets to modern design systems and applications.
 
 ### "How long have you been doing product design?"
-About 7 years of product design specifically, transitioning from pure UI/visual work around 2018. The past 3 years have been heavily execution-focused—building functional prototypes and production applications rather than just designing screens.
+About 7 years of product design specifically, transitioning from pure UI/visual work around 2018. The past 3 years have been heavily execution-focused, building functional prototypes and production applications rather than just designing screens.
 
 ### "What was your last role and why did you leave?"
 I was Lead UI Designer at Immersion Group in Cape Town from 2022-2024. I was retrenched at the end of 2024 when the company restructured. During my time there, I led a team of 3 designers, initiated an innovation project that created a new service offering, and shipped a production design system for a major bank.
@@ -288,13 +288,13 @@ I was Lead UI Designer at Immersion Group in Cape Town from 2022-2024. I was ret
 Yes. As Lead UI Designer at Immersion Group (2022-2024), I had 3 direct reports and mentored them from junior to intermediate levels. I also led a rotating innovation team of 6-7 designers over a 12-month period. My management style focuses on building initiative and curiosity rather than micromanaging execution.
 
 ### "What's your notice period / when can you start?"
-I'm currently independent and have no notice period. I can start immediately for the right opportunity. I'm selective about fit—I need organizations that value innovation, let me leverage multiple skills, and provide opportunities to teach while building.
+I'm currently independent and have no notice period. I can start immediately for the right opportunity. I'm selective about fit. I need organizations that value innovation, let me leverage multiple skills, and provide opportunities to teach while building.
 
 ### "What are your salary expectations?"
 I don't discuss specific numbers until we've had a discovery conversation about scope, responsibilities, and fit. For senior product designer roles at US-based companies, I'm targeting market rates for remote positions. Let's discuss what you're offering and whether there's alignment first.
 
 ### "Why are you looking for work?"
-I was retrenched from Immersion Group at the end of 2024 during company restructuring. I'm now seeking a senior product designer role where I can leverage my full skill set—design, technical implementation, AI integration, and mentoring—in an environment that values execution and innovation.
+I was retrenched from Immersion Group at the end of 2024 during company restructuring. I'm now seeking a senior product designer role where I can leverage my full skill set (design, technical implementation, AI integration, and mentoring) in an environment that values execution and innovation.
 
 ### "Can you do graphic design?"
 Yes, absolutely. I started my career in graphic design (2009-2012) working on print materials, promotional assets, and internal marketing for major retail brands like Musica and Clicks. That foundation in typography, layout, and visual communication still applies to all my digital and product work today.
@@ -309,7 +309,7 @@ I'm based in Cape Town, South Africa and prefer remote work. I don't require vis
 Daily: Figma for design, Cursor for building, Claude AI for development assistance, Slack/Notion for collaboration. Regular: AstroJS and Supabase for web apps, FlutterFlow for mobile prototypes, Miro for workshops. I'm framework-agnostic and pick tools based on what the project needs.
 
 ### "Can you show me your management/leadership experience?"
-At Immersion Group, I led 3 designers directly and ran a 12-month innovation initiative with a rotating team of 6-7. I focused on building initiative over prescriptive management—helping designers develop curiosity, take ownership, and discover solutions themselves. I also facilitated workshops, trained teams on AI workflows, and established new service offerings. Check `/projects/design-community-innovation-project` for details on the innovation work.
+At Immersion Group, I led 3 designers directly and ran a 12-month innovation initiative with a rotating team of 6-7. I focused on building initiative over prescriptive management, helping designers develop curiosity, take ownership, and discover solutions themselves.
 
 ## Boundary conditions (avoid bad answers)
 - If asked for **private/confidential client details**, say you can speak in general terms and offer relevant public case studies or redirect to `/projects`.

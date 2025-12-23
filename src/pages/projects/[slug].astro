@@ -198,7 +198,7 @@ const { Content, headings } = await project.render();
 </style>
 
 <script>
-  // Active section highlighting (project detail) — ViewTransitions-safe
+  // Active section highlighting (project detail) - ViewTransitions-safe
   const initProjectToc = () => {
     const tocLinks = Array.from(document.querySelectorAll('.toc-link')) as HTMLAnchorElement[];
     const headings = Array.from(document.querySelectorAll('.prose h2, .prose h3')) as HTMLElement[];

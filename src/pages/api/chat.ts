@@ -173,7 +173,7 @@ export const POST: APIRoute = async ({ request }) => {
   try {
     const ip = getClientIp(request);
     if (!rl.allow(ip)) {
-      return json({ reply: 'Too many requests — please wait a moment and try again.' }, 429);
+      return json({ reply: 'Too many requests. Please wait a moment and try again.' }, 429);
     }
 
     const body = await request.json();
@@ -281,7 +281,7 @@ export const POST: APIRoute = async ({ request }) => {
       .map((p) => {
         const keywords = (p.useFor && p.useFor.length ? p.useFor : p.tags).join(', ');
         const summary = (p.aiSummary && String(p.aiSummary).trim().length ? String(p.aiSummary) : p.description).trim();
-        return `- ${p.slug}: ${p.title} (${keywords}) — ${summary}${p.featured ? ' [featured]' : ''}`;
+        return `- ${p.slug}: ${p.title} (${keywords}) - ${summary}${p.featured ? ' [featured]' : ''}`;
       })
       .join('\n');
 
@@ -289,7 +289,7 @@ export const POST: APIRoute = async ({ request }) => {
       .map((b) => {
         const topics = (b.topics && b.topics.length ? b.topics.join(', ') : '').trim();
         const summary = (b.aiSummary && String(b.aiSummary).trim().length ? String(b.aiSummary) : b.description).trim();
-        return `- ${b.slug}: ${b.title}${topics ? ` (${topics})` : ''} — ${summary}`;
+        return `- ${b.slug}: ${b.title}${topics ? ` (${topics})` : ''} - ${summary}`;
       })
       .join('\n');
 
@@ -404,7 +404,7 @@ Voice & tone:
 Answer quality rules:
 - Be specific. Use the provided Context.
 - SYNTHESIZE information from the context, don't just recite it.
-- Answer the SPECIFIC question asked. Don't dump all related information—be selective and relevant.
+- Answer the SPECIFIC question asked. Don't dump all related information. Be selective and relevant.
 - If the user request is ambiguous or you're missing key details, ask 1 clarification question.
 - If the question is off-topic, gently redirect and provide 2–3 navigation chips.
 
@@ -424,7 +424,7 @@ If the question asks about years of experience, team management, last role, noti
 1. Be comprehensive (ignore the brevity rule)
 2. Use structured formatting (bullets, clear sections) when helpful
 3. Never say "I don't have that detail" if you can infer from context
-4. Sell the experience confidently—"Led team of 3 designers" not "mentored a few people"
+4. Sell the experience confidently: "Led team of 3 designers" not "mentored a few people"
 
 Examples of when to use bullets:
 - "list your skills" → use bullets
@@ -459,16 +459,16 @@ Project cards rules:
 - Return at most 4 project slugs.
 - Use EXACT slugs from the Projects context.
 
-Context — Nasif (single source of truth):
+Context - Nasif (single source of truth):
 ${knowledge}
 
-Context — About page (auto-extracted):
+Context - About page (auto-extracted):
 ${aboutText}
 
-Context — Relevant Projects (top matches):
+Context - Relevant Projects (top matches):
 ${projectContext}
 
-Context — Relevant Insights (top matches):
+Context - Relevant Insights (top matches):
 ${blogContext}
 `;
 
@@ -556,6 +556,6 @@ ${blogContext}
 
   } catch (error) {
     console.error('API Error:', error);
-    return json({ reply: 'Sorry — something went wrong. Please try again.' }, 500);
+    return json({ reply: 'Sorry, something went wrong. Please try again.' }, 500);
   }
 };

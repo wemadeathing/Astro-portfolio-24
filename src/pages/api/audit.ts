@@ -236,7 +236,7 @@ export const POST: APIRoute = async ({ request }) => {
       try {
         ai = await aiExplain(audit, apiKey);
       } catch (e) {
-        // AI is optional — return deterministic audit even if AI fails.
+        // AI is optional. Return deterministic audit even if AI fails.
         ai = { summary: 'AI explanation failed. Try again later.', top_priorities: [], quick_wins: [] };
       }
 

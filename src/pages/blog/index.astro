@@ -2,7 +2,6 @@
 import Layout from '../../layouts/Layout.astro';
 import BlogCard from '../../components/BlogCard.astro';
 import { getCollection } from 'astro:content';
-import { readingTime } from '../../lib/reading-time';
 import { tagToSlug } from '../../lib/tag-utils';
 
 const posts = await getCollection('blog');
@@ -32,11 +31,11 @@ const allTags = Array.from(
       </div>
 
       {allTags.length > 0 && (
-        <div class="mt-7">
-          <div class="flex flex-wrap items-center gap-2 overflow-x-auto pb-1">
+        <div class="mt-7 -mx-4 sm:mx-0">
+          <div class="insights-chip-row flex items-center gap-2 overflow-x-auto pb-1 whitespace-nowrap px-4 sm:px-0">
             <a
               href="/blog"
-              class="inline-flex items-center rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors bg-primary/15 text-white/90 border-primary/30"
+              class="shrink-0 inline-flex items-center rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors bg-primary/15 text-white/90 border-primary/30"
               aria-current="true"
             >
               All
@@ -44,7 +43,7 @@ const allTags = Array.from(
             {allTags.map((tag) => (
               <a
                 href={`/blog/tags/${tagToSlug(tag)}`}
-                class="inline-flex items-center rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors bg-white/[0.03] text-white/70 border-white/10 hover:bg-white/[0.06] hover:text-white"
+                class="shrink-0 inline-flex items-center rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors bg-white/[0.03] text-white/70 border-white/10 hover:bg-white/[0.06] hover:text-white"
               >
                 {tag}
               </a>
@@ -53,18 +52,31 @@ const allTags = Array.from(
         </div>
       )}
 
-      <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 stagger-children">
+      <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
         {sortedPosts.map((post) => (
           <BlogCard
             title={post.data.title}
-            excerpt={post.data.description}
-            date={post.data.pubDate}
             image={post.data.image}
             slug={post.slug}
-            readingTime={readingTime(post.body).label}
+            kicker={
+              (post.data.topics?.[0] ?? post.data.tags?.[0])
+                ? String(post.data.topics?.[0] ?? post.data.tags?.[0])
+                : undefined
+            }
           />
         ))}
       </div>
     </div>
   </section>
 </Layout>
+
+<style>
+  .insights-chip-row {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .insights-chip-row::-webkit-scrollbar {
+    display: none;
+  }
+</style>

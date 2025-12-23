@@ -82,21 +82,50 @@ const relatedPosts = sortedPosts
   .filter((x) => x.score > 0)
   .sort((a, b) => b.score - a.score || b.post.data.pubDate.valueOf() - a.post.data.pubDate.valueOf())
   .slice(0, 3)
-  .map((x) => x.post);
+  .map((x) => ({
+    post: x.post,
+    readingLabel: readingTime(x.post.body).label,
+  }));
 ---
 
 <Layout title={post.data.title} description={post.data.description} image={post.data.image}>
-  <article class="min-h-screen bg-background">
+  <article class="min-h-screen">
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 pb-16">
+      {/* Mobile back to feed */}
+      <div class="mb-4 sm:mb-6 lg:hidden">
+        <a
+          href="/blog"
+          class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-semibold text-white/80 hover:bg-white/[0.06] hover:text-white focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="m15 18-6-6 6-6" />
+          </svg>
+          <span>Back to Insights</span>
+        </a>
+      </div>
+
       <div class="grid grid-cols-1 lg:grid-cols-[1fr_240px] gap-10">
-        <div class="rounded-2xl border border-white/10 bg-white/[0.03] shadow-sm px-6 sm:px-8 md:px-12 py-7 md:py-10">
-          <Breadcrumb 
-            items={[
-              { label: 'Home', href: '/' },
-              { label: 'Insights', href: '/blog' },
-              { label: post.data.title }
-            ]}
-          />
+        <div class="rounded-[26px] border border-white/12 bg-white/[0.03] px-6 sm:px-8 md:px-12 py-6 md:py-10">
+          <div class="hidden sm:block">
+            <Breadcrumb
+              items={[
+                { label: 'Home', href: '/' },
+                { label: 'Insights', href: '/blog' },
+                { label: post.data.title }
+              ]}
+            />
+          </div>
 
           <div class="mb-8">
             <h1 class="type-h1 mb-4 text-white/95">{post.data.title}</h1>
@@ -106,7 +135,7 @@ const relatedPosts = sortedPosts
             </p>
 
             {(post.data.tags?.length || post.data.topics?.length) ? (
-              <div class="mb-6 flex flex-wrap gap-2">
+              <div class="mb-6 hidden sm:flex flex-wrap gap-2">
                 {(post.data.tags ?? []).map((t) => (
                   <a
                     href={`/blog/tags/${tagToSlug(String(t))}`}
@@ -117,7 +146,10 @@ const relatedPosts = sortedPosts
                 ))}
               </div>
             ) : null}
-            <ShareButtons title={post.data.title} />
+
+            <div class="mt-4 hidden sm:block">
+              <ShareButtons title={post.data.title} />
+            </div>
           </div>
 
           <div class="prose max-w-none">
@@ -128,23 +160,47 @@ const relatedPosts = sortedPosts
             <div class="mt-10 pt-8 border-t border-white/10">
               <div class="text-xs tracking-[0.22em] uppercase text-white/50">Keep reading</div>
               <h2 class="mt-2 text-lg sm:text-xl font-semibold text-white/92">Related posts</h2>
-              <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {relatedPosts.map((p) => (
-                  <BlogCard
-                    title={p.data.title}
-                    excerpt={p.data.description}
-                    date={p.data.pubDate}
-                    image={p.data.image}
-                    slug={p.slug}
-                    readingTime={readingTime(p.body).label}
-                  />
-                ))}
+              <div class="mt-6">
+                <div
+                  class="keep-reading-row flex gap-3 overflow-x-auto pb-2 pl-1 pr-0 snap-x snap-proximity"
+                  role="list"
+                  aria-label="Related posts"
+                >
+                  {relatedPosts.map((item) => (
+                    <a
+                      role="listitem"
+                      href={`/blog/${item.post.slug}`}
+                      class="group w-56 sm:w-60 md:w-64 flex-shrink-0 snap-start rounded-[26px] overflow-hidden border border-white/12 bg-[#070910] transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30 first:ml-1"
+                    >
+                      <div class="aspect-[16/11] overflow-hidden">
+                        <img
+                          src={item.post.data.image}
+                          alt={item.post.data.title}
+                          loading="lazy"
+                          decoding="async"
+                          class="h-full w-full object-cover"
+                        />
+                      </div>
+                      <div class="p-4">
+                        <h3 class="text-sm font-semibold text-white/95 leading-snug line-clamp-3">
+                          {item.post.data.title}
+                        </h3>
+                        <p class="mt-2 text-xs text-white/60">
+                          {new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(
+                            item.post.data.pubDate
+                          )}
+                          {` • ${item.readingLabel}`}
+                        </p>
+                      </div>
+                    </a>
+                  ))}
+                </div>
               </div>
             </div>
           ) : null}
 
 
-          <div class="mt-10 pt-8 border-t border-white/10">
+          <div class="mt-10 pt-8 border-t border-transparent sm:border-white/10">
             <div class="text-xs tracking-[0.22em] uppercase text-white/50">Newsletter</div>
             <h2 class="mt-2 text-lg sm:text-xl font-semibold text-white/92">
               Get occasional product + AI notes
@@ -213,10 +269,19 @@ const relatedPosts = sortedPosts
   .prose code {
     @apply text-sm text-white/90;
   }
+
+  .keep-reading-row {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .keep-reading-row::-webkit-scrollbar {
+    display: none;
+  }
 </style>
 
 <script>
-  // TOC active link highlighting (blog detail) — ViewTransitions-safe
+  // TOC active link highlighting (blog detail) - ViewTransitions-safe
   const initActiveToc = () => {
     const tocLinks = Array.from(document.querySelectorAll('.toc-link')) as HTMLAnchorElement[];
     const headings = Array.from(document.querySelectorAll('.prose h2, .prose h3')) as HTMLElement[];

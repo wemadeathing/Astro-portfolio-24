@@ -309,7 +309,7 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
       if (!isSse) {
         const data = await response.json().catch(() => ({} as any));
         applyAssistantPatch({
-          content: data.reply || 'Sorry — I had trouble connecting. You can retry.',
+          content: data.reply || 'Sorry, I had trouble connecting. You can retry.',
           projects: Array.isArray(data.projects) ? data.projects : undefined,
           chips: Array.isArray(data.chips) ? data.chips : undefined,
         });
@@ -375,7 +375,7 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
         setMessages((curr) =>
           curr.map((m) =>
             m.id === assistantId
-              ? { ...m, content: 'Sorry — I had trouble connecting. You can retry.' }
+              ? { ...m, content: 'Sorry, I had trouble connecting. You can retry.' }
               : m
           )
         );
@@ -385,7 +385,7 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
           {
             id: (Date.now() + 2).toString(),
             role: 'assistant',
-            content: 'Sorry — I had trouble connecting. You can retry.',
+            content: 'Sorry, I had trouble connecting. You can retry.',
           },
         ]);
       }

@@ -163,12 +163,15 @@ const isHome = pathname === '/' || pathname === '';
           (closeButton || focusables[0] || panel)?.focus?.();
         });
       } else {
-        // Restore focus back to trigger when closing.
+        // Restore focus back to whatever was active before opening.
+        // If we never opened (e.g., initial page load), do nothing.
+        if (!lastFocused) {
+          return;
+        }
+
         requestAnimationFrame(() => {
           if (lastFocused && (lastFocused as HTMLElement).focus) {
             (lastFocused as HTMLElement).focus();
-          } else {
-            menuButton.focus();
           }
           lastFocused = null;
         });

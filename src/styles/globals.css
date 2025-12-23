@@ -68,7 +68,7 @@
 @layer components {
   /* Typography scale (shadcn-like: tight, consistent) */
   .type-h1 {
-    @apply text-3xl sm:text-4xl md:text-4xl font-semibold tracking-[-0.03em] leading-[1.05];
+    @apply text-2xl sm:text-4xl md:text-4xl font-semibold tracking-[-0.03em] leading-[1.1];
   }
   .type-h2 {
     @apply text-2xl sm:text-3xl font-semibold tracking-[-0.02em] leading-tight;
@@ -182,9 +182,6 @@
   animation: float 6s ease-in-out infinite;
 }
 
-.page-content {
-  animation: fadeIn 0.6s ease-out;
-}
 
 .animate-slide-up {
   animation: slideUp 0.8s ease-out;
