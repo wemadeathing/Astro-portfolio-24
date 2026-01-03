@@ -3,6 +3,7 @@ import Layout from '../../layouts/Layout.astro';
 import BlogCard from '../../components/BlogCard.astro';
 import { getCollection } from 'astro:content';
 import { tagToSlug } from '../../lib/tag-utils';
+import { readingTime } from '../../lib/reading-time';
 
 const posts = await getCollection('blog');
 const sortedPosts = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
@@ -53,18 +54,23 @@ const allTags = Array.from(
       )}
 
       <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
-        {sortedPosts.map((post) => (
-          <BlogCard
-            title={post.data.title}
-            image={post.data.image}
-            slug={post.slug}
-            kicker={
-              (post.data.topics?.[0] ?? post.data.tags?.[0])
-                ? String(post.data.topics?.[0] ?? post.data.tags?.[0])
-                : undefined
-            }
-          />
-        ))}
+        {sortedPosts.map((post) => {
+          const rt = readingTime(post.body);
+          return (
+            <BlogCard
+              title={post.data.title}
+              image={post.data.image}
+              slug={post.slug}
+              kicker={
+                (post.data.topics?.[0] ?? post.data.tags?.[0])
+                  ? String(post.data.topics?.[0] ?? post.data.tags?.[0])
+                  : undefined
+              }
+              pubDate={post.data.pubDate}
+              readingTime={rt.label}
+            />
+          );
+        })}
       </div>
     </div>
   </section>

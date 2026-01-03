@@ -4,27 +4,35 @@ interface Props {
   image: string;
   slug: string;
   kicker?: string;
+  pubDate?: Date;
+  readingTime?: string;
 }
 
-const { title, image, slug, kicker } = Astro.props;
+const { title, image, slug, kicker, pubDate, readingTime } = Astro.props;
+
+const formattedDate = pubDate
+  ? new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(pubDate)
+  : null;
 ---
 
 <a
   href={`/blog/${slug}`}
   class="group block rounded-[24px] border border-white/[0.12] bg-[#08080c]/95 overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.65)] transition-all hover:-translate-y-0.5 hover:border-white/30 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
 >
-  <div class="aspect-video overflow-hidden bg-white/5">
+  <div class="aspect-video overflow-hidden bg-white/5 relative">
+    <div class="absolute inset-0 skeleton-image" aria-hidden="true"></div>
     <img
       src={image}
       alt={title}
-      class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+      class="relative w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
       loading="lazy"
       decoding="async"
+      onload="this.parentElement.querySelector('.skeleton-image').style.display='none'"
     />
   </div>
   <div class="px-4 pb-5 pt-4">
     {kicker ? (
-      <div class="text-[11px] tracking-[0.22em] uppercase text-white/50 line-clamp-1">
+      <div class="text-[11px] tracking-[0.22em] uppercase text-white/55 line-clamp-1">
         {kicker}
       </div>
     ) : null}
@@ -34,5 +42,10 @@ const { title, image, slug, kicker } = Astro.props;
     ]}>
       {title}
     </h2>
+    {(formattedDate || readingTime) && (
+      <p class="mt-2 text-xs text-white/55">
+        {formattedDate}{formattedDate && readingTime && ' • '}{readingTime}
+      </p>
+    )}
   </div>
 </a>

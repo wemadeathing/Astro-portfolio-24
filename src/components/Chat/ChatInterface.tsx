@@ -49,6 +49,7 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [lastUserText, setLastUserText] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
 
   const menuPanelRef = useRef<HTMLDivElement>(null);
   const menuCloseButtonRef = useRef<HTMLButtonElement>(null);
@@ -212,6 +213,23 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
     container.addEventListener('scroll', handleScroll, { passive: true });
     return () => container.removeEventListener('scroll', handleScroll);
   }, [hasStarted]); // Re-bind when chat starts (and container renders)
+
+  // Show onboarding tooltip after a delay (only on first visit)
+  useEffect(() => {
+    const hasSeenTooltip = sessionStorage.getItem('chat-tooltip-seen');
+    if (hasSeenTooltip || hasStarted) return;
+
+    const timer = setTimeout(() => {
+      setShowTooltip(true);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [hasStarted]);
+
+  const dismissTooltip = () => {
+    setShowTooltip(false);
+    sessionStorage.setItem('chat-tooltip-seen', 'true');
+  };
 
 
   const scrollToBottom = () => {
@@ -561,6 +579,23 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
 
             {/* Input (intro) */}
             <form onSubmit={handleSubmit} className="relative mt-4 flex items-center gap-2 w-full max-w-[680px]">
+              {/* Onboarding tooltip */}
+              {showTooltip && (
+                <div className="absolute -top-14 left-1/2 -translate-x-1/2 z-10 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                  <div className="relative bg-primary/95 text-primary-foreground px-4 py-2 rounded-full text-sm font-medium shadow-lg whitespace-nowrap">
+                    Try asking me anything about my work!
+                    <button
+                      type="button"
+                      onClick={dismissTooltip}
+                      className="ml-2 opacity-70 hover:opacity-100 transition-opacity"
+                      aria-label="Dismiss tooltip"
+                    >
+                      ×
+                    </button>
+                    <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-primary/95" />
+                  </div>
+                </div>
+              )}
               <input
                 type="text"
                 value={input}
@@ -748,6 +783,20 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
               </div>
             </div>
 
+            {/* Browse traditionally link */}
+            <div className="mt-6 text-center">
+              <a
+                href="/projects"
+                className="inline-flex items-center gap-2 text-sm text-muted-foreground/70 hover:text-foreground transition-colors"
+              >
+                <span>Or browse my work traditionally</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14"/>
+                  <path d="m12 5 7 7-7 7"/>
+                </svg>
+              </a>
+            </div>
+
             {/* Simple Footer (Intro Only) */}
             <footer className="w-full border-t border-border/40 mt-8 pt-6 pb-4 text-xs text-muted-foreground/60">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -795,10 +844,11 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
                     }`}
                   >
                     {msg.role === 'assistant' && msg.id === typingMessageId && !msg.content ? (
-                      <div className="flex items-center gap-2" aria-label="Assistant is typing">
-                        <div className="w-2 h-2 bg-foreground/40 rounded-full animate-bounce" />
-                        <div className="w-2 h-2 bg-foreground/40 rounded-full animate-bounce delay-75" />
-                        <div className="w-2 h-2 bg-foreground/40 rounded-full animate-bounce delay-150" />
+                      <div className="flex items-center gap-2" role="status" aria-live="polite">
+                        <span className="sr-only">Assistant is typing a response...</span>
+                        <div className="w-2 h-2 bg-foreground/50 rounded-full animate-bounce" aria-hidden="true" />
+                        <div className="w-2 h-2 bg-foreground/50 rounded-full animate-bounce delay-75" aria-hidden="true" />
+                        <div className="w-2 h-2 bg-foreground/50 rounded-full animate-bounce delay-150" aria-hidden="true" />
                       </div>
                     ) : (
                       <p className="leading-relaxed whitespace-pre-wrap">{msg.content}</p>
@@ -828,7 +878,7 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
                 {msg.projects && msg.projects.length > 0 && (
                   <div className="w-full pl-12 pr-2">
                     <div className="flex items-center justify-between gap-3 mb-3">
-                      <div className="text-xs tracking-wide uppercase text-muted-foreground/70">Projects</div>
+                      <div className="text-xs tracking-wide uppercase text-muted-foreground">Projects</div>
                       <a
                         href="/projects"
                         className="text-xs text-muted-foreground/80 hover:text-foreground transition-colors"
@@ -857,7 +907,7 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
                         <a
                           key={`${chip.label}-${chip.href}`}
                           href={chip.href}
-                          className="text-xs md:text-sm px-3 py-1.5 bg-muted/20 hover:bg-muted/35 border border-border/40 rounded-full transition-colors text-muted-foreground/90 hover:text-foreground"
+                          className="text-xs md:text-sm px-3 py-1.5 bg-muted/20 hover:bg-muted/35 border border-border/40 rounded-full transition-colors text-muted-foreground hover:text-foreground"
                         >
                           {chip.label}
                         </a>

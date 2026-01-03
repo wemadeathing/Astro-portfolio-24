@@ -41,7 +41,20 @@ const resources = defineCollection({
     image: z.string().optional(),
 
     type: z
-      .enum(['video', 'article', 'tool', 'paper', 'template', 'repo', 'podcast', 'other'])
+      .enum([
+        'library',
+        'directory',
+        'tool',
+        'article',
+        'video',
+        'template',
+        'course',
+        'podcast',
+        'newsletter',
+        'book',
+        'paper',
+        'other',
+      ])
       .optional()
       .default('other'),
     tags: z.array(z.string()).default([]),

@@ -7,7 +7,40 @@ import { getResourceMeta } from '../../lib/resource-meta';
 export const prerender = false;
 
 const activeTag = Astro.url.searchParams.get('tag') || '';
-const activeType = Astro.url.searchParams.get('type') || '';
+const activeType = (Astro.url.searchParams.get('type') || '').toLowerCase();
+
+const normalizeType = (t: unknown) => String(t || '').toLowerCase().trim();
+
+const typeLabel = (t: string) => {
+  const kind = normalizeType(t);
+  if (!kind || kind === 'other') return 'Resource';
+  if (kind === 'library') return 'Library';
+  if (kind === 'directory') return 'Directory';
+  if (kind === 'tool') return 'Tool';
+  if (kind === 'article') return 'Article';
+  if (kind === 'video') return 'Video';
+  if (kind === 'template') return 'Template';
+  if (kind === 'course') return 'Course';
+  if (kind === 'podcast') return 'Podcast';
+  if (kind === 'newsletter') return 'Newsletter';
+  if (kind === 'book') return 'Book';
+  // fallback: Title Case
+  return kind.charAt(0).toUpperCase() + kind.slice(1);
+};
+
+const typeSortOrder: Record<string, number> = {
+  library: 1,
+  directory: 2,
+  tool: 3,
+  article: 4,
+  video: 5,
+  template: 6,
+  course: 7,
+  podcast: 8,
+  newsletter: 9,
+  book: 10,
+  other: 99,
+};
 
 const resources = await getCollection('resources');
 
@@ -34,12 +67,17 @@ const allTags = Array.from(
 ).sort((a, b) => a.localeCompare(b));
 
 const allTypes = Array.from(
-  new Set(sorted.map((r) => String(r.data.type || 'other')).filter(Boolean))
-).sort((a, b) => a.localeCompare(b));
+  new Set(sorted.map((r) => normalizeType(r.data.type || 'other')).filter(Boolean))
+).sort((a, b) => {
+  const ao = typeSortOrder[a] ?? 50;
+  const bo = typeSortOrder[b] ?? 50;
+  if (ao !== bo) return ao - bo;
+  return a.localeCompare(b);
+});
 
 const typeCounts = new Map<string, number>();
 for (const r of sorted) {
-  const t = String(r.data.type || 'other');
+  const t = normalizeType(r.data.type || 'other');
   typeCounts.set(t, (typeCounts.get(t) ?? 0) + 1);
 }
 
@@ -54,7 +92,7 @@ for (const r of sorted) {
 
 const filtered = sorted.filter((r) => {
   const hasTag = activeTag ? (r.data.tags ?? []).includes(activeTag) : true;
-  const hasType = activeType ? String(r.data.type || 'other') === activeType : true;
+  const hasType = activeType ? normalizeType(r.data.type || 'other') === activeType : true;
   return hasTag && hasType;
 });
 
@@ -87,12 +125,12 @@ const cards = await Promise.all(
       description,
       image,
       siteName,
-      type: r.data.type,
+      type: normalizeType(r.data.type || 'other'),
     };
   })
 );
 
-const typeLabel = activeType || 'All types';
+const activeTypeLabel = activeType ? typeLabel(activeType) : 'All types';
 const topicLabel = activeTag || 'All topics';
 
 const ChevronDown = () => `
@@ -113,34 +151,6 @@ const ChevronDown = () => `
         <p class="mt-4 type-lead text-white/70">
           Curated resources: tools, videos, and articles I actually use.
         </p>
-      </div>
-
-      <!-- Featured tools section -->
-      <div class="mt-8 rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5">
-        <div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div class="max-w-[50ch]">
-            <div class="text-xs tracking-[0.22em] uppercase text-emerald-300/80">Tool</div>
-            <h2 class="mt-2 text-base sm:text-lg font-semibold text-white/95">
-              AI Readiness Audit
-            </h2>
-            <p class="mt-1 text-sm text-white/70">
-              Run a quick technical check to see if your site is readable to AI systems and modern search:
-              indexability, metadata, structured data, and basic accessibility.
-            </p>
-          </div>
-
-          <div class="flex flex-col items-start gap-2 sm:items-end">
-            <a
-              href="/audit"
-              class="inline-flex h-10 items-center justify-center rounded-xl bg-primary px-4 text-sm font-semibold text-primary-foreground whitespace-nowrap transition-colors hover:bg-primary/90 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
-            >
-              Open audit tool
-            </a>
-            <p class="text-xs text-white/45 max-w-[32ch] sm:text-right">
-              Free mini audit, no signup required.
-            </p>
-          </div>
-        </div>
       </div>
 
       {(allTags.length > 0 || allTypes.length > 0) && (
@@ -173,7 +183,7 @@ const ChevronDown = () => `
                   class="list-none cursor-pointer select-none w-full h-11 rounded-xl bg-[#131313]/60 border border-white/10 px-3 text-sm text-white/85 flex items-center justify-between gap-3 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/15"
                   aria-label="Filter by type"
                 >
-                  <span class="truncate">{typeLabel}</span>
+                  <span class="truncate">{activeTypeLabel}</span>
                   <span class="text-white/50 group-open:rotate-180 transition-transform">
                     <Fragment set:html={ChevronDown()} />
                   </span>
@@ -203,7 +213,7 @@ const ChevronDown = () => `
                             : 'text-white/70 hover:bg-white/[0.04] hover:text-white',
                         ]}
                       >
-                        <span class="capitalize">{t}</span>
+                        <span>{typeLabel(t)}</span>
                       </a>
                     ))}
                   </div>
@@ -292,9 +302,35 @@ const ChevronDown = () => `
 
       <div class="mt-10">
         <div
-          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 items-start"
+          class="columns-1 sm:columns-2 lg:columns-3 gap-6 md:gap-8 space-y-6 md:space-y-8"
           data-resource-list
         >
+          {/* Featured Tool Card - AI Readiness Audit */}
+          <a
+            href="/audit"
+            class="group block break-inside-avoid rounded-2xl border-2 border-primary/30 bg-primary/5 overflow-hidden transition-all hover:-translate-y-0.5 hover:border-primary/50 hover:bg-primary/10 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+            data-resource-card
+            data-search="ai readiness audit tool seo metadata structured data accessibility"
+          >
+            <div class="p-5">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="inline-flex items-center rounded-full bg-primary/20 border border-primary/30 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary">
+                  Tool
+                </span>
+                <span class="text-[10px] text-white/50 uppercase tracking-wider">Featured</span>
+              </div>
+              <h3 class="text-base font-semibold text-white/95 group-hover:text-primary transition-colors">
+                AI Readiness Audit
+              </h3>
+              <p class="mt-2 text-sm text-white/70">
+                Check if your site is readable to AI systems: indexability, metadata, structured data, and accessibility.
+              </p>
+              <p class="mt-3 text-xs text-white/50">
+                Free • No signup required
+              </p>
+            </div>
+          </a>
+
           {cards.map((c) => (
             <ResourceCard
               href={c.href}
