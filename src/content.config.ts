@@ -9,6 +9,9 @@ const blog = defineCollection({
     updatedDate: z.coerce.date().optional(),
     image: z.string().url(),
     tags: z.array(z.string()).default([]),
+    // Series metadata
+    series: z.string().optional(),
+    seriesOrder: z.number().optional(),
     // AI-facing metadata (optional)
     ai_summary: z.string().optional(),
     topics: z.array(z.string()).optional().default([]),
