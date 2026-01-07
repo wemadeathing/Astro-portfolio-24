@@ -226,6 +226,26 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
     return () => clearTimeout(timer);
   }, [hasStarted]);
 
+  // Auto-dismiss tooltip so it doesn't linger and block content.
+  useEffect(() => {
+    if (!showTooltip) return;
+
+    const timer = setTimeout(() => {
+      dismissTooltip();
+    }, 2600);
+
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showTooltip]);
+
+  // Ensure tooltip disappears once chat starts.
+  useEffect(() => {
+    if (!hasStarted) return;
+    if (!showTooltip) return;
+    dismissTooltip();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasStarted]);
+
   const dismissTooltip = () => {
     setShowTooltip(false);
     sessionStorage.setItem('chat-tooltip-seen', 'true');
@@ -573,16 +593,20 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
             <h1 className="text-2xl md:text-3xl font-medium leading-tight text-foreground/95 mb-2 mt-5 md:mt-8 max-w-[680px] animate-in fade-in slide-in-from-bottom-4 duration-700">
               Hi, I'm Nasif. Product Designer who builds.
             </h1>
-            <p className="text-sm md:text-base text-muted-foreground/80 max-w-[680px] mb-0 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150">
+            <p className="text-sm md:text-base text-muted-foreground/80 max-w-[680px] mb-0 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100">
               I design brands, build products and ship apps. 15+ years designing and building solutions. My first language is design, but I also speak dev and AI.
             </p>
 
             {/* Input (intro) */}
-            <form onSubmit={handleSubmit} className="relative mt-4 flex items-center gap-2 w-full max-w-[680px]">
+            <form
+              onSubmit={handleSubmit}
+              className="relative mt-4 flex items-center gap-2 w-full max-w-[680px] animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200"
+            >
               {/* Onboarding tooltip */}
               {showTooltip && (
-                <div className="absolute -top-14 left-1/2 -translate-x-1/2 z-10 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 z-10 animate-in fade-in slide-in-from-top-2 duration-300">
                   <div className="relative bg-primary/95 text-primary-foreground px-4 py-2 rounded-full text-sm font-medium shadow-lg whitespace-nowrap">
+                    <div className="absolute left-1/2 -translate-x-1/2 bottom-full w-0 h-0 border-l-8 border-r-8 border-b-8 border-l-transparent border-r-transparent border-b-primary/95" />
                     Try asking me anything about my work!
                     <button
                       type="button"
@@ -592,7 +616,6 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
                     >
                       ×
                     </button>
-                    <div className="absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-8 border-r-8 border-t-8 border-l-transparent border-r-transparent border-t-primary/95" />
                   </div>
                 </div>
               )}
@@ -654,7 +677,7 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
             )}
 
             {/* Bento Grid Navigation */}
-            <div className="w-full mt-8 md:mt-10 pb-12">
+            <div className="w-full mt-8 md:mt-10 pb-12 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-300">
               <div className="max-w-[1100px] mx-auto text-left">
                 <div className="flex items-center justify-between gap-4 mb-3">
                   <div className="text-xs tracking-wide uppercase text-muted-foreground/70">Quick links</div>
