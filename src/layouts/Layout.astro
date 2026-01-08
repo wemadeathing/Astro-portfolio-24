@@ -13,21 +13,25 @@ interface Props {
   robots?: string;
   hideNav?: boolean;
   hideFooter?: boolean;
+  schema?: object;
 }
 
 const { 
   title,
   description = "Technical Product Designer & AI Integration Specialist. Building enterprise design systems, rapid prototypes, and AI-powered products. Designer who codes with 15+ years experience.",
   image = "/images/NS-profile-2.png",
-  canonicalURL = Astro.url.href,
+  canonicalURL,
   robots = "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
   hideNav = false,
-  hideFooter = false
+  hideFooter = false,
+  schema
 } = Astro.props;
 
 const siteUrl = "https://www.nasifsalaam.com"; // Your actual domain
 const siteName = "Nasif Salaam";
 const themeColor = "#0b0b0b";
+
+const canonical = canonicalURL ?? new URL(Astro.url.pathname, siteUrl).href;
 
 const structuredData = {
   "@context": "https://schema.org",
@@ -59,8 +63,8 @@ const structuredData = {
     },
     {
       "@type": "WebPage",
-      "@id": `${canonicalURL}#webpage`,
-      url: canonicalURL,
+      "@id": `${canonical}#webpage`,
+      url: canonical,
       name: title,
       description,
       isPartOf: { "@id": `${siteUrl}/#website` },
@@ -100,12 +104,12 @@ const structuredData = {
     <link rel="manifest" href="/Web%20Manifest.json">
     
     <!-- Canonical URL -->
-    <link rel="canonical" href={canonicalURL} />
+    <link rel="canonical" href={canonical} />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={siteName} />
-    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:image" content={new URL(image, siteUrl)} />
@@ -117,7 +121,7 @@ const structuredData = {
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:site" content="@nasifsalaam" />
     <meta property="twitter:creator" content="@nasifsalaam" />
-    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:url" content={canonical} />
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
     <meta property="twitter:image" content={new URL(image, siteUrl)} />
@@ -129,6 +133,7 @@ const structuredData = {
 
     <!-- Structured Data (Schema.org) -->
     <script type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
 
     <ViewTransitions fallback="none" />
 

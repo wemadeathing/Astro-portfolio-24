@@ -31,9 +31,27 @@ if (Astro.props?.project) {
 }
 
 const { Content, headings } = await project.render();
+
+const siteUrl = "https://www.nasifsalaam.com";
+const shareUrl = new URL(Astro.url.pathname, siteUrl).href;
+
+const projectSchema = {
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "name": project.data.title,
+  "description": project.data.description,
+  "image": project.data.image,
+  "url": shareUrl,
+  "creator": {
+    "@type": "Person",
+    "name": "Nasif Salaam",
+    "url": "https://www.nasifsalaam.com"
+  },
+  "keywords": project.data.tags?.join(", ")
+};
 ---
 
-<Layout title={project.data.title} description={project.data.description} image={project.data.image}>
+<Layout title={project.data.title} description={project.data.description} image={project.data.image} schema={projectSchema}>
   <article class="min-h-screen bg-background">
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 pb-16">
       <div class="grid grid-cols-1 lg:grid-cols-[1fr_240px] gap-10">

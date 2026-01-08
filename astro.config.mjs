@@ -5,6 +5,7 @@ import mdx from '@astrojs/mdx';
 import netlify from '@astrojs/netlify';
 
 export default defineConfig({
+  site: 'https://www.nasifsalaam.com',
   output: 'server',
   adapter: netlify(),
   integrations: [

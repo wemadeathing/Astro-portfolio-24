@@ -13,5 +13,26 @@ const latestPost = blogPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pu
   hideNav={true}
   hideFooter={true}
 >
+  <div class="sr-only">
+    <h1>Nasif Salaam - Technical Product Designer & AI Integration Specialist</h1>
+    <p>
+      I am a Technical Product Designer and AI Integration Specialist with over 15 years of experience.
+      I specialize in building enterprise design systems, rapid prototypes, and AI-powered products.
+      I am a designer who codes, bridging the gap between design and development.
+    </p>
+    <h2>Latest Insights</h2>
+    <ul>
+      {blogPosts.slice(0, 5).map(post => (
+        <li><a href={`/blog/${post.slug}`}>{post.data.title}</a></li>
+      ))}
+    </ul>
+    <h2>Core Expertise</h2>
+    <ul>
+      <li>AI-Accelerated Development</li>
+      <li>Enterprise Design Systems</li>
+      <li>Rapid Prototyping</li>
+      <li>Full-stack Design Engineering</li>
+    </ul>
+  </div>
   <ChatInterface client:only="react" latestPost={latestPost} />
 </Layout>

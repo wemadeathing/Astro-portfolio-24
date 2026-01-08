@@ -38,6 +38,36 @@ if (Astro.props?.post) {
 
 const { Content } = await post.render();
 
+const siteUrl = "https://www.nasifsalaam.com";
+const shareUrl = new URL(Astro.url.pathname, siteUrl).href;
+
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": post.data.title,
+  "description": post.data.description,
+  "image": post.data.image ? [post.data.image] : [],
+  "datePublished": post.data.pubDate.toISOString(),
+  "dateModified": (post.data.updatedDate || post.data.pubDate).toISOString(),
+  "author": {
+    "@type": "Person",
+    "name": "Nasif Salaam",
+    "url": "https://www.nasifsalaam.com"
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Nasif Salaam",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://www.nasifsalaam.com/images/ns26/logo26w.png"
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": shareUrl
+  }
+};
+
 const rt = readingTime(post.body);
 
 const formattedDate = post.data.pubDate.toLocaleDateString('en-US', {
@@ -88,7 +118,7 @@ const relatedPosts = sortedPosts
   }));
 ---
 
-<Layout title={post.data.title} description={post.data.description} image={post.data.image}>
+<Layout title={post.data.title} description={post.data.description} image={post.data.image} schema={articleSchema}>
   <article class="min-h-screen">
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 pb-16">
       {/* Mobile back to feed */}
