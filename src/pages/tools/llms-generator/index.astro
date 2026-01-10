@@ -1,0 +1,25 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import LlmsGeneratorComponent from '../../../components/Tools/LlmsGenerator';
+
+export const prerender = true;
+---
+
+<Layout
+  title="llms.txt Generator | Optimize your site for AI"
+  description="Generate a standard llms.txt file to help AI agents like ChatGPT and Claude understand and navigate your website better."
+>
+  <section class="py-10 sm:py-14">
+    <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-[68ch] mb-10">
+        <div class="type-kicker text-white/60">Mini tool</div>
+        <h1 class="mt-3 type-h1 text-white/95">llms.txt Generator</h1>
+        <p class="mt-4 type-lead text-white/70">
+          Create a "map" for AI agents. Help LLMs understand your site structure without needing to scrape complex HTML.
+        </p>
+      </div>
+
+      <LlmsGeneratorComponent client:load />
+    </div>
+  </section>
+</Layout>

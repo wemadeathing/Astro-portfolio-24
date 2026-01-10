@@ -331,6 +331,32 @@ const ChevronDown = () => `
             </div>
           </a>
 
+          {/* Featured Tool Card - llms.txt Generator */}
+          <a
+            href="/tools/llms-generator"
+            class="group block break-inside-avoid rounded-2xl border-2 border-primary/30 bg-primary/5 overflow-hidden transition-all hover:-translate-y-0.5 hover:border-primary/50 hover:bg-primary/10 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+            data-resource-card
+            data-search="llms.txt generator tool ai seo sitemap chatgpt claude"
+          >
+            <div class="p-5">
+              <div class="flex items-center gap-2 mb-2">
+                <span class="inline-flex items-center rounded-full bg-primary/20 border border-primary/30 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary">
+                  Tool
+                </span>
+                <span class="text-[10px] text-white/50 uppercase tracking-wider">Featured</span>
+              </div>
+              <h3 class="text-base font-semibold text-white/95 group-hover:text-primary transition-colors">
+                llms.txt Generator
+              </h3>
+              <p class="mt-2 text-sm text-white/70">
+                Generate a standard "map" file for AI agents to easily understand your website structure.
+              </p>
+              <p class="mt-3 text-xs text-white/50">
+                Free • AI Auto-fill
+              </p>
+            </div>
+          </a>
+
           {cards.map((c) => (
             <ResourceCard
               href={c.href}
