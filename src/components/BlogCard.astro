@@ -6,9 +6,13 @@ interface Props {
   kicker?: string;
   pubDate?: Date;
   readingTime?: string;
+  series?: {
+    name: string;
+    order: number;
+  };
 }
 
-const { title, image, slug, kicker, pubDate, readingTime } = Astro.props;
+const { title, image, slug, kicker, pubDate, readingTime, series } = Astro.props;
 
 const formattedDate = pubDate
   ? new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(pubDate)
@@ -21,6 +25,11 @@ const formattedDate = pubDate
 >
   <div class="aspect-video overflow-hidden bg-white/5 relative">
     <div class="absolute inset-0 skeleton-image" aria-hidden="true"></div>
+    {series ? (
+      <div class="absolute top-3 left-3 z-10 rounded-full border border-white/10 bg-black/60 backdrop-blur-md px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white/90 shadow-sm">
+        Part {series.order}
+      </div>
+    ) : null}
     <img
       src={image}
       alt={title}
@@ -31,14 +40,16 @@ const formattedDate = pubDate
     />
   </div>
   <div class="px-4 pb-5 pt-4">
-    {kicker ? (
-      <div class="text-[11px] tracking-[0.22em] uppercase text-white/55 line-clamp-1">
-        {kicker}
-      </div>
-    ) : null}
+    <div class="flex items-center gap-2 text-[11px] tracking-[0.22em] uppercase text-white/55 line-clamp-1">
+      {series ? (
+        <span class="text-primary/90 font-bold">{series.name}</span>
+      ) : (
+        kicker && <span>{kicker}</span>
+      )}
+    </div>
     <h2 class:list={[
       'text-[15px] sm:text-base font-semibold text-white/92 group-hover:text-primary transition-colors line-clamp-3 leading-snug',
-      kicker ? 'mt-2' : '',
+      'mt-2',
     ]}>
       {title}
     </h2>

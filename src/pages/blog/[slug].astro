@@ -158,6 +158,13 @@ const relatedPosts = sortedPosts
           </div>
 
           <div class="mb-8">
+            {post.data.series && (
+              <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary">
+                <span class="uppercase tracking-wider font-bold">Series</span>
+                <span class="text-primary/40">|</span>
+                <span>{post.data.series} <span class="opacity-75">— Part {post.data.seriesOrder}</span></span>
+              </div>
+            )}
             <h1 class="type-h1 mb-4 text-white/95">{post.data.title}</h1>
             <p class="text-sm text-white/60 mb-3">
               {formattedDate} • {rt.label}

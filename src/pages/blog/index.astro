@@ -68,6 +68,11 @@ const allTags = Array.from(
               }
               pubDate={post.data.pubDate}
               readingTime={rt.label}
+              series={
+                post.data.series && typeof post.data.seriesOrder === 'number'
+                  ? { name: post.data.series, order: post.data.seriesOrder }
+                  : undefined
+              }
             />
           );
         })}
