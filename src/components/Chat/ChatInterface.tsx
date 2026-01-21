@@ -42,6 +42,8 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
 
   const [hasStarted, setHasStarted] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [introMounted, setIntroMounted] = useState(false);
+  const [bentoMounted, setBentoMounted] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -448,6 +450,39 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
     startChatWithPrompt(lastUserText);
   };
 
+  // Subtle staged intro animation: top block first, then bento.
+  useEffect(() => {
+    if (!isIntro) {
+      setIntroMounted(false);
+      setBentoMounted(false);
+      return;
+    }
+
+    let t: number | undefined;
+    let raf = 0;
+
+    const prefersReduce =
+      typeof window !== 'undefined' &&
+      window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (prefersReduce) {
+      setIntroMounted(true);
+      setBentoMounted(true);
+      return;
+    }
+
+    // Next paint: reveal top section.
+    raf = window.requestAnimationFrame(() => setIntroMounted(true));
+    // Shortly after: reveal bento section.
+    t = window.setTimeout(() => setBentoMounted(true), 180);
+
+    return () => {
+      if (raf) window.cancelAnimationFrame(raf);
+      if (t) window.clearTimeout(t);
+    };
+  }, [isIntro]);
+
   const menuLinks = [
     { title: 'Work', description: 'Browse featured case studies', href: '/projects' },
     { title: 'About', description: 'Background and approach', href: '/about' },
@@ -479,7 +514,7 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
   };
 
   return (
-    <div className="flex flex-col h-screen h-[100dvh] overflow-hidden bg-background text-foreground relative">
+    <div className="flex flex-col h-[100dvh] overflow-hidden bg-background text-foreground relative">
       
       {/* Background Gradient & Noise */}
       <div className="absolute inset-0 pointer-events-none -z-20">
@@ -590,75 +625,93 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
       {isIntro && (
         <div className="flex-1 overflow-y-auto px-4 pt-24 sm:pt-28 pb-14 md:pb-20 relative z-20">
           <div className="w-full max-w-[1100px] mx-auto flex flex-col items-center text-center">
-            <h1 className="text-2xl md:text-3xl font-medium leading-tight text-foreground/95 mb-2 mt-5 md:mt-8 max-w-[680px] animate-in fade-in slide-in-from-bottom-4 duration-700">
-              Hi, I'm Nasif. Product Designer who builds.
-            </h1>
-            <p className="text-sm md:text-base text-muted-foreground/80 max-w-[680px] mb-0 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-100">
-              I design brands, build products and ship apps. 15+ years designing and building solutions. My first language is design, but I also speak dev and AI.
-            </p>
-
-            {/* Input (intro) */}
-            <form
-              onSubmit={handleSubmit}
-              className="relative mt-4 flex items-center gap-2 w-full max-w-[680px] animate-in fade-in slide-in-from-bottom-4 duration-700 delay-200"
+            {/* Top section (staged in first) */}
+            <div
+              className={[
+                'w-full flex flex-col items-center text-center',
+                'transition-all duration-500 ease-out will-change-transform',
+                introMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2',
+              ].join(' ')}
             >
-              {/* Onboarding tooltip */}
-              {showTooltip && (
-                <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 z-10 animate-in fade-in slide-in-from-top-2 duration-300">
-                  <div className="relative bg-primary/95 text-primary-foreground px-4 py-2 rounded-full text-sm font-medium shadow-lg whitespace-nowrap">
-                    <div className="absolute left-1/2 -translate-x-1/2 bottom-full w-0 h-0 border-l-8 border-r-8 border-b-8 border-l-transparent border-r-transparent border-b-primary/95" />
-                    Try asking me anything about my work!
+              <h1 className="text-2xl md:text-3xl font-medium leading-tight text-foreground/95 mb-2 mt-5 md:mt-8 max-w-[680px]">
+                Hi, I'm Nasif. Product Designer who builds.
+              </h1>
+              <p className="text-sm md:text-base text-muted-foreground/80 max-w-[680px] mb-0">
+                I design brands, build products and ship apps. 15+ years designing and building solutions. My first language is design, but I also speak dev and AI.
+              </p>
+
+              {/* Input (intro) */}
+              <form
+                onSubmit={handleSubmit}
+                className="relative mt-4 flex items-center gap-2 w-full max-w-[680px]"
+              >
+                {/* Onboarding tooltip */}
+                {showTooltip && (
+                  <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 z-10">
+                    <div className="relative bg-primary/95 text-primary-foreground px-4 py-2 rounded-full text-sm font-medium shadow-lg whitespace-nowrap">
+                      <div className="absolute left-1/2 -translate-x-1/2 bottom-full w-0 h-0 border-l-8 border-r-8 border-b-8 border-l-transparent border-r-transparent border-b-primary/95" />
+                      Try asking me anything about my work!
+                      <button
+                        type="button"
+                        onClick={dismissTooltip}
+                        className="ml-2 opacity-70 hover:opacity-100 transition-opacity"
+                        aria-label="Dismiss tooltip"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  </div>
+                )}
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onFocus={() => setShowSuggestions(true)}
+                  onBlur={() => setShowSuggestions(false)}
+                  ref={inputRef}
+                  placeholder="Ask me about my projects, skills, or experience..."
+                  className="w-full bg-muted/40 border border-border/60 hover:border-border focus:border-primary/70 rounded-full py-3.5 md:py-4 pl-5 md:pl-6 pr-14 text-base outline-none transition-all shadow-sm focus:ring-4 focus:ring-primary/15 focus:bg-muted/50 placeholder:text-muted-foreground/55 placeholder:font-normal"
+                  disabled={isLoading}
+                />
+                <div className="absolute inset-y-0 right-2 flex items-center gap-1">
+                  {isLoading ? (
                     <button
                       type="button"
-                      onClick={dismissTooltip}
-                      className="ml-2 opacity-70 hover:opacity-100 transition-opacity"
-                      aria-label="Dismiss tooltip"
+                      onClick={stopRequest}
+                      className="p-2 mr-1 bg-muted/40 border border-border/60 text-foreground rounded-full hover:bg-muted/55 transition-all shadow-sm"
+                      aria-label="Stop"
                     >
-                      ×
+                      <StopCircle size={20} />
                     </button>
-                  </div>
+                  ) : (
+                    <button
+                      type="submit"
+                      disabled={!input.trim() || isLoading}
+                      className="p-2 mr-1 bg-primary text-primary-foreground rounded-full hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
+                      aria-label="Send"
+                    >
+                      <Send size={20} />
+                    </button>
+                  )}
                 </div>
-              )}
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onFocus={() => setShowSuggestions(true)}
-                onBlur={() => setShowSuggestions(false)}
-                ref={inputRef}
-                placeholder="Ask me about my projects, skills, or experience..."
-                className="w-full bg-muted/40 border border-border/60 hover:border-border focus:border-primary/70 rounded-full py-3.5 md:py-4 pl-5 md:pl-6 pr-14 text-base outline-none transition-all shadow-sm focus:ring-4 focus:ring-primary/15 focus:bg-muted/50"
-                disabled={isLoading}
-                autoFocus
-              />
-              <div className="absolute inset-y-0 right-2 flex items-center gap-1">
-                {isLoading ? (
-                  <button
-                    type="button"
-                    onClick={stopRequest}
-                    className="p-2 mr-1 bg-muted/40 border border-border/60 text-foreground rounded-full hover:bg-muted/55 transition-all shadow-sm"
-                    aria-label="Stop"
-                  >
-                    <StopCircle size={20} />
-                  </button>
-                ) : (
-                  <button
-                    type="submit"
-                    disabled={!input.trim() || isLoading}
-                    className="p-2 mr-1 bg-primary text-primary-foreground rounded-full hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
-                    aria-label="Send"
-                  >
-                    <Send size={20} />
-                  </button>
-                )}
-              </div>
-            </form>
+              </form>
 
-            {/* Suggestions - show only when input is focused */}
-            {showSuggestions && (
-              <div className="flex flex-wrap justify-center gap-2 mt-3 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                {['Tell me about your AI experience', 'Show me your portfolio', 'How can I contact you?'].map(
-                  (suggestion) => (
+              {/* Suggestions - animate open on focus */}
+              <div
+                aria-hidden={!showSuggestions}
+                className={[
+                  'mt-3 overflow-hidden transition-all duration-200 ease-out',
+                  showSuggestions
+                    ? 'max-h-24 opacity-100 translate-y-0'
+                    : 'max-h-0 opacity-0 -translate-y-1 pointer-events-none',
+                ].join(' ')}
+              >
+                <div className="flex flex-wrap justify-center gap-2">
+                  {[
+                    'Tell me about your AI experience',
+                    'Show me your portfolio',
+                    'How can I contact you?',
+                  ].map((suggestion) => (
                     <button
                       key={suggestion}
                       type="button"
@@ -671,34 +724,44 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
                     >
                       {suggestion}
                     </button>
-                  )
-                )}
-              </div>
-            )}
-
-            {/* Bento Grid Navigation */}
-            <div className="w-full mt-8 md:mt-10 pb-12 animate-in fade-in slide-in-from-bottom-6 duration-700 delay-300">
-              <div className="max-w-[1100px] mx-auto text-left">
-                <div className="flex items-center justify-between gap-4 mb-3">
-                  <div className="text-xs tracking-wide uppercase text-muted-foreground/70">Quick links</div>
-                  <div className="h-px flex-1 bg-border/60" />
+                  ))}
                 </div>
               </div>
-              {/* Bento layout: 2 rows - optimized for mobile */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-3 md:gap-4 max-w-[1100px] mx-auto auto-rows-[160px] sm:auto-rows-[160px] md:auto-rows-[180px]">
-                {/* Row 1: large grey + 2 logo tiles */}
-                <a
-                  href="/projects"
-                  className={[tileBase, 'col-span-1 sm:col-span-2 md:col-span-6 p-5 md:p-6 text-left bg-secondary/30'].join(' ')}
-                >
-                  <div className="relative z-10 h-full flex flex-col">
-                    <div className="text-xs opacity-70 mb-2">Projects • Case Studies</div>
-                    <div className="text-lg md:text-xl font-medium leading-snug tracking-tight max-w-[34ch]">
-                      Explore selected work across design systems, AI products, and rapid prototyping
-                    </div>
-                    <div className="absolute bottom-5 right-5 text-lg opacity-70 group-hover:opacity-100 transition-opacity">↘</div>
+            </div>
+
+            {/* Bento Grid Navigation */}
+            <div className="w-full mt-8 md:mt-10 pb-12">
+              <div
+                className={[
+                  'w-full',
+                  'transition-all duration-500 ease-out will-change-transform',
+                  bentoMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2',
+                ].join(' ')}
+              >
+                <div className="max-w-[1100px] mx-auto text-left">
+                  <div className="flex items-center justify-between gap-4 mb-3">
+                    <div className="text-xs tracking-wide uppercase text-muted-foreground/70">Quick links</div>
+                    <div className="h-px flex-1 bg-border/60" />
                   </div>
-                </a>
+                </div>
+                {/* Bento layout: 2 rows - optimized for mobile */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-3 md:gap-4 max-w-[1100px] mx-auto auto-rows-[160px] sm:auto-rows-[160px] md:auto-rows-[180px]">
+                  {/* Row 1: large grey + 2 logo tiles */}
+                  <a
+                    href="/projects"
+                    className={[
+                      tileBase,
+                      'col-span-1 sm:col-span-2 md:col-span-6 p-5 md:p-6 text-left bg-secondary/30',
+                    ].join(' ')}
+                  >
+                    <div className="relative z-10 h-full flex flex-col">
+                      <div className="text-xs opacity-70 mb-2">Projects • Case Studies</div>
+                      <div className="text-lg md:text-xl font-medium leading-snug tracking-tight max-w-[34ch]">
+                        Explore selected work across design systems, AI products, and rapid prototyping
+                      </div>
+                      <div className="absolute bottom-5 right-5 text-lg opacity-70 group-hover:opacity-100 transition-opacity">↘</div>
+                    </div>
+                  </a>
 
                 <a
                   href="/about"
@@ -803,6 +866,7 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
                     </div>
                   </a>
                 )}
+                </div>
               </div>
             </div>
 
@@ -956,7 +1020,7 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
                 onChange={(e) => setInput(e.target.value)}
                 ref={inputRef}
                 placeholder="Ask me about my projects, skills, or experience..."
-                className="w-full bg-muted/50 border border-border/60 hover:border-border focus:border-primary/70 rounded-full py-3 md:py-4 pl-5 md:pl-6 pr-14 text-base md:text-lg outline-none transition-all shadow-sm focus:ring-4 focus:ring-primary/15"
+                className="w-full bg-muted/50 border border-border/60 hover:border-border focus:border-primary/70 rounded-full py-3 md:py-4 pl-5 md:pl-6 pr-14 text-base md:text-lg outline-none transition-all shadow-sm focus:ring-4 focus:ring-primary/15 placeholder:text-muted-foreground/55 placeholder:font-normal"
                 disabled={isLoading}
               />
               <div className="absolute inset-y-0 right-2 flex items-center gap-1">
