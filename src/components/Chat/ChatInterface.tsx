@@ -868,6 +868,7 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
                 )}
               </div>
             </div>
+            </div>
 
             {/* Browse traditionally link */}
             <div className="mt-6 text-center">
