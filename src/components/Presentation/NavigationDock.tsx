@@ -38,8 +38,8 @@ export const NavigationDock: React.FC = () => {
       { name: 'Home', icon: Home, slide: 0 },
       { name: 'Intro', icon: User, slide: 1 },
       { name: 'Projects', icon: Briefcase, slide: 4, hasSubmenu: true },
-      { name: 'More', icon: Grid, slide: 20 },
-      { name: 'Contact', icon: Mail, slide: 23 },
+      { name: 'More', icon: Grid, slide: 25 },
+      { name: 'Contact', icon: Mail, slide: 28 },
     ],
     []
   );
@@ -49,6 +49,7 @@ export const NavigationDock: React.FC = () => {
       { name: 'Banking suite (cross‑platform)', slide: 4 },
       { name: 'Design system', slide: 9 },
       { name: 'Rapid innovation projects', slide: 14 },
+      { name: 'WhatsApp flow builder', slide: 19 },
     ],
     []
   );

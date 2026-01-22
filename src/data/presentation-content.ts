@@ -368,17 +368,104 @@ export const presentationData = {
         "/images/ri-flutterflow.png",
         "/images/ri-testing.png"
       ]
+    },
+
+    whatsappFlowBuilder: {
+      title: "WhatsApp Flow Builder",
+      subtitle: "AI-powered FlowJSON builder with Figma export",
+      context: {
+        client: "Self-initiated product build",
+        role: "Solo (Product to Code)",
+        duration: "Evolved over months",
+        challenge:
+          "WhatsApp Flows require FlowJSON, which is error-prone and hard to debug. Meta’s tooling is restrictive, and designers and engineers had no shared workflow for fast iteration and validation."
+      },
+      scope: [
+        "Natural language to FlowJSON generation with real-time validation",
+        "Split-screen editor: code + pixel-accurate WhatsApp preview",
+        "Visual editor + properties panel for faster iteration",
+        "Figma export to bridge designer–developer collaboration"
+      ],
+      approach: {
+        steps: [
+          {
+            phase: "Discovery",
+            description:
+              "Mapped the core workflow pain: designers mocked flows in Figma while developers rebuilt everything as FlowJSON, with no fast feedback loop.",
+            deliverables: ["Workflow audit", "Problem framing", "Success criteria"]
+          },
+          {
+            phase: "Prototype",
+            description:
+              "Built a lightweight local visualizer to remove account/tooling constraints and speed up iteration without the Meta sandbox.",
+            deliverables: ["Flow visualizer prototype", "Parsing + rendering", "Iteration loop"]
+          },
+          {
+            phase: "Build",
+            description:
+              "Added AI generation, a code editor, and real-time preview to create a tight prompt → preview → refine workflow.",
+            deliverables: ["AI generation", "Editor + preview", "Validation + error handling"]
+          },
+          {
+            phase: "Platform",
+            description:
+              "Productized into a multi-user platform with saved flows and a monetization-ready credit model to support repeat usage.",
+            deliverables: ["Auth + accounts", "Saved flows", "Credits + packaging"]
+          }
+        ]
+      },
+      solution: {
+        features: [
+          "Natural language prompts that generate FlowJSON",
+          "Split-screen editor with live preview for fast iteration",
+          "Visual editor with properties panel and templates",
+          "Schema validation and error highlighting to reduce debugging time",
+          "Figma export workflow to align design and implementation",
+          "Multi-user platform with saved flows and credit-based usage"
+        ],
+        tech: ["React", "TypeScript", "Tailwind", "Monaco Editor", "Node", "Supabase", "OpenAI", "Claude"]
+      },
+      overview: [
+        "Built an AI-powered builder that turns natural language into production-ready FlowJSON, with a visual editor and pixel-accurate preview to make iteration fast and reliable.",
+        "The key value was workflow alignment: designers and engineers could collaborate through a shared artifact, then export results directly into Figma for design iteration and handoff."
+      ],
+      impact: {
+        metrics: [
+          {
+            value: "Minutes",
+            label: "Iteration cycles",
+            description: "From prompt to validated flow"
+          },
+          {
+            value: "Reduced",
+            label: "Debugging time",
+            description: "Less FlowJSON trial-and-error"
+          },
+          {
+            value: "Bridged",
+            label: "Design + dev",
+            description: "Figma export workflow"
+          },
+          {
+            value: "Production",
+            label: "Ready platform",
+            description: "Multi-user + saved flows"
+          }
+        ]
+      },
+      images: [
+        "/images/work/flows/flows-feature.jpeg",
+        "/images/work/flows/flows-main-app.jpeg",
+        "/images/work/flows/flows-visual-editor.jpeg",
+        "/images/work/flows/flows-generator.jpeg",
+        "/images/work/flows/flows-figma-plugin.png",
+        "/images/work/flows/flows-figma-generated-ui.png"
+      ]
     }
   },
 
   // Honorable Mentions
   honorableMentions: [
-    {
-      title: "WhatsApp Flow Builder",
-      description: "AI-powered tool for designing WhatsApp conversation flows",
-      tech: ["React", "OpenAI", "Figma Plugin"],
-      image: "/images/work/flows/flows-feature.jpeg"
-    },
     {
       title: "Coffee Directory",
       description: "AI-accelerated coffee shop directory with custom scraping",

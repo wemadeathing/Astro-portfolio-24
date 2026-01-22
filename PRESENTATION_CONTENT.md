@@ -261,18 +261,18 @@ This document lists **all slide content and on-screen structure** for `src/pages
 
 ## Slide 15 — Case study 03 (Title slide)
 - **Kicker**: `Case study 03`
-- **Title (H1)**: `Design Community Innovation`
-- **Subtitle (accent)**: `Self-Initiated Team Project`
+- **Title (H1)**: `Rapid Innovation Projects`
+- **Subtitle (accent)**: `Self-Initiated Team Innovation`
 - **2 small cards**
   - **Role**: `Project Lead & Technical Builder`
   - **Timeline**: `2024`
 - **Challenge (highlight block)**:
-  - `Transform downtime into strategic value by upskilling 6-7 designers while building functional MVP for SA design community.`
+  - `Transform downtime into strategic value by upskilling 6-7 designers while building functional MVPs for real client problems.`
 
 ---
 
-## Slide 16 — Design Community Innovation (Approach and process)
-- **Kicker**: `Design Community Innovation`
+## Slide 16 — Rapid Innovation Projects (Approach and process)
+- **Kicker**: `Rapid Innovation Projects`
 - **Heading (H2)**: `Approach and process`
 - **4 step cards (columns)**
   - **Step 1 — Research**
@@ -288,27 +288,27 @@ This document lists **all slide content and on-screen structure** for `src/pages
       - `UI designs`
       - `User flows`
   - **Step 3 — Build**
-    - Description: `Built functional MVP using FlutterFlow, Supabase, and AI integration`
+    - Description: `Built functional MVPs using FlutterFlow, Supabase, and AI integration`
     - Bullets:
-      - `Working mobile app`
+      - `Working prototypes`
       - `Database schema`
-      - `AI chatbot`
+      - `API integrations`
   - **Step 4 — Test**
-    - Description: `User tested with 10 designers, discovered key insights`
+    - Description: `User tested with real users, discovered key insights`
     - Bullets:
       - `Testing insights`
-      - `Product pivot`
-      - `Mentorship feature`
+      - `Product pivots`
+      - `Feature validation`
 
 ---
 
-## Slide 17 — Design Community Innovation (Solution)
-- **Kicker**: `Design Community Innovation`
+## Slide 17 — Rapid Innovation Projects (Solution)
+- **Kicker**: `Rapid Innovation Projects`
 - **Heading (H2)**: `Solution`
 - **2-column layout**
   - **Left card — Overview**
     - Paragraph 1:
-      - `Ran a self-initiated innovation program that turned downtime into strategic value — upskilling a team while shipping a functional MVP. We built for the SA design community: a credible concept with real product process, not a slide deck.`
+      - `Ran a self-initiated innovation program that turned downtime into strategic value by upskilling a team while shipping functional MVPs. We built for real client problems: credible concepts with actual product process, not slide decks.`
     - Paragraph 2:
       - `Delivery doubled as training: distributed research, fast iteration, and hands-on build experience (FlutterFlow, Supabase, AI integration) to stretch designers across the full lifecycle.`
   - **Right card — What shipped**
@@ -323,23 +323,23 @@ This document lists **all slide content and on-screen structure** for `src/pages
       - `Supabase`
       - `Buildship`
       - `OpenAI API`
-      - `Authentication`
+      - `Google Design Sprint`
 
 ---
 
-## Slide 18 — Design Community Innovation (Impact)
-- **Kicker**: `Design Community Innovation`
+## Slide 18 — Rapid Innovation Projects (Impact)
+- **Kicker**: `Rapid Innovation Projects`
 - **Heading (H2)**: `Impact`
 - **4 metric cards**
   - `6-7` — **Team Members**: `Upskilled across full lifecycle`
-  - `Functional` — **MVP Delivered**: `With real database and AI`
-  - `10` — **Users Tested**: `Validated concept and pivots`
+  - `Functional` — **MVPs Delivered**: `With real databases and APIs`
+  - `10+` — **Users Tested**: `Validated concepts and pivots`
   - `New` — **Service Offering**: `Rapid prototyping capability`
 
 ---
 
-## Slide 19 — Design Community Innovation (Visuals)
-- **Kicker**: `Design Community Innovation`
+## Slide 19 — Rapid Innovation Projects (Visuals)
+- **Kicker**: `Rapid Innovation Projects`
 - **Heading (H2)**: `Visuals`
 - **Image grid (6)**
   - `/images/ri-feature-new.png`
@@ -353,7 +353,105 @@ This document lists **all slide content and on-screen structure** for `src/pages
 
 ---
 
-## Slide 20 — Skills overview
+## Slide 20 — Case study 04 (Title slide)
+- **Kicker**: `Case study 04`
+- **Title (H1)**: `WhatsApp Flow Builder`
+- **Subtitle (accent)**: `AI-powered FlowJSON builder with Figma export`
+- **2 small cards**
+  - **Role**: `Solo (Product to Code)`
+  - **Timeline**: `Evolved over months`
+- **Challenge (highlight block)**:
+  - `WhatsApp Flows require FlowJSON, which is error-prone and hard to debug. Meta’s tooling is restrictive, and designers and engineers had no shared workflow for fast iteration and validation.`
+
+---
+
+## Slide 21 — WhatsApp Flow Builder (Approach and process)
+- **Kicker**: `WhatsApp Flow Builder`
+- **Heading (H2)**: `Approach and process`
+- **4 step cards (columns)**
+  - **Step 1 — Discovery**
+    - Description: `Mapped the core workflow pain: designers mocked flows in Figma while developers rebuilt everything as FlowJSON, with no fast feedback loop.`
+    - Bullets:
+      - `Workflow audit`
+      - `Problem framing`
+      - `Success criteria`
+  - **Step 2 — Prototype**
+    - Description: `Built a lightweight local visualizer to remove account/tooling constraints and speed up iteration without the Meta sandbox.`
+    - Bullets:
+      - `Flow visualizer prototype`
+      - `Parsing + rendering`
+      - `Iteration loop`
+  - **Step 3 — Build**
+    - Description: `Added AI generation, a code editor, and real-time preview to create a tight prompt → preview → refine workflow.`
+    - Bullets:
+      - `AI generation`
+      - `Editor + preview`
+      - `Validation + error handling`
+  - **Step 4 — Platform**
+    - Description: `Productized into a multi-user platform with saved flows and a monetization-ready credit model to support repeat usage.`
+    - Bullets:
+      - `Auth + accounts`
+      - `Saved flows`
+      - `Credits + packaging`
+
+---
+
+## Slide 22 — WhatsApp Flow Builder (Solution)
+- **Kicker**: `WhatsApp Flow Builder`
+- **Heading (H2)**: `Solution`
+- **2-column layout**
+  - **Left card — Overview**
+    - Paragraph 1:
+      - `Built an AI-powered builder that turns natural language into production-ready FlowJSON, with a visual editor and pixel-accurate preview to make iteration fast and reliable.`
+    - Paragraph 2:
+      - `The key value was workflow alignment: designers and engineers could collaborate through a shared artifact, then export results directly into Figma for design iteration and handoff.`
+  - **Right card — What shipped**
+    - Bullets:
+      - `Natural language prompts that generate FlowJSON`
+      - `Split-screen editor with live preview for fast iteration`
+      - `Visual editor with properties panel and templates`
+      - `Schema validation and error highlighting to reduce debugging time`
+      - `Figma export workflow to align design and implementation`
+      - `Multi-user platform with saved flows and credit-based usage`
+    - **Stack and build (chips)**
+      - `React`
+      - `TypeScript`
+      - `Tailwind`
+      - `Monaco Editor`
+      - `Node`
+      - `Supabase`
+      - `OpenAI`
+      - `Claude`
+
+---
+
+## Slide 23 — WhatsApp Flow Builder (Impact)
+- **Kicker**: `WhatsApp Flow Builder`
+- **Heading (H2)**: `Impact`
+- **4 metric cards**
+  - `Minutes` — **Iteration cycles**: `From prompt to validated flow`
+  - `Reduced` — **Debugging time**: `Less FlowJSON trial-and-error`
+  - `Bridged` — **Design + dev**: `Figma export workflow`
+  - `Production` — **Ready platform**: `Multi-user + saved flows`
+
+---
+
+## Slide 24 — WhatsApp Flow Builder (Visuals)
+- **Kicker**: `WhatsApp Flow Builder`
+- **Heading (H2)**: `Visuals`
+- **Image grid (6)**
+  - `/images/work/flows/flows-feature.jpeg`
+  - `/images/work/flows/flows-main-app.jpeg`
+  - `/images/work/flows/flows-visual-editor.jpeg`
+  - `/images/work/flows/flows-generator.jpeg`
+  - `/images/work/flows/flows-figma-plugin.png`
+  - `/images/work/flows/flows-figma-generated-ui.png`
+- **Interaction**
+  - Clicking any image opens the **gallery lightbox**; left/right navigation supported inside the overlay.
+
+---
+
+## Slide 25 — Skills overview
 - **Kicker**: `Skills`
 - **Heading (H1)**: `What enables the range`
 - **6 cards (grid)**
@@ -366,13 +464,10 @@ This document lists **all slide content and on-screen structure** for `src/pages
 
 ---
 
-## Slide 21 — Honorable mentions
+## Slide 26 — Honorable mentions
 - **Kicker**: `More work`
 - **Heading (H1)**: `Honorable mentions`
-- **Grid of 6 cards** (each card is clickable → opens gallery lightbox)
-  - **WhatsApp Flow Builder**
-    - Description: `AI-powered tool for designing WhatsApp conversation flows`
-    - Image: `/images/work/flows/flows-feature.jpeg`
+- **Grid of 5 cards** (each card is clickable → opens gallery lightbox)
   - **Coffee Directory**
     - Description: `AI-accelerated coffee shop directory with custom scraping`
     - Image: `/images/work/findmeacoffee-feature.jpeg`
@@ -391,24 +486,24 @@ This document lists **all slide content and on-screen structure** for `src/pages
 
 ---
 
-## Slide 22 — Q&A
+## Slide 27 — Q&A
 - **Kicker**: `Q&A`
 - **Heading (H1)**: `Questions?`
 - **Paragraph (lead)**:
   - `Happy to go deeper on design systems at scale, rapid prototyping, AI-enabled product work, and how I collaborate with engineering.`
 - **Prompt cards (4)**
   - `How do you balance design quality with delivery speed?`
-  - `How do you work with engineers day-to-day?`
+  - `How do you work in end-to-end projects?`
   - `How do you approach AI features responsibly?`
   - `What kind of team environment do you thrive in?`
 
 ---
 
-## Slide 23 — What I’m Looking For
+## Slide 28 — What I’m Looking For
 - **Kicker**: `Next`
 - **Heading (H1)**: `What I'm Looking For`
 - **Bullet cards (4)**
-  - `Senior product designer roles with US-based companies`
+  - `Lead / Senior product designer roles`
   - `Organizations that value innovation and execution`
   - `Opportunities to leverage my broad skill set`
   - `Environments where I can teach and impart knowledge`
@@ -417,7 +512,7 @@ This document lists **all slide content and on-screen structure** for `src/pages
 
 ---
 
-## Slide 24 — Thank you
+## Slide 29 — Thank you
 - **Kicker**: `Thank you`
 - **Heading (H1)**: `Thank you`
 - **Paragraph (lead)**:
