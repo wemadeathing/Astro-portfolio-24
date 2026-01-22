@@ -3,11 +3,12 @@ type CaseStudy = {
   title: string;
   subtitle: string;
   context: { role: string; duration: string; challenge: string };
-  approach: { steps: { phase: string; description: string; deliverables: string[] }[] };
+  approach: { steps: { phase: string; description: string; deliverables: string[]; images?: string[] }[] };
   solution: { features: string[]; tech: string[] };
   impact: { metrics: { value: string; label: string; description: string }[] };
   images: string[];
   overview: string[];
+  solutionImage?: string;
 };
 
 interface Props {
@@ -16,10 +17,19 @@ interface Props {
   metaLeftLabel: string;
   metaRightLabel: string;
   stackLabel: string;
-  visualsAlt: string;
 }
 
-const { caseNumber, caseStudy, metaLeftLabel, metaRightLabel, stackLabel, visualsAlt } = Astro.props;
+const { caseNumber, caseStudy, metaLeftLabel, metaRightLabel, stackLabel } = Astro.props;
+
+const approachImages = caseStudy.images.slice(0, 4);
+const solutionImage = caseStudy.solutionImage ?? caseStudy.images?.[0] ?? '';
+
+const getStepGallery = (stepIndex: number, size = 3) => {
+  const images = caseStudy.images ?? [];
+  if (images.length === 0) return [];
+  const start = (stepIndex * size) % images.length;
+  return Array.from({ length: Math.min(size, images.length) }, (_, i) => images[(start + i) % images.length]);
+};
 ---
 
 <!-- Title slide -->
@@ -69,26 +79,46 @@ const { caseNumber, caseStudy, metaLeftLabel, metaRightLabel, stackLabel, visual
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {caseStudy.approach.steps.map((step, index) => (
-          <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-xl text-left">
-            <div class="flex items-center justify-between">
-              <div class="text-xs tracking-[0.22em] uppercase text-white/45">Step</div>
-              <div class="inline-flex h-8 items-center rounded-full border border-white/10 bg-white/5 px-3 text-xs text-white/65">
-                {index + 1}
+        {caseStudy.approach.steps.map((step, index) => {
+          const stepGallery = getStepGallery(index, 3);
+          const explicitGallery = (step.images ?? []).filter(Boolean);
+          const gallery = explicitGallery.length > 0 ? explicitGallery : stepGallery;
+          const stepImage = gallery[0] ?? approachImages[index] ?? caseStudy.images[0];
+
+          return (
+            <button
+              type="button"
+              class="group rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl text-left overflow-hidden transition-colors hover:bg-white/[0.05] hover:border-white/20 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+              data-gallery-item={stepImage}
+              data-gallery-items={JSON.stringify(gallery)}
+              aria-label={`Open visual for ${caseStudy.title} — ${step.phase}`}
+            >
+              <div class="relative w-full aspect-[16/9]">
+                <img
+                  src={stepImage}
+                  alt={`${caseStudy.title} — ${step.phase}`}
+                  class="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/55 via-black/10 to-black/0"></div>
               </div>
-            </div>
-            <div class="mt-4 text-lg font-semibold text-white/92">{step.phase}</div>
-            <div class="mt-2 text-sm leading-[1.65] text-white/70">{step.description}</div>
-            <div class="mt-4 space-y-2">
-              {step.deliverables.map((deliverable) => (
-                <div class="flex items-start gap-3 text-sm text-white/65">
-                  <div class="mt-2 w-2 h-2 rounded-full bg-primary/70"></div>
-                  <div class="leading-[1.6]">{deliverable}</div>
+
+              <div class="p-6">
+                <div class="text-lg font-semibold text-white/92">{step.phase}</div>
+                <div class="mt-2 text-sm leading-[1.65] text-white/70">{step.description}</div>
+                <div class="mt-4 space-y-2">
+                  {step.deliverables.map((deliverable) => (
+                    <div class="flex items-start gap-3 text-sm text-white/65">
+                      <div class="mt-2 w-2 h-2 rounded-full bg-primary/70"></div>
+                      <div class="leading-[1.6]">{deliverable}</div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
-        ))}
+              </div>
+            </button>
+          );
+        })}
       </div>
     </div>
   </div>
@@ -104,14 +134,26 @@ const { caseNumber, caseStudy, metaLeftLabel, metaRightLabel, stackLabel, visual
       </div>
 
       <div class="mx-auto w-full max-w-[1200px] grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-7 backdrop-blur-xl text-left">
-          <div class="text-[11px] tracking-[0.22em] uppercase text-white/45 mb-3 text-left">Overview</div>
-          <p class="text-sm sm:text-base leading-[1.75] text-white/75 text-left">
-            {caseStudy.overview?.[0] ?? ''}
-          </p>
-          <p class="mt-4 text-sm sm:text-base leading-[1.75] text-white/75 text-left">
-            {caseStudy.overview?.[1] ?? ''}
-          </p>
+        <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-xl text-left">
+          {solutionImage ? (
+            <button
+              type="button"
+              class="group relative w-full overflow-hidden rounded-xl border border-white/10 bg-white/[0.02] focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+              data-gallery-item={solutionImage}
+              aria-label={`Open ${caseStudy.title} solution visual`}
+            >
+              <img
+                src={solutionImage}
+                alt={`${caseStudy.title} solution visual`}
+                class="h-[330px] sm:h-[360px] w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                loading="lazy"
+                decoding="async"
+              />
+              <div class="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/0 transition-colors group-hover:ring-white/10"></div>
+            </button>
+          ) : (
+            <div class="h-[330px] sm:h-[360px] w-full rounded-xl border border-white/10 bg-white/[0.02]" />
+          )}
         </div>
 
         <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-7 backdrop-blur-xl text-left">
@@ -153,41 +195,10 @@ const { caseNumber, caseStudy, metaLeftLabel, metaRightLabel, stackLabel, visual
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {caseStudy.impact.metrics.map((metric) => (
           <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-center backdrop-blur-xl">
-            <div class="text-4xl font-semibold tracking-[-0.03em] text-primary">{metric.value}</div>
+            <div class="text-3xl lg:text-[34px] font-semibold tracking-[-0.03em] text-primary">{metric.value}</div>
             <div class="mt-2 text-sm font-semibold text-white/85">{metric.label}</div>
             <div class="mt-2 text-sm leading-[1.6] text-white/60">{metric.description}</div>
           </div>
-        ))}
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Visuals -->
-<section>
-  <div class="min-h-[100dvh] w-full flex items-center justify-center px-8 pt-6 pb-40">
-    <div class="w-full max-w-[1300px]">
-      <div class="text-center mb-8">
-        <div class="type-kicker text-white/50 mb-3">{caseStudy.title}</div>
-        <h2 class="type-h2 text-white/90">Visuals</h2>
-      </div>
-
-      <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
-        {caseStudy.images.slice(0, 6).map((image) => (
-          <button
-            type="button"
-            class="group rounded-3xl border border-white/10 bg-white/[0.03] p-3 backdrop-blur-xl transition-colors hover:bg-white/[0.05] hover:border-white/20"
-            data-gallery-item={image}
-            aria-label="Open image"
-          >
-            <img
-              src={image}
-              alt={visualsAlt}
-              class="w-full h-[220px] lg:h-[260px] object-cover rounded-2xl"
-              loading="lazy"
-              decoding="async"
-            />
-          </button>
         ))}
       </div>
     </div>

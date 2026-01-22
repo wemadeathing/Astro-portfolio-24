@@ -132,13 +132,23 @@ export const presentationData = {
             phase: "Design",
             description:
               "Led creative direction, updating brand identity and designing high-fidelity UI across mobile, web, and dashboard.",
-            deliverables: ["Concept designs", "Illustrations + icons", "Hi-fi prototypes"]
+            deliverables: ["Concept designs", "Illustrations + icons", "Hi-fi prototypes"],
+            images: [
+              "/images/presentation/banking-suite/banking-suite-delivery-1.png",
+              "/images/presentation/banking-suite/banking-suite-design-1.png",
+              "/images/presentation/banking-suite/banking-suite-refine-1.png"
+            ]
           },
           {
             phase: "Delivery",
             description:
               "Collaborated with UX designers and engineers through agile sprints to ship designs within technical constraints.",
-            deliverables: ["Dev handoff", "Design QA", "Iteration cycles"]
+            deliverables: ["Dev handoff", "Design QA", "Iteration cycles"],
+            images: [
+              "/images/presentation/banking-suite/banking-suite-design-1.png",
+              "/images/presentation/banking-suite/banking-suite-delivery-1.png",
+              "/images/presentation/banking-suite/banking-suite-solution-1.png"
+            ]
           },
           {
             phase: "Refine",
@@ -187,13 +197,13 @@ export const presentationData = {
         ]
       },
       images: [
-        "/images/presentation/banking-suite-feature.png",
-        "/images/presentation/banking-suite-mobile-design.png",
-        "/images/presentation/banking-suite-competitor.png",
-        "/images/presentation/banking-suite-comp-analysis.png",
-        "/images/digital-transformation-app-1.jpg",
-        "/images/digital-transformation-app-2.jpg"
-      ]
+        "/images/presentation/banking-suite/banking-suite-discovery-1.png",
+        "/images/presentation/banking-suite/banking-suite-design-1.png",
+        "/images/presentation/banking-suite/banking-suite-delivery-1.png",
+        "/images/presentation/banking-suite/banking-suite-refine-1.png",
+        "/images/presentation/banking-suite/banking-suite-solution-1.png"
+      ],
+      solutionImage: "/images/presentation/banking-suite/banking-suite-solution-1.png"
     },
 
     designSystem: {
@@ -214,24 +224,28 @@ export const presentationData = {
       approach: {
         steps: [
           {
-            phase: "Foundation",
+            phase: "Research",
             description: "Defined the token layer and system architecture to support scale and theming.",
-            deliverables: ["Design tokens", "Naming conventions", "System architecture"]
+            deliverables: ["Design tokens", "Naming conventions", "System architecture"],
+            images: ["/images/presentation/banking-suite-competitor.png"]
           },
           {
             phase: "Components",
-            description: "Built a reusable component library with patterns for complex workflows.",
-            deliverables: ["Component library", "Atomic Structure", "States and variants"]
+            description: "Built a reusable component library with patterns for complex workflows and scale.",
+            deliverables: ["Component library", "Atomic Structure", "States and variants"],
+            images: ["/images/presentation/components.png"]
           },
           {
             phase: "Documentation",
             description: "Created usage guidance so teams could implement consistently without heavy oversight.",
-            deliverables: ["Usage guidelines", "Examples", "Handoff notes"]
+            deliverables: ["Usage guidelines", "Examples", "Handoff notes"],
+            images: ["/images/presentation/documentation.png"]
           },
           {
             phase: "Adoption",
             description: "Aligned with engineering on implementation and kept refining with regular feedback.",
-            deliverables: ["Dev alignment", "Design QA", "Continuous feedback"]
+            deliverables: ["Dev alignment", "Design QA", "Continuous feedback"],
+            images: ["/images/presentation/design-system-components.png"]
           }
         ]
       },
@@ -303,22 +317,26 @@ export const presentationData = {
           {
             phase: "Research",
             description: "Distributed research across team based on strengths",
-            deliverables: ["Competitor analysis", "User interviews", "Information architecture"]
+            deliverables: ["Competitor analysis", "User interviews", "Information architecture"],
+            images: ["/images/ri-ideation.png", "/images/ri-information-architecture.png"]
           },
           {
             phase: "Design",
             description: "Adapted Google Design Sprint methodology to consulting context",
-            deliverables: ["Wireframes", "UI designs", "User flows"]
+            deliverables: ["Wireframes", "UI designs", "User flows"],
+            images: ["/images/ri-wireframes.png", "/images/ri-ui-design.png"]
           },
           {
             phase: "Build",
             description: "Built functional MVPs using FlutterFlow, Supabase, and AI integration",
-            deliverables: ["Working prototypes", "Database schema", "API integrations"]
+            deliverables: ["Working prototypes", "Database schema", "API integrations"],
+            images: ["/images/ri-flutterflow.png", "/images/ri-feature.png"]
           },
           {
             phase: "Test",
             description: "User tested with real users, discovered key insights",
-            deliverables: ["Testing insights", "Product pivots", "Feature validation"]
+            deliverables: ["Testing insights", "Product pivots", "Feature validation"],
+            images: ["/images/ri-testing.png", "/images/ri-feature-new.png"]
           }
         ]
       },
@@ -362,104 +380,13 @@ export const presentationData = {
       },
       images: [
         "/images/ri-feature-new.png",
+        "/images/ri-feature.png",
         "/images/ri-ideation.png",
+        "/images/ri-information-architecture.png",
         "/images/ri-wireframes.png",
         "/images/ri-ui-design.png",
         "/images/ri-flutterflow.png",
         "/images/ri-testing.png"
-      ]
-    },
-
-    whatsappFlowBuilder: {
-      title: "WhatsApp Flow Builder",
-      subtitle: "AI-powered FlowJSON builder with Figma export",
-      context: {
-        client: "Self-initiated product build",
-        role: "Solo (Product to Code)",
-        duration: "Evolved over months",
-        challenge:
-          "WhatsApp Flows require FlowJSON, which is error-prone and hard to debug. Meta’s tooling is restrictive, and designers and engineers had no shared workflow for fast iteration and validation."
-      },
-      scope: [
-        "Natural language to FlowJSON generation with real-time validation",
-        "Split-screen editor: code + pixel-accurate WhatsApp preview",
-        "Visual editor + properties panel for faster iteration",
-        "Figma export to bridge designer–developer collaboration"
-      ],
-      approach: {
-        steps: [
-          {
-            phase: "Discovery",
-            description:
-              "Mapped the core workflow pain: designers mocked flows in Figma while developers rebuilt everything as FlowJSON, with no fast feedback loop.",
-            deliverables: ["Workflow audit", "Problem framing", "Success criteria"]
-          },
-          {
-            phase: "Prototype",
-            description:
-              "Built a lightweight local visualizer to remove account/tooling constraints and speed up iteration without the Meta sandbox.",
-            deliverables: ["Flow visualizer prototype", "Parsing + rendering", "Iteration loop"]
-          },
-          {
-            phase: "Build",
-            description:
-              "Added AI generation, a code editor, and real-time preview to create a tight prompt → preview → refine workflow.",
-            deliverables: ["AI generation", "Editor + preview", "Validation + error handling"]
-          },
-          {
-            phase: "Platform",
-            description:
-              "Productized into a multi-user platform with saved flows and a monetization-ready credit model to support repeat usage.",
-            deliverables: ["Auth + accounts", "Saved flows", "Credits + packaging"]
-          }
-        ]
-      },
-      solution: {
-        features: [
-          "Natural language prompts that generate FlowJSON",
-          "Split-screen editor with live preview for fast iteration",
-          "Visual editor with properties panel and templates",
-          "Schema validation and error highlighting to reduce debugging time",
-          "Figma export workflow to align design and implementation",
-          "Multi-user platform with saved flows and credit-based usage"
-        ],
-        tech: ["React", "TypeScript", "Tailwind", "Monaco Editor", "Node", "Supabase", "OpenAI", "Claude"]
-      },
-      overview: [
-        "Built an AI-powered builder that turns natural language into production-ready FlowJSON, with a visual editor and pixel-accurate preview to make iteration fast and reliable.",
-        "The key value was workflow alignment: designers and engineers could collaborate through a shared artifact, then export results directly into Figma for design iteration and handoff."
-      ],
-      impact: {
-        metrics: [
-          {
-            value: "Minutes",
-            label: "Iteration cycles",
-            description: "From prompt to validated flow"
-          },
-          {
-            value: "Reduced",
-            label: "Debugging time",
-            description: "Less FlowJSON trial-and-error"
-          },
-          {
-            value: "Bridged",
-            label: "Design + dev",
-            description: "Figma export workflow"
-          },
-          {
-            value: "Production",
-            label: "Ready platform",
-            description: "Multi-user + saved flows"
-          }
-        ]
-      },
-      images: [
-        "/images/work/flows/flows-feature.jpeg",
-        "/images/work/flows/flows-main-app.jpeg",
-        "/images/work/flows/flows-visual-editor.jpeg",
-        "/images/work/flows/flows-generator.jpeg",
-        "/images/work/flows/flows-figma-plugin.png",
-        "/images/work/flows/flows-figma-generated-ui.png"
       ]
     }
   },
@@ -467,34 +394,60 @@ export const presentationData = {
   // Honorable Mentions
   honorableMentions: [
     {
-      title: "Coffee Directory",
+      title: "AI-Accelerated Coffee Directory",
       description: "AI-accelerated coffee shop directory with custom scraping",
       tech: ["Astro", "Supabase", "Web Scraping"],
-      image: "/images/work/findmeacoffee-feature.jpeg"
+      image: "/images/work/findmeacoffee/findmeacoffee-thumbnail.jpeg",
+      images: [
+        "/images/work/findmeacoffee/findmeacoffee-thumbnail.jpeg",
+        "/images/work/findmeacoffee/findmeacoffee-home.png",
+        "/images/work/findmeacoffee/findmeacoffee-listing.png",
+        "/images/work/findmeacoffee/findmeacoffee-filter.png",
+        "/images/work/findmeacoffee/findmeacoffee-supabase-table.png",
+        "/images/work/findmeacoffee/findmeacoffee-apify-action.png",
+        "/images/work/findmeacoffee/findmeacoffee-extractor.jpeg",
+        "/images/work/findmeacoffee/findmeacoffee-extractor-build.png"
+      ]
     },
     {
       title: "EverPrompt",
       description: "Prompt management platform for AI workflows",
       tech: ["React", "Supabase", "AI Integration"],
-      image: "/images/work/Everprompt - AI Prompt Management Made Simple.jpeg"
+      image: "/images/work/Everprompt - AI Prompt Management Made Simple.jpeg",
+      images: [
+        "/images/work/Everprompt - AI Prompt Management Made Simple.jpeg",
+        "/images/work/everprompt-app1.png",
+        "/images/work/everprompt-app2.png",
+        "/images/work/everprompt-app3.png"
+      ]
     },
     {
-      title: "BikeTune App",
-      description: "Bike maintenance tracking with Flutter",
-      tech: ["Flutter", "Mobile App", "Firebase"],
-      image: "/images/presentation/mention-01.jpg"
+      title: "WhatsApp Flow Builder",
+      description: "AI-powered FlowJSON builder with Figma export",
+      tech: ["React", "TypeScript", "Supabase", "AI"],
+      image: "/images/work/flows/flows-feature.jpeg",
+      images: [
+        "/images/work/flows/flows-feature.jpeg",
+        "/images/work/flows/flows-preview.png",
+        "/images/work/flows/flows-manual.png",
+        "/images/work/flows/flows-main-app.jpeg",
+        "/images/work/flows/flows-visual-editor.jpeg",
+        "/images/work/flows/flows-generator.jpeg",
+        "/images/work/flows/flows-figma-plugin.png",
+        "/images/work/flows/flows-figma-generated-ui.png"
+      ]
     },
     {
-      title: "Habit Tracking",
+      title: "Ripple",
       description: "Personal productivity and habit tracking app",
-      tech: ["React", "Mobile", "Analytics"],
-      image: "/images/presentation/mention-02.jpg"
-    },
-    {
-      title: "ECOS Consulting",
-      description: "Safety, health and environment consulting website",
-      tech: ["Web Design", "Branding", "WordPress"],
-      image: "/images/work/ECOS Consulting _ Safety_ Health _ Environment.jpeg"
+      tech: ["React", "Supabase", "Tailwind"],
+      image: "/images/work/Ripple.jpeg",
+      images: [
+        "/images/work/Ripple.jpeg",
+        "/images/work/ripple-app-1.png",
+        "/images/work/ripple-app-2.png",
+        "/images/work/ripple-app-3.png"
+      ]
     }
   ],
 

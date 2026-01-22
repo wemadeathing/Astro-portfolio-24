@@ -86,31 +86,19 @@ This document lists **all slide content and on-screen structure** for `src/pages
 ## Slide 6 — Banking Suite (Approach and process)
 - **Kicker**: `Banking Suite`
 - **Heading (H2)**: `Approach and process`
-- **4 step cards (columns)**
-  - **Step 1 — Discovery**
+- **4 image cards (columns)** (each card is clickable → opens a **3‑image** lightbox gallery for that step)
+  - **Card 1 — Discovery**
     - Description: `Evaluated existing brand and UI across platforms to identify inconsistencies and opportunities for improvement.`
-    - Bullets:
-      - `Desktop research`
-      - `Competitor analysis`
-      - `Brand + UI audits`
-  - **Step 2 — Design**
+    - Bullets: `Desktop research`, `Competitor analysis`, `Brand + UI audits`
+  - **Card 2 — Design**
     - Description: `Led creative direction—overhauling brand identity and designing high-fidelity UI across mobile, web, and dashboard.`
-    - Bullets:
-      - `Concept designs`
-      - `Illustrations + icons`
-      - `Hi-fi prototypes`
-  - **Step 3 — Delivery**
+    - Bullets: `Concept designs`, `Illustrations + icons`, `Hi-fi prototypes`
+  - **Card 3 — Delivery**
     - Description: `Collaborated with UX designers and engineers through agile sprints to ship designs within technical constraints.`
-    - Bullets:
-      - `Dev handoff`
-      - `Design QA`
-      - `Iteration cycles`
-  - **Step 4 — Refine**
+    - Bullets: `Dev handoff`, `Design QA`, `Iteration cycles`
+  - **Card 4 — Refine**
     - Description: `Partnered with QA to identify and resolve UI bugs through systematic audits and polish passes.`
-    - Bullets:
-      - `Bug fixes`
-      - `Polish pass`
-      - `Consistency audits`
+    - Bullets: `Bug fixes`, `Polish pass`, `Consistency audits`
 
 ---
 
@@ -118,11 +106,7 @@ This document lists **all slide content and on-screen structure** for `src/pages
 - **Kicker**: `Banking Suite`
 - **Heading (H2)**: `Solution`
 - **2-column layout**
-  - **Left card — Overview**
-    - Paragraph 1:
-      - `Shipped cross-platform banking experiences across public web, secure platforms, and mobile — modern UI patterns without breaking enterprise constraints. The focus was clarity and trust: stronger hierarchy, repeatable workflow patterns, and streamlined journeys for everyday tasks.`
-    - Paragraph 2:
-      - `Delivery stayed grounded in implementation reality through tight collaboration with engineering, design QA, and iteration on edge cases where legacy systems typically create friction.`
+  - **Left card — Hero image** (clickable → opens lightbox)
   - **Right card — What shipped**
     - Bullets:
       - `Clear, modern UI patterns across web, secure platforms, and mobile`
@@ -150,22 +134,7 @@ This document lists **all slide content and on-screen structure** for `src/pages
 
 ---
 
-## Slide 9 — Banking Suite (Visuals)
-- **Kicker**: `Banking Suite`
-- **Heading (H2)**: `Visuals`
-- **Image grid (6)**
-  - `/images/presentation/banking-suite-feature.png`
-  - `/images/presentation/banking-suite-mobile-design.png`
-  - `/images/presentation/banking-suite-competitor.png`
-  - `/images/presentation/banking-suite-comp-analysis.png`
-  - `/images/digital-transformation-app-1.jpg`
-  - `/images/digital-transformation-app-2.jpg`
-- **Interaction**
-  - Clicking any image opens the **gallery lightbox**; left/right navigation supported inside the overlay.
-
----
-
-## Slide 10 — Case study 02 (Title slide)
+## Slide 9 — Case study 02 (Title slide)
 - **Kicker**: `Case study 02`
 - **Title (H1)**: `Design System`
 - **Subtitle (accent)**: `Enterprise component library and tokens`
@@ -177,46 +146,30 @@ This document lists **all slide content and on-screen structure** for `src/pages
 
 ---
 
-## Slide 11 — Design System (Approach and process)
+## Slide 10 — Design System (Approach and process)
 - **Kicker**: `Design System`
 - **Heading (H2)**: `Approach and process`
-- **4 step cards (columns)**
-  - **Step 1 — Foundation**
+- **4 image cards (columns)** (each card is clickable → opens a **3‑image** lightbox gallery for that step)
+  - **Card 1 — Research**
     - Description: `Defined the token layer and system architecture to support scale and theming.`
-    - Bullets:
-      - `Design tokens`
-      - `Naming conventions`
-      - `System architecture`
-  - **Step 2 — Components**
+    - Bullets: `Design tokens`, `Naming conventions`, `System architecture`
+  - **Card 2 — Components**
     - Description: `Built a reusable component library with patterns for complex, regulated workflows.`
-    - Bullets:
-      - `Component library`
-      - `Patterns`
-      - `States and variants`
-  - **Step 3 — Documentation**
+    - Bullets: `Component library`, `Patterns`, `States and variants`
+  - **Card 3 — Documentation**
     - Description: `Created usage guidance so teams could implement consistently without heavy oversight.`
-    - Bullets:
-      - `Usage guidelines`
-      - `Examples`
-      - `Handoff notes`
-  - **Step 4 — Adoption**
+    - Bullets: `Usage guidelines`, `Examples`, `Handoff notes`
+  - **Card 4 — Adoption**
     - Description: `Aligned with engineering on implementation and kept the system evolving with real feedback.`
-    - Bullets:
-      - `Dev alignment`
-      - `Design QA`
-      - `Governance rhythms`
+    - Bullets: `Dev alignment`, `Design QA`, `Governance rhythms`
 
 ---
 
-## Slide 12 — Design System (Solution)
+## Slide 11 — Design System (Solution)
 - **Kicker**: `Design System`
 - **Heading (H2)**: `Solution`
 - **2-column layout**
-  - **Left card — Overview**
-    - Paragraph 1:
-      - `Built a production design system that could scale across multiple products without slowing teams down. Tokens, component standards, and clear usage guidance reduced drift and made implementation more predictable.`
-    - Paragraph 2:
-      - `The system was designed for real constraints: regulated UI patterns, platform differences, and multiple teams shipping in parallel — kept aligned through dev collaboration, QA, and governance rhythms.`
+  - **Left card — Hero image** (clickable → opens lightbox)
   - **Right card — What shipped**
     - Bullets:
       - `Atomic design system with 50+ reusable components`
@@ -233,7 +186,7 @@ This document lists **all slide content and on-screen structure** for `src/pages
 
 ---
 
-## Slide 13 — Design System (Impact)
+## Slide 12 — Design System (Impact)
 - **Kicker**: `Design System`
 - **Heading (H2)**: `Impact`
 - **4 metric cards**
@@ -244,22 +197,7 @@ This document lists **all slide content and on-screen structure** for `src/pages
 
 ---
 
-## Slide 14 — Design System (Visuals)
-- **Kicker**: `Design System`
-- **Heading (H2)**: `Visuals`
-- **Image grid (6)**
-  - `/images/presentation/design-system-components.png`
-  - `/images/card 01 - design.jpg`
-  - `/images/card 02 - structure.jpg`
-  - `/images/card 03 - base components.jpg`
-  - `/images/fintech-components.png`
-  - `/images/fintech-ui-design.png`
-- **Interaction**
-  - Clicking any image opens the **gallery lightbox**; left/right navigation supported inside the overlay.
-
----
-
-## Slide 15 — Case study 03 (Title slide)
+## Slide 13 — Case study 03 (Title slide)
 - **Kicker**: `Case study 03`
 - **Title (H1)**: `Rapid Innovation Projects`
 - **Subtitle (accent)**: `Self-Initiated Team Innovation`
@@ -271,46 +209,30 @@ This document lists **all slide content and on-screen structure** for `src/pages
 
 ---
 
-## Slide 16 — Rapid Innovation Projects (Approach and process)
+## Slide 14 — Rapid Innovation Projects (Approach and process)
 - **Kicker**: `Rapid Innovation Projects`
 - **Heading (H2)**: `Approach and process`
-- **4 step cards (columns)**
-  - **Step 1 — Research**
+- **4 image cards (columns)** (each card is clickable → opens a **3‑image** lightbox gallery for that step)
+  - **Card 1 — Research**
     - Description: `Distributed research across team based on strengths`
-    - Bullets:
-      - `Competitor analysis`
-      - `User interviews`
-      - `Information architecture`
-  - **Step 2 — Design**
+    - Bullets: `Competitor analysis`, `User interviews`, `Information architecture`
+  - **Card 2 — Design**
     - Description: `Adapted Google Design Sprint methodology to consulting context`
-    - Bullets:
-      - `Wireframes`
-      - `UI designs`
-      - `User flows`
-  - **Step 3 — Build**
+    - Bullets: `Wireframes`, `UI designs`, `User flows`
+  - **Card 3 — Build**
     - Description: `Built functional MVPs using FlutterFlow, Supabase, and AI integration`
-    - Bullets:
-      - `Working prototypes`
-      - `Database schema`
-      - `API integrations`
-  - **Step 4 — Test**
+    - Bullets: `Working prototypes`, `Database schema`, `API integrations`
+  - **Card 4 — Test**
     - Description: `User tested with real users, discovered key insights`
-    - Bullets:
-      - `Testing insights`
-      - `Product pivots`
-      - `Feature validation`
+    - Bullets: `Testing insights`, `Product pivots`, `Feature validation`
 
 ---
 
-## Slide 17 — Rapid Innovation Projects (Solution)
+## Slide 15 — Rapid Innovation Projects (Solution)
 - **Kicker**: `Rapid Innovation Projects`
 - **Heading (H2)**: `Solution`
 - **2-column layout**
-  - **Left card — Overview**
-    - Paragraph 1:
-      - `Ran a self-initiated innovation program that turned downtime into strategic value by upskilling a team while shipping functional MVPs. We built for real client problems: credible concepts with actual product process, not slide decks.`
-    - Paragraph 2:
-      - `Delivery doubled as training: distributed research, fast iteration, and hands-on build experience (FlutterFlow, Supabase, AI integration) to stretch designers across the full lifecycle.`
+  - **Left card — Hero image** (clickable → opens lightbox)
   - **Right card — What shipped**
     - Bullets:
       - `Onboarding assessment for skill gap identification`
@@ -327,7 +249,7 @@ This document lists **all slide content and on-screen structure** for `src/pages
 
 ---
 
-## Slide 18 — Rapid Innovation Projects (Impact)
+## Slide 16 — Rapid Innovation Projects (Impact)
 - **Kicker**: `Rapid Innovation Projects`
 - **Heading (H2)**: `Impact`
 - **4 metric cards**
@@ -338,120 +260,7 @@ This document lists **all slide content and on-screen structure** for `src/pages
 
 ---
 
-## Slide 19 — Rapid Innovation Projects (Visuals)
-- **Kicker**: `Rapid Innovation Projects`
-- **Heading (H2)**: `Visuals`
-- **Image grid (6)**
-  - `/images/ri-feature-new.png`
-  - `/images/ri-ideation.png`
-  - `/images/ri-wireframes.png`
-  - `/images/ri-ui-design.png`
-  - `/images/ri-flutterflow.png`
-  - `/images/ri-testing.png`
-- **Interaction**
-  - Clicking any image opens the **gallery lightbox**; left/right navigation supported inside the overlay.
-
----
-
-## Slide 20 — Case study 04 (Title slide)
-- **Kicker**: `Case study 04`
-- **Title (H1)**: `WhatsApp Flow Builder`
-- **Subtitle (accent)**: `AI-powered FlowJSON builder with Figma export`
-- **2 small cards**
-  - **Role**: `Solo (Product to Code)`
-  - **Timeline**: `Evolved over months`
-- **Challenge (highlight block)**:
-  - `WhatsApp Flows require FlowJSON, which is error-prone and hard to debug. Meta’s tooling is restrictive, and designers and engineers had no shared workflow for fast iteration and validation.`
-
----
-
-## Slide 21 — WhatsApp Flow Builder (Approach and process)
-- **Kicker**: `WhatsApp Flow Builder`
-- **Heading (H2)**: `Approach and process`
-- **4 step cards (columns)**
-  - **Step 1 — Discovery**
-    - Description: `Mapped the core workflow pain: designers mocked flows in Figma while developers rebuilt everything as FlowJSON, with no fast feedback loop.`
-    - Bullets:
-      - `Workflow audit`
-      - `Problem framing`
-      - `Success criteria`
-  - **Step 2 — Prototype**
-    - Description: `Built a lightweight local visualizer to remove account/tooling constraints and speed up iteration without the Meta sandbox.`
-    - Bullets:
-      - `Flow visualizer prototype`
-      - `Parsing + rendering`
-      - `Iteration loop`
-  - **Step 3 — Build**
-    - Description: `Added AI generation, a code editor, and real-time preview to create a tight prompt → preview → refine workflow.`
-    - Bullets:
-      - `AI generation`
-      - `Editor + preview`
-      - `Validation + error handling`
-  - **Step 4 — Platform**
-    - Description: `Productized into a multi-user platform with saved flows and a monetization-ready credit model to support repeat usage.`
-    - Bullets:
-      - `Auth + accounts`
-      - `Saved flows`
-      - `Credits + packaging`
-
----
-
-## Slide 22 — WhatsApp Flow Builder (Solution)
-- **Kicker**: `WhatsApp Flow Builder`
-- **Heading (H2)**: `Solution`
-- **2-column layout**
-  - **Left card — Overview**
-    - Paragraph 1:
-      - `Built an AI-powered builder that turns natural language into production-ready FlowJSON, with a visual editor and pixel-accurate preview to make iteration fast and reliable.`
-    - Paragraph 2:
-      - `The key value was workflow alignment: designers and engineers could collaborate through a shared artifact, then export results directly into Figma for design iteration and handoff.`
-  - **Right card — What shipped**
-    - Bullets:
-      - `Natural language prompts that generate FlowJSON`
-      - `Split-screen editor with live preview for fast iteration`
-      - `Visual editor with properties panel and templates`
-      - `Schema validation and error highlighting to reduce debugging time`
-      - `Figma export workflow to align design and implementation`
-      - `Multi-user platform with saved flows and credit-based usage`
-    - **Stack and build (chips)**
-      - `React`
-      - `TypeScript`
-      - `Tailwind`
-      - `Monaco Editor`
-      - `Node`
-      - `Supabase`
-      - `OpenAI`
-      - `Claude`
-
----
-
-## Slide 23 — WhatsApp Flow Builder (Impact)
-- **Kicker**: `WhatsApp Flow Builder`
-- **Heading (H2)**: `Impact`
-- **4 metric cards**
-  - `Minutes` — **Iteration cycles**: `From prompt to validated flow`
-  - `Reduced` — **Debugging time**: `Less FlowJSON trial-and-error`
-  - `Bridged` — **Design + dev**: `Figma export workflow`
-  - `Production` — **Ready platform**: `Multi-user + saved flows`
-
----
-
-## Slide 24 — WhatsApp Flow Builder (Visuals)
-- **Kicker**: `WhatsApp Flow Builder`
-- **Heading (H2)**: `Visuals`
-- **Image grid (6)**
-  - `/images/work/flows/flows-feature.jpeg`
-  - `/images/work/flows/flows-main-app.jpeg`
-  - `/images/work/flows/flows-visual-editor.jpeg`
-  - `/images/work/flows/flows-generator.jpeg`
-  - `/images/work/flows/flows-figma-plugin.png`
-  - `/images/work/flows/flows-figma-generated-ui.png`
-- **Interaction**
-  - Clicking any image opens the **gallery lightbox**; left/right navigation supported inside the overlay.
-
----
-
-## Slide 25 — Skills overview
+## Slide 17 — Skills overview
 - **Kicker**: `Skills`
 - **Heading (H1)**: `What enables the range`
 - **6 cards (grid)**
@@ -464,29 +273,50 @@ This document lists **all slide content and on-screen structure** for `src/pages
 
 ---
 
-## Slide 26 — Honorable mentions
+## Slide 18 — Honorable mentions
 - **Kicker**: `More work`
 - **Heading (H1)**: `Honorable mentions`
-- **Grid of 5 cards** (each card is clickable → opens gallery lightbox)
-  - **Coffee Directory**
+- **Grid of 4 cards (2×2)** (each card is clickable → opens a per-card gallery lightbox)
+  - **AI-Accelerated Coffee Directory**
     - Description: `AI-accelerated coffee shop directory with custom scraping`
-    - Image: `/images/work/findmeacoffee-feature.jpeg`
+    - Gallery:
+      - `/images/work/findmeacoffee/findmeacoffee-thumbnail.jpeg`
+      - `/images/work/findmeacoffee/findmeacoffee-home.png`
+      - `/images/work/findmeacoffee/findmeacoffee-listing.png`
+      - `/images/work/findmeacoffee/findmeacoffee-filter.png`
+      - `/images/work/findmeacoffee/findmeacoffee-supabase-table.png`
+      - `/images/work/findmeacoffee/findmeacoffee-apify-action.png`
+      - `/images/work/findmeacoffee/findmeacoffee-extractor.jpeg`
+      - `/images/work/findmeacoffee/findmeacoffee-extractor-build.png`
   - **EverPrompt**
     - Description: `Prompt management platform for AI workflows`
-    - Image: `/images/work/Everprompt - AI Prompt Management Made Simple.jpeg`
-  - **BikeTune App**
-    - Description: `Bike maintenance tracking with Flutter`
-    - Image: `/images/presentation/mention-01.jpg`
-  - **Habit Tracking**
+    - Gallery:
+      - `/images/work/Everprompt - AI Prompt Management Made Simple.jpeg`
+      - `/images/work/everprompt-app1.png`
+      - `/images/work/everprompt-app2.png`
+      - `/images/work/everprompt-app3.png`
+  - **WhatsApp Flow Builder**
+    - Description: `AI-powered FlowJSON builder with Figma export`
+    - Gallery:
+      - `/images/work/flows/flows-feature.jpeg`
+      - `/images/work/flows/flows-preview.png`
+      - `/images/work/flows/flows-manual.png`
+      - `/images/work/flows/flows-main-app.jpeg`
+      - `/images/work/flows/flows-visual-editor.jpeg`
+      - `/images/work/flows/flows-generator.jpeg`
+      - `/images/work/flows/flows-figma-plugin.png`
+      - `/images/work/flows/flows-figma-generated-ui.png`
+  - **Ripple**
     - Description: `Personal productivity and habit tracking app`
-    - Image: `/images/presentation/mention-02.jpg`
-  - **ECOS Consulting**
-    - Description: `Safety, health & environment consulting website`
-    - Image: `/images/work/ECOS Consulting _ Safety_ Health _ Environment.jpeg`
+    - Gallery:
+      - `/images/work/Ripple.jpeg`
+      - `/images/work/ripple-app-1.png`
+      - `/images/work/ripple-app-2.png`
+      - `/images/work/ripple-app-3.png`
 
 ---
 
-## Slide 27 — Q&A
+## Slide 19 — Q&A
 - **Kicker**: `Q&A`
 - **Heading (H1)**: `Questions?`
 - **Paragraph (lead)**:
@@ -499,7 +329,7 @@ This document lists **all slide content and on-screen structure** for `src/pages
 
 ---
 
-## Slide 28 — What I’m Looking For
+## Slide 20 — What I’m Looking For
 - **Kicker**: `Next`
 - **Heading (H1)**: `What I'm Looking For`
 - **Bullet cards (4)**
@@ -512,7 +342,7 @@ This document lists **all slide content and on-screen structure** for `src/pages
 
 ---
 
-## Slide 29 — Thank you
+## Slide 21 — Thank you
 - **Kicker**: `Thank you`
 - **Heading (H1)**: `Thank you`
 - **Paragraph (lead)**:

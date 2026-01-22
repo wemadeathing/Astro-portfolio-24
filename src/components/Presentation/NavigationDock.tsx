@@ -38,8 +38,8 @@ export const NavigationDock: React.FC = () => {
       { name: 'Home', icon: Home, slide: 0 },
       { name: 'Intro', icon: User, slide: 1 },
       { name: 'Projects', icon: Briefcase, slide: 4, hasSubmenu: true },
-      { name: 'More', icon: Grid, slide: 25 },
-      { name: 'Contact', icon: Mail, slide: 28 },
+      { name: 'More', icon: Grid, slide: 17 },
+      { name: 'Contact', icon: Mail, slide: 20 },
     ],
     []
   );
@@ -47,9 +47,8 @@ export const NavigationDock: React.FC = () => {
   const projects = useMemo(
     () => [
       { name: 'Banking suite (cross‑platform)', slide: 4 },
-      { name: 'Design system', slide: 9 },
-      { name: 'Rapid innovation projects', slide: 14 },
-      { name: 'WhatsApp flow builder', slide: 19 },
+      { name: 'Design system', slide: 8 },
+      { name: 'Rapid innovation projects', slide: 12 },
     ],
     []
   );
