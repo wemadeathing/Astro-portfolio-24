@@ -1,0 +1,576 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { presentationData } from '../data/presentation-content';
+import '../styles/presentation.css';
+import 'reveal.js/dist/reveal.css';
+import { ArrowRight, Briefcase, Code2, Home, Layers3, Mail, Palette, Rocket, User } from 'lucide-react';
+import { NavigationDock } from '../components/Presentation/NavigationDock';
+import { MethodologyDiagram } from '../components/Presentation/MethodologyDiagram';
+import BlogCard from '../components/BlogCard.astro';
+import CaseStudyDeck from '../components/Presentation/CaseStudyDeck.astro';
+
+const { foundation, caseStudies, honorableMentions, closing } = presentationData;
+
+const positioningSkills = [
+  {
+    title: 'Product design + systems',
+    points: ['End-to-end UI/UX (web + mobile)', 'Design systems + tokens', 'High-fidelity prototyping'],
+  },
+  {
+    title: 'AI-enabled delivery',
+    points: ['Rapid MVP prototyping', 'AI adoption workshops', 'Intelligent feature integration'],
+  },
+  {
+    title: 'Visual design + branding',
+    points: ['Brand identity systems', 'Marketing materials + graphics', 'Visual consistency across platforms'],
+  },
+] as const;
+
+const toolLogos = [
+  { src: '/images/logos/Figma_Symbol_0 1.png', alt: 'Figma' },
+  { src: '/images/logos/supabase-logo-DCC676FFE2-seeklogo.com 1.png', alt: 'Supabase' },
+  { src: '/images/logos/Cursor_Logo_0 1.png', alt: 'Cursor' },
+  { src: '/images/logos/Claude_Logo_0 1.png', alt: 'Claude' },
+  { src: '/images/logos/Perplexity Logo Off-White 1.png', alt: 'Perplexity' },
+  { src: '/images/logos/Replit_idxDSDvFDM_0 1.png', alt: 'Replit' },
+  { src: '/images/logos/Lovable_Logo_1 1.png', alt: 'Lovable' },
+  { src: '/images/logos/StackBlitz_idLCk4jSTb_1 1.png', alt: 'StackBlitz' },
+  { src: '/images/logos/V0_Logo_0 1.png', alt: 'v0' },
+  { src: '/images/logos/Group 512819.png', alt: 'Tool' },
+] as const;
+
+const capabilityIconMap: Record<string, any> = {
+  code: Code2,
+  layers: Layers3,
+  zap: ArrowRight,
+  rocket: Rocket,
+  users: User,
+  database: Layers3,
+};
+
+const caseStudyDecks = [
+  {
+    caseNumber: '01',
+    caseStudy: caseStudies.bankingSuite,
+    metaLeftLabel: 'Role',
+    metaRightLabel: 'Duration',
+    stackLabel: 'Stack and methods',
+    visualsAlt: 'Banking suite visual',
+  },
+  {
+    caseNumber: '02',
+    caseStudy: caseStudies.designSystem,
+    metaLeftLabel: 'Role',
+    metaRightLabel: 'Timeline',
+    stackLabel: 'Stack and build',
+    visualsAlt: 'Design system visual',
+  },
+  {
+    caseNumber: '03',
+    caseStudy: caseStudies.designCommunity,
+    metaLeftLabel: 'Role',
+    metaRightLabel: 'Timeline',
+    stackLabel: 'Stack and methods',
+    visualsAlt: 'Rapid innovation visual',
+  },
+] as const;
+---
+
+<Layout 
+  title="Nasif Salaam | Portfolio Presentation"
+  description="Interactive portfolio presentation showcasing 15+ years of design and development experience"
+  hideNav={true}
+  hideFooter={true}
+>
+  <div class="fixed inset-0 bg-background overflow-hidden">
+    <div class="reveal h-full w-full">
+      <div class="slides">
+      
+      <!-- SECTION 1: OPENING -->
+      <!-- Slide 1: Hero -->
+      <section>
+        <div class="min-h-[100dvh] w-full bg-background flex items-center justify-center pt-6 pb-40">
+          <img
+            src="/images/ns26/logo26w-gradient.svg"
+            alt="Nasif Salaam"
+            class="h-9 sm:h-10 w-auto opacity-70 animate-slide-up"
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+      </section>
+
+      <!-- Slide 2: Intro -->
+      <section>
+        <div class="min-h-[100dvh] w-full flex items-center justify-center px-8 pt-6 pb-40">
+          <div class="w-full max-w-[1100px] text-center">
+            <div class="mx-auto max-w-[80ch]">
+              <div class="type-kicker text-white/50 mb-3">Intro</div>
+              <h2 class="type-h1 text-white/95">
+                Hi, I'm {foundation.whoIAm.name}. {foundation.whoIAm.title}.
+              </h2>
+              <p class="mt-5 type-lead text-white/75 max-w-[70ch]">
+                Product Designer with 15+ years across branding, visual design, UI/UX, and development. I design end-to-end, from research to launch, either creating MVPs or working with dev teams to shape products.
+              </p>
+
+              <div class="mt-7 flex flex-wrap justify-center gap-2">
+                {foundation.whoIAm.descriptors.map((descriptor) => (
+                  <span class="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-sm text-white/70">
+                    {descriptor}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 2: FOUNDATION -->
+      <!-- Slide 3: Positioning -->
+      <section>
+        <div class="min-h-[100dvh] w-full flex items-center justify-center px-8 pt-6 pb-40">
+          <div class="w-full max-w-[1300px] flex flex-col justify-start items-center">
+            <div class="type-kicker text-white/50 mb-3">Skills</div>
+            <h2 class="type-h1 text-white/95 max-w-[18ch] text-center">
+              {foundation.superpower.statement}
+            </h2>
+            <p class="mt-5 type-lead text-white/70 max-w-[70ch] text-center">
+              A broad skill set that lets me go from discovery to shippable work and collaborate deeply with engineering.
+            </p>
+
+            <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4 max-w-[1200px] w-full">
+              {positioningSkills.map((group) => (
+                <div class="rounded-2xl border border-white/10 bg-white/[0.03] px-6 py-5 backdrop-blur-xl text-left">
+                  <div class="text-sm font-semibold text-white/92 text-left">{group.title}</div>
+                  <div class="mt-4 space-y-2">
+                    {group.points.map((point) => (
+                      <div class="flex items-start gap-3 text-white/75">
+                        <div class="mt-2 w-2 h-2 rounded-full bg-primary/80"></div>
+                        <div class="text-sm leading-[1.6]">{point}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div class="mt-10 w-full max-w-[1200px]">
+              <div class="type-kicker text-white/40 text-center mb-4">Tools</div>
+              <div class="presentation-marquee" aria-label="Tools carousel">
+                <div class="presentation-marquee__track">
+                  {[...toolLogos, ...toolLogos].map((logo) => (
+                    <div class="presentation-marquee__item">
+                      <img
+                        src={logo.src}
+                        alt={logo.alt}
+                        class="presentation-marquee__logo"
+                        loading="lazy"
+                        decoding="async"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 4: Problem-solving methodology -->
+      <section>
+        <div class="min-h-[100dvh] w-full flex items-center justify-center px-8 pt-6 pb-40">
+          <div class="w-full max-w-[1300px]">
+            <div class="text-center mb-8">
+              <div class="type-kicker text-white/50 mb-3">Approach</div>
+              <h2 class="type-h1 text-white/95">{foundation.methodology.title}</h2>
+              <div class="mt-3 text-sm text-white/60 tracking-[0.22em] uppercase">
+                {foundation.methodology.approach}
+              </div>
+            </div>
+
+            <div class="p-2 sm:p-4">
+              <MethodologyDiagram client:load stages={foundation.methodology.stages} />
+              
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: CASE STUDIES -->
+
+      {caseStudyDecks.map((deck) => (
+        <CaseStudyDeck
+          caseNumber={deck.caseNumber}
+          caseStudy={deck.caseStudy}
+          metaLeftLabel={deck.metaLeftLabel}
+          metaRightLabel={deck.metaRightLabel}
+          stackLabel={deck.stackLabel}
+          visualsAlt={deck.visualsAlt}
+        />
+      ))}
+
+      <!-- Skills overview -->
+      <section>
+        <div class="min-h-[100dvh] w-full flex items-center justify-center px-8 pt-6 pb-40">
+          <div class="w-full max-w-[1300px]">
+            <div class="text-center mb-10">
+              <div class="type-kicker text-white/50 mb-3">Skills</div>
+              <h2 class="type-h1 text-white/95">What enables the range</h2>
+              <div class="mt-4 h-px w-16 bg-primary/50 mx-auto"></div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {foundation.capabilities.map((capability) => {
+                const Icon = capabilityIconMap[capability.icon] ?? Code2;
+                return (
+                  <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-xl hover:bg-white/[0.05] hover:border-white/20 transition-colors text-left">
+                    <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+                      <Icon class="w-5 h-5 text-primary" />
+                    </div>
+                    <div class="mt-4 text-xl font-semibold text-white/92">{capability.title}</div>
+                    <div class="mt-2 text-base leading-[1.7] text-white/70">
+                      {capability.description}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: HONORABLE MENTIONS -->
+      <!-- Slide 21: Other Notable Work -->
+      <section>
+        <div class="min-h-[100dvh] w-full flex items-center justify-center px-8 pt-6 pb-40">
+          <div class="w-full max-w-[1300px]">
+            <div class="text-center mb-10">
+              <div class="type-kicker text-white/50 mb-3">More work</div>
+              <h2 class="type-h1 text-white/95">Honorable mentions</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
+              {honorableMentions.map((project) => (
+                <div class="relative">
+                  <button
+                    type="button"
+                    class="group block w-full rounded-[24px] border border-white/[0.12] bg-[#08080c]/95 overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.65)] transition-all hover:-translate-y-0.5 hover:border-white/30 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+                    data-gallery-item={project.image}
+                    aria-label={`Open image: ${project.title}`}
+                  >
+                    <div class="h-[150px] md:h-[165px] overflow-hidden bg-white/5 relative">
+                      <div class="absolute inset-0 skeleton-image" aria-hidden="true"></div>
+                      <img
+                        src={project.image}
+                        alt={project.title}
+                        class="relative w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        loading="lazy"
+                        decoding="async"
+                        onload="this.parentElement.querySelector('.skeleton-image').style.display='none'"
+                      />
+                    </div>
+                    <div class="px-4 pb-4 pt-3">
+                      <div class="flex items-center gap-2 text-[11px] tracking-[0.22em] uppercase text-white/55 line-clamp-1">
+                        <span>Highlight</span>
+                      </div>
+                      <div class="text-[14px] sm:text-[15px] font-semibold text-white/92 group-hover:text-primary transition-colors line-clamp-2 leading-snug mt-2">
+                        {project.title}
+                      </div>
+                    </div>
+                  </button>
+
+                  <div class="pointer-events-none absolute inset-x-0 bottom-0 px-4 pb-5">
+                    <div class="rounded-2xl border border-white/10 bg-black/60 backdrop-blur-md px-4 py-2.5">
+                      <p class="text-xs leading-[1.55] text-white/75 line-clamp-2">
+                        {project.description}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Q&A -->
+      <section>
+        <div class="min-h-[100dvh] w-full flex items-center justify-center px-8 pt-6 pb-40">
+          <div class="w-full max-w-[1100px] text-center">
+            <div class="type-kicker text-white/50 mb-3">Q&amp;A</div>
+            <h2 class="type-h1 text-white/95">Questions?</h2>
+            <p class="mt-5 type-lead text-white/75 max-w-[70ch] mx-auto">
+              Happy to go deeper on design systems at scale, rapid prototyping, AI-enabled product work, and how I collaborate with engineering.
+            </p>
+            <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-4 text-left max-w-[900px] mx-auto">
+              {[
+                'How do you balance design quality with delivery speed?',
+                'How do you work in end-to-end projects?',
+                'How do you approach AI features responsibly?',
+                'What kind of team environment do you thrive in?',
+              ].map((prompt) => (
+                <div class="rounded-2xl border border-white/10 bg-white/[0.03] px-6 py-5 backdrop-blur-xl">
+                  <div class="flex items-start gap-3">
+                    <div class="mt-2 w-2 h-2 rounded-full bg-primary/80"></div>
+                    <div class="text-sm sm:text-base leading-[1.7] text-white/75">{prompt}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 5: CLOSING -->
+      <!-- Slide 22: What I'm Looking For -->
+      <section>
+        <div class="min-h-[100dvh] w-full flex items-center justify-center px-8 pt-6 pb-40">
+          <div class="w-full max-w-[1300px] text-center">
+            <div class="type-kicker text-white/50 mb-3">Next</div>
+            <h2 class="type-h1 text-white/95">{closing.lookingFor.title}</h2>
+
+            <div class="mt-8 mx-auto max-w-[70ch] space-y-4">
+              {closing.lookingFor.content.map((item) => (
+                <div class="rounded-2xl border border-white/10 bg-white/[0.03] px-6 py-4 text-left backdrop-blur-xl">
+                  <div class="flex items-start gap-3">
+                    <div class="mt-2 w-2 h-2 rounded-full bg-primary/80"></div>
+                    <div class="text-sm sm:text-base leading-[1.7] text-white/75">{item}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div class="mt-8 inline-flex items-center rounded-full border border-primary/25 bg-primary/10 px-6 py-3 text-sm text-white/80">
+              {closing.lookingFor.availability}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Slide 23: Let's Connect -->
+      <section>
+        <div class="min-h-[100dvh] w-full flex items-center justify-center px-8 pt-6 pb-40">
+          <div class="w-full max-w-[1100px] text-center">
+            <div class="type-kicker text-white/50 mb-3">Thank you</div>
+            <h2 class="type-h1 text-white/95">Thank you</h2>
+            <p class="mt-5 type-lead text-white/75 max-w-[70ch] mx-auto">
+              Ready to discuss how I can contribute to your team.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      </div>
+    </div>
+  </div>
+
+  <NavigationDock client:load />
+
+  <!-- Simple image lightbox for galleries -->
+  <div
+    id="presentation-gallery"
+    class="fixed inset-0 z-[60] hidden items-center justify-center bg-black/80 px-6 py-10"
+    aria-hidden="true"
+  >
+    <button
+      id="presentation-gallery-prev"
+      type="button"
+      class="absolute left-6 top-1/2 -translate-y-1/2 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-black/40 text-white/90 backdrop-blur hover:bg-black/55 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+      aria-label="Previous image"
+    >
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </button>
+
+    <button
+      id="presentation-gallery-next"
+      type="button"
+      class="absolute right-6 top-1/2 -translate-y-1/2 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-black/40 text-white/90 backdrop-blur hover:bg-black/55 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+      aria-label="Next image"
+    >
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </button>
+
+    <button
+      id="presentation-gallery-close"
+      type="button"
+      class="absolute right-6 top-6 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-black/40 text-white/90 backdrop-blur hover:bg-black/55 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+      aria-label="Close image"
+    >
+      ✕
+    </button>
+    <img
+      id="presentation-gallery-img"
+      alt="Gallery image"
+      class="max-h-[85vh] w-auto max-w-[92vw] rounded-2xl border border-white/10 object-contain"
+      loading="eager"
+      decoding="async"
+    />
+  </div>
+
+  <script>
+    import Reveal from 'reveal.js';
+
+    const initPresentation = () => {
+      const deck = new Reveal({
+        width: 1440,
+        height: 810,
+        margin: 0.012,
+        minScale: 0.2,
+        maxScale: 3.0,
+        navigateOnClick: false,
+        controls: false,
+        progress: true,
+        center: true,
+        hash: true,
+        transition: 'fade',
+        transitionSpeed: 'default',
+        backgroundTransition: 'fade',
+        keyboard: {
+          37: 'prev',
+          39: 'next',
+          38: 'prev',
+          40: 'next',
+          32: 'next',
+          70: () => {
+            if (document.fullscreenElement) {
+              document.exitFullscreen();
+            } else {
+              document.documentElement.requestFullscreen();
+            }
+          },
+        },
+      });
+
+      deck.initialize();
+
+      // Expose helpers for the dock
+      window.Reveal = deck;
+      window.navigateToSlide = (slideIndex) => deck.slide(slideIndex);
+
+      // Lightweight gallery: click any [data-gallery-item] to open.
+      const overlay = document.getElementById('presentation-gallery');
+      const overlayImg = document.getElementById('presentation-gallery-img') as HTMLImageElement | null;
+      const overlayClose = document.getElementById('presentation-gallery-close') as HTMLButtonElement | null;
+      const overlayPrev = document.getElementById('presentation-gallery-prev') as HTMLButtonElement | null;
+      const overlayNext = document.getElementById('presentation-gallery-next') as HTMLButtonElement | null;
+
+      let currentItems: string[] = [];
+      let currentIndex = -1;
+      let isOpen = false;
+
+      const setNavState = () => {
+        const canNavigate = currentItems.length > 1 && currentIndex >= 0;
+        overlayPrev?.classList.toggle('hidden', !canNavigate);
+        overlayNext?.classList.toggle('hidden', !canNavigate);
+      };
+
+      const open = (src: string) => {
+        if (!overlay || !overlayImg) return;
+        overlayImg.src = src;
+        overlay.classList.remove('hidden');
+        overlay.classList.add('flex');
+        overlay.setAttribute('aria-hidden', 'false');
+        isOpen = true;
+        setNavState();
+      };
+
+      const step = (direction: -1 | 1) => {
+        if (!overlayImg || currentItems.length === 0) return;
+        if (currentIndex < 0) return;
+        const nextIndex = (currentIndex + direction + currentItems.length) % currentItems.length;
+        currentIndex = nextIndex;
+        overlayImg.src = currentItems[currentIndex];
+        setNavState();
+      };
+
+      const close = () => {
+        if (!overlay || !overlayImg) return;
+        overlay.classList.add('hidden');
+        overlay.classList.remove('flex');
+        overlay.setAttribute('aria-hidden', 'true');
+        overlayImg.src = '';
+        currentItems = [];
+        currentIndex = -1;
+        isOpen = false;
+        setNavState();
+      };
+
+      document.querySelectorAll('[data-gallery-item]').forEach((el) => {
+        el.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const src = el.getAttribute('data-gallery-item');
+          if (!src) return;
+
+          // Scope the gallery to the *current slide* so next/prev stays relevant.
+          const slide = deck.getCurrentSlide?.() as HTMLElement | null;
+          const scoped = slide
+            ? Array.from(slide.querySelectorAll('[data-gallery-item]'))
+            : Array.from(document.querySelectorAll('[data-gallery-item]'));
+
+          currentItems = scoped
+            .map((node) => node.getAttribute('data-gallery-item'))
+            .filter((value): value is string => Boolean(value));
+          currentIndex = Math.max(0, currentItems.indexOf(src));
+
+          open(src);
+        });
+      });
+
+      overlayPrev?.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        step(-1);
+      });
+
+      overlayNext?.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        step(1);
+      });
+
+      overlayClose?.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        close();
+      });
+
+      overlay?.addEventListener('click', (e) => {
+        // close when clicking the backdrop
+        if (e.target === overlay) close();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (!isOpen) return;
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          e.stopPropagation();
+          close();
+          return;
+        }
+        if (e.key === 'ArrowLeft') {
+          e.preventDefault();
+          e.stopPropagation();
+          step(-1);
+          return;
+        }
+        if (e.key === 'ArrowRight') {
+          e.preventDefault();
+          e.stopPropagation();
+          step(1);
+          return;
+        }
+      });
+    };
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initPresentation);
+    } else {
+      initPresentation();
+    }
+  </script>
+</Layout>

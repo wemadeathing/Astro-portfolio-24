@@ -1,0 +1,145 @@
+/* Reveal integration that matches site styling */
+
+.reveal-viewport {
+  background: hsl(var(--background));
+}
+
+.reveal {
+  color: hsl(var(--foreground));
+}
+
+.reveal .slides {
+  text-align: left;
+}
+
+.reveal .slides > section,
+.reveal .slides > section > section {
+  padding: 0;
+}
+
+.reveal .controls {
+  display: none;
+}
+
+/* Progress bar */
+.reveal .progress {
+  background: hsl(var(--border) / 0.45);
+  height: 2px;
+}
+
+.reveal .progress span {
+  background: hsl(var(--primary));
+}
+
+/* Prevent Reveal theme defaults from forcing typography */
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal p,
+.reveal li {
+  color: inherit;
+  text-transform: none;
+  letter-spacing: inherit;
+}
+
+/* Ensure SVGs inherit color correctly */
+.reveal svg {
+  color: inherit;
+}
+
+/* Presentation readability: bump the site typography scale inside the deck */
+.reveal .type-kicker {
+  font-size: 0.875rem; /* 14px */
+}
+
+.reveal .type-h1 {
+  font-size: clamp(2.25rem, 3.2vw, 4rem);
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+  font-weight: 600;
+}
+
+.reveal .type-h2 {
+  font-size: clamp(1.75rem, 2.6vw, 3.25rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+
+.reveal .type-h3 {
+  font-size: clamp(1.25rem, 1.8vw, 2rem);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+
+.reveal .type-lead {
+  font-size: clamp(1.125rem, 1.4vw, 1.5rem);
+  line-height: 1.65;
+}
+
+.reveal .type-muted {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: hsl(var(--muted-foreground));
+}
+
+/* Tools marquee (grayscale → color on hover, pauses on hover) */
+.presentation-marquee {
+  position: relative;
+  overflow: hidden;
+  padding: 6px 0;
+  /* soft edge fade */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 10%,
+    black 90%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
+}
+
+.presentation-marquee__track {
+  display: flex;
+  gap: 22px;
+  width: max-content;
+  animation: presentationMarquee 26s linear infinite;
+  will-change: transform;
+}
+
+.presentation-marquee__item {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  padding: 0 14px;
+}
+
+.presentation-marquee__logo {
+  height: 26px;
+  width: auto;
+  opacity: 0.78;
+  filter: grayscale(1) contrast(1.05) brightness(0.95);
+  transition: filter 180ms ease, opacity 180ms ease, transform 180ms ease;
+}
+
+.presentation-marquee__item:hover .presentation-marquee__logo {
+  opacity: 1;
+  filter: none;
+  transform: translateY(-1px);
+}
+
+@keyframes presentationMarquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .presentation-marquee__track {
+    animation: none;
+  }
+}
