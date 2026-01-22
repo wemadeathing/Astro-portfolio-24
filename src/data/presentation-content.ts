@@ -76,27 +76,27 @@ export const presentationData = {
       stages: [
         {
           name: "Understand",
-          description: "Research constraints early: technical, business, user needs",
+          description: "Research constraints early - what's technically possible, what the business needs, and what users actually want",
           icon: "search"
         },
         {
           name: "Define",
-          description: "Establish clear scope within reality, not blue-sky thinking",
+          description: "Define clear scope based on reality, not wishful thinking. What can we actually build?",
           icon: "target"
         },
         {
           name: "Design",
-          description: "Create solutions grounded in technical feasibility",
+          description: "Design solutions that work within technical constraints. Beautiful AND buildable.",
           icon: "pen-tool"
         },
         {
           name: "Build",
-          description: "Prototype with real data or collaborate closely with dev teams",
+          description: "Build functional prototypes with AI tools OR collaborate closely with dev teams to ship designs accurately",
           icon: "hammer"
         },
         {
           name: "Ship",
-          description: "Deliver production-ready solutions that actually get used",
+          description: "Launch, learn, and iterate. Design continues after deployment.",
           icon: "send"
         }
       ]
