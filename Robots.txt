@@ -1,9 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /aux
-
-# Optimize crawl rate
-Crawl-delay: 10
-
-# Sitemap location
-Sitemap: https://www.nasifsalaam.com/sitemap.xml

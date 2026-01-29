@@ -1,6 +1,6 @@
 User-agent: *
 Allow: /
-Disallow: /aux
+
 
 # Allow AI search and agent use (Explicitly welcoming AI bots)
 User-agent: OAI-SearchBot
