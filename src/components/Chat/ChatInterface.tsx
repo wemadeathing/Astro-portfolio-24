@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Bot, Menu, Send, StopCircle, User, X } from 'lucide-react';
 import ProjectCard from './ProjectCard';
 import ResourceCard from './ResourceCard';
+import BlogCard from './BlogCard';
 
 interface ProjectData {
   title: string;
@@ -21,12 +22,21 @@ interface ResourceData {
   siteName?: string;
 }
 
+interface BlogData {
+  title: string;
+  description: string;
+  slug: string;
+  pubDate: string;
+  tags: string[];
+}
+
 interface Message {
   id: string;
   role: 'user' | 'assistant';
   content: string;
   projects?: ProjectData[];
   resources?: ResourceData[];
+  blogs?: BlogData[];
   chips?: { label: string; href: string; kind?: string }[];
 }
 
@@ -364,6 +374,7 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
           content: data.reply || 'Sorry, I had trouble connecting. You can retry.',
           projects: Array.isArray(data.projects) ? data.projects : undefined,
           resources: Array.isArray(data.resources) ? data.resources : undefined,
+          blogs: Array.isArray(data.blogs) ? data.blogs : undefined,
           chips: Array.isArray(data.chips) ? data.chips : undefined,
         });
         return;
@@ -395,6 +406,7 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
             content: typeof parsed.reply === 'string' ? parsed.reply : '',
             projects: Array.isArray(parsed.projects) ? parsed.projects : undefined,
             resources: Array.isArray(parsed.resources) ? parsed.resources : undefined,
+            blogs: Array.isArray(parsed.blogs) ? parsed.blogs : undefined,
             chips: Array.isArray(parsed.chips) ? parsed.chips : undefined,
           });
           return;
@@ -1021,6 +1033,33 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
                           className="min-w-[200px] sm:min-w-[220px] md:min-w-[240px] snap-start"
                         >
                           <ResourceCard {...resource} />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Render blog cards when present */}
+                {msg.role === 'assistant' && msg.blogs && msg.blogs.length > 0 && (
+                  <div className="w-full pl-12 pr-2 mt-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                        Insights
+                      </span>
+                      <a
+                        href="/blog"
+                        className="text-xs text-muted-foreground/80 hover:text-foreground transition-colors"
+                      >
+                        View all →
+                      </a>
+                    </div>
+                    <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory">
+                      {msg.blogs.map((blog) => (
+                        <div
+                          key={blog.slug}
+                          className="min-w-[200px] sm:min-w-[220px] md:min-w-[240px] snap-start"
+                        >
+                          <BlogCard {...blog} />
                         </div>
                       ))}
                     </div>

@@ -2,6 +2,16 @@
   command = "npm run build"
   publish = "dist"
 
+# Rate limiting for chat API endpoint
+# Limits: 25 requests per minute per IP
+[[rate_limit]]
+  path = "/api/chat"
+  window_limit = 25
+  window_size = 60
+  aggregator = "ip"
+  status_code = 429
+  custom_message = "Too many requests. Please wait a moment and try again."
+
 [[headers]]
   for = "/*"
   [headers.values]

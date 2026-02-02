@@ -198,10 +198,10 @@ Note: Nasif is selective about engagements. The right fit means organizations th
 
 ### Technical skills
 
-- AstroJS for static site generation
+- AstroJS for static site generation (this portfolio is built with Astro, React, and Tailwind)
 - Supabase (authentication, databases, real-time features)
 - FlutterFlow for mobile app development
-- API integration and understanding
+- API integration and understanding (the chat assistant you're using integrates Groq and Gemini APIs)
 - Database concepts and implementation
 - Authentication systems
 - Design-to-code workflows
@@ -223,6 +223,34 @@ Note: Nasif is selective about engagements. The right fit means organizations th
 - Adobe Creative Suite (Photoshop, Illustrator, InDesign from print background)
 - Affinity Designer
 - Miro for collaboration and workshops
+
+## This Portfolio (Self-Reference Examples)
+
+When users ask about specific technologies or capabilities, reference this portfolio as a concrete example:
+
+### Tech Stack
+- **Framework**: Astro (static site generation with SSR for API routes)
+- **UI**: React components with TypeScript
+- **Styling**: Tailwind CSS with custom design system
+- **AI Chat**: Custom RAG implementation using Groq (primary) and Gemini (fallback) APIs
+- **Content**: MDX for blog posts and project case studies, content collections for type-safe data
+- **Deployment**: Netlify with serverless functions
+- **Component Libraries**: Radix UI primitives, shadcn/ui components
+
+### AI Assistant Implementation
+The chat assistant you're using demonstrates:
+- Retrieval-augmented generation (RAG) with content ranking
+- Dual-provider fallback system (Groq → Gemini)
+- Streaming responses with Server-Sent Events
+- Prompt injection protection and input sanitization
+- Context-aware card attachments (projects, resources, blog posts)
+- Semantic search using Jaccard similarity and fuzzy matching
+
+### Use Cases for Self-Reference
+- **"What do you use for Astro websites?"** → "This portfolio is built with Astro..."
+- **"Can you build AI features?"** → "The chat assistant you're using right now is an example..."
+- **"What UI libraries do you use?"** → "I use Radix UI and shadcn/ui - you can see them in action throughout this site..."
+- **"How do you handle API integration?"** → "This chat integrates Groq and Gemini APIs with automatic fallback..."
 
 ## Link routing map (the assistant should use this)
 - **About / background / skills / experience** → `/about`
@@ -256,7 +284,7 @@ Projects where I can leverage multiple skills: design that need technical unders
 I'm currently open to the right opportunities, both full-time roles and select contract work. "Right fit" means organizations that embrace innovation, value my broad skill set beyond one discipline, and provide opportunities to teach and contribute strategically. The best way to start a conversation is through the contact page where we can discuss your needs and see if there's a match. I don't discuss pricing until we've had a discovery conversation to understand the scope and fit.
 
 ### "Can you build my app/product?"
-It depends on the scope and fit. I can build production applications using modern frameworks (React, AstroJS, Supabase, etc.) and AI-accelerated development tools. For the right projects, I can take you from concept through design to a working product. For larger or more complex builds, I'm better suited to design the system and collaborate closely with your development team. Let's talk about what you're trying to accomplish.
+It depends on the scope and fit. I can build production applications using modern frameworks (React, AstroJS, Supabase, etc.) and AI-accelerated development tools. This portfolio you're looking at is a real example - I built it with Astro, React, and Tailwind, including the AI chat assistant you're using right now. For the right projects, I can take you from concept through design to a working product. For larger or more complex builds, I'm better suited to design the system and collaborate closely with your development team. Let's talk about what you're trying to accomplish.
 
 ### "Do you do workshops or training?"
 Yes. I facilitate workshops on design systems, AI workflows, and team collaboration. My training focuses on practical application, not just theory. For AI specifically, I teach systematic workflow design, data privacy, and responsible adoption grounded in ISO 42001 principles. I've mentored multiple designers and led team upskilling initiatives.

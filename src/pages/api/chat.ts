@@ -19,6 +19,7 @@ const ModelJsonSchema = z.object({
     .optional(),
   project_cards: z.array(z.string().min(1)).optional(),
   resource_cards: z.array(z.string().min(1)).optional(),
+  blog_cards: z.array(z.string().min(1)).optional(),
 });
 
 type Chip = { label: string; href: string; kind?: string };
@@ -39,6 +40,14 @@ type ResourceCard = {
   tags: string[];
   image?: string;
   siteName?: string;
+};
+
+type BlogCard = {
+  title: string;
+  description: string;
+  slug: string;
+  pubDate: string; // ISO string
+  tags: string[];
 };
 
 const json = (payload: unknown, status = 200) =>
@@ -114,6 +123,41 @@ const stripMarkdownLite = (s: string) => {
   return out;
 };
 
+const sanitizeHistoryContent = (content: string): string => {
+  if (typeof content !== 'string') return '';
+
+  let sanitized = String(content).trim();
+
+  // Remove potential prompt injection patterns
+  // Remove phrases that could be interpreted as system instructions
+  const injectionPatterns = [
+    /ignore\s+(all\s+)?(previous|above|prior)\s+(instructions|prompts|rules)/gi,
+    /forget\s+(all\s+)?(previous|above|prior)\s+(instructions|prompts|rules)/gi,
+    /new\s+(instructions|system\s+prompt|rules):/gi,
+    /system\s*:/gi,
+    /\[SYSTEM\]/gi,
+    /\[INST\]/gi,
+    /<\|im_start\|>/gi,
+    /<\|im_end\|>/gi,
+    /assistant\s*:/gi,
+  ];
+
+  for (const pattern of injectionPatterns) {
+    sanitized = sanitized.replace(pattern, '[removed]');
+  }
+
+  // Limit excessive repetition (potential token exhaustion attack)
+  // Replace 4+ repeated characters with 3
+  sanitized = sanitized.replace(/(.)\1{3,}/g, '$1$1$1');
+
+  // Ensure reasonable length (backup check)
+  if (sanitized.length > MAX_MESSAGE_CHARS) {
+    sanitized = sanitized.slice(0, MAX_MESSAGE_CHARS);
+  }
+
+  return sanitized;
+};
+
 const tokenSet = (s: string) =>
   new Set(
     normalize(s)
@@ -167,6 +211,8 @@ const allowedChipHref = (href: string, projectSlugs: Set<string>, blogSlugs: Set
 const sanitizeChips = (chips: unknown, projectSlugs: Set<string>, blogSlugs: Set<string>) => {
   if (!Array.isArray(chips)) return [] as Chip[];
   const out: Chip[] = [];
+  const rejected: string[] = [];
+
   for (const c of chips) {
     if (!c || typeof c !== 'object') continue;
     const label = (c as any).label;
@@ -174,11 +220,33 @@ const sanitizeChips = (chips: unknown, projectSlugs: Set<string>, blogSlugs: Set
     const kind = (c as any).kind;
     if (typeof label !== 'string' || typeof href !== 'string') continue;
     const cleanHref = href.trim();
-    if (!cleanHref.startsWith('/')) continue;
-    if (!allowedChipHref(cleanHref, projectSlugs, blogSlugs)) continue;
-    out.push({ label: label.trim().slice(0, 32), href: cleanHref, kind: typeof kind === 'string' ? kind.slice(0, 24) : undefined });
+
+    // Reject non-relative URLs
+    if (!cleanHref.startsWith('/')) {
+      rejected.push(cleanHref);
+      continue;
+    }
+
+    // Reject hrefs not in allowlist
+    if (!allowedChipHref(cleanHref, projectSlugs, blogSlugs)) {
+      rejected.push(cleanHref);
+      continue;
+    }
+
+    out.push({
+      label: label.trim().slice(0, 32),
+      href: cleanHref,
+      kind: typeof kind === 'string' ? kind.slice(0, 24) : undefined
+    });
+
     if (out.length >= 6) break;
   }
+
+  // Log rejected chips for monitoring
+  if (rejected.length > 0) {
+    console.warn('LLM provided invalid chip hrefs:', rejected.join(', '));
+  }
+
   return out;
 };
 
@@ -191,13 +259,16 @@ export const POST: APIRoute = async ({ request }) => {
 
     const body = await request.json();
     const userMessageRaw = body?.message;
-    const userMessage = typeof userMessageRaw === 'string' ? userMessageRaw : '';
+    const userMessage = typeof userMessageRaw === 'string' ? sanitizeHistoryContent(userMessageRaw) : '';
     const historyRaw = Array.isArray(body?.history) ? body.history : [];
 
     const history = historyRaw
       .slice(-20)
-      .map((msg: any) => ({ role: msg?.role, content: msg?.content }))
-      .filter((m: any) => (m.role === 'user' || m.role === 'assistant') && typeof m.content === 'string');
+      .map((msg: any) => ({
+        role: msg?.role,
+        content: typeof msg?.content === 'string' ? sanitizeHistoryContent(msg.content) : ''
+      }))
+      .filter((m: any) => (m.role === 'user' || m.role === 'assistant') && m.content.length > 0);
 
     const wantsStream =
       request.headers.get('accept')?.includes('text/event-stream') ||
@@ -228,9 +299,14 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    // 1) Gather content (the “brain”)
-    const projects = await getCollection('projects');
-    const blogPosts = await getCollection('blog');
+    // 1) Gather content (the "brain")
+    // Only include published content
+    const projects = await getCollection('projects', ({ data }) => {
+      return data.published !== false;
+    });
+    const blogPosts = await getCollection('blog', ({ data }) => {
+      return data.draft !== true;
+    });
     const resources = await getCollection('resources');
     const knowledgeEntry = await getEntry('assistant', 'knowledge');
     const knowledge = knowledgeEntry?.body ?? '';
@@ -340,6 +416,9 @@ export const POST: APIRoute = async ({ request }) => {
         .filter(Boolean)
         .slice(0, 6);
 
+      // Track hallucinated slugs for logging
+      const hallucinated: string[] = [];
+
       // Exact first
       const exact = new Set<string>();
       for (const s of wanted) {
@@ -347,10 +426,14 @@ export const POST: APIRoute = async ({ request }) => {
         const hit = projects.find(
           (p) => low === p.slug.toLowerCase() || low === p.data.title.toLowerCase()
         );
-        if (hit) exact.add(hit.slug);
+        if (hit) {
+          exact.add(hit.slug);
+        } else {
+          hallucinated.push(s);
+        }
       }
 
-      // Fuzzy fallback
+      // Fuzzy fallback (only if no exact matches found)
       if (exact.size < wanted.length) {
         const candidates = projects.map((p) => ({ slug: p.slug, title: p.data.title }));
         for (const s of wanted) {
@@ -362,8 +445,16 @@ export const POST: APIRoute = async ({ request }) => {
             const score = Math.max(bigramDice(s, c.slug), bigramDice(s, c.title));
             if (!best || score > best.score) best = { slug: c.slug, score };
           }
-          if (best && best.score >= 0.55) exact.add(best.slug);
+          // Only accept fuzzy matches with high confidence (>= 0.60)
+          if (best && best.score >= 0.60) {
+            exact.add(best.slug);
+          }
         }
+      }
+
+      // Log hallucinations for monitoring
+      if (hallucinated.length > 0) {
+        console.warn('LLM hallucinated project slugs:', hallucinated.join(', '));
       }
 
       return projects
@@ -383,13 +474,17 @@ export const POST: APIRoute = async ({ request }) => {
         .filter(Boolean)
         .slice(0, 6);
 
+      // Track hallucinated titles for logging
+      const hallucinated: string[] = [];
       const hits: (typeof resources[0])[] = [];
+
       for (const t of wanted) {
         const low = t.toLowerCase();
         // Try exact match first
         let hit = resources.find(
           (r) => low === r.data.title.toLowerCase() || low === r.data.url.toLowerCase()
         );
+
         // Fuzzy fallback
         if (!hit) {
           let best: { r: typeof resources[0]; score: number } | null = null;
@@ -397,12 +492,23 @@ export const POST: APIRoute = async ({ request }) => {
             const score = Math.max(bigramDice(t, r.data.title), bigramDice(t, r.data.url));
             if (!best || score > best.score) best = { r, score };
           }
-          if (best && best.score >= 0.5) hit = best.r;
+          // Stricter fuzzy threshold (>= 0.55 instead of 0.50)
+          if (best && best.score >= 0.55) {
+            hit = best.r;
+          } else {
+            hallucinated.push(t);
+          }
         }
+
         if (hit && !hits.some(h => h.data.url === hit!.data.url)) {
           hits.push(hit);
         }
         if (hits.length >= 6) break;
+      }
+
+      // Log hallucinations for monitoring
+      if (hallucinated.length > 0) {
+        console.warn('LLM hallucinated resource titles:', hallucinated.join(', '));
       }
 
       // Fetch metadata for images
@@ -421,6 +527,64 @@ export const POST: APIRoute = async ({ request }) => {
         })
       );
       return matched;
+    };
+
+    const makeCardBlogs = (slugs: string[]) => {
+      const wanted = slugs
+        .map((s) => String(s || '').trim())
+        .filter(Boolean)
+        .slice(0, 6);
+
+      // Track hallucinated slugs for logging
+      const hallucinated: string[] = [];
+      const exact = new Set<string>();
+
+      // Exact match first
+      for (const s of wanted) {
+        const low = s.toLowerCase();
+        const hit = blogPosts.find(
+          (b) => low === b.slug.toLowerCase() || low === b.data.title.toLowerCase()
+        );
+        if (hit) {
+          exact.add(hit.slug);
+        } else {
+          hallucinated.push(s);
+        }
+      }
+
+      // Fuzzy fallback if no exact matches
+      if (exact.size < wanted.length) {
+        const candidates = blogPosts.map((b) => ({ slug: b.slug, title: b.data.title }));
+        for (const s of wanted) {
+          if (exact.size >= 6) break;
+          const low = s.toLowerCase();
+          if (Array.from(exact).some((x) => x.toLowerCase() === low)) continue;
+          let best: { slug: string; score: number } | null = null;
+          for (const c of candidates) {
+            const score = Math.max(bigramDice(s, c.slug), bigramDice(s, c.title));
+            if (!best || score > best.score) best = { slug: c.slug, score };
+          }
+          // High confidence threshold for fuzzy matches
+          if (best && best.score >= 0.60) {
+            exact.add(best.slug);
+          }
+        }
+      }
+
+      // Log hallucinations for monitoring
+      if (hallucinated.length > 0) {
+        console.warn('LLM hallucinated blog slugs:', hallucinated.join(', '));
+      }
+
+      return blogPosts
+        .filter((b) => exact.has(b.slug))
+        .map((b) => ({
+          title: b.data.title,
+          description: b.data.description,
+          slug: b.slug,
+          pubDate: b.data.pubDate.toISOString(),
+          tags: (b.data as any).topics ?? [],
+        })) as BlogCard[];
     };
 
     // 2) Offline mode (no API key)
@@ -475,35 +639,65 @@ export const POST: APIRoute = async ({ request }) => {
     // 3. LLM call with fallback (Groq primary, Gemini fallback)
     const callGroq = async (messages: { role: 'system' | 'user' | 'assistant'; content: string }[]): Promise<string> => {
       const groq = new Groq({ apiKey: import.meta.env.GROQ_API_KEY });
-      const completion = await groq.chat.completions.create({
-        model: 'llama-3.3-70b-versatile',
-        messages,
-        response_format: { type: 'json_object' },
-        temperature: 0.7,
-        max_tokens: 1024,
-      });
-      return completion.choices[0]?.message?.content || '';
+      try {
+        const completion = await groq.chat.completions.create({
+          model: 'llama-3.3-70b-versatile',
+          messages,
+          response_format: { type: 'json_object' },
+          temperature: 0.7,
+          max_tokens: 1024,
+        });
+        return completion.choices[0]?.message?.content || '';
+      } catch (error: any) {
+        // Categorize Groq errors
+        if (error?.status === 401 || error?.message?.includes('auth')) {
+          throw new Error('GROQ_AUTH_ERROR');
+        }
+        if (error?.status === 429 || error?.message?.includes('rate limit')) {
+          throw new Error('GROQ_RATE_LIMIT');
+        }
+        if (error?.code === 'ETIMEDOUT' || error?.code === 'ECONNABORTED') {
+          throw new Error('GROQ_TIMEOUT');
+        }
+        // Generic network/API error
+        throw new Error('GROQ_API_ERROR');
+      }
     };
 
     const callGemini = async (systemPrompt: string, userMessage: string, history: { role: string; content: string }[]): Promise<string> => {
       const genAI = new GoogleGenerativeAI(import.meta.env.GEMINI_API_KEY);
-      const model = genAI.getGenerativeModel({ 
-        model: 'gemini-2.0-flash',
-        generationConfig: { responseMimeType: 'application/json' },
-      });
-      const geminiHistory = history.map((msg) => ({
-        role: msg.role === 'assistant' ? 'model' : 'user',
-        parts: [{ text: msg.content }],
-      }));
-      const chat = model.startChat({
-        history: [
-          { role: 'user', parts: [{ text: systemPrompt }] },
-          { role: 'model', parts: [{ text: 'Understood. I will respond as Nasif\'s AI assistant following all the guidelines.' }] },
-          ...geminiHistory,
-        ],
-      });
-      const result = await chat.sendMessage(userMessage);
-      return result.response.text() || '';
+      try {
+        const model = genAI.getGenerativeModel({
+          model: 'gemini-2.0-flash',
+          generationConfig: { responseMimeType: 'application/json' },
+        });
+        const geminiHistory = history.map((msg) => ({
+          role: msg.role === 'assistant' ? 'model' : 'user',
+          parts: [{ text: msg.content }],
+        }));
+        const chat = model.startChat({
+          history: [
+            { role: 'user', parts: [{ text: systemPrompt }] },
+            { role: 'model', parts: [{ text: 'Understood. I will respond as Nasif\'s AI assistant following all the guidelines.' }] },
+            ...geminiHistory,
+          ],
+        });
+        const result = await chat.sendMessage(userMessage);
+        return result.response.text() || '';
+      } catch (error: any) {
+        // Categorize Gemini errors
+        if (error?.message?.includes('API key') || error?.message?.includes('auth')) {
+          throw new Error('GEMINI_AUTH_ERROR');
+        }
+        if (error?.message?.includes('quota') || error?.message?.includes('rate')) {
+          throw new Error('GEMINI_RATE_LIMIT');
+        }
+        if (error?.code === 'ETIMEDOUT' || error?.code === 'ECONNABORTED') {
+          throw new Error('GEMINI_TIMEOUT');
+        }
+        // Generic network/API error
+        throw new Error('GEMINI_API_ERROR');
+      }
     };
 
     const systemPrompt = `
@@ -561,7 +755,8 @@ IMPORTANT OUTPUT FORMAT:
   "answer": string, // Use plain text for casual questions, use bullets (•) when user asks to "list" or for recruitment queries
   "chips"?: Array<{ "label": string, "href": string, "kind"?: string }>,
   "project_cards"?: string[],
-  "resource_cards"?: string[]
+  "resource_cards"?: string[],
+  "blog_cards"?: string[]
 }
 
 Chips rules:
@@ -575,12 +770,85 @@ Project cards rules:
 - Only include "project_cards" if the user asked to see work/projects/portfolio, asked for examples, or visuals are clearly helpful.
 - Return at most 4 project slugs.
 - Use EXACT slugs from the Projects context.
+- CRITICAL: Only reference projects that appear in the Projects context below. Never mention unpublished or draft projects.
 
 Resource cards rules:
 - Include "resource_cards" when the user asks for tools, resources, recommendations for design systems, typography, frameworks, libraries, or similar topics.
 - Return at most 4 resource titles.
 - Use EXACT titles from the Resources context.
-- Briefly explain WHY you're recommending each resource in your answer.
+- CRITICAL: If you mention ANY tool, library, or resource by name in your answer, you MUST include it in "resource_cards". Never mention resources in text without attaching the cards.
+- CRITICAL: NEVER recommend or list resources in your answer that are not in the Resources context. If no relevant resources exist in the context, say "I don't have specific resources curated for that, but you can browse the resources page" and provide a chip to /resources.
+
+Blog cards rules:
+- Include "blog_cards" when the user asks about writing, insights, articles, or specific topics covered in blog posts (AI, design systems, prototyping, etc.).
+- Return at most 4 blog slugs.
+- Use EXACT slugs from the Insights context.
+- Only include blog cards when they're relevant to the question.
+- CRITICAL: Only reference blog posts that appear in the Insights context below. Never mention unpublished or draft posts.
+
+EXAMPLES (for response style and format):
+
+Example 1 - Casual question:
+User: "What do you do?"
+Assistant: {
+  "answer": "I'm a Product Designer who closes the gap between design and development. I design complex workflows for fintech and banking, build design systems, and create functional prototypes with real data. Unlike most designers, I understand technical constraints deeply enough to design within reality, and I can build production applications myself when needed."
+}
+
+Example 2 - Recruitment question (comprehensive):
+User: "How many years of UI design experience do you have?"
+Assistant: {
+  "answer": "I have 15+ years of UI design experience spanning my entire career:\n\n• 2009-2012: Started in graphic design at Musica & Clicks (promotional materials, retail branding)\n• 2014-2018: Freelance visual designer (web design, branding, WordPress development)\n• 2019-2021: Senior Digital Designer at Machete Creative (UI/UX for retail campaigns)\n• 2022-2024: Lead UI Designer at Immersion Group (design systems, fintech products)\n• 2024-present: Independent Product Designer (AI-accelerated development)\n\nMy work has evolved from print and digital design to execution-focused product design with technical implementation.",
+  "chips": [{"label": "About", "href": "/about"}, {"label": "Contact", "href": "/contact"}]
+}
+
+Example 3 - Request with project cards:
+User: "Show me your portfolio"
+Assistant: {
+  "answer": "Here are some featured projects showcasing design systems, AI products, and rapid prototyping work:",
+  "project_cards": ["enterprise-design-system", "everprompt", "whatsapp-flow-builder", "ai-accelerated-coffee-directory"],
+  "chips": [{"label": "Work", "href": "/projects"}]
+}
+
+Example 4 - Off-topic redirect:
+User: "What's the weather like?"
+Assistant: {
+  "answer": "I'm here to help you learn about Nasif's work, experience, and services. I can answer questions about his projects, skills, background, or how to get in touch.",
+  "chips": [{"label": "Work", "href": "/projects"}, {"label": "About", "href": "/about"}, {"label": "Contact", "href": "/contact"}]
+}
+
+Example 5 - Resources request (when relevant resources exist):
+User: "What resources would you recommend for design systems?"
+Assistant: {
+  "answer": "For design systems, I recommend checking out the curated resources on the resources page. They cover design system tools, frameworks, and methodologies relevant to building scalable systems.",
+  "resource_cards": ["Polaris Design System", "Material Design", "IBM Carbon"],
+  "chips": [{"label": "Resources", "href": "/resources"}]
+}
+
+Example 6 - Resources request (when NO relevant resources exist):
+User: "What tools do you recommend for video editing?"
+Assistant: {
+  "answer": "I don't have specific video editing resources curated on this site. The resources page focuses on design systems, AI tools, and development frameworks. You can browse the full collection there.",
+  "chips": [{"label": "Resources", "href": "/resources"}]
+}
+
+Example 7 - Self-referential with resources (CORRECT - mentions tools AND includes cards):
+User: "What do you use for Astro websites?"
+Assistant: {
+  "answer": "This portfolio you're looking at is actually built with Astro! I use Astro for static site generation, React for dynamic components, and UI libraries like Radix UI and shadcn/ui for accessible, customizable elements. Here are some of the key resources:",
+  "resource_cards": ["Astro Docs", "React Docs", "Radix UI", "shadcn/ui"],
+  "chips": [{"label": "Resources", "href": "/resources"}]
+}
+
+CRITICAL CONSTRAINT - Grounding in context:
+- NEVER mention resource names, book titles, tool names, or specific recommendations that are not explicitly listed in the Resources context below.
+- If asked for recommendations and nothing relevant exists in the Resources context, acknowledge this honestly rather than inventing resources.
+- This applies to ALL content: projects, blog posts, and resources. Only reference what exists in the provided context.
+
+SELF-REFERENTIAL EXAMPLES:
+- When asked about Astro: "This portfolio you're looking at is actually built with Astro! It's a static site generator that combines great performance with developer experience."
+- When asked about React/UI components: "I use React components throughout this site, including shadcn/ui and Radix UI for accessible UI elements."
+- When asked about AI features: "The chat assistant you're using right now is an example of AI integration - it uses Groq and Gemini APIs with RAG (retrieval-augmented generation) to answer questions about my work."
+- Always look for opportunities to reference the current portfolio as a practical example when relevant to the question.
 
 Context - Nasif (single source of truth):
 ${knowledge}
@@ -611,18 +879,22 @@ ${resourceContext}
     // Try Groq first, fall back to Gemini
     let raw = '';
     let usedProvider = 'groq';
-    
+    let lastError: Error | null = null;
+
     if (import.meta.env.GROQ_API_KEY) {
       try {
         raw = await callGroq(messages);
-      } catch (groqError) {
-        console.error('Groq API failed, trying Gemini fallback:', groqError);
+      } catch (groqError: any) {
+        lastError = groqError;
+        console.error('Groq API failed:', groqError?.message || groqError);
         if (import.meta.env.GEMINI_API_KEY) {
           try {
             raw = await callGemini(systemPrompt, userMessage, history);
             usedProvider = 'gemini';
-          } catch (geminiError) {
-            console.error('Gemini fallback also failed:', geminiError);
+            lastError = null; // Clear error since Gemini succeeded
+          } catch (geminiError: any) {
+            lastError = geminiError;
+            console.error('Gemini fallback also failed:', geminiError?.message || geminiError);
             throw geminiError;
           }
         } else {
@@ -654,6 +926,9 @@ ${resourceContext}
     const requestedResources = Array.isArray(parsed?.resource_cards) ? parsed!.resource_cards!.slice(0, 6) : [];
     const attachedResources = requestedResources.length ? await makeCardResources(requestedResources) : [];
 
+    const requestedBlogSlugs = Array.isArray(parsed?.blog_cards) ? parsed!.blog_cards!.slice(0, 6) : [];
+    const attachedBlogs = requestedBlogSlugs.length ? makeCardBlogs(requestedBlogSlugs) : [];
+
     const lowerMsg = userMessage.toLowerCase();
     const wantsWork =
       lowerMsg.includes('project') ||
@@ -672,6 +947,14 @@ ${resourceContext}
       lowerMsg.includes('framework') ||
       lowerMsg.includes('library');
 
+    const wantsBlogs =
+      lowerMsg.includes('blog') ||
+      lowerMsg.includes('article') ||
+      lowerMsg.includes('writing') ||
+      lowerMsg.includes('insight') ||
+      lowerMsg.includes('post') ||
+      lowerMsg.includes('read about');
+
     // If the model didn't return cards but the user clearly asked for portfolio/work, attach top matches.
     const inferredCards = wantsWork
       ? makeCardProjects(topProjects.map((p) => p.slug).slice(0, 4))
@@ -680,6 +963,11 @@ ${resourceContext}
     // If the model didn't return resources but user asked for recommendations, attach top matches.
     const inferredResources = wantsResources && attachedResources.length === 0
       ? await makeCardResources(topResources.map((r) => r.title).slice(0, 4))
+      : [];
+
+    // If the model didn't return blog cards but user asked about writing/articles, attach top matches.
+    const inferredBlogs = wantsBlogs && attachedBlogs.length === 0
+      ? makeCardBlogs(topBlogs.map((b) => b.slug).slice(0, 4))
       : [];
 
     // If the model asked for cards but we couldn't resolve any, fall back to featured/top matches.
@@ -692,11 +980,14 @@ ${resourceContext}
 
     const resourcesForPayload = attachedResources.length > 0 ? attachedResources : inferredResources;
 
+    const blogsForPayload = attachedBlogs.length > 0 ? attachedBlogs : inferredBlogs;
+
     const payload = {
       reply,
       chips,
       projects: projectsForPayload,
       resources: resourcesForPayload,
+      blogs: blogsForPayload,
       mode: 'online',
     };
 
@@ -726,12 +1017,40 @@ ${resourceContext}
 
     return sse(stream, 200);
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('API Error:', error);
+
+    // Provide user-friendly error messages based on error type
+    let userMessage = 'Sorry, something went wrong. Please try again.';
+    let statusCode = 500;
+
     if (error instanceof Error) {
-      console.error('Error message:', error.message);
-      console.error('Error stack:', error.stack);
+      const errorMsg = error.message;
+
+      // Authentication errors
+      if (errorMsg.includes('AUTH_ERROR')) {
+        userMessage = 'The AI service is temporarily unavailable. Please try again later.';
+        statusCode = 503;
+      }
+      // Rate limit errors
+      else if (errorMsg.includes('RATE_LIMIT')) {
+        userMessage = 'The AI service is experiencing high demand. Please wait a moment and try again.';
+        statusCode = 429;
+      }
+      // Timeout errors
+      else if (errorMsg.includes('TIMEOUT')) {
+        userMessage = 'The request took too long to process. Please try again with a shorter message.';
+        statusCode = 504;
+      }
+      // Generic API errors
+      else if (errorMsg.includes('API_ERROR')) {
+        userMessage = 'Unable to connect to the AI service. Please check your connection and try again.';
+        statusCode = 503;
+      }
+
+      console.error('Error details:', { message: error.message, stack: error.stack });
     }
-    return json({ reply: 'Sorry, something went wrong. Please try again.' }, 500);
+
+    return json({ reply: userMessage }, statusCode);
   }
 };
