@@ -20,6 +20,7 @@ const ModelJsonSchema = z.object({
   project_cards: z.array(z.string().min(1)).optional(),
   resource_cards: z.array(z.string().min(1)).optional(),
   blog_cards: z.array(z.string().min(1)).optional(),
+  follow_ups: z.array(z.string().min(1).max(80)).max(3).optional(),
 });
 
 type Chip = { label: string; href: string; kind?: string };
@@ -756,7 +757,8 @@ IMPORTANT OUTPUT FORMAT:
   "chips"?: Array<{ "label": string, "href": string, "kind"?: string }>,
   "project_cards"?: string[],
   "resource_cards"?: string[],
-  "blog_cards"?: string[]
+  "blog_cards"?: string[],
+  "follow_ups"?: string[] // 2-3 contextual follow-up questions to guide the conversation deeper
 }
 
 Chips rules:
@@ -786,12 +788,24 @@ Blog cards rules:
 - Only include blog cards when they're relevant to the question.
 - CRITICAL: Only reference blog posts that appear in the Insights context below. Never mention unpublished or draft posts.
 
+Follow-up questions rules:
+- Include 2-3 "follow_ups" for EVERY response to guide users deeper into relevant topics.
+- Make them specific and contextual to what was just discussed.
+- Phrase as natural questions a visitor might ask next.
+- Examples:
+  - After discussing design systems → "How do you approach design system governance?"
+  - After mentioning AI work → "What AI projects have you built?"
+  - After explaining experience → "What was your role at Immersion Group?"
+- Keep each follow-up under 80 characters.
+- Always provide follow-ups unless it's a goodbye/closing statement.
+
 EXAMPLES (for response style and format):
 
 Example 1 - Casual question:
 User: "What do you do?"
 Assistant: {
-  "answer": "I'm a Product Designer who closes the gap between design and development. I design complex workflows for fintech and banking, build design systems, and create functional prototypes with real data. Unlike most designers, I understand technical constraints deeply enough to design within reality, and I can build production applications myself when needed."
+  "answer": "I'm a Product Designer who closes the gap between design and development. I design complex workflows for fintech and banking, build design systems, and create functional prototypes with real data. Unlike most designers, I understand technical constraints deeply enough to design within reality, and I can build production applications myself when needed.",
+  "follow_ups": ["What makes you different from other designers?", "Show me your design system work", "How do you bridge design and development?"]
 }
 
 Example 2 - Recruitment question (comprehensive):
@@ -806,7 +820,8 @@ User: "Show me your portfolio"
 Assistant: {
   "answer": "Here are some featured projects showcasing design systems, AI products, and rapid prototyping work:",
   "project_cards": ["enterprise-design-system", "everprompt", "whatsapp-flow-builder", "ai-accelerated-coffee-directory"],
-  "chips": [{"label": "Work", "href": "/projects"}]
+  "chips": [{"label": "Work", "href": "/projects"}],
+  "follow_ups": ["Tell me about your design system process", "What AI projects have you built?", "How do you prototype so quickly?"]
 }
 
 Example 4 - Off-topic redirect:
@@ -982,12 +997,15 @@ ${resourceContext}
 
     const blogsForPayload = attachedBlogs.length > 0 ? attachedBlogs : inferredBlogs;
 
+    const followUps = Array.isArray(parsed?.follow_ups) ? parsed.follow_ups.slice(0, 3) : [];
+
     const payload = {
       reply,
       chips,
       projects: projectsForPayload,
       resources: resourcesForPayload,
       blogs: blogsForPayload,
+      followUps,
       mode: 'online',
     };
 

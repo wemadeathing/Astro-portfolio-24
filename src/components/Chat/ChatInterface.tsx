@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Bot, Menu, Send, StopCircle, User, X } from 'lucide-react';
+import { Bot, Check, Copy, Menu, RotateCcw, Send, StopCircle, User, X } from 'lucide-react';
 import ProjectCard from './ProjectCard';
 import ResourceCard from './ResourceCard';
 import BlogCard from './BlogCard';
@@ -38,6 +38,7 @@ interface Message {
   resources?: ResourceData[];
   blogs?: BlogData[];
   chips?: { label: string; href: string; kind?: string }[];
+  followUps?: string[];
 }
 
 interface LatestPostData {
@@ -74,6 +75,7 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
   const [lastUserText, setLastUserText] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const menuPanelRef = useRef<HTMLDivElement>(null);
   const menuCloseButtonRef = useRef<HTMLButtonElement>(null);
@@ -376,6 +378,7 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
           resources: Array.isArray(data.resources) ? data.resources : undefined,
           blogs: Array.isArray(data.blogs) ? data.blogs : undefined,
           chips: Array.isArray(data.chips) ? data.chips : undefined,
+          followUps: Array.isArray(data.followUps) ? data.followUps : undefined,
         });
         return;
       }
@@ -408,6 +411,7 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
             resources: Array.isArray(parsed.resources) ? parsed.resources : undefined,
             blogs: Array.isArray(parsed.blogs) ? parsed.blogs : undefined,
             chips: Array.isArray(parsed.chips) ? parsed.chips : undefined,
+            followUps: Array.isArray(parsed.followUps) ? parsed.followUps : undefined,
           });
           return;
         }
@@ -468,6 +472,24 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     void sendPrompt(input);
+  };
+
+  const clearConversation = () => {
+    setMessages([]);
+    setInput('');
+    setIsIntro(true);
+    setHasStarted(false);
+    setLastUserText(null);
+  };
+
+  const copyToClipboard = async (text: string, id: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedId(id);
+      setTimeout(() => setCopiedId(null), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
   };
 
   const isIntro = !hasStarted && messages.length === 0;
@@ -566,7 +588,20 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
                 className="h-7 sm:h-8 w-auto"
               />
             </a>
-            
+
+            {/* New Chat button (only show in chat mode) */}
+            {!isIntro && (
+              <button
+                type="button"
+                aria-label="New conversation"
+                onClick={clearConversation}
+                className="w-10 h-10 flex items-center justify-center rounded-full bg-muted/30 border border-border/60 text-foreground/80 hover:bg-muted/45 transition-colors duration-200"
+                title="Start new conversation"
+              >
+                <RotateCcw size={16} />
+              </button>
+            )}
+
             {/* Burger */}
             <button
               type="button"
@@ -734,9 +769,9 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
               >
                 <div className="flex flex-wrap justify-center gap-2">
                   {[
-                    'Tell me about your AI experience',
-                    'Show me your portfolio',
-                    'How can I contact you?',
+                    'What makes you different from other designers?',
+                    'Walk me through your design process',
+                    'Show me your AI projects',
                   ].map((suggestion) => (
                     <button
                       key={suggestion}
@@ -950,7 +985,7 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
                   )}
                   
                   <div
-                    className={`max-w-[85%] rounded-2xl px-6 py-4 ${
+                    className={`max-w-[85%] rounded-2xl px-6 py-4 relative group ${
                       msg.role === 'user'
                         ? 'bg-primary/10 border border-primary/20 text-foreground'
                         : 'bg-muted/50 border border-border text-foreground'
@@ -964,7 +999,24 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
                         <div className="w-2 h-2 bg-foreground/50 rounded-full animate-bounce delay-150" aria-hidden="true" />
                       </div>
                     ) : (
-                      <p className="leading-relaxed whitespace-pre-wrap">{msg.content}</p>
+                      <>
+                        <p className="leading-relaxed whitespace-pre-wrap">{msg.content}</p>
+                        {msg.role === 'assistant' && msg.content && (
+                          <button
+                            type="button"
+                            onClick={() => copyToClipboard(msg.content, msg.id)}
+                            className="absolute top-2 right-2 p-1.5 rounded-md bg-background/80 border border-border/60 opacity-0 group-hover:opacity-100 hover:bg-background transition-all"
+                            aria-label="Copy response"
+                            title="Copy to clipboard"
+                          >
+                            {copiedId === msg.id ? (
+                              <Check size={14} className="text-green-600" />
+                            ) : (
+                              <Copy size={14} className="text-muted-foreground" />
+                            )}
+                          </button>
+                        )}
+                      </>
                     )}
                   </div>
 
@@ -1078,6 +1130,31 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
                         >
                           {chip.label}
                         </a>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Render follow-up suggestions when present */}
+                {msg.role === 'assistant' && msg.followUps && msg.followUps.length > 0 && (
+                  <div className="w-full pl-12 pr-2 mt-3">
+                    <div className="text-xs text-muted-foreground mb-2">You might also want to ask:</div>
+                    <div className="flex flex-wrap gap-2">
+                      {msg.followUps.map((followUp, idx) => (
+                        <button
+                          key={`followup-${idx}`}
+                          type="button"
+                          onClick={() => {
+                            setInput(followUp);
+                            inputRef.current?.focus();
+                            setTimeout(() => {
+                              inputRef.current?.parentElement?.querySelector('button[type="submit"]')?.click();
+                            }, 100);
+                          }}
+                          className="text-xs md:text-sm px-3 py-1.5 bg-primary/10 hover:bg-primary/20 border border-primary/30 rounded-full transition-colors text-foreground/90 hover:text-foreground"
+                        >
+                          {followUp}
+                        </button>
                       ))}
                     </div>
                   </div>
