@@ -1,8 +1,10 @@
 import type { APIRoute } from 'astro';
 import { getCollection, getEntry } from 'astro:content';
-import OpenAI from 'openai';
+import Groq from 'groq-sdk';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { z } from 'zod';
 import aboutPageSource from '../about.astro?raw';
+import { getResourceMeta } from '../../lib/resource-meta';
 
 const ModelJsonSchema = z.object({
   answer: z.string().min(1),
@@ -16,6 +18,7 @@ const ModelJsonSchema = z.object({
     )
     .optional(),
   project_cards: z.array(z.string().min(1)).optional(),
+  resource_cards: z.array(z.string().min(1)).optional(),
 });
 
 type Chip = { label: string; href: string; kind?: string };
@@ -26,6 +29,16 @@ type ProjectCard = {
   image: string;
   tags: string[];
   slug: string;
+};
+
+type ResourceCard = {
+  title: string;
+  description: string;
+  url: string;
+  type: string;
+  tags: string[];
+  image?: string;
+  siteName?: string;
 };
 
 const json = (payload: unknown, status = 200) =>
@@ -218,6 +231,7 @@ export const POST: APIRoute = async ({ request }) => {
     // 1) Gather content (the “brain”)
     const projects = await getCollection('projects');
     const blogPosts = await getCollection('blog');
+    const resources = await getCollection('resources');
     const knowledgeEntry = await getEntry('assistant', 'knowledge');
     const knowledge = knowledgeEntry?.body ?? '';
 
@@ -267,6 +281,21 @@ export const POST: APIRoute = async ({ request }) => {
         return { ...b, score };
       });
 
+    const resourceItems = resources.map((r) => {
+      const tags = (r.data as any).tags ?? [];
+      const text = `${r.data.title} ${r.data.description ?? ''} ${Array.isArray(tags) ? tags.join(' ') : ''} ${r.data.type ?? ''}`;
+      const score = jaccard(queryTokens, tokenSet(text)) +
+        (Array.isArray(tags) && tags.some((t: string) => queryTokens.has(normalize(t))) ? 0.1 : 0);
+      return { 
+        url: r.data.url, 
+        title: r.data.title, 
+        description: r.data.description ?? '', 
+        type: r.data.type ?? 'other',
+        tags, 
+        score 
+      };
+    });
+
     const topProjects = projectItems
       .slice()
       .sort((a, b) => b.score - a.score)
@@ -276,6 +305,11 @@ export const POST: APIRoute = async ({ request }) => {
       .slice()
       .sort((a, b) => b.score - a.score)
       .slice(0, 6);
+
+    const topResources = resourceItems
+      .slice()
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 8);
 
     const projectContext = topProjects
       .map((p) => {
@@ -290,6 +324,13 @@ export const POST: APIRoute = async ({ request }) => {
         const topics = (b.topics && b.topics.length ? b.topics.join(', ') : '').trim();
         const summary = (b.aiSummary && String(b.aiSummary).trim().length ? String(b.aiSummary) : b.description).trim();
         return `- ${b.slug}: ${b.title}${topics ? ` (${topics})` : ''} - ${summary}`;
+      })
+      .join('\n');
+
+    const resourceContext = topResources
+      .map((r) => {
+        const tagsStr = (r.tags && r.tags.length ? r.tags.join(', ') : '').trim();
+        return `- ${r.title} (${r.type}${tagsStr ? `, ${tagsStr}` : ''}) - ${r.description} [${r.url}]`;
       })
       .join('\n');
 
@@ -336,8 +377,54 @@ export const POST: APIRoute = async ({ request }) => {
         })) as ProjectCard[];
     };
 
+    const makeCardResources = async (titles: string[]): Promise<ResourceCard[]> => {
+      const wanted = titles
+        .map((s) => String(s || '').trim())
+        .filter(Boolean)
+        .slice(0, 6);
+
+      const hits: (typeof resources[0])[] = [];
+      for (const t of wanted) {
+        const low = t.toLowerCase();
+        // Try exact match first
+        let hit = resources.find(
+          (r) => low === r.data.title.toLowerCase() || low === r.data.url.toLowerCase()
+        );
+        // Fuzzy fallback
+        if (!hit) {
+          let best: { r: typeof resources[0]; score: number } | null = null;
+          for (const r of resources) {
+            const score = Math.max(bigramDice(t, r.data.title), bigramDice(t, r.data.url));
+            if (!best || score > best.score) best = { r, score };
+          }
+          if (best && best.score >= 0.5) hit = best.r;
+        }
+        if (hit && !hits.some(h => h.data.url === hit!.data.url)) {
+          hits.push(hit);
+        }
+        if (hits.length >= 6) break;
+      }
+
+      // Fetch metadata for images
+      const matched = await Promise.all(
+        hits.map(async (hit) => {
+          const meta = await getResourceMeta(hit.data.url);
+          return {
+            title: hit.data.title,
+            description: hit.data.description ?? '',
+            url: hit.data.url,
+            type: hit.data.type ?? 'other',
+            tags: (hit.data as any).tags ?? [],
+            image: (hit.data as any).image || meta.image,
+            siteName: meta.siteName,
+          };
+        })
+      );
+      return matched;
+    };
+
     // 2) Offline mode (no API key)
-    if (!import.meta.env.OPENAI_API_KEY) {
+    if (!import.meta.env.GROQ_API_KEY && !import.meta.env.GEMINI_API_KEY) {
       const lowerMsg = userMessage.toLowerCase();
       const wantsWork =
         lowerMsg.includes('project') ||
@@ -385,10 +472,39 @@ export const POST: APIRoute = async ({ request }) => {
       return sse(stream, 200);
     }
 
-    // 3. Initialize OpenAI
-    const openai = new OpenAI({
-      apiKey: import.meta.env.OPENAI_API_KEY,
-    });
+    // 3. LLM call with fallback (Groq primary, Gemini fallback)
+    const callGroq = async (messages: { role: 'system' | 'user' | 'assistant'; content: string }[]): Promise<string> => {
+      const groq = new Groq({ apiKey: import.meta.env.GROQ_API_KEY });
+      const completion = await groq.chat.completions.create({
+        model: 'llama-3.3-70b-versatile',
+        messages,
+        response_format: { type: 'json_object' },
+        temperature: 0.7,
+        max_tokens: 1024,
+      });
+      return completion.choices[0]?.message?.content || '';
+    };
+
+    const callGemini = async (systemPrompt: string, userMessage: string, history: { role: string; content: string }[]): Promise<string> => {
+      const genAI = new GoogleGenerativeAI(import.meta.env.GEMINI_API_KEY);
+      const model = genAI.getGenerativeModel({ 
+        model: 'gemini-2.0-flash',
+        generationConfig: { responseMimeType: 'application/json' },
+      });
+      const geminiHistory = history.map((msg) => ({
+        role: msg.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text: msg.content }],
+      }));
+      const chat = model.startChat({
+        history: [
+          { role: 'user', parts: [{ text: systemPrompt }] },
+          { role: 'model', parts: [{ text: 'Understood. I will respond as Nasif\'s AI assistant following all the guidelines.' }] },
+          ...geminiHistory,
+        ],
+      });
+      const result = await chat.sendMessage(userMessage);
+      return result.response.text() || '';
+    };
 
     const systemPrompt = `
 You are an AI assistant for Nasif Salaam.
@@ -444,7 +560,8 @@ IMPORTANT OUTPUT FORMAT:
 {
   "answer": string, // Use plain text for casual questions, use bullets (•) when user asks to "list" or for recruitment queries
   "chips"?: Array<{ "label": string, "href": string, "kind"?: string }>,
-  "project_cards"?: string[]
+  "project_cards"?: string[],
+  "resource_cards"?: string[]
 }
 
 Chips rules:
@@ -459,6 +576,12 @@ Project cards rules:
 - Return at most 4 project slugs.
 - Use EXACT slugs from the Projects context.
 
+Resource cards rules:
+- Include "resource_cards" when the user asks for tools, resources, recommendations for design systems, typography, frameworks, libraries, or similar topics.
+- Return at most 4 resource titles.
+- Use EXACT titles from the Resources context.
+- Briefly explain WHY you're recommending each resource in your answer.
+
 Context - Nasif (single source of truth):
 ${knowledge}
 
@@ -470,19 +593,48 @@ ${projectContext}
 
 Context - Relevant Insights (top matches):
 ${blogContext}
+
+Context - Relevant Resources (top matches):
+${resourceContext}
 `;
 
-    const completion = await openai.chat.completions.create({
-      messages: [
-        { role: 'system', content: systemPrompt },
-        ...history,
-        { role: 'user', content: userMessage },
-      ],
-      model: 'gpt-4o-mini',
-      response_format: { type: 'json_object' },
-    });
+    // Build chat history for Groq/OpenAI format
+    const messages: { role: 'system' | 'user' | 'assistant'; content: string }[] = [
+      { role: 'system', content: systemPrompt },
+      ...history.map((msg: { role: string; content: string }) => ({
+        role: msg.role as 'user' | 'assistant',
+        content: msg.content,
+      })),
+      { role: 'user', content: userMessage },
+    ];
 
-    const raw = completion.choices[0]?.message?.content || '';
+    // Try Groq first, fall back to Gemini
+    let raw = '';
+    let usedProvider = 'groq';
+    
+    if (import.meta.env.GROQ_API_KEY) {
+      try {
+        raw = await callGroq(messages);
+      } catch (groqError) {
+        console.error('Groq API failed, trying Gemini fallback:', groqError);
+        if (import.meta.env.GEMINI_API_KEY) {
+          try {
+            raw = await callGemini(systemPrompt, userMessage, history);
+            usedProvider = 'gemini';
+          } catch (geminiError) {
+            console.error('Gemini fallback also failed:', geminiError);
+            throw geminiError;
+          }
+        } else {
+          throw groqError;
+        }
+      }
+    } else if (import.meta.env.GEMINI_API_KEY) {
+      raw = await callGemini(systemPrompt, userMessage, history);
+      usedProvider = 'gemini';
+    }
+    
+    console.log(`Chat response from: ${usedProvider}`);
     let parsed: z.infer<typeof ModelJsonSchema> | null = null;
     try {
       parsed = ModelJsonSchema.parse(JSON.parse(raw));
@@ -499,6 +651,9 @@ ${blogContext}
     const requestedSlugs = Array.isArray(parsed?.project_cards) ? parsed!.project_cards!.slice(0, 6) : [];
     const attachedProjects = requestedSlugs.length ? makeCardProjects(requestedSlugs) : [];
 
+    const requestedResources = Array.isArray(parsed?.resource_cards) ? parsed!.resource_cards!.slice(0, 6) : [];
+    const attachedResources = requestedResources.length ? await makeCardResources(requestedResources) : [];
+
     const lowerMsg = userMessage.toLowerCase();
     const wantsWork =
       lowerMsg.includes('project') ||
@@ -508,9 +663,23 @@ ${blogContext}
       lowerMsg.includes('case study') ||
       lowerMsg.includes('case studies');
 
+    const wantsResources =
+      lowerMsg.includes('resource') ||
+      lowerMsg.includes('tool') ||
+      lowerMsg.includes('recommend') ||
+      lowerMsg.includes('design system') ||
+      lowerMsg.includes('typography') ||
+      lowerMsg.includes('framework') ||
+      lowerMsg.includes('library');
+
     // If the model didn't return cards but the user clearly asked for portfolio/work, attach top matches.
     const inferredCards = wantsWork
       ? makeCardProjects(topProjects.map((p) => p.slug).slice(0, 4))
+      : [];
+
+    // If the model didn't return resources but user asked for recommendations, attach top matches.
+    const inferredResources = wantsResources && attachedResources.length === 0
+      ? await makeCardResources(topResources.map((r) => r.title).slice(0, 4))
       : [];
 
     // If the model asked for cards but we couldn't resolve any, fall back to featured/top matches.
@@ -521,10 +690,13 @@ ${blogContext}
           ? attachedProjects
           : inferredCards;
 
+    const resourcesForPayload = attachedResources.length > 0 ? attachedResources : inferredResources;
+
     const payload = {
       reply,
       chips,
       projects: projectsForPayload,
+      resources: resourcesForPayload,
       mode: 'online',
     };
 
@@ -556,6 +728,10 @@ ${blogContext}
 
   } catch (error) {
     console.error('API Error:', error);
+    if (error instanceof Error) {
+      console.error('Error message:', error.message);
+      console.error('Error stack:', error.stack);
+    }
     return json({ reply: 'Sorry, something went wrong. Please try again.' }, 500);
   }
 };

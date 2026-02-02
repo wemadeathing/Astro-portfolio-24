@@ -4,41 +4,23 @@ import ResourceCard from '../../components/resources/ResourceCard.astro';
 import { getCollection } from 'astro:content';
 import { getResourceMeta } from '../../lib/resource-meta';
 
-export const prerender = false;
-
-const activeTag = Astro.url.searchParams.get('tag') || '';
-const activeType = (Astro.url.searchParams.get('type') || '').toLowerCase();
+export const prerender = true;
 
 const normalizeType = (t: unknown) => String(t || '').toLowerCase().trim();
 
-const typeLabel = (t: string) => {
-  const kind = normalizeType(t);
-  if (!kind || kind === 'other') return 'Resource';
-  if (kind === 'library') return 'Library';
-  if (kind === 'directory') return 'Directory';
-  if (kind === 'tool') return 'Tool';
-  if (kind === 'article') return 'Article';
-  if (kind === 'video') return 'Video';
-  if (kind === 'template') return 'Template';
-  if (kind === 'course') return 'Course';
-  if (kind === 'podcast') return 'Podcast';
-  if (kind === 'newsletter') return 'Newsletter';
-  if (kind === 'book') return 'Book';
-  // fallback: Title Case
-  return kind.charAt(0).toUpperCase() + kind.slice(1);
-};
-
 const typeSortOrder: Record<string, number> = {
-  library: 1,
-  directory: 2,
+  docs: 1,
+  library: 2,
   tool: 3,
-  article: 4,
-  video: 5,
-  template: 6,
-  course: 7,
-  podcast: 8,
-  newsletter: 9,
-  book: 10,
+  directory: 4,
+  platform: 5,
+  article: 6,
+  video: 7,
+  template: 8,
+  course: 9,
+  podcast: 10,
+  newsletter: 11,
+  book: 12,
   other: 99,
 };
 
@@ -47,77 +29,50 @@ const resources = await getCollection('resources');
 const sorted = resources
   .slice()
   .sort((a, b) => {
-    // featured first
     const af = Number(Boolean(a.data.featured));
     const bf = Number(Boolean(b.data.featured));
     if (bf !== af) return bf - af;
+
+    const at = normalizeType(a.data.type || 'other');
+    const bt = normalizeType(b.data.type || 'other');
+    const ao = typeSortOrder[at] ?? 99;
+    const bo = typeSortOrder[bt] ?? 99;
+    if (ao !== bo) return ao - bo;
 
     const ad = a.data.addedDate ? a.data.addedDate.valueOf() : 0;
     const bd = b.data.addedDate ? b.data.addedDate.valueOf() : 0;
     return bd - ad;
   });
 
-const allTags = Array.from(
-  new Set(
-    sorted
-      .flatMap((r) => r.data.tags ?? [])
-      .map((t) => String(t).trim())
-      .filter(Boolean)
-  )
-).sort((a, b) => a.localeCompare(b));
+// Define curated filter categories
+const filterCategories = [
+  { label: 'All', value: '' },
+  { label: 'AI Builders', value: 'ai-builder' },
+  { label: 'Backend', value: 'backend' },
+  { label: 'Frameworks', value: 'framework' },
+  { label: 'UI Components', value: 'ui' },
+  { label: 'Typography', value: 'typography' },
+  { label: 'Colors', value: 'colors' },
+  { label: 'Animation', value: 'animation' },
+  { label: 'Illustrations', value: 'illustrations' },
+  { label: 'Icons', value: 'icons' },
+  { label: 'Accessibility', value: 'accessibility' },
+  { label: 'Inspiration', value: 'inspiration' },
+  { label: 'Docs', value: 'docs' },
+];
 
-const allTypes = Array.from(
-  new Set(sorted.map((r) => normalizeType(r.data.type || 'other')).filter(Boolean))
-).sort((a, b) => {
-  const ao = typeSortOrder[a] ?? 50;
-  const bo = typeSortOrder[b] ?? 50;
-  if (ao !== bo) return ao - bo;
-  return a.localeCompare(b);
-});
+const totalCount = sorted.length;
 
-const typeCounts = new Map<string, number>();
-for (const r of sorted) {
-  const t = normalizeType(r.data.type || 'other');
-  typeCounts.set(t, (typeCounts.get(t) ?? 0) + 1);
-}
-
-const tagCounts = new Map<string, number>();
-for (const r of sorted) {
-  for (const tag of (r.data.tags ?? []).map(String)) {
-    const t = tag.trim();
-    if (!t) continue;
-    tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1);
-  }
-}
-
-const filtered = sorted.filter((r) => {
-  const hasTag = activeTag ? (r.data.tags ?? []).includes(activeTag) : true;
-  const hasType = activeType ? normalizeType(r.data.type || 'other') === activeType : true;
-  return hasTag && hasType;
-});
-
-const buildHref = (next: { tag?: string | null; type?: string | null }) => {
-  const url = new URL(Astro.url);
-  if (next.tag === null) url.searchParams.delete('tag');
-  else if (typeof next.tag === 'string') url.searchParams.set('tag', next.tag);
-
-  if (next.type === null) url.searchParams.delete('type');
-  else if (typeof next.type === 'string') url.searchParams.set('type', next.type);
-
-  return `${url.pathname}${url.search}`;
-};
-
+// Fetch metadata for ALL resources
 const cards = await Promise.all(
-  filtered.map(async (r) => {
-    const meta =
-      r.data.title || r.data.description || r.data.image
-        ? {}
-        : await getResourceMeta(r.data.url);
-
+  sorted.map(async (r) => {
+    const meta = await getResourceMeta(r.data.url);
+    
     const title = r.data.title || meta.title || r.data.url;
     const description = r.data.description || meta.description;
     const image = r.data.image || meta.image;
     const siteName = meta.siteName;
+    const tags = r.data.tags || [];
 
     return {
       href: r.data.url,
@@ -126,18 +81,11 @@ const cards = await Promise.all(
       image,
       siteName,
       type: normalizeType(r.data.type || 'other'),
+      tags,
+      search: `${title} ${description ?? ''} ${siteName ?? ''} ${r.data.url}`.toLowerCase()
     };
   })
 );
-
-const activeTypeLabel = activeType ? typeLabel(activeType) : 'All types';
-const topicLabel = activeTag || 'All topics';
-
-const ChevronDown = () => `
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <path d="m6 9 6 6 6-6" />
-  </svg>
-`;
 ---
 
 <Layout
@@ -153,211 +101,116 @@ const ChevronDown = () => `
         </p>
       </div>
 
-      {(allTags.length > 0 || allTypes.length > 0) && (
-        <div class="mt-8 rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5">
-          <div class="grid grid-cols-1 gap-4 sm:grid-cols-[1.2fr_1fr_1fr_auto] sm:items-end">
-            <div>
-              <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-2">Search</div>
-              <div class="relative">
-                <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-white/45">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <circle cx="11" cy="11" r="7" />
-                    <path d="m20 20-3.5-3.5" />
-                  </svg>
-                </span>
-                <input
-                  id="resource_search"
-                  type="search"
-                  placeholder="Search resources…"
-                  class="w-full h-11 rounded-xl bg-[#131313]/60 border border-white/10 pl-10 pr-3 text-sm text-white/85 placeholder:text-white/40 focus:border-primary/70 focus:outline-none focus:ring-4 focus:ring-primary/15"
-                  autocomplete="off"
-                  aria-label="Search resources"
-                />
-              </div>
-            </div>
-
-            <div>
-              <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-2">Type</div>
-              <details class="group relative">
-                <summary
-                  class="list-none cursor-pointer select-none w-full h-11 rounded-xl bg-[#131313]/60 border border-white/10 px-3 text-sm text-white/85 flex items-center justify-between gap-3 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/15"
-                  aria-label="Filter by type"
-                >
-                  <span class="truncate">{activeTypeLabel}</span>
-                  <span class="text-white/50 group-open:rotate-180 transition-transform">
-                    <Fragment set:html={ChevronDown()} />
-                  </span>
-                </summary>
-
-                <div class="absolute z-20 mt-2 w-full rounded-xl border border-white/10 bg-[#0f0f10]/95 backdrop-blur p-2 shadow-2xl">
-                  <a
-                    href={buildHref({ type: null })}
-                    class:list={[
-                      'flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors',
-                      !activeType ? 'bg-white/[0.05] text-white/90' : 'text-white/70 hover:bg-white/[0.04] hover:text-white',
-                    ]}
-                  >
-                    <span>All types</span>
-                  </a>
-
-                  <div class="my-2 h-px bg-white/10"></div>
-
-                  <div class="max-h-64 overflow-auto pr-1">
-                    {allTypes.map((t) => (
-                      <a
-                        href={buildHref({ type: t })}
-                        class:list={[
-                          'flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors',
-                          activeType === t
-                            ? 'bg-white/[0.05] text-white/90'
-                            : 'text-white/70 hover:bg-white/[0.04] hover:text-white',
-                        ]}
-                      >
-                        <span>{typeLabel(t)}</span>
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              </details>
-            </div>
-
-            <div>
-              <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-2">Topic</div>
-              <details class="group relative">
-                <summary
-                  class="list-none cursor-pointer select-none w-full h-11 rounded-xl bg-[#131313]/60 border border-white/10 px-3 text-sm text-white/85 flex items-center justify-between gap-3 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/15"
-                  aria-label="Filter by topic"
-                >
-                  <span class="truncate">{topicLabel}</span>
-                  <span class="text-white/50 group-open:rotate-180 transition-transform">
-                    <Fragment set:html={ChevronDown()} />
-                  </span>
-                </summary>
-
-                <div class="absolute z-20 mt-2 w-full rounded-xl border border-white/10 bg-[#0f0f10]/95 backdrop-blur p-2 shadow-2xl">
-                  <a
-                    href={buildHref({ tag: null })}
-                    class:list={[
-                      'flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors',
-                      !activeTag ? 'bg-white/[0.05] text-white/90' : 'text-white/70 hover:bg-white/[0.04] hover:text-white',
-                    ]}
-                  >
-                    <span>All topics</span>
-                  </a>
-
-                  <div class="my-2 h-px bg-white/10"></div>
-
-                  <div class="max-h-64 overflow-auto pr-1">
-                    {allTags.map((t) => (
-                      <a
-                        href={buildHref({ tag: t })}
-                        class:list={[
-                          'flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors',
-                          activeTag === t
-                            ? 'bg-white/[0.05] text-white/90'
-                            : 'text-white/70 hover:bg-white/[0.04] hover:text-white',
-                        ]}
-                      >
-                        <span>{t}</span>
-                      </a>
-                    ))}
-                  </div>
-                </div>
-              </details>
-            </div>
-
-            <div class="flex items-end justify-end gap-2">
-              {(activeTag || activeType) ? (
-                <a
-                  href="/resources"
-                  class="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-white/70 transition-colors hover:bg-white/[0.06] hover:text-white focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/15"
-                  aria-label="Clear filters"
-                  title="Clear filters"
-                >
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    aria-hidden="true"
-                  >
-                    <path d="M18 6 6 18" />
-                    <path d="m6 6 12 12" />
-                  </svg>
-                </a>
-              ) : null}
-            </div>
-          </div>
+      <!-- Filter UI -->
+      <div class="mt-8 space-y-4">
+        <!-- Search -->
+        <div class="relative">
+          <label for="resource-search" class="sr-only">Search resources</label>
+          <input
+            type="text"
+            id="resource-search"
+            placeholder="Search resources..."
+            class="w-full max-w-md px-4 py-2.5 pl-10 pr-12 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-white/40 focus:outline-none focus:border-primary/50 focus:ring-2 focus:ring-primary/20 transition-all"
+          />
+          <span class="absolute right-3 top-1/2 -translate-y-1/2 kbd pointer-events-none" id="search-kbd-hint">/</span>
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
         </div>
-      )}
+        
+        <!-- Category chips - horizontal scroll on mobile, wrap on desktop -->
+        <div class="flex gap-2 overflow-x-auto md:flex-wrap pb-2 md:pb-0 scrollbar-hide" id="category-filters">
+          {filterCategories.map((cat, idx) => (
+            <button
+              type="button"
+              data-category={cat.value}
+              aria-pressed={idx === 0 ? "true" : "false"}
+              class:list={[
+                "filter-chip shrink-0 px-3 py-1.5 rounded-full text-xs font-medium border transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50",
+                idx === 0 
+                  ? "bg-primary/20 border-primary/40 text-primary" 
+                  : "bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:border-white/20"
+              ]}
+            >
+              {cat.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <!-- Results info bar -->
+      <div class="mt-6 flex items-center justify-between text-sm" id="results-bar">
+        <span class="text-white/50" id="results-count">
+          Showing <span class="text-white/80 font-medium" data-count>{totalCount}</span> of {totalCount} resources
+        </span>
+        <button
+          type="button"
+          id="clear-filters"
+          class="hidden items-center gap-1.5 text-white/50 hover:text-white transition-colors"
+        >
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+          Clear filters
+        </button>
+      </div>
 
       <style>
-        /* Hide default marker in Safari */
-        details > summary::-webkit-details-marker { display: none; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Card animations */
+        [data-resource-card] {
+          transition: opacity 0.2s ease, transform 0.25s ease;
+        }
+        [data-resource-card].hiding {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+        [data-resource-card].hidden {
+          display: none;
+        }
+        [data-resource-card].showing {
+          animation: cardFadeIn 0.25s ease forwards;
+        }
+        @keyframes cardFadeIn {
+          from { opacity: 0; transform: scale(0.95); }
+          to { opacity: 1; transform: scale(1); }
+        }
+        
+        /* Staggered entrance on page load */
+        [data-resource-card] {
+          opacity: 0;
+          animation: cardEntrance 0.4s ease forwards;
+        }
+        @keyframes cardEntrance {
+          from { opacity: 0; transform: translateY(12px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Keyboard hint */
+        .kbd {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 1.25rem;
+          height: 1.25rem;
+          padding: 0 0.25rem;
+          font-size: 0.65rem;
+          font-family: ui-monospace, monospace;
+          background: rgba(255,255,255,0.08);
+          border: 1px solid rgba(255,255,255,0.15);
+          border-radius: 4px;
+          color: rgba(255,255,255,0.5);
+        }
       </style>
 
-      <div class="mt-10">
+      <div class="mt-4">
         <div
-          class="columns-1 sm:columns-2 lg:columns-3 gap-6 md:gap-8 space-y-6 md:space-y-8"
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
           data-resource-list
         >
-          {/* Featured Tool Card - AI Readiness Audit */}
-          <a
-            href="/audit"
-            class="group block break-inside-avoid rounded-2xl border-2 border-primary/30 bg-primary/5 overflow-hidden transition-all hover:-translate-y-0.5 hover:border-primary/50 hover:bg-primary/10 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
-            data-resource-card
-            data-search="ai readiness audit tool seo metadata structured data accessibility"
-          >
-            <div class="p-5">
-              <div class="flex items-center gap-2 mb-2">
-                <span class="inline-flex items-center rounded-full bg-primary/20 border border-primary/30 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary">
-                  Tool
-                </span>
-                <span class="text-[10px] text-white/50 uppercase tracking-wider">Featured</span>
-              </div>
-              <h3 class="text-base font-semibold text-white/95 group-hover:text-primary transition-colors">
-                AI Readiness Audit
-              </h3>
-              <p class="mt-2 text-sm text-white/70">
-                Check if your site is readable to AI systems: indexability, metadata, structured data, and accessibility.
-              </p>
-              <p class="mt-3 text-xs text-white/50">
-                Free • No signup required
-              </p>
-            </div>
-          </a>
-
-          {/* Featured Tool Card - llms.txt Generator */}
-          <a
-            href="/tools/llms-generator"
-            class="group block break-inside-avoid rounded-2xl border-2 border-primary/30 bg-primary/5 overflow-hidden transition-all hover:-translate-y-0.5 hover:border-primary/50 hover:bg-primary/10 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
-            data-resource-card
-            data-search="llms.txt generator tool ai seo sitemap chatgpt claude"
-          >
-            <div class="p-5">
-              <div class="flex items-center gap-2 mb-2">
-                <span class="inline-flex items-center rounded-full bg-primary/20 border border-primary/30 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary">
-                  Tool
-                </span>
-                <span class="text-[10px] text-white/50 uppercase tracking-wider">Featured</span>
-              </div>
-              <h3 class="text-base font-semibold text-white/95 group-hover:text-primary transition-colors">
-                llms.txt Generator
-              </h3>
-              <p class="mt-2 text-sm text-white/70">
-                Generate a standard "map" file for AI agents to easily understand your website structure.
-              </p>
-              <p class="mt-3 text-xs text-white/50">
-                Free • AI Auto-fill
-              </p>
-            </div>
-          </a>
-
-          {cards.map((c) => (
+          {cards.map((c, i) => (
             <ResourceCard
               href={c.href}
               title={c.title}
@@ -365,15 +218,23 @@ const ChevronDown = () => `
               image={c.image}
               siteName={c.siteName}
               type={c.type}
+              tags={c.tags}
+              index={i}
             />
           ))}
         </div>
 
         <div
-          class="hidden mt-10 rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-white/70"
+          class="hidden mt-10 rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-center"
           data-resource-empty
         >
-          No matches.
+          <p class="text-white/70 mb-4">No resources found.</p>
+          <button
+            type="button"
+            class="clear-all-btn text-sm text-primary hover:text-primary/80 transition-colors"
+          >
+            Clear filters
+          </button>
         </div>
 
         {cards.length === 0 && (
@@ -383,58 +244,199 @@ const ChevronDown = () => `
         )}
       </div>
 
-      <script is:inline>
+      <script is:inline define:vars={{ totalCount }}>
         (() => {
-          const input = document.getElementById('resource_search');
-          const list = document.querySelector('[data-resource-list]');
+          const searchInput = document.getElementById('resource-search');
+          const categoryFilters = document.getElementById('category-filters');
+          const clearBtn = document.getElementById('clear-filters');
+          const resultsCount = document.querySelector('[data-count]');
           const empty = document.querySelector('[data-resource-empty]');
+          const clearAllBtns = document.querySelectorAll('.clear-all-btn');
+          const kbdHint = document.getElementById('search-kbd-hint');
 
-          const getQ = () => {
-            try {
-              const url = new URL(window.location.href);
-              return (url.searchParams.get('q') || '').trim();
-            } catch {
-              return '';
-            }
+          let currentQuery = '';
+          let currentCategory = '';
+          let filterTimeout = null;
+          
+          const updateChipStyles = () => {
+            const chips = categoryFilters.querySelectorAll('.filter-chip');
+            chips.forEach(chip => {
+              const isActive = chip.getAttribute('data-category') === currentCategory;
+              chip.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+              if (isActive) {
+                chip.className = 'filter-chip shrink-0 px-3 py-1.5 rounded-full text-xs font-medium border transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 bg-primary/20 border-primary/40 text-primary';
+              } else {
+                chip.className = 'filter-chip shrink-0 px-3 py-1.5 rounded-full text-xs font-medium border transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 bg-white/5 border-white/10 text-white/70 hover:bg-white/10 hover:border-white/20';
+              }
+            });
           };
 
-          const setQ = (q) => {
-            try {
-              const url = new URL(window.location.href);
-              if (!q) url.searchParams.delete('q');
-              else url.searchParams.set('q', q);
-              window.history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
-            } catch {
-              // ignore
+          const updateURL = () => {
+            const url = new URL(window.location.href);
+            if (currentQuery) {
+              url.searchParams.set('q', currentQuery);
+            } else {
+              url.searchParams.delete('q');
             }
+            if (currentCategory) {
+              url.searchParams.set('cat', currentCategory);
+            } else {
+              url.searchParams.delete('cat');
+            }
+            history.replaceState({}, '', url.toString());
           };
 
-          const apply = (q) => {
-            const query = String(q || '').toLowerCase().trim();
+          const updateClearButton = () => {
+            const hasFilters = currentQuery || currentCategory;
+            clearBtn.classList.toggle('hidden', !hasFilters);
+            clearBtn.classList.toggle('inline-flex', hasFilters);
+          };
+          
+          const applyFilter = () => {
+            const q = currentQuery.toLowerCase().trim();
+            const cat = currentCategory.toLowerCase();
             const cards = Array.from(document.querySelectorAll('[data-resource-card]'));
             let shown = 0;
+            
+            // Clear any pending animation timeout
+            if (filterTimeout) clearTimeout(filterTimeout);
+
+            const toHide = [];
+            const toShow = [];
 
             for (const el of cards) {
-              const hay = (el.getAttribute('data-search') || '').toLowerCase();
-              const match = !query || hay.includes(query);
-              el.classList.toggle('hidden', !match);
-              if (match) shown += 1;
+              const searchText = (el.getAttribute('data-search') || '').toLowerCase();
+              const cardTags = (el.getAttribute('data-tags') || '').toLowerCase().split(',');
+              const cardType = (el.getAttribute('data-type') || '').toLowerCase();
+              
+              // Text search matches against search text
+              const matchesQuery = !q || searchText.includes(q);
+              
+              // Category uses exact tag matching
+              let matchesCategory = !cat;
+              if (cat) {
+                // Check if category matches any tag or the type
+                matchesCategory = cardTags.some(tag => tag.includes(cat)) || cardType.includes(cat);
+              }
+              
+              const match = matchesQuery && matchesCategory;
+              const isCurrentlyHidden = el.classList.contains('hidden');
+              
+              if (match) {
+                shown += 1;
+                if (isCurrentlyHidden) toShow.push(el);
+              } else {
+                if (!isCurrentlyHidden) toHide.push(el);
+              }
             }
 
-            if (empty) empty.classList.toggle('hidden', shown !== 0);
+            // Animate out cards that should hide
+            toHide.forEach(el => {
+              el.classList.add('hiding');
+            });
+
+            // After hide animation, actually hide them and show new ones
+            filterTimeout = setTimeout(() => {
+              toHide.forEach(el => {
+                el.classList.remove('hiding');
+                el.classList.add('hidden');
+              });
+              
+              // Show cards with staggered animation
+              toShow.forEach((el, i) => {
+                el.classList.remove('hidden');
+                el.classList.add('showing');
+                el.style.animationDelay = `${i * 30}ms`;
+              });
+              
+              // Clean up showing class after animation
+              setTimeout(() => {
+                toShow.forEach(el => {
+                  el.classList.remove('showing');
+                  el.style.animationDelay = '';
+                });
+              }, 300 + toShow.length * 30);
+            }, toHide.length > 0 ? 200 : 0);
+
+            // Update count
+            if (resultsCount) {
+              resultsCount.textContent = shown.toString();
+            }
+
+            // Show/hide empty state
+            if (empty) {
+              empty.classList.toggle('hidden', shown !== 0);
+            }
+
+            updateClearButton();
+            updateURL();
           };
 
-          const init = () => {
-            if (!(input instanceof HTMLInputElement)) return;
-            const initial = getQ();
-            if (initial) input.value = initial;
-            apply(input.value);
+          const clearFilters = () => {
+            currentQuery = '';
+            currentCategory = '';
+            searchInput.value = '';
+            updateChipStyles();
+            applyFilter();
+          };
 
-            input.addEventListener('input', () => {
-              const q = input.value.trim();
-              setQ(q);
-              apply(q);
-            });
+          // Event listeners
+          searchInput.addEventListener('input', (e) => {
+            currentQuery = e.target.value;
+            applyFilter();
+          });
+
+          // Escape key clears search
+          searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+              searchInput.value = '';
+              currentQuery = '';
+              applyFilter();
+              searchInput.blur();
+            }
+          });
+
+          categoryFilters.addEventListener('click', (e) => {
+            const chip = e.target.closest('.filter-chip');
+            if (!chip) return;
+            currentCategory = chip.getAttribute('data-category') || '';
+            updateChipStyles();
+            applyFilter();
+          });
+
+          clearBtn.addEventListener('click', clearFilters);
+          clearAllBtns.forEach(btn => btn.addEventListener('click', clearFilters));
+
+          // Global keyboard shortcuts
+          document.addEventListener('keydown', (e) => {
+            // "/" to focus search (when not in an input)
+            if (e.key === '/' && document.activeElement !== searchInput && !e.ctrlKey && !e.metaKey) {
+              e.preventDefault();
+              searchInput.focus();
+              searchInput.select();
+            }
+          });
+
+          // Hide kbd hint when focused, show when blurred
+          searchInput.addEventListener('focus', () => {
+            if (kbdHint) kbdHint.style.opacity = '0';
+          });
+          searchInput.addEventListener('blur', () => {
+            if (kbdHint && !searchInput.value) kbdHint.style.opacity = '1';
+          });
+
+          // Initialize from URL
+          const init = () => {
+            const p = new URLSearchParams(window.location.search);
+            if (p.has('q')) {
+              currentQuery = p.get('q') || '';
+              searchInput.value = currentQuery;
+            }
+            if (p.has('cat')) {
+              currentCategory = p.get('cat') || '';
+              updateChipStyles();
+            }
+            applyFilter();
           };
 
           init();

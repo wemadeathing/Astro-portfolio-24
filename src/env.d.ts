@@ -9,7 +9,7 @@ interface ImportMetaEnv {
   readonly MAILERLITE_API_TOKEN?: string;
   readonly MAILERLITE_GROUP_ID?: string;
   readonly MAILERLITE_API_BASE_URL?: string;
-  readonly OPENAI_API_KEY?: string;
+  readonly GEMINI_API_KEY?: string;
 }
 
 interface ImportMeta {

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Bot, Menu, Send, StopCircle, User, X } from 'lucide-react';
 import ProjectCard from './ProjectCard';
+import ResourceCard from './ResourceCard';
 
 interface ProjectData {
   title: string;
@@ -10,11 +11,22 @@ interface ProjectData {
   slug: string;
 }
 
+interface ResourceData {
+  title: string;
+  description: string;
+  url: string;
+  type: string;
+  tags: string[];
+  image?: string;
+  siteName?: string;
+}
+
 interface Message {
   id: string;
   role: 'user' | 'assistant';
   content: string;
   projects?: ProjectData[];
+  resources?: ResourceData[];
   chips?: { label: string; href: string; kind?: string }[];
 }
 
@@ -351,6 +363,7 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
         applyAssistantPatch({
           content: data.reply || 'Sorry, I had trouble connecting. You can retry.',
           projects: Array.isArray(data.projects) ? data.projects : undefined,
+          resources: Array.isArray(data.resources) ? data.resources : undefined,
           chips: Array.isArray(data.chips) ? data.chips : undefined,
         });
         return;
@@ -381,6 +394,7 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
           applyAssistantPatch({
             content: typeof parsed.reply === 'string' ? parsed.reply : '',
             projects: Array.isArray(parsed.projects) ? parsed.projects : undefined,
+            resources: Array.isArray(parsed.resources) ? parsed.resources : undefined,
             chips: Array.isArray(parsed.chips) ? parsed.chips : undefined,
           });
           return;
@@ -980,6 +994,33 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
                           className="min-w-[240px] sm:min-w-[260px] md:min-w-[300px] snap-start"
                         >
                           <ProjectCard {...project} />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Render resource cards when present */}
+                {msg.role === 'assistant' && msg.resources && msg.resources.length > 0 && (
+                  <div className="w-full pl-12 pr-2 mt-4">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                        Resources
+                      </span>
+                      <a
+                        href="/resources"
+                        className="text-xs text-muted-foreground/80 hover:text-foreground transition-colors"
+                      >
+                        View all →
+                      </a>
+                    </div>
+                    <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory">
+                      {msg.resources.map((resource) => (
+                        <div
+                          key={resource.url}
+                          className="min-w-[200px] sm:min-w-[220px] md:min-w-[240px] snap-start"
+                        >
+                          <ResourceCard {...resource} />
                         </div>
                       ))}
                     </div>
