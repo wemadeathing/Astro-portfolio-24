@@ -4,7 +4,6 @@ import Groq from 'groq-sdk';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { z } from 'zod';
 import aboutPageSource from '../about.astro?raw';
-import { getResourceMeta } from '../../lib/resource-meta';
 
 const ModelJsonSchema = z.object({
   answer: z.string().min(1),
@@ -77,7 +76,7 @@ const MAX_MESSAGE_CHARS = 2000;
 const rl = (() => {
   const byIp = new Map<string, number[]>();
   const WINDOW_MS = 60_000;
-  const MAX_PER_WINDOW = 25;
+  const MAX_PER_WINDOW = 10; // Reduced from 25 to 10 to avoid API rate limits
 
   const allow = (ip: string) => {
     const now = Date.now();
@@ -89,6 +88,41 @@ const rl = (() => {
   };
 
   return { allow };
+})();
+
+// Global API rate limit tracker to prevent hitting provider limits
+const apiRateLimiter = (() => {
+  const groqCalls: number[] = [];
+  const geminiCalls: number[] = [];
+  const WINDOW_MS = 60_000;
+  const MAX_GROQ_PER_MINUTE = 30; // Groq free tier limit
+  const MAX_GEMINI_PER_MINUTE = 15; // Gemini free tier limit (more conservative)
+
+  const canCallGroq = () => {
+    const now = Date.now();
+    const recent = groqCalls.filter((t) => now - t < WINDOW_MS);
+    if (recent.length >= MAX_GROQ_PER_MINUTE) return false;
+    groqCalls.push(now);
+    // Keep array size manageable
+    if (groqCalls.length > MAX_GROQ_PER_MINUTE * 2) {
+      groqCalls.splice(0, groqCalls.length - MAX_GROQ_PER_MINUTE);
+    }
+    return true;
+  };
+
+  const canCallGemini = () => {
+    const now = Date.now();
+    const recent = geminiCalls.filter((t) => now - t < WINDOW_MS);
+    if (recent.length >= MAX_GEMINI_PER_MINUTE) return false;
+    geminiCalls.push(now);
+    // Keep array size manageable
+    if (geminiCalls.length > MAX_GEMINI_PER_MINUTE * 2) {
+      geminiCalls.splice(0, geminiCalls.length - MAX_GEMINI_PER_MINUTE);
+    }
+    return true;
+  };
+
+  return { canCallGroq, canCallGemini };
 })();
 
 const getClientIp = (request: Request) => {
@@ -251,12 +285,28 @@ const sanitizeChips = (chips: unknown, projectSlugs: Set<string>, blogSlugs: Set
   return out;
 };
 
+let _collectionsCache: {
+  projects: Awaited<ReturnType<typeof getCollection>>;
+  blogPosts: Awaited<ReturnType<typeof getCollection>>;
+  resources: Awaited<ReturnType<typeof getCollection>>;
+  knowledge: string;
+  ts: number;
+} | null = null;
+
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+
 export const POST: APIRoute = async ({ request }) => {
   try {
     const ip = getClientIp(request);
     if (!rl.allow(ip)) {
       return json({ reply: 'Too many requests. Please wait a moment and try again.' }, 429);
     }
+
+    // Netlify free-tier: 10s, paid: 26s. Use 25s to be safe for paid, or 9s for free.
+    // Adjust FUNCTION_DEADLINE_MS based on your Netlify plan.
+    const FUNCTION_DEADLINE_MS = 25_000;
+    const requestStart = Date.now();
+    const remainingMs = () => Math.max(0, FUNCTION_DEADLINE_MS - (Date.now() - requestStart));
 
     const body = await request.json();
     const userMessageRaw = body?.message;
@@ -300,17 +350,18 @@ export const POST: APIRoute = async ({ request }) => {
       );
     }
 
-    // 1) Gather content (the "brain")
-    // Only include published content
-    const projects = await getCollection('projects', ({ data }) => {
-      return data.published !== false;
-    });
-    const blogPosts = await getCollection('blog', ({ data }) => {
-      return data.draft !== true;
-    });
-    const resources = await getCollection('resources');
-    const knowledgeEntry = await getEntry('assistant', 'knowledge');
-    const knowledge = knowledgeEntry?.body ?? '';
+    // 1) Gather content (the "brain") – with module-level caching for warm invocations
+    const now = Date.now();
+    if (!_collectionsCache || now - _collectionsCache.ts > CACHE_TTL_MS) {
+      const [projects, blogPosts, resources, knowledgeEntry] = await Promise.all([
+        getCollection('projects', ({ data }) => data.published !== false),
+        getCollection('blog', ({ data }) => data.draft !== true),
+        getCollection('resources'),
+        getEntry('assistant', 'knowledge'),
+      ]);
+      _collectionsCache = { projects, blogPosts, resources, knowledge: knowledgeEntry?.body ?? '', ts: now };
+    }
+    const { projects, blogPosts, resources, knowledge } = _collectionsCache;
 
     const projectSlugs = new Set(projects.map((p) => p.slug));
     const blogSlugs = new Set(blogPosts.map((b) => b.slug));
@@ -469,7 +520,7 @@ export const POST: APIRoute = async ({ request }) => {
         })) as ProjectCard[];
     };
 
-    const makeCardResources = async (titles: string[]): Promise<ResourceCard[]> => {
+    const makeCardResources = (titles: string[]): ResourceCard[] => {
       const wanted = titles
         .map((s) => String(s || '').trim())
         .filter(Boolean)
@@ -512,22 +563,16 @@ export const POST: APIRoute = async ({ request }) => {
         console.warn('LLM hallucinated resource titles:', hallucinated.join(', '));
       }
 
-      // Fetch metadata for images
-      const matched = await Promise.all(
-        hits.map(async (hit) => {
-          const meta = await getResourceMeta(hit.data.url);
-          return {
-            title: hit.data.title,
-            description: hit.data.description ?? '',
-            url: hit.data.url,
-            type: hit.data.type ?? 'other',
-            tags: (hit.data as any).tags ?? [],
-            image: (hit.data as any).image || meta.image,
-            siteName: meta.siteName,
-          };
-        })
-      );
-      return matched;
+      // Return card data without external metadata fetches to avoid timeout on serverless
+      return hits.map((hit) => ({
+        title: hit.data.title,
+        description: hit.data.description ?? '',
+        url: hit.data.url,
+        type: hit.data.type ?? 'other',
+        tags: (hit.data as any).tags ?? [],
+        image: (hit.data as any).image || undefined,
+        siteName: undefined,
+      }));
     };
 
     const makeCardBlogs = (slugs: string[]) => {
@@ -588,8 +633,8 @@ export const POST: APIRoute = async ({ request }) => {
         })) as BlogCard[];
     };
 
-    // 2) Offline mode (no API key)
-    if (!import.meta.env.GROQ_API_KEY && !import.meta.env.GEMINI_API_KEY) {
+    // 2) Offline mode (no API keys available)
+    if (!import.meta.env.GROQ_API_KEY && !import.meta.env.GEMINI_API_KEY && !import.meta.env.OPENROUTER_API_KEY) {
       const lowerMsg = userMessage.toLowerCase();
       const wantsWork =
         lowerMsg.includes('project') ||
@@ -638,35 +683,47 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // 3. LLM call with fallback (Groq primary, Gemini fallback)
-    const callGroq = async (messages: { role: 'system' | 'user' | 'assistant'; content: string }[]): Promise<string> => {
+    const callGroq = async (messages: { role: 'system' | 'user' | 'assistant'; content: string }[], timeoutMs: number, retryCount = 0): Promise<string> => {
       const groq = new Groq({ apiKey: import.meta.env.GROQ_API_KEY });
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), timeoutMs);
       try {
-        const completion = await groq.chat.completions.create({
-          model: 'llama-3.3-70b-versatile',
-          messages,
-          response_format: { type: 'json_object' },
-          temperature: 0.7,
-          max_tokens: 1024,
-        });
+        const completion = await groq.chat.completions.create(
+          {
+            model: 'llama-3.3-70b-versatile',
+            messages,
+            response_format: { type: 'json_object' },
+            temperature: 0.7,
+            max_tokens: 1024,
+          },
+          { signal: controller.signal }
+        );
         return completion.choices[0]?.message?.content || '';
       } catch (error: any) {
-        // Categorize Groq errors
-        if (error?.status === 401 || error?.message?.includes('auth')) {
-          throw new Error('GROQ_AUTH_ERROR');
+        console.error('Groq raw error:', { message: error?.message, status: error?.status, code: error?.code, name: error?.name, type: error?.type });
+        if (error?.name === 'AbortError' || error?.message?.includes('abort')) throw new Error('GROQ_TIMEOUT');
+        if (error?.status === 401 || error?.message?.includes('auth')) throw new Error('GROQ_AUTH_ERROR');
+
+        // Retry rate limit errors once with a small delay
+        if ((error?.status === 429 || error?.message?.includes('rate limit')) && retryCount === 0) {
+          console.log('Groq rate limit hit, retrying after 1s delay...');
+          clearTimeout(timer);
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          // Reduce timeout by the delay we just waited
+          return callGroq(messages, Math.max(timeoutMs - 1000, 3000), 1);
         }
-        if (error?.status === 429 || error?.message?.includes('rate limit')) {
-          throw new Error('GROQ_RATE_LIMIT');
-        }
-        if (error?.code === 'ETIMEDOUT' || error?.code === 'ECONNABORTED') {
-          throw new Error('GROQ_TIMEOUT');
-        }
-        // Generic network/API error
+
+        if (error?.status === 429 || error?.message?.includes('rate limit')) throw new Error('GROQ_RATE_LIMIT');
+        if (error?.message?.includes('TIMEOUT') || error?.code === 'ETIMEDOUT' || error?.code === 'ECONNABORTED') throw new Error('GROQ_TIMEOUT');
         throw new Error('GROQ_API_ERROR');
+      } finally {
+        clearTimeout(timer);
       }
     };
 
-    const callGemini = async (systemPrompt: string, userMessage: string, history: { role: string; content: string }[]): Promise<string> => {
+    const callGemini = async (systemPrompt: string, userMessage: string, history: { role: string; content: string }[], timeoutMs: number, retryCount = 0): Promise<string> => {
       const genAI = new GoogleGenerativeAI(import.meta.env.GEMINI_API_KEY);
+      let timeoutTimer: ReturnType<typeof setTimeout> | null = null;
       try {
         const model = genAI.getGenerativeModel({
           model: 'gemini-2.0-flash',
@@ -683,21 +740,82 @@ export const POST: APIRoute = async ({ request }) => {
             ...geminiHistory,
           ],
         });
-        const result = await chat.sendMessage(userMessage);
+        const result = await Promise.race([
+          chat.sendMessage(userMessage),
+          new Promise<never>((_, reject) => {
+            timeoutTimer = setTimeout(() => reject(new Error('GEMINI_TIMEOUT')), timeoutMs);
+          }),
+        ]);
         return result.response.text() || '';
       } catch (error: any) {
-        // Categorize Gemini errors
-        if (error?.message?.includes('API key') || error?.message?.includes('auth')) {
-          throw new Error('GEMINI_AUTH_ERROR');
+        console.error('Gemini raw error:', { message: error?.message, status: error?.status, code: error?.code, name: error?.name, type: error?.type });
+        if (error?.message?.includes('API key') || error?.message?.includes('auth')) throw new Error('GEMINI_AUTH_ERROR');
+
+        // Retry rate limit errors once with a small delay
+        if ((error?.message?.includes('quota') || error?.message?.includes('rate')) && retryCount === 0) {
+          console.log('Gemini rate limit hit, retrying after 1.5s delay...');
+          if (timeoutTimer) clearTimeout(timeoutTimer);
+          await new Promise(resolve => setTimeout(resolve, 1500));
+          // Reduce timeout by the delay we just waited
+          return callGemini(systemPrompt, userMessage, history, Math.max(timeoutMs - 1500, 3000), 1);
         }
-        if (error?.message?.includes('quota') || error?.message?.includes('rate')) {
-          throw new Error('GEMINI_RATE_LIMIT');
-        }
-        if (error?.code === 'ETIMEDOUT' || error?.code === 'ECONNABORTED') {
-          throw new Error('GEMINI_TIMEOUT');
-        }
-        // Generic network/API error
+
+        if (error?.message?.includes('quota') || error?.message?.includes('rate')) throw new Error('GEMINI_RATE_LIMIT');
+        if (error?.message?.includes('TIMEOUT') || error?.code === 'ETIMEDOUT' || error?.code === 'ECONNABORTED') throw new Error('GEMINI_TIMEOUT');
         throw new Error('GEMINI_API_ERROR');
+      } finally {
+        if (timeoutTimer) clearTimeout(timeoutTimer);
+      }
+    };
+
+    const callOpenRouter = async (messages: { role: 'system' | 'user' | 'assistant'; content: string }[], timeoutMs: number, retryCount = 0): Promise<string> => {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), timeoutMs);
+      try {
+        const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${import.meta.env.OPENROUTER_API_KEY}`,
+            'Content-Type': 'application/json',
+            'HTTP-Referer': 'https://nasifsalaam.com',
+            'X-Title': 'Nasif Salaam Portfolio Chat',
+          },
+          body: JSON.stringify({
+            model: 'deepseek/deepseek-chat', // DeepSeek V3.2 (your default with credits)
+            messages,
+            temperature: 0.7,
+            max_tokens: 1024,
+          }),
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('OpenRouter API error:', { status: response.status, body: errorText });
+
+          if (response.status === 401) throw new Error('OPENROUTER_AUTH_ERROR');
+          if (response.status === 429) {
+            // Retry once with delay
+            if (retryCount === 0) {
+              console.log('OpenRouter rate limit hit, retrying after 2s delay...');
+              clearTimeout(timer);
+              await new Promise(resolve => setTimeout(resolve, 2000));
+              return callOpenRouter(messages, Math.max(timeoutMs - 2000, 3000), 1);
+            }
+            throw new Error('OPENROUTER_RATE_LIMIT');
+          }
+          throw new Error('OPENROUTER_API_ERROR');
+        }
+
+        const data = await response.json();
+        return data.choices?.[0]?.message?.content || '';
+      } catch (error: any) {
+        console.error('OpenRouter raw error:', { message: error?.message, name: error?.name });
+        if (error?.name === 'AbortError' || error?.message?.includes('abort')) throw new Error('OPENROUTER_TIMEOUT');
+        if (error?.message?.includes('OPENROUTER_')) throw error; // Re-throw our custom errors
+        throw new Error('OPENROUTER_API_ERROR');
+      } finally {
+        clearTimeout(timer);
       }
     };
 
@@ -749,8 +867,11 @@ Examples of when NOT to use bullets:
 - "are you available?" → plain text paragraph
 - "how do you work remotely?" → plain text paragraph
 
-IMPORTANT OUTPUT FORMAT:
-- You MUST reply with a single JSON object (no markdown wrapper, no extra text).
+CRITICAL RESPONSE FORMAT:
+- You MUST reply with ONLY a valid JSON object
+- DO NOT wrap your response in markdown code blocks (no \`\`\`json\`\`\`)
+- DO NOT include any text before or after the JSON
+- Your entire response must be parseable by JSON.parse()
 - Schema:
 {
   "answer": string, // Use plain text for casual questions, use bullets (•) when user asks to "list" or for recruitment queries
@@ -891,41 +1012,102 @@ ${resourceContext}
       { role: 'user', content: userMessage },
     ];
 
-    // Try Groq first, fall back to Gemini
+    // Try OpenRouter FIRST (paid, reliable), then free tiers as fallbacks
     let raw = '';
-    let usedProvider = 'groq';
+    let usedProvider = 'openrouter';
     let lastError: Error | null = null;
 
-    if (import.meta.env.GROQ_API_KEY) {
+    // PRIMARY: OpenRouter (DeepSeek with credits - fast and reliable)
+    if (import.meta.env.OPENROUTER_API_KEY) {
       try {
-        raw = await callGroq(messages);
-      } catch (groqError: any) {
-        lastError = groqError;
-        console.error('Groq API failed:', groqError?.message || groqError);
-        if (import.meta.env.GEMINI_API_KEY) {
-          try {
-            raw = await callGemini(systemPrompt, userMessage, history);
-            usedProvider = 'gemini';
-            lastError = null; // Clear error since Gemini succeeded
-          } catch (geminiError: any) {
-            lastError = geminiError;
-            console.error('Gemini fallback also failed:', geminiError?.message || geminiError);
-            throw geminiError;
-          }
-        } else {
-          throw groqError;
+        const openrouterBudget = Math.min(remainingMs() - 2000, 15000);
+        if (openrouterBudget < 3000) throw new Error('OPENROUTER_TIMEOUT');
+        console.log(`OpenRouter PRIMARY time budget: ${openrouterBudget}ms (remaining: ${remainingMs()}ms)`);
+        raw = await callOpenRouter(messages, openrouterBudget);
+        usedProvider = 'openrouter';
+      } catch (openrouterError: any) {
+        lastError = openrouterError;
+        console.error('OpenRouter failed:', openrouterError?.message || openrouterError);
+      }
+    }
+
+    // FALLBACK 1: Groq (free tier)
+    if (!raw && import.meta.env.GROQ_API_KEY) {
+      if (!apiRateLimiter.canCallGroq()) {
+        console.warn('Groq API rate limit reached (local throttle)');
+        lastError = new Error('GROQ_RATE_LIMIT');
+      } else {
+        try {
+          const groqBudget = Math.min(remainingMs() - 2000, 12000);
+          if (groqBudget < 3000) throw new Error('GROQ_TIMEOUT');
+          console.log(`Groq FALLBACK time budget: ${groqBudget}ms (remaining: ${remainingMs()}ms)`);
+          raw = await callGroq(messages, groqBudget);
+          usedProvider = 'groq';
+          lastError = null;
+        } catch (groqError: any) {
+          lastError = groqError;
+          console.error('Groq fallback also failed:', groqError?.message || groqError);
         }
       }
-    } else if (import.meta.env.GEMINI_API_KEY) {
-      raw = await callGemini(systemPrompt, userMessage, history);
-      usedProvider = 'gemini';
+    }
+
+    // FALLBACK 2: Gemini (free tier)
+    if (!raw && import.meta.env.GEMINI_API_KEY) {
+      if (!apiRateLimiter.canCallGemini()) {
+        console.warn('Gemini API rate limit reached (local throttle)');
+        lastError = new Error('GEMINI_RATE_LIMIT');
+      } else {
+        try {
+          const geminiBudget = Math.min(remainingMs() - 2000, 10000);
+          if (geminiBudget < 3000) throw new Error('GEMINI_TIMEOUT');
+          console.log(`Gemini FALLBACK time budget: ${geminiBudget}ms (remaining: ${remainingMs()}ms)`);
+          raw = await callGemini(systemPrompt, userMessage, history, geminiBudget);
+          usedProvider = 'gemini';
+          lastError = null;
+        } catch (geminiError: any) {
+          lastError = geminiError;
+          console.error('Gemini fallback also failed:', geminiError?.message || geminiError);
+        }
+      }
+    }
+
+    // If all providers failed, throw the last error
+    if (!raw && lastError) {
+      throw lastError;
     }
     
     console.log(`Chat response from: ${usedProvider}`);
+    console.log(`Raw response (first 200 chars): ${raw.slice(0, 200)}`);
+
+    // Extract JSON from various formats
+    let jsonStr = raw.trim();
+
+    // Try to extract from markdown code blocks: ```json {...} ``` or ``` {...} ```
+    const codeBlockMatch = jsonStr.match(/```(?:json)?\s*(\{[\s\S]*?\})\s*```/);
+    if (codeBlockMatch) {
+      console.log('Extracted JSON from markdown code block');
+      jsonStr = codeBlockMatch[1].trim();
+    }
+
+    // If still looks like it has extra text, try to find the JSON object
+    if (!jsonStr.startsWith('{')) {
+      const jsonObjectMatch = jsonStr.match(/(\{[\s\S]*\})/);
+      if (jsonObjectMatch) {
+        console.log('Extracted JSON object from mixed content');
+        jsonStr = jsonObjectMatch[1].trim();
+      }
+    }
+
     let parsed: z.infer<typeof ModelJsonSchema> | null = null;
     try {
-      parsed = ModelJsonSchema.parse(JSON.parse(raw));
-    } catch {
+      const parsedJson = JSON.parse(jsonStr);
+      parsed = ModelJsonSchema.parse(parsedJson);
+      console.log('Successfully parsed JSON response');
+    } catch (parseError) {
+      console.error('Failed to parse LLM response as JSON');
+      console.error('Raw response:', raw.slice(0, 500));
+      console.error('Extracted jsonStr:', jsonStr.slice(0, 500));
+      console.error('Parse error:', parseError);
       parsed = null;
     }
 
@@ -939,7 +1121,7 @@ ${resourceContext}
     const attachedProjects = requestedSlugs.length ? makeCardProjects(requestedSlugs) : [];
 
     const requestedResources = Array.isArray(parsed?.resource_cards) ? parsed!.resource_cards!.slice(0, 6) : [];
-    const attachedResources = requestedResources.length ? await makeCardResources(requestedResources) : [];
+    const attachedResources = requestedResources.length ? makeCardResources(requestedResources) : [];
 
     const requestedBlogSlugs = Array.isArray(parsed?.blog_cards) ? parsed!.blog_cards!.slice(0, 6) : [];
     const attachedBlogs = requestedBlogSlugs.length ? makeCardBlogs(requestedBlogSlugs) : [];
@@ -977,7 +1159,7 @@ ${resourceContext}
 
     // If the model didn't return resources but user asked for recommendations, attach top matches.
     const inferredResources = wantsResources && attachedResources.length === 0
-      ? await makeCardResources(topResources.map((r) => r.title).slice(0, 4))
+      ? makeCardResources(topResources.map((r) => r.title).slice(0, 4))
       : [];
 
     // If the model didn't return blog cards but user asked about writing/articles, attach top matches.
@@ -1039,7 +1221,7 @@ ${resourceContext}
     console.error('API Error:', error);
 
     // Provide user-friendly error messages based on error type
-    let userMessage = 'Sorry, something went wrong. Please try again.';
+    let errorReply = 'Sorry, something went wrong. Please try again.';
     let statusCode = 500;
 
     if (error instanceof Error) {
@@ -1047,28 +1229,45 @@ ${resourceContext}
 
       // Authentication errors
       if (errorMsg.includes('AUTH_ERROR')) {
-        userMessage = 'The AI service is temporarily unavailable. Please try again later.';
+        errorReply = 'The AI service is temporarily unavailable. Please try again later.';
         statusCode = 503;
       }
       // Rate limit errors
       else if (errorMsg.includes('RATE_LIMIT')) {
-        userMessage = 'The AI service is experiencing high demand. Please wait a moment and try again.';
+        console.warn('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.warn('⚠️  All AI API Providers Exhausted');
+        console.warn('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+        console.warn('');
+        console.warn('All three API providers failed:');
+        console.warn('  • Groq: Rate limit or quota exceeded');
+        console.warn('  • Gemini: Rate limit or quota exceeded');
+        console.warn('  • OpenRouter: Rate limit or quota exceeded');
+        console.warn('');
+        console.warn('Solutions:');
+        console.warn('  1. Wait a few minutes for rate limits to reset');
+        console.warn('  2. Upgrade API tiers for higher limits');
+        console.warn('  3. Reduce token usage by simplifying prompts');
+        console.warn('  4. Monitor usage: https://console.groq.com, https://ai.google.dev');
+        console.warn('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+
+        errorReply = 'The AI assistant is experiencing high demand. Please wait a moment and try again.';
         statusCode = 429;
       }
       // Timeout errors
       else if (errorMsg.includes('TIMEOUT')) {
-        userMessage = 'The request took too long to process. Please try again with a shorter message.';
+        errorReply = 'The request took too long to process. Please try again with a shorter message.';
         statusCode = 504;
       }
-      // Generic API errors
+      // Generic API errors - just return a simple error message
       else if (errorMsg.includes('API_ERROR')) {
-        userMessage = 'Unable to connect to the AI service. Please check your connection and try again.';
+        console.warn('All AI APIs failed');
+        errorReply = 'The AI assistant is temporarily unavailable. Please try again later.';
         statusCode = 503;
       }
 
       console.error('Error details:', { message: error.message, stack: error.stack });
     }
 
-    return json({ reply: userMessage }, statusCode);
+    return json({ reply: errorReply }, statusCode);
   }
 };

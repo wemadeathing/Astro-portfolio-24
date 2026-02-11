@@ -3,10 +3,10 @@
   publish = "dist"
 
 # Rate limiting for chat API endpoint
-# Limits: 25 requests per minute per IP
+# Limits: 10 requests per minute per IP (reduced to prevent API quota exhaustion)
 [[rate_limit]]
   path = "/api/chat"
-  window_limit = 25
+  window_limit = 10
   window_size = 60
   aggregator = "ip"
   status_code = 429
