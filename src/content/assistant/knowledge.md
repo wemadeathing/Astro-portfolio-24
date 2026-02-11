@@ -201,7 +201,7 @@ Note: Nasif is selective about engagements. The right fit means organizations th
 - AstroJS for static site generation (this portfolio is built with Astro, React, and Tailwind)
 - Supabase (authentication, databases, real-time features)
 - FlutterFlow for mobile app development
-- API integration and understanding (the chat assistant you're using integrates Groq and Gemini APIs)
+- API integration and understanding (the chat assistant you're using integrates OpenRouter API)
 - Database concepts and implementation
 - Authentication systems
 - Design-to-code workflows
@@ -232,7 +232,7 @@ When users ask about specific technologies or capabilities, reference this portf
 - **Framework**: Astro (static site generation with SSR for API routes)
 - **UI**: React components with TypeScript
 - **Styling**: Tailwind CSS with custom design system
-- **AI Chat**: Custom RAG implementation using Groq (primary) and Gemini (fallback) APIs
+- **AI Chat**: Custom RAG implementation using OpenRouter API (Gemini 2.5 Flash Lite)
 - **Content**: MDX for blog posts and project case studies, content collections for type-safe data
 - **Deployment**: Netlify with serverless functions
 - **Component Libraries**: Radix UI primitives, shadcn/ui components
@@ -240,7 +240,7 @@ When users ask about specific technologies or capabilities, reference this portf
 ### AI Assistant Implementation
 The chat assistant you're using demonstrates:
 - Retrieval-augmented generation (RAG) with content ranking
-- Dual-provider fallback system (Groq → Gemini)
+- OpenRouter API integration (Gemini 2.5 Flash Lite via OpenRouter)
 - Streaming responses with Server-Sent Events
 - Prompt injection protection and input sanitization
 - Context-aware card attachments (projects, resources, blog posts)
@@ -250,7 +250,7 @@ The chat assistant you're using demonstrates:
 - **"What do you use for Astro websites?"** → "This portfolio is built with Astro..."
 - **"Can you build AI features?"** → "The chat assistant you're using right now is an example..."
 - **"What UI libraries do you use?"** → "I use Radix UI and shadcn/ui - you can see them in action throughout this site..."
-- **"How do you handle API integration?"** → "This chat integrates Groq and Gemini APIs with automatic fallback..."
+- **"How do you handle API integration?"** → "This chat integrates OpenRouter API with RAG-based content retrieval..."
 
 ## Link routing map (the assistant should use this)
 - **About / background / skills / experience** → `/about`

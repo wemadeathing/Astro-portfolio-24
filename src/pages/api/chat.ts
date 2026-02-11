@@ -1,7 +1,5 @@
 import type { APIRoute } from 'astro';
-import { getCollection, getEntry } from 'astro:content';
-import Groq from 'groq-sdk';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 import { z } from 'zod';
 import aboutPageSource from '../about.astro?raw';
 
@@ -90,40 +88,6 @@ const rl = (() => {
   return { allow };
 })();
 
-// Global API rate limit tracker to prevent hitting provider limits
-const apiRateLimiter = (() => {
-  const groqCalls: number[] = [];
-  const geminiCalls: number[] = [];
-  const WINDOW_MS = 60_000;
-  const MAX_GROQ_PER_MINUTE = 30; // Groq free tier limit
-  const MAX_GEMINI_PER_MINUTE = 15; // Gemini free tier limit (more conservative)
-
-  const canCallGroq = () => {
-    const now = Date.now();
-    const recent = groqCalls.filter((t) => now - t < WINDOW_MS);
-    if (recent.length >= MAX_GROQ_PER_MINUTE) return false;
-    groqCalls.push(now);
-    // Keep array size manageable
-    if (groqCalls.length > MAX_GROQ_PER_MINUTE * 2) {
-      groqCalls.splice(0, groqCalls.length - MAX_GROQ_PER_MINUTE);
-    }
-    return true;
-  };
-
-  const canCallGemini = () => {
-    const now = Date.now();
-    const recent = geminiCalls.filter((t) => now - t < WINDOW_MS);
-    if (recent.length >= MAX_GEMINI_PER_MINUTE) return false;
-    geminiCalls.push(now);
-    // Keep array size manageable
-    if (geminiCalls.length > MAX_GEMINI_PER_MINUTE * 2) {
-      geminiCalls.splice(0, geminiCalls.length - MAX_GEMINI_PER_MINUTE);
-    }
-    return true;
-  };
-
-  return { canCallGroq, canCallGemini };
-})();
 
 const getClientIp = (request: Request) => {
   const xf = request.headers.get('x-forwarded-for');
@@ -234,7 +198,7 @@ const bigramDice = (a: string, b: string) => {
 
 const allowedChipHref = (href: string, projectSlugs: Set<string>, blogSlugs: Set<string>) => {
   // Allow core nav
-  if (href === '/about' || href === '/projects' || href === '/blog' || href === '/contact') return true;
+  if (href === '/about' || href === '/projects' || href === '/blog' || href === '/contact' || href === '/resources') return true;
   // Allow deep links to known slugs
   const proj = href.match(/^\/projects\/([^/?#]+)$/);
   if (proj && projectSlugs.has(proj[1])) return true;
@@ -286,9 +250,9 @@ const sanitizeChips = (chips: unknown, projectSlugs: Set<string>, blogSlugs: Set
 };
 
 let _collectionsCache: {
-  projects: Awaited<ReturnType<typeof getCollection>>;
-  blogPosts: Awaited<ReturnType<typeof getCollection>>;
-  resources: Awaited<ReturnType<typeof getCollection>>;
+  projects: CollectionEntry<'projects'>[];
+  blogPosts: CollectionEntry<'blog'>[];
+  resources: CollectionEntry<'resources'>[];
   knowledge: string;
   ts: number;
 } | null = null;
@@ -302,9 +266,9 @@ export const POST: APIRoute = async ({ request }) => {
       return json({ reply: 'Too many requests. Please wait a moment and try again.' }, 429);
     }
 
-    // Netlify free-tier: 10s, paid: 26s. Use 25s to be safe for paid, or 9s for free.
-    // Adjust FUNCTION_DEADLINE_MS based on your Netlify plan.
-    const FUNCTION_DEADLINE_MS = 25_000;
+    // Netlify free-tier: 10s hard limit. Paid: 26s.
+    // Using 9s to stay safely under free-tier limit.
+    const FUNCTION_DEADLINE_MS = 9_000;
     const requestStart = Date.now();
     const remainingMs = () => Math.max(0, FUNCTION_DEADLINE_MS - (Date.now() - requestStart));
 
@@ -355,7 +319,7 @@ export const POST: APIRoute = async ({ request }) => {
     if (!_collectionsCache || now - _collectionsCache.ts > CACHE_TTL_MS) {
       const [projects, blogPosts, resources, knowledgeEntry] = await Promise.all([
         getCollection('projects', ({ data }) => data.published !== false),
-        getCollection('blog', ({ data }) => data.draft !== true),
+        getCollection('blog'),
         getCollection('resources'),
         getEntry('assistant', 'knowledge'),
       ]);
@@ -634,7 +598,7 @@ export const POST: APIRoute = async ({ request }) => {
     };
 
     // 2) Offline mode (no API keys available)
-    if (!import.meta.env.GROQ_API_KEY && !import.meta.env.GEMINI_API_KEY && !import.meta.env.OPENROUTER_API_KEY) {
+    if (!import.meta.env.OPENROUTER_API_KEY) {
       const lowerMsg = userMessage.toLowerCase();
       const wantsWork =
         lowerMsg.includes('project') ||
@@ -682,92 +646,7 @@ export const POST: APIRoute = async ({ request }) => {
       return sse(stream, 200);
     }
 
-    // 3. LLM call with fallback (Groq primary, Gemini fallback)
-    const callGroq = async (messages: { role: 'system' | 'user' | 'assistant'; content: string }[], timeoutMs: number, retryCount = 0): Promise<string> => {
-      const groq = new Groq({ apiKey: import.meta.env.GROQ_API_KEY });
-      const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), timeoutMs);
-      try {
-        const completion = await groq.chat.completions.create(
-          {
-            model: 'llama-3.3-70b-versatile',
-            messages,
-            response_format: { type: 'json_object' },
-            temperature: 0.7,
-            max_tokens: 1024,
-          },
-          { signal: controller.signal }
-        );
-        return completion.choices[0]?.message?.content || '';
-      } catch (error: any) {
-        console.error('Groq raw error:', { message: error?.message, status: error?.status, code: error?.code, name: error?.name, type: error?.type });
-        if (error?.name === 'AbortError' || error?.message?.includes('abort')) throw new Error('GROQ_TIMEOUT');
-        if (error?.status === 401 || error?.message?.includes('auth')) throw new Error('GROQ_AUTH_ERROR');
-
-        // Retry rate limit errors once with a small delay
-        if ((error?.status === 429 || error?.message?.includes('rate limit')) && retryCount === 0) {
-          console.log('Groq rate limit hit, retrying after 1s delay...');
-          clearTimeout(timer);
-          await new Promise(resolve => setTimeout(resolve, 1000));
-          // Reduce timeout by the delay we just waited
-          return callGroq(messages, Math.max(timeoutMs - 1000, 3000), 1);
-        }
-
-        if (error?.status === 429 || error?.message?.includes('rate limit')) throw new Error('GROQ_RATE_LIMIT');
-        if (error?.message?.includes('TIMEOUT') || error?.code === 'ETIMEDOUT' || error?.code === 'ECONNABORTED') throw new Error('GROQ_TIMEOUT');
-        throw new Error('GROQ_API_ERROR');
-      } finally {
-        clearTimeout(timer);
-      }
-    };
-
-    const callGemini = async (systemPrompt: string, userMessage: string, history: { role: string; content: string }[], timeoutMs: number, retryCount = 0): Promise<string> => {
-      const genAI = new GoogleGenerativeAI(import.meta.env.GEMINI_API_KEY);
-      let timeoutTimer: ReturnType<typeof setTimeout> | null = null;
-      try {
-        const model = genAI.getGenerativeModel({
-          model: 'gemini-2.0-flash',
-          generationConfig: { responseMimeType: 'application/json' },
-        });
-        const geminiHistory = history.map((msg) => ({
-          role: msg.role === 'assistant' ? 'model' : 'user',
-          parts: [{ text: msg.content }],
-        }));
-        const chat = model.startChat({
-          history: [
-            { role: 'user', parts: [{ text: systemPrompt }] },
-            { role: 'model', parts: [{ text: 'Understood. I will respond as Nasif\'s AI assistant following all the guidelines.' }] },
-            ...geminiHistory,
-          ],
-        });
-        const result = await Promise.race([
-          chat.sendMessage(userMessage),
-          new Promise<never>((_, reject) => {
-            timeoutTimer = setTimeout(() => reject(new Error('GEMINI_TIMEOUT')), timeoutMs);
-          }),
-        ]);
-        return result.response.text() || '';
-      } catch (error: any) {
-        console.error('Gemini raw error:', { message: error?.message, status: error?.status, code: error?.code, name: error?.name, type: error?.type });
-        if (error?.message?.includes('API key') || error?.message?.includes('auth')) throw new Error('GEMINI_AUTH_ERROR');
-
-        // Retry rate limit errors once with a small delay
-        if ((error?.message?.includes('quota') || error?.message?.includes('rate')) && retryCount === 0) {
-          console.log('Gemini rate limit hit, retrying after 1.5s delay...');
-          if (timeoutTimer) clearTimeout(timeoutTimer);
-          await new Promise(resolve => setTimeout(resolve, 1500));
-          // Reduce timeout by the delay we just waited
-          return callGemini(systemPrompt, userMessage, history, Math.max(timeoutMs - 1500, 3000), 1);
-        }
-
-        if (error?.message?.includes('quota') || error?.message?.includes('rate')) throw new Error('GEMINI_RATE_LIMIT');
-        if (error?.message?.includes('TIMEOUT') || error?.code === 'ETIMEDOUT' || error?.code === 'ECONNABORTED') throw new Error('GEMINI_TIMEOUT');
-        throw new Error('GEMINI_API_ERROR');
-      } finally {
-        if (timeoutTimer) clearTimeout(timeoutTimer);
-      }
-    };
-
+    // 3. LLM call via OpenRouter (paid)
     const callOpenRouter = async (messages: { role: 'system' | 'user' | 'assistant'; content: string }[], timeoutMs: number, retryCount = 0): Promise<string> => {
       const controller = new AbortController();
       const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -781,10 +660,11 @@ export const POST: APIRoute = async ({ request }) => {
             'X-Title': 'Nasif Salaam Portfolio Chat',
           },
           body: JSON.stringify({
-            model: 'deepseek/deepseek-chat', // DeepSeek V3.2 (your default with credits)
+            model: 'google/gemini-2.5-flash-lite',
             messages,
             temperature: 0.7,
-            max_tokens: 1024,
+            max_tokens: 2048,
+            response_format: { type: 'json_object' },
           }),
           signal: controller.signal,
         });
@@ -886,7 +766,7 @@ Chips rules:
 - Chips are navigation and deep links.
 - Use 0–4 chips.
 - Only use hrefs that match these patterns:
-  - "/about", "/projects", "/blog", "/contact"
+  - "/about", "/projects", "/blog", "/contact", "/resources"
   - "/projects/<slug>", "/blog/<slug>"
 
 Project cards rules:
@@ -983,7 +863,7 @@ CRITICAL CONSTRAINT - Grounding in context:
 SELF-REFERENTIAL EXAMPLES:
 - When asked about Astro: "This portfolio you're looking at is actually built with Astro! It's a static site generator that combines great performance with developer experience."
 - When asked about React/UI components: "I use React components throughout this site, including shadcn/ui and Radix UI for accessible UI elements."
-- When asked about AI features: "The chat assistant you're using right now is an example of AI integration - it uses Groq and Gemini APIs with RAG (retrieval-augmented generation) to answer questions about my work."
+- When asked about AI features: "The chat assistant you're using right now is an example of AI integration - it uses OpenRouter API with RAG (retrieval-augmented generation) to answer questions about my work."
 - Always look for opportunities to reference the current portfolio as a practical example when relevant to the question.
 
 Context - Nasif (single source of truth):
@@ -1012,71 +892,13 @@ ${resourceContext}
       { role: 'user', content: userMessage },
     ];
 
-    // Try OpenRouter FIRST (paid, reliable), then free tiers as fallbacks
-    let raw = '';
-    let usedProvider = 'openrouter';
-    let lastError: Error | null = null;
-
-    // PRIMARY: OpenRouter (DeepSeek with credits - fast and reliable)
-    if (import.meta.env.OPENROUTER_API_KEY) {
-      try {
-        const openrouterBudget = Math.min(remainingMs() - 2000, 15000);
-        if (openrouterBudget < 3000) throw new Error('OPENROUTER_TIMEOUT');
-        console.log(`OpenRouter PRIMARY time budget: ${openrouterBudget}ms (remaining: ${remainingMs()}ms)`);
-        raw = await callOpenRouter(messages, openrouterBudget);
-        usedProvider = 'openrouter';
-      } catch (openrouterError: any) {
-        lastError = openrouterError;
-        console.error('OpenRouter failed:', openrouterError?.message || openrouterError);
-      }
-    }
-
-    // FALLBACK 1: Groq (free tier)
-    if (!raw && import.meta.env.GROQ_API_KEY) {
-      if (!apiRateLimiter.canCallGroq()) {
-        console.warn('Groq API rate limit reached (local throttle)');
-        lastError = new Error('GROQ_RATE_LIMIT');
-      } else {
-        try {
-          const groqBudget = Math.min(remainingMs() - 2000, 12000);
-          if (groqBudget < 3000) throw new Error('GROQ_TIMEOUT');
-          console.log(`Groq FALLBACK time budget: ${groqBudget}ms (remaining: ${remainingMs()}ms)`);
-          raw = await callGroq(messages, groqBudget);
-          usedProvider = 'groq';
-          lastError = null;
-        } catch (groqError: any) {
-          lastError = groqError;
-          console.error('Groq fallback also failed:', groqError?.message || groqError);
-        }
-      }
-    }
-
-    // FALLBACK 2: Gemini (free tier)
-    if (!raw && import.meta.env.GEMINI_API_KEY) {
-      if (!apiRateLimiter.canCallGemini()) {
-        console.warn('Gemini API rate limit reached (local throttle)');
-        lastError = new Error('GEMINI_RATE_LIMIT');
-      } else {
-        try {
-          const geminiBudget = Math.min(remainingMs() - 2000, 10000);
-          if (geminiBudget < 3000) throw new Error('GEMINI_TIMEOUT');
-          console.log(`Gemini FALLBACK time budget: ${geminiBudget}ms (remaining: ${remainingMs()}ms)`);
-          raw = await callGemini(systemPrompt, userMessage, history, geminiBudget);
-          usedProvider = 'gemini';
-          lastError = null;
-        } catch (geminiError: any) {
-          lastError = geminiError;
-          console.error('Gemini fallback also failed:', geminiError?.message || geminiError);
-        }
-      }
-    }
-
-    // If all providers failed, throw the last error
-    if (!raw && lastError) {
-      throw lastError;
-    }
+    // Call OpenRouter (paid)
+    const openrouterBudget = Math.min(remainingMs() - 1000, 8000);
+    if (openrouterBudget < 3000) throw new Error('OPENROUTER_TIMEOUT');
+    console.log(`OpenRouter time budget: ${openrouterBudget}ms (remaining: ${remainingMs()}ms)`);
+    const raw = await callOpenRouter(messages, openrouterBudget);
     
-    console.log(`Chat response from: ${usedProvider}`);
+    console.log('Chat response from: openrouter');
     console.log(`Raw response (first 200 chars): ${raw.slice(0, 200)}`);
 
     // Extract JSON from various formats
@@ -1101,14 +923,32 @@ ${resourceContext}
     let parsed: z.infer<typeof ModelJsonSchema> | null = null;
     try {
       const parsedJson = JSON.parse(jsonStr);
-      parsed = ModelJsonSchema.parse(parsedJson);
-      console.log('Successfully parsed JSON response');
+      // Try strict parse first, fall back to lenient parse
+      const strict = ModelJsonSchema.safeParse(parsedJson);
+      if (strict.success) {
+        parsed = strict.data;
+        console.log('Successfully parsed JSON response (strict)');
+      } else {
+        // Lenient: extract what we can even if some fields are wrong
+        console.warn('Strict parse failed, using lenient extraction:', strict.error.issues.map(i => i.path.join('.')).join(', '));
+        parsed = {
+          answer: typeof parsedJson.answer === 'string' ? parsedJson.answer : (typeof parsedJson.reply === 'string' ? parsedJson.reply : ''),
+          chips: Array.isArray(parsedJson.chips) ? parsedJson.chips : undefined,
+          project_cards: Array.isArray(parsedJson.project_cards) ? parsedJson.project_cards : undefined,
+          resource_cards: Array.isArray(parsedJson.resource_cards) ? parsedJson.resource_cards : undefined,
+          blog_cards: Array.isArray(parsedJson.blog_cards) ? parsedJson.blog_cards : undefined,
+          follow_ups: Array.isArray(parsedJson.follow_ups) ? parsedJson.follow_ups.filter((f: unknown) => typeof f === 'string').slice(0, 3) : undefined,
+        };
+      }
     } catch (parseError) {
       console.error('Failed to parse LLM response as JSON');
       console.error('Raw response:', raw.slice(0, 500));
-      console.error('Extracted jsonStr:', jsonStr.slice(0, 500));
       console.error('Parse error:', parseError);
-      parsed = null;
+      // Last resort: use raw text as the answer
+      const cleanRaw = raw.replace(/```(?:json)?\s*/gi, '').replace(/```/g, '').trim();
+      if (cleanRaw.length > 10) {
+        parsed = { answer: cleanRaw };
+      }
     }
 
     const answer = parsed?.answer?.trim();
@@ -1234,22 +1074,7 @@ ${resourceContext}
       }
       // Rate limit errors
       else if (errorMsg.includes('RATE_LIMIT')) {
-        console.warn('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-        console.warn('⚠️  All AI API Providers Exhausted');
-        console.warn('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-        console.warn('');
-        console.warn('All three API providers failed:');
-        console.warn('  • Groq: Rate limit or quota exceeded');
-        console.warn('  • Gemini: Rate limit or quota exceeded');
-        console.warn('  • OpenRouter: Rate limit or quota exceeded');
-        console.warn('');
-        console.warn('Solutions:');
-        console.warn('  1. Wait a few minutes for rate limits to reset');
-        console.warn('  2. Upgrade API tiers for higher limits');
-        console.warn('  3. Reduce token usage by simplifying prompts');
-        console.warn('  4. Monitor usage: https://console.groq.com, https://ai.google.dev');
-        console.warn('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-
+        console.warn('OpenRouter rate limit hit');
         errorReply = 'The AI assistant is experiencing high demand. Please wait a moment and try again.';
         statusCode = 429;
       }
@@ -1258,9 +1083,9 @@ ${resourceContext}
         errorReply = 'The request took too long to process. Please try again with a shorter message.';
         statusCode = 504;
       }
-      // Generic API errors - just return a simple error message
+      // Generic API errors
       else if (errorMsg.includes('API_ERROR')) {
-        console.warn('All AI APIs failed');
+        console.warn('OpenRouter API error');
         errorReply = 'The AI assistant is temporarily unavailable. Please try again later.';
         statusCode = 503;
       }
