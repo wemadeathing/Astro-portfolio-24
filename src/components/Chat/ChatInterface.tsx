@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Bot, Check, Copy, Menu, RotateCcw, Send, StopCircle, User, X } from 'lucide-react';
+import { Bot, Check, Copy, Menu, Send, StopCircle, User, X } from 'lucide-react';
 import ProjectCard from './ProjectCard';
 import ResourceCard from './ResourceCard';
 import BlogCard from './BlogCard';
@@ -588,19 +588,6 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
                 className="h-7 sm:h-8 w-auto"
               />
             </a>
-
-            {/* New Chat button (only show in chat mode) */}
-            {!isIntro && (
-              <button
-                type="button"
-                aria-label="New conversation"
-                onClick={clearConversation}
-                className="w-10 h-10 flex items-center justify-center rounded-full bg-muted/30 border border-border/60 text-foreground/80 hover:bg-muted/45 transition-colors duration-200"
-                title="Start new conversation"
-              >
-                <RotateCcw size={16} />
-              </button>
-            )}
 
             {/* Burger */}
             <button
