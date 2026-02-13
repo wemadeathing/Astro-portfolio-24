@@ -59,14 +59,14 @@ export default function ResourceCard({ title, description, url, type, image, sit
         </div>
       </div>
 
-      <div className="p-3">
-        <h4 className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1">
+      <div className="p-3 text-left">
+        <h4 className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1 mb-1">
           {title}
         </h4>
         {description && (
-          <p className="mt-1 text-xs text-muted-foreground line-clamp-2">{description}</p>
+          <p className="text-xs text-muted-foreground line-clamp-2 mb-3">{description}</p>
         )}
-        <div className="mt-2 flex items-center gap-1.5 text-[10px] text-muted-foreground/60">
+        <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground/60">
           <span className="truncate">{siteName || hostname}</span>
           <ExternalLink className="w-3 h-3 ml-auto opacity-0 group-hover:opacity-100 transition-opacity text-primary" />
         </div>

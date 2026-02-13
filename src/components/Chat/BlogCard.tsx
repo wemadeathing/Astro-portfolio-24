@@ -26,7 +26,7 @@ export default function BlogCard({ title, description, slug, pubDate, tags }: Bl
       href={`/blog/${slug}`}
       className="group block rounded-xl border border-border/50 bg-muted/10 hover:bg-muted/20 hover:border-border transition-all overflow-hidden h-full"
     >
-      <div className="p-4">
+      <div className="p-3 text-left">
         <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground/60 mb-2">
           <Calendar className="w-3 h-3" />
           <span>{formatDate(pubDate)}</span>

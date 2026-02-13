@@ -53,9 +53,10 @@ interface LatestPostData {
 
 interface ChatInterfaceProps {
   latestPost?: LatestPostData;
+  projects?: ProjectData[];
 }
 
-export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
+export default function ChatInterface({ latestPost, projects = [] }: ChatInterfaceProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const messagesRef = useRef<Message[]>([]);
 
@@ -76,6 +77,13 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'chat' | 'portfolio'>(() => {
+    if (typeof window !== 'undefined') {
+      return (localStorage.getItem('preferred-view') as 'chat' | 'portfolio') || 'chat';
+    }
+    return 'chat';
+  });
+  const [displayedView, setDisplayedView] = useState<'chat' | 'portfolio'>(viewMode);
 
   const menuPanelRef = useRef<HTMLDivElement>(null);
   const menuCloseButtonRef = useRef<HTMLButtonElement>(null);
@@ -271,6 +279,16 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
     dismissTooltip();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasStarted]);
+
+  useEffect(() => {
+    localStorage.setItem('preferred-view', viewMode);
+  }, [viewMode]);
+
+  const switchView = (next: 'chat' | 'portfolio') => {
+    if (next === viewMode) return;
+    setViewMode(next);
+    setDisplayedView(next);
+  };
 
   const dismissTooltip = () => {
     setShowTooltip(false);
@@ -669,270 +687,367 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
         </div>
       </div>
 
-      {/* Intro Screen (single layout; no overlap) */}
+      {/* Intro Screen */}
       {isIntro && (
-        <div className="flex-1 overflow-y-auto px-4 pt-24 sm:pt-28 pb-14 md:pb-20 relative z-20">
+        <div className="flex-1 overflow-y-auto px-4 pt-24 sm:pt-28 pb-6 relative z-20">
           <div className="w-full max-w-[1100px] mx-auto flex flex-col items-center text-center">
-            {/* Top section (staged in first) */}
+            {/* Persistent Glass View Toggle */}
             <div
               className={[
-                'w-full flex flex-col items-center text-center',
                 'transition-all duration-500 ease-out will-change-transform',
                 introMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2',
               ].join(' ')}
             >
-              <h1 className="text-2xl md:text-3xl font-medium leading-tight text-foreground/95 mb-2 mt-5 md:mt-8 max-w-[680px]">
-                Hi, I'm Nasif. Product Designer who builds.
-              </h1>
-              <p className="text-sm md:text-base text-muted-foreground/80 max-w-[680px] mb-0">
-                I design brands, build products and ship apps. 15+ years designing and building solutions. My first language is design, but I also speak dev and AI.
-              </p>
+              <div className="inline-flex items-center gap-0.5 p-0.5 rounded-full bg-white/[0.06] backdrop-blur-xl shadow-[0_0_15px_rgba(0,0,0,0.1),inset_0_1px_0_rgba(255,255,255,0.05)] mb-4 mt-3 md:mt-5 relative">
+                {/* Sliding indicator */}
+                <div
+                  className="absolute top-0.5 bottom-0.5 rounded-full bg-white/[0.1] shadow-[0_1px_6px_rgba(0,0,0,0.15)] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
+                  style={{
+                    left: viewMode === 'chat' ? '2px' : 'calc(50%)',
+                    width: 'calc(50% - 2px)',
+                  }}
+                />
+                <button
+                  type="button"
+                  onClick={() => switchView('chat')}
+                  className={[
+                    'relative z-10 px-3.5 py-[3px] rounded-full text-[11px] font-medium transition-colors duration-200',
+                    viewMode === 'chat' ? 'text-foreground' : 'text-muted-foreground/50 hover:text-muted-foreground',
+                  ].join(' ')}
+                >
+                  AI Chat
+                </button>
+                <button
+                  type="button"
+                  onClick={() => switchView('portfolio')}
+                  className={[
+                    'relative z-10 px-3.5 py-[3px] rounded-full text-[11px] font-medium transition-colors duration-200',
+                    viewMode === 'portfolio' ? 'text-foreground' : 'text-muted-foreground/50 hover:text-muted-foreground',
+                  ].join(' ')}
+                >
+                  Portfolio
+                </button>
+              </div>
+            </div>
 
-              {/* Input (intro) */}
-              <form
-                onSubmit={handleSubmit}
-                className="relative mt-4 flex items-center gap-2 w-full max-w-[680px]"
+            {/* Content area with crossfade */}
+            <div className="w-full relative">
+              {/* Chat View Content */}
+              {displayedView === 'chat' && (
+              <div
+                className="w-full flex flex-col items-center text-center animate-[fadeSlideUp_0.35s_ease-out_both]"
               >
-                {/* Onboarding tooltip */}
-                {showTooltip && (
-                  <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 z-10">
-                    <div className="relative bg-primary/95 text-primary-foreground px-4 py-2 rounded-full text-sm font-medium shadow-lg whitespace-nowrap">
-                      <div className="absolute left-1/2 -translate-x-1/2 bottom-full w-0 h-0 border-l-8 border-r-8 border-b-8 border-l-transparent border-r-transparent border-b-primary/95" />
-                      Try asking me anything about my work!
+                <h1 className="text-2xl md:text-3xl font-medium leading-tight text-foreground/95 mb-2 max-w-[680px]">
+                  Hi, I'm Nasif. Product Designer who builds.
+                </h1>
+                <p className="text-sm md:text-base text-muted-foreground/80 max-w-[680px] mb-0">
+                  I design brands, build products and ship apps. 15+ years designing and building solutions. My first language is design, but I also speak dev and AI.
+                </p>
+
+                {/* Input (intro) */}
+                <form
+                  onSubmit={handleSubmit}
+                  className="relative mt-4 flex items-center gap-2 w-full max-w-[680px]"
+                >
+                  {/* Onboarding tooltip */}
+                  {showTooltip && (
+                    <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 z-10">
+                      <div className="relative bg-primary/95 text-primary-foreground px-4 py-2 rounded-full text-sm font-medium shadow-lg whitespace-nowrap">
+                        <div className="absolute left-1/2 -translate-x-1/2 bottom-full w-0 h-0 border-l-8 border-r-8 border-b-8 border-l-transparent border-r-transparent border-b-primary/95" />
+                        Try asking me anything about my work!
+                        <button
+                          type="button"
+                          onClick={dismissTooltip}
+                          className="ml-2 opacity-70 hover:opacity-100 transition-opacity"
+                          aria-label="Dismiss tooltip"
+                        >
+                          ×
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                  <input
+                    type="text"
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onFocus={() => setShowSuggestions(true)}
+                    onBlur={() => setShowSuggestions(false)}
+                    ref={inputRef}
+                    placeholder="Ask me about my projects, skills, or experience..."
+                    className="w-full bg-muted/40 border border-border/60 hover:border-border focus:border-primary/70 rounded-full py-3.5 md:py-4 pl-5 md:pl-6 pr-14 text-base outline-none transition-all shadow-sm focus:ring-4 focus:ring-primary/15 focus:bg-muted/50 placeholder:text-muted-foreground/55 placeholder:font-normal"
+                    disabled={isLoading}
+                  />
+                  <div className="absolute inset-y-0 right-2 flex items-center gap-1">
+                    {isLoading ? (
                       <button
                         type="button"
-                        onClick={dismissTooltip}
-                        className="ml-2 opacity-70 hover:opacity-100 transition-opacity"
-                        aria-label="Dismiss tooltip"
+                        onClick={stopRequest}
+                        className="p-2 mr-1 bg-muted/40 border border-border/60 text-foreground rounded-full hover:bg-muted/55 transition-all shadow-sm"
+                        aria-label="Stop"
                       >
-                        ×
+                        <StopCircle size={20} />
                       </button>
-                    </div>
+                    ) : (
+                      <button
+                        type="submit"
+                        disabled={!input.trim() || isLoading}
+                        className="p-2 mr-1 bg-primary text-primary-foreground rounded-full hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
+                        aria-label="Send"
+                      >
+                        <Send size={20} />
+                      </button>
+                    )}
                   </div>
-                )}
-                <input
-                  type="text"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onFocus={() => setShowSuggestions(true)}
-                  onBlur={() => setShowSuggestions(false)}
-                  ref={inputRef}
-                  placeholder="Ask me about my projects, skills, or experience..."
-                  className="w-full bg-muted/40 border border-border/60 hover:border-border focus:border-primary/70 rounded-full py-3.5 md:py-4 pl-5 md:pl-6 pr-14 text-base outline-none transition-all shadow-sm focus:ring-4 focus:ring-primary/15 focus:bg-muted/50 placeholder:text-muted-foreground/55 placeholder:font-normal"
-                  disabled={isLoading}
-                />
-                <div className="absolute inset-y-0 right-2 flex items-center gap-1">
-                  {isLoading ? (
-                    <button
-                      type="button"
-                      onClick={stopRequest}
-                      className="p-2 mr-1 bg-muted/40 border border-border/60 text-foreground rounded-full hover:bg-muted/55 transition-all shadow-sm"
-                      aria-label="Stop"
-                    >
-                      <StopCircle size={20} />
-                    </button>
-                  ) : (
-                    <button
-                      type="submit"
-                      disabled={!input.trim() || isLoading}
-                      className="p-2 mr-1 bg-primary text-primary-foreground rounded-full hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
-                      aria-label="Send"
-                    >
-                      <Send size={20} />
-                    </button>
-                  )}
-                </div>
-              </form>
+                </form>
 
-              {/* Suggestions - animate open on focus */}
-              <div
-                aria-hidden={!showSuggestions}
-                className={[
-                  'mt-3 overflow-hidden transition-all duration-200 ease-out',
-                  showSuggestions
-                    ? 'max-h-24 opacity-100 translate-y-0'
-                    : 'max-h-0 opacity-0 -translate-y-1 pointer-events-none',
-                ].join(' ')}
-              >
-                <div className="flex flex-wrap justify-center gap-2">
-                  {[
-                    'What makes you different from other designers?',
-                    'Walk me through your design process',
-                    'Show me your AI projects',
-                  ].map((suggestion) => (
-                    <button
-                      key={suggestion}
-                      type="button"
-                      onMouseDown={(e) => {
-                        // Prevent input blur so suggestions don't disappear before we fill.
-                        e.preventDefault();
-                        fillInput(suggestion);
-                      }}
-                      className="text-xs md:text-sm px-3 py-1.5 bg-muted/20 hover:bg-muted/35 border border-border/40 rounded-full transition-colors text-muted-foreground/90 hover:text-foreground"
-                    >
-                      {suggestion}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Bento Grid Navigation */}
-            <div className="w-full mt-8 md:mt-10 pb-12">
-              <div
-                className={[
-                  'w-full',
-                  'transition-all duration-500 ease-out will-change-transform',
-                  bentoMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2',
-                ].join(' ')}
-              >
-                <div className="max-w-[1100px] mx-auto text-left">
-                  <div className="flex items-center justify-between gap-4 mb-3">
-                    <div className="text-xs tracking-wide uppercase text-muted-foreground/70">Quick links</div>
-                    <div className="h-px flex-1 bg-border/60" />
+                {/* Suggestions - animate open on focus */}
+                <div
+                  aria-hidden={!showSuggestions}
+                  className={[
+                    'mt-3 overflow-hidden transition-all duration-200 ease-out',
+                    showSuggestions
+                      ? 'max-h-24 opacity-100 translate-y-0'
+                      : 'max-h-0 opacity-0 -translate-y-1 pointer-events-none',
+                  ].join(' ')}
+                >
+                  <div className="flex flex-wrap justify-center gap-2">
+                    {[
+                      'What makes you different from other designers?',
+                      'Walk me through your design process',
+                      'Show me your AI projects',
+                    ].map((suggestion) => (
+                      <button
+                        key={suggestion}
+                        type="button"
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          fillInput(suggestion);
+                        }}
+                        className="text-xs md:text-sm px-3 py-1.5 bg-muted/20 hover:bg-muted/35 border border-border/40 rounded-full transition-colors text-muted-foreground/90 hover:text-foreground"
+                      >
+                        {suggestion}
+                      </button>
+                    ))}
                   </div>
                 </div>
-                {/* Bento layout: 2 rows - optimized for mobile */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-3 md:gap-4 max-w-[1100px] mx-auto auto-rows-[160px] sm:auto-rows-[160px] md:auto-rows-[180px]">
-                  {/* Row 1: large grey + 2 logo tiles */}
-                  <a
-                    href="/projects"
+
+                {/* Bento Grid Navigation */}
+                <div className="w-full mt-8 md:mt-10 pb-2">
+                  <div
                     className={[
-                      tileBase,
-                      'col-span-1 sm:col-span-2 md:col-span-6 p-5 md:p-6 text-left bg-secondary/30',
+                      'w-full',
+                      'transition-all duration-500 ease-out will-change-transform',
+                      bentoMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2',
                     ].join(' ')}
                   >
-                    <div className="relative z-10 h-full flex flex-col">
-                      <div className="text-xs opacity-70 mb-2">Projects • Case Studies</div>
-                      <div className="text-lg md:text-xl font-medium leading-snug tracking-tight max-w-[34ch]">
-                        Explore selected work across design systems, AI products, and rapid prototyping
+                    <div className="max-w-[1100px] mx-auto text-left">
+                      <div className="flex items-center justify-between gap-4 mb-3">
+                        <div className="text-xs tracking-wide uppercase text-muted-foreground/70">Quick links</div>
+                        <div className="h-px flex-1 bg-border/60" />
                       </div>
-                      <div className="absolute bottom-5 right-5 text-lg opacity-70 group-hover:opacity-100 transition-opacity">↘</div>
                     </div>
-                  </a>
+                    {/* Bento layout */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-3 md:gap-4 max-w-[1100px] mx-auto auto-rows-[160px] sm:auto-rows-[160px] md:auto-rows-[180px]">
+                      <a
+                        href="/projects"
+                        className={[
+                          tileBase,
+                          'col-span-1 sm:col-span-2 md:col-span-6 p-5 md:p-6 text-left bg-secondary/30',
+                        ].join(' ')}
+                      >
+                        <div className="relative z-10 h-full flex flex-col">
+                          <div className="text-xs opacity-70 mb-2">Projects • Case Studies</div>
+                          <div className="text-lg md:text-xl font-medium leading-snug tracking-tight max-w-[34ch]">
+                            Explore selected work across design systems, AI products, and rapid prototyping
+                          </div>
+                          <div className="absolute bottom-5 right-5 text-lg opacity-70 group-hover:opacity-100 transition-opacity">↘</div>
+                        </div>
+                      </a>
 
-                <a
-                  href="/about"
-                  className={[
-                    tileBase,
-                    'bg-black bg-cover bg-center relative text-white',
-                    'border-0 hover:border-0 ring-1 ring-inset ring-white/10 hover:ring-white/20',
-                    'col-span-1 md:col-span-3 p-0 text-left min-h-[160px]',
-                  ].join(' ')}
-                  style={{ backgroundImage: "url('/images/abstract/Frame%20120823.png')" }}
-                >
-                  <div className="absolute inset-0 bg-black/40 transition-colors group-hover:bg-black/30" />
-                  <div className="relative z-10 h-full">
-                    <div className="absolute bottom-2 left-2 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/55 px-2.5 py-1 text-sm font-semibold text-white/95 backdrop-blur">
-                      About <span className="text-white/70">↘</span>
+                      <a
+                        href="/about"
+                        className={[
+                          tileBase,
+                          'bg-black bg-cover bg-center relative text-white',
+                          'border-0 hover:border-0 ring-1 ring-inset ring-white/10 hover:ring-white/20',
+                          'col-span-1 md:col-span-3 p-0 text-left min-h-[160px]',
+                        ].join(' ')}
+                        style={{ backgroundImage: "url('/images/abstract/Frame%20120823.png')" }}
+                      >
+                        <div className="absolute inset-0 bg-black/40 transition-colors group-hover:bg-black/30" />
+                        <div className="relative z-10 h-full">
+                          <div className="absolute bottom-2 left-2 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/55 px-2.5 py-1 text-sm font-semibold text-white/95 backdrop-blur">
+                            About <span className="text-white/70">↘</span>
+                          </div>
+                        </div>
+                      </a>
+
+                      <a
+                        href="/blog"
+                        className={[
+                          tileBase,
+                          'bg-black bg-cover bg-center relative text-white',
+                          'border-0 hover:border-0 ring-1 ring-inset ring-white/10 hover:ring-white/20',
+                          'col-span-1 md:col-span-3 p-0 text-left min-h-[160px]',
+                        ].join(' ')}
+                        style={{ backgroundImage: "url('/images/abstract/Frame%20120827.png')" }}
+                      >
+                        <div className="absolute inset-0 bg-black/40 transition-colors group-hover:bg-black/30" />
+                        <div className="relative z-10 h-full">
+                          <div className="absolute bottom-2 left-2 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/55 px-2.5 py-1 text-sm font-semibold text-white/95 backdrop-blur">
+                            Insights <span className="text-white/70">↘</span>
+                          </div>
+                        </div>
+                      </a>
+
+                      <a
+                        href="/projects?tag=Builds"
+                        className={[
+                          tileBase,
+                          'bg-black bg-cover bg-center relative text-white',
+                          'border-0 hover:border-0 ring-1 ring-inset ring-white/10 hover:ring-white/20',
+                          'col-span-1 md:col-span-3 p-0 text-left min-h-[160px]',
+                        ].join(' ')}
+                        style={{ backgroundImage: "url('/images/abstract/Frame%20120825.png')" }}
+                      >
+                        <div className="absolute inset-0 bg-black/40 transition-colors group-hover:bg-black/30" />
+                        <div className="relative z-10 h-full">
+                          <div className="absolute bottom-2 left-2 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/55 px-2.5 py-1 text-sm font-semibold text-white/95 backdrop-blur">
+                            Builds <span className="text-white/70">↘</span>
+                          </div>
+                        </div>
+                      </a>
+
+                      <a
+                        href="/contact"
+                        className={[
+                          tileBase,
+                          'bg-black bg-cover bg-center relative text-white',
+                          'border-0 hover:border-0 ring-1 ring-inset ring-white/10 hover:ring-white/20',
+                          'col-span-1 md:col-span-3 p-0 text-left min-h-[160px]',
+                        ].join(' ')}
+                        style={{ backgroundImage: "url('/images/abstract/Frame%20120826.png')" }}
+                      >
+                        <div className="absolute inset-0 bg-black/40 transition-colors group-hover:bg-black/30" />
+                        <div className="relative z-10 h-full">
+                          <div className="absolute bottom-2 left-2 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/55 px-2.5 py-1 text-sm font-semibold text-white/95 backdrop-blur">
+                            Contact <span className="text-white/70">↘</span>
+                          </div>
+                        </div>
+                      </a>
+
+                      {latestPost ? (
+                        <a
+                          href={`/blog/${latestPost.slug}`}
+                          className={[tileBase, 'col-span-1 sm:col-span-2 md:col-span-6 p-5 md:p-6 text-left bg-secondary/30'].join(' ')}
+                        >
+                          <div className="relative z-10 h-full flex flex-col">
+                            <div className="text-xs opacity-70 mb-2">Latest Insight</div>
+                            <div className="text-lg md:text-xl font-medium leading-snug tracking-tight max-w-[36ch]">
+                              {latestPost.data.title}
+                            </div>
+                            <div className="text-sm opacity-60 mt-2 max-w-[42ch] line-clamp-2">
+                              {latestPost.data.description}
+                            </div>
+                            <div className="absolute bottom-5 right-5 text-lg opacity-70 group-hover:opacity-100 transition-opacity">↘</div>
+                          </div>
+                        </a>
+                      ) : (
+                        <a
+                          href="/about"
+                          className={[tileBase, 'col-span-1 sm:col-span-2 md:col-span-6 p-5 md:p-6 text-left bg-secondary/30'].join(' ')}
+                        >
+                          <div className="relative z-10 h-full flex flex-col">
+                            <div className="text-xs opacity-70 mb-2">Resume • Experience</div>
+                            <div className="text-lg md:text-xl font-medium leading-snug tracking-tight max-w-[36ch]">
+                              A quick scan of roles, skills, and outcomes across 15+ years
+                            </div>
+                            <div className="absolute bottom-5 right-5 text-lg opacity-70 group-hover:opacity-100 transition-opacity">↘</div>
+                          </div>
+                        </a>
+                      )}
                     </div>
                   </div>
-                </a>
-
-                <a
-                  href="/blog"
-                  className={[
-                    tileBase,
-                    'bg-black bg-cover bg-center relative text-white',
-                    'border-0 hover:border-0 ring-1 ring-inset ring-white/10 hover:ring-white/20',
-                    'col-span-1 md:col-span-3 p-0 text-left min-h-[160px]',
-                  ].join(' ')}
-                  style={{ backgroundImage: "url('/images/abstract/Frame%20120827.png')" }}
-                >
-                  <div className="absolute inset-0 bg-black/40 transition-colors group-hover:bg-black/30" />
-                  <div className="relative z-10 h-full">
-                    <div className="absolute bottom-2 left-2 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/55 px-2.5 py-1 text-sm font-semibold text-white/95 backdrop-blur">
-                      Insights <span className="text-white/70">↘</span>
-                    </div>
-                  </div>
-                </a>
-
-                {/* Row 2: Builds tile + Contact tile + Latest Insight */}
-                <a
-                  href="/projects?tag=Builds"
-                  className={[
-                    tileBase,
-                    'bg-black bg-cover bg-center relative text-white',
-                    'border-0 hover:border-0 ring-1 ring-inset ring-white/10 hover:ring-white/20',
-                    'col-span-1 md:col-span-3 p-0 text-left min-h-[160px]',
-                  ].join(' ')}
-                  style={{ backgroundImage: "url('/images/abstract/Frame%20120825.png')" }}
-                >
-                  <div className="absolute inset-0 bg-black/40 transition-colors group-hover:bg-black/30" />
-                  <div className="relative z-10 h-full">
-                    <div className="absolute bottom-2 left-2 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/55 px-2.5 py-1 text-sm font-semibold text-white/95 backdrop-blur">
-                      Builds <span className="text-white/70">↘</span>
-                    </div>
-                  </div>
-                </a>
-
-                <a
-                  href="/contact"
-                  className={[
-                    tileBase,
-                    'bg-black bg-cover bg-center relative text-white',
-                    'border-0 hover:border-0 ring-1 ring-inset ring-white/10 hover:ring-white/20',
-                    'col-span-1 md:col-span-3 p-0 text-left min-h-[160px]',
-                  ].join(' ')}
-                  style={{ backgroundImage: "url('/images/abstract/Frame%20120826.png')" }}
-                >
-                  <div className="absolute inset-0 bg-black/40 transition-colors group-hover:bg-black/30" />
-                  <div className="relative z-10 h-full">
-                    <div className="absolute bottom-2 left-2 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/55 px-2.5 py-1 text-sm font-semibold text-white/95 backdrop-blur">
-                      Contact <span className="text-white/70">↘</span>
-                    </div>
-                  </div>
-                </a>
-
-                {latestPost ? (
-                  <a
-                    href={`/blog/${latestPost.slug}`}
-                    className={[tileBase, 'col-span-1 sm:col-span-2 md:col-span-6 p-5 md:p-6 text-left bg-secondary/30'].join(' ')}
-                  >
-                    <div className="relative z-10 h-full flex flex-col">
-                      <div className="text-xs opacity-70 mb-2">Latest Insight</div>
-                      <div className="text-lg md:text-xl font-medium leading-snug tracking-tight max-w-[36ch]">
-                        {latestPost.data.title}
-                      </div>
-                      <div className="text-sm opacity-60 mt-2 max-w-[42ch] line-clamp-2">
-                        {latestPost.data.description}
-                      </div>
-                      <div className="absolute bottom-5 right-5 text-lg opacity-70 group-hover:opacity-100 transition-opacity">↘</div>
-                    </div>
-                  </a>
-                ) : (
-                  <a
-                    href="/about"
-                    className={[tileBase, 'col-span-1 sm:col-span-2 md:col-span-6 p-5 md:p-6 text-left bg-secondary/30'].join(' ')}
-                  >
-                    <div className="relative z-10 h-full flex flex-col">
-                      <div className="text-xs opacity-70 mb-2">Resume • Experience</div>
-                      <div className="text-lg md:text-xl font-medium leading-snug tracking-tight max-w-[36ch]">
-                        A quick scan of roles, skills, and outcomes across 15+ years
-                      </div>
-                      <div className="absolute bottom-5 right-5 text-lg opacity-70 group-hover:opacity-100 transition-opacity">↘</div>
-                    </div>
-                  </a>
-                )}
+                </div>
               </div>
-            </div>
-            </div>
+              )}
 
-            {/* Browse traditionally link */}
-            <div className="mt-6 text-center">
-              <a
-                href="/projects"
-                className="inline-flex items-center gap-2 text-sm text-muted-foreground/70 hover:text-foreground transition-colors"
+              {/* Portfolio View Content */}
+              {displayedView === 'portfolio' && (
+              <div
+                className="w-full flex flex-col items-center animate-[fadeSlideUp_0.35s_ease-out_both]"
               >
-                <span>Or browse my work traditionally</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 12h14"/>
-                  <path d="m12 5 7 7-7 7"/>
-                </svg>
-              </a>
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-medium leading-tight text-foreground/95 max-w-[680px]">
+                  Hi, I'm Nasif. Product Designer who builds.
+                </h1>
+                <p className="text-base md:text-lg text-muted-foreground/80 max-w-[680px] mt-4">
+                  I design brands, build products and ship apps. 15+ years designing and building solutions. My first language is design, but I also speak dev and AI.
+                </p>
+
+                {/* Projects Grid */}
+                <div className="w-full mt-12 md:mt-16 text-left">
+                  <div className="flex items-center justify-between gap-4 mb-6">
+                    <div className="text-xs tracking-wide uppercase text-muted-foreground/70">Selected Work</div>
+                    <div className="h-px flex-1 bg-border/60" />
+                    <a
+                      href="/projects"
+                      className="text-xs text-muted-foreground/70 hover:text-foreground transition-colors"
+                    >
+                      View all →
+                    </a>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                    {projects.map((project, i) => (
+                      <a
+                        key={project.slug}
+                        href={`/projects/${project.slug}`}
+                        className={[
+                          'group block rounded-2xl border border-border/60 bg-card/60 overflow-hidden transition-all hover:bg-card/75 hover:border-border hover:-translate-y-0.5 hover:shadow-[0_18px_50px_rgba(0,0,0,0.25)] focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20',
+                          displayedView === 'portfolio' ? 'animate-[fadeSlideUp_0.4s_ease-out_both]' : '',
+                        ].join(' ')}
+                        style={displayedView === 'portfolio' ? { animationDelay: `${i * 60}ms` } : undefined}
+                      >
+                        <div className="aspect-video overflow-hidden bg-muted/20 relative">
+                          <img
+                            src={project.image}
+                            alt={project.title}
+                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                            loading="lazy"
+                          />
+                        </div>
+                        <div className="p-5 text-left">
+                          <h2 className="text-base sm:text-lg font-semibold text-foreground/92 group-hover:text-primary transition-colors line-clamp-1">
+                            {project.title}
+                          </h2>
+                          <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
+                            {project.description}
+                          </p>
+                          <div className="flex items-center gap-2 mt-3">
+                            {project.tags.slice(0, 2).map((tag) => (
+                              <span
+                                key={tag}
+                                className="inline-flex items-center rounded-md border border-transparent bg-secondary/80 px-2 py-0.5 text-xs font-semibold text-secondary-foreground"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                            {project.tags.length > 2 && (
+                              <span className="text-[10px] text-muted-foreground font-medium">
+                                +{project.tags.length - 2}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              )}
             </div>
 
-            {/* Simple Footer (Intro Only) */}
+            {/* Footer */}
             <footer className="w-full border-t border-border/40 mt-8 pt-6 pb-4 text-xs text-muted-foreground/60">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>© {new Date().getFullYear()} Nasif Salaam</div>
@@ -1028,9 +1143,9 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
 
                 {/* Render Project Cards if present */}
                 {msg.projects && msg.projects.length > 0 && (
-                  <div className="w-full pl-12 pr-2">
-                    <div className="flex items-center justify-between gap-3 mb-3">
-                      <div className="text-xs tracking-wide uppercase text-muted-foreground">Projects</div>
+                  <div className="w-full pl-12 pr-2 text-left">
+                    <div className="flex items-center justify-between mb-3">
+                      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Projects</span>
                       <a
                         href="/projects"
                         className="text-xs text-muted-foreground/80 hover:text-foreground transition-colors"
@@ -1038,11 +1153,11 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
                         View all →
                       </a>
                     </div>
-                    <div className="flex gap-4 overflow-x-auto pb-2 snap-x snap-mandatory">
+                    <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory">
                       {msg.projects.map((project) => (
                         <div
                           key={project.slug}
-                          className="min-w-[240px] sm:min-w-[260px] md:min-w-[300px] snap-start"
+                          className="min-w-[220px] sm:min-w-[240px] md:min-w-[260px] snap-start"
                         >
                           <ProjectCard {...project} />
                         </div>
@@ -1053,11 +1168,9 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
 
                 {/* Render resource cards when present */}
                 {msg.role === 'assistant' && msg.resources && msg.resources.length > 0 && (
-                  <div className="w-full pl-12 pr-2 mt-4">
+                  <div className="w-full pl-12 pr-2 text-left">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                        Resources
-                      </span>
+                      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Resources</span>
                       <a
                         href="/resources"
                         className="text-xs text-muted-foreground/80 hover:text-foreground transition-colors"
@@ -1069,7 +1182,7 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
                       {msg.resources.map((resource) => (
                         <div
                           key={resource.url}
-                          className="min-w-[200px] sm:min-w-[220px] md:min-w-[240px] snap-start"
+                          className="min-w-[220px] sm:min-w-[240px] md:min-w-[260px] snap-start"
                         >
                           <ResourceCard {...resource} />
                         </div>
@@ -1080,11 +1193,9 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
 
                 {/* Render blog cards when present */}
                 {msg.role === 'assistant' && msg.blogs && msg.blogs.length > 0 && (
-                  <div className="w-full pl-12 pr-2 mt-4">
+                  <div className="w-full pl-12 pr-2 text-left">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                        Insights
-                      </span>
+                      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Insights</span>
                       <a
                         href="/blog"
                         className="text-xs text-muted-foreground/80 hover:text-foreground transition-colors"
@@ -1096,7 +1207,7 @@ export default function ChatInterface({ latestPost }: ChatInterfaceProps) {
                       {msg.blogs.map((blog) => (
                         <div
                           key={blog.slug}
-                          className="min-w-[200px] sm:min-w-[220px] md:min-w-[240px] snap-start"
+                          className="min-w-[220px] sm:min-w-[240px] md:min-w-[260px] snap-start"
                         >
                           <BlogCard {...blog} />
                         </div>

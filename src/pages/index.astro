@@ -5,6 +5,17 @@ import { getCollection } from 'astro:content';
 
 const blogPosts = await getCollection('blog');
 const latestPost = blogPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())[0];
+
+const allProjects = await getCollection('projects');
+const projects = allProjects
+  .filter((project) => project.data.published !== false)
+  .map((p) => ({
+    title: p.data.title,
+    description: p.data.description,
+    image: p.data.image,
+    tags: p.data.tags || [],
+    slug: p.slug,
+  }));
 ---
 
 <Layout 
@@ -34,7 +45,7 @@ const latestPost = blogPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pu
       <li>Full-stack Design Engineering</li>
     </ul>
   </div>
-  <ChatInterface client:only="react" latestPost={latestPost}>
+  <ChatInterface client:only="react" latestPost={latestPost} projects={projects}>
     <div slot="fallback" class="w-full h-[100dvh] flex flex-col bg-background relative overflow-hidden">
       <!-- Skeleton Nav -->
       <div class="fixed top-4 left-0 right-0 z-40 px-4">
