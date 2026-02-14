@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Bot, Check, Copy, Menu, Send, StopCircle, User, X } from 'lucide-react';
+import { Check, Copy, Menu, Send, StopCircle, User, X } from 'lucide-react';
 import ProjectCard from './ProjectCard';
 import ResourceCard from './ResourceCard';
 import BlogCard from './BlogCard';
@@ -1081,16 +1081,24 @@ export default function ChatInterface({ latestPost, projects = [] }: ChatInterfa
               >
                 <div className={`flex gap-4 max-w-full ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   {msg.role === 'assistant' && (
-                    <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                      <Bot size={18} className="text-primary" />
+                    <div className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center shrink-0 overflow-hidden">
+                      <img src="/images/ns26/logo26w-gradient.svg" alt="NS" className="w-5 h-5 object-contain" />
                     </div>
                   )}
                   
                   <div
-                    className={`max-w-[85%] rounded-2xl px-6 py-4 relative group ${
+                    style={{
+                      background: msg.role === 'user'
+                        ? 'linear-gradient(135deg, hsl(189 94% 43% / 0.12) 0%, hsl(189 94% 43% / 0.05) 100%)'
+                        : 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)',
+                      boxShadow: msg.role === 'user'
+                        ? 'inset 0 1px 0 0 hsl(189 94% 43% / 0.2), inset 0 -1px 0 0 rgba(0,0,0,0.1), 0 8px 32px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.1)'
+                        : 'inset 0 1px 0 0 rgba(255,255,255,0.12), inset 0 -1px 0 0 rgba(0,0,0,0.08), 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08)',
+                    }}
+                    className={`max-w-[85%] rounded-2xl px-6 py-4 relative group backdrop-blur-2xl ${
                       msg.role === 'user'
-                        ? 'bg-primary/10 border border-primary/20 text-foreground'
-                        : 'bg-muted/50 border border-border text-foreground'
+                        ? 'border border-primary/20 text-foreground'
+                        : 'border border-white/[0.1] text-foreground'
                     }`}
                   >
                     {msg.role === 'assistant' && msg.id === typingMessageId && !msg.content ? (
@@ -1123,7 +1131,7 @@ export default function ChatInterface({ latestPost, projects = [] }: ChatInterfa
                   </div>
 
                   {msg.role === 'user' && (
-                    <div className="w-8 h-8 rounded-full bg-primary/15 border border-primary/20 flex items-center justify-center shrink-0">
+                    <div className="w-8 h-8 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20 flex items-center justify-center shrink-0">
                       <User size={18} className="text-primary" />
                     </div>
                   )}

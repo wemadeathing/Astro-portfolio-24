@@ -8,15 +8,7 @@ primary_focus:
   - "Branding and product design"
 ---
 
-## How this file is used (read this first)
-This file is the **primary knowledge base** for the site chat assistant. It is injected into the assistant's system prompt as **"Context - Nasif (single source of truth)"**.
-
-The assistant also receives:
-- The **About page** (auto-extracted from `src/pages/about.astro`)
-- **Projects** collection summaries (`src/content/projects/*`)
-- **Blog** collection summaries (`src/content/blog/*`)
-
-When information is missing from projects/blog/about, the assistant must rely on **this file**.
+<!-- Knowledge base for the site chat assistant -->
 
 ## Writing requirements (treat this like a prompt spec)
 - **Be factual and grounded**. Do not invent details. If unknown, say "I don't have that detail" and offer a next step.
@@ -201,7 +193,7 @@ Note: Nasif is selective about engagements. The right fit means organizations th
 - AstroJS for static site generation (this portfolio is built with Astro, React, and Tailwind)
 - Supabase (authentication, databases, real-time features)
 - FlutterFlow for mobile app development
-- API integration and understanding (the chat assistant you're using integrates OpenRouter API)
+- API integration and understanding
 - Database concepts and implementation
 - Authentication systems
 - Design-to-code workflows
@@ -229,28 +221,25 @@ Note: Nasif is selective about engagements. The right fit means organizations th
 When users ask about specific technologies or capabilities, reference this portfolio as a concrete example:
 
 ### Tech Stack
-- **Framework**: Astro (static site generation with SSR for API routes)
+- **Framework**: Astro
 - **UI**: React components with TypeScript
 - **Styling**: Tailwind CSS with custom design system
-- **AI Chat**: Custom RAG implementation using OpenRouter API (Gemini 2.5 Flash Lite)
+- **AI Chat**: AI-powered chat assistant with site-aware answers
 - **Content**: MDX for blog posts and project case studies, content collections for type-safe data
-- **Deployment**: Netlify with serverless functions
+- **Deployment**: Netlify
 - **Component Libraries**: Radix UI primitives, shadcn/ui components
 
 ### AI Assistant Implementation
-The chat assistant you're using demonstrates:
-- Retrieval-augmented generation (RAG) with content ranking
-- OpenRouter API integration (Gemini 2.5 Flash Lite via OpenRouter)
-- Streaming responses with Server-Sent Events
-- Prompt injection protection and input sanitization
+The chat assistant demonstrates:
+- AI-powered conversational interface with site-aware answers
 - Context-aware card attachments (projects, resources, blog posts)
-- Semantic search using Jaccard similarity and fuzzy matching
+- Input validation and security measures
 
 ### Use Cases for Self-Reference
 - **"What do you use for Astro websites?"** → "This portfolio is built with Astro..."
-- **"Can you build AI features?"** → "The chat assistant you're using right now is an example..."
+- **"Can you build AI features?"** → "This site's chat assistant is an example of AI integration in a real product..."
 - **"What UI libraries do you use?"** → "I use Radix UI and shadcn/ui - you can see them in action throughout this site..."
-- **"How do you handle API integration?"** → "This chat integrates OpenRouter API with RAG-based content retrieval..."
+- **"How do you handle API integration?"** → "This chat uses AI to answer questions about my work based on site content..."
 
 ## Link routing map (the assistant should use this)
 - **About / background / skills / experience** → `/about`
