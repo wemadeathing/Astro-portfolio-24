@@ -9,6 +9,8 @@ const latestPost = blogPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pu
 const allProjects = await getCollection('projects');
 const projects = allProjects
   .filter((project) => project.data.published !== false)
+  .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999))
+  .slice(0, 6)
   .map((p) => ({
     title: p.data.title,
     description: p.data.description,

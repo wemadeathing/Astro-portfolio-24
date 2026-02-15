@@ -6,7 +6,9 @@ const activeTag = Astro.url.searchParams.get('tag');
 
 // Only get published projects
 const allProjects = await getCollection('projects');
-const projects = allProjects.filter((project) => project.data.published !== false);
+const projects = allProjects
+  .filter((project) => project.data.published !== false)
+  .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999));
 
 const tagCounts = projects
   .flatMap((p) => p.data.tags ?? [])

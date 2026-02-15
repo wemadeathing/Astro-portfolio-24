@@ -28,6 +28,7 @@ const projects = defineCollection({
     tags: z.array(z.string()),
     featured: z.boolean().default(false),
     published: z.boolean().default(true),
+    order: z.number().optional(),
     // AI-facing metadata (optional)
     ai_summary: z.string().optional(),
     use_for_questions: z.array(z.string()).optional().default([]),

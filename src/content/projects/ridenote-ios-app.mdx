@@ -1,0 +1,217 @@
+---
+title: "RideNote - Mountain Bike Settings Tracker"
+description: "Designed, developed, and shipped a production iOS app solo in 30 days using AI-assisted development. From idea validation to App Store approval."
+ai_summary: "End-to-end solo build of a production iOS app for mountain bikers to track bike settings. Covers product planning, PRD-driven development, offline-first SQLite architecture, AI-assisted coding with Cursor, App Store submission, and beta testing. Demonstrates full product ownership from concept to launch."
+image: "/images/work/ridenote-hero.png"
+tags: ["Builds", "Mobile App", "Solo Founder", "React Native", "AI-Assisted Development"]
+use_for_questions: ["Mobile app development", "Solo building", "AI-assisted development", "Product ownership", "App Store submission", "React Native", "Offline-first architecture"]
+featured: true
+published: true
+order: 1
+---
+import ClickableImage from '../../components/ClickableImage.astro';
+import FeatureCard from '../../components/FeatureCard.astro';
+import ProjectStats from '../../components/ProjectStats.astro';
+import TechStack from '../../components/TechStack.astro';
+
+<ProjectStats
+  stats={[
+    { label: "Timeline", value: "30 Days" },
+    { label: "Role", value: "Solo Designer & Dev" },
+    { label: "Type", value: "iOS App" },
+    { label: "Status", value: "Live in App Store" }
+  ]}
+/>
+
+<div class="prose prose-lg max-w-none">
+
+## Project Overview
+
+I've been mountain biking for over a decade and could never remember whether 26 or 28 PSI worked better at my local trail. Notes were scattered across apps, whiteboards, and memory. The existing solutions were either too complex (suspension tuning calculators built for pros) or too generic (notes apps that don't understand bike settings).
+
+RideNote is a fast ride journal: 60 seconds to log a ride, 10 seconds to check what worked last time. It's a searchable history of bike settings and performance, designed to work completely offline. Not a suspension tuning calculator, not a social platform, not a Strava competitor. A focused tool that solves one problem well.
+
+This wasn't just about solving my own problem. I wanted a real end-to-end case study: a production iOS app in the App Store, built solo, demonstrating full product ownership.
+
+**Note:** This case study focuses on the product and development process. I'm working on a separate design case study that dives deep into the branding, icon creation, and UI design decisions. That will cover the visual design evolution, typography choices, color system, and the thinking behind making it feel "premium" for a V1.
+
+## Tools & Technologies
+
+<TechStack
+  items={[
+    { category: "Development", tools: ["React Native", "Expo", "TypeScript"] },
+    { category: "Data", tools: ["SQLite", "Local-first"] },
+    { category: "AI Tools", tools: ["Cursor AI", "Claude", "Perplexity"] },
+    { category: "Design", tools: ["Affinity Designer", "Figma"] }
+  ]}
+/>
+
+## The Challenge
+
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 my-8">
+  <FeatureCard title="Solo Everything">
+    Product design, development, brand, App Store prep. Every hat, every decision, no team to delegate to.
+  </FeatureCard>
+  <FeatureCard title="Scope Discipline">
+    A long feature list that needed ruthless cutting. Social features, AI recommendations, maintenance tracking, all cut.
+  </FeatureCard>
+  <FeatureCard title="Speed vs. Polish">
+    Ship in 30 days while making it feel premium. Beta testers needed to say "smooth," not "rough prototype."
+  </FeatureCard>
+  <FeatureCard title="First App Store Submission">
+    Never shipped an iOS app before. App Store Connect, TestFlight, review guidelines, all new territory.
+  </FeatureCard>
+</div>
+
+## Planning: The PRD as Self-Contract
+
+I started with a comprehensive Product Requirements Document. Not a formality, a contract with myself to prevent feature creep.
+
+The PRD defined success metrics, user personas, and most importantly, what I would NOT build. Every time I wanted to add a feature during development, I had to justify it against this document. Most times, I couldn't. Social sharing, AI recommendations, Strava integration, all parked in Phase 2.
+
+The primary persona was clear: "Weekend Warrior Matt," someone who rides 2-4 times per month on a trail bike, uses Strava comfortably, but doesn't want to become a suspension engineer. He just wants to remember if 26 or 28 PSI felt better last month.
+
+<ClickableImage
+  src="/images/work/ridenote-prd.png"
+  alt="Claude project instructions that formed the foundation of RideNote"
+  caption="Detailed project instructions created in Claude that informed the PRD, scope, and every build decision from day one"
+/>
+
+
+## Design + Development: Building in Code
+
+I didn't wireframe in Figma. The approach was PRD-driven direct implementation using Cursor AI. Unconventional, but it works for solo projects with clear scope and well-understood user flows. It wouldn't scale to team environments where you need shared artifacts, but here it meant I could iterate fast.
+
+Cursor handled boilerplate code, feature generation from clear prompts, and build debugging. But it couldn't make UX flow decisions, design polish choices, or scope prioritization calls. Those required human judgment at every step.
+
+<ClickableImage
+  src="/images/work/ridenote-code-design.png"
+  alt="Building directly in Cursor AI"
+  caption="Designing and building simultaneously in Cursor, no handoff, no waiting"
+/>
+
+
+## The Context-Switching Reality
+
+Solo building means constantly switching between brand design, UI design, UX thinking, development, and go-to-market. AI helps with execution speed, but the cognitive load of wearing every hat is real and under-discussed in "I built X in a weekend" posts.
+
+My approach was to batch similar work: one day for brand, one day for UI implementation, one day for App Store prep. It reduces thrashing, though it doesn't eliminate the mental overhead entirely.
+
+## Key Decision: Offline-First Architecture
+
+The most impactful technical decision was making RideNote completely local. No user accounts, no cloud sync, pure SQLite storage on device.
+
+Partly pragmatic (faster development without a backend) and partly philosophical (better UX with instant saves, works on trail rides with no signal, privacy by default). The trade-off, no cross-device sync, was acceptable for V1.0.
+
+The payoff was immediate. Beta testers specifically called out how "smooth" the app feels. No loading spinners, no network errors, no sign-up friction. Everything just works, instantly. When you're in a parking lot after a ride logging settings before you forget, that speed matters.
+
+## Key Decision: Baseline vs. Ride Note Mental Model
+
+Early versions mixed two concepts that confused users: bike configuration (hardware capabilities) and baseline settings (what you typically run).
+
+I separated these into distinct concepts. Your baseline is your typical starting settings, stored once per bike. Ride notes are deviations from that baseline, with performance feedback attached. Users understand they're tracking experiments, not documenting a spec sheet. The mental model became clearer immediately.
+
+<ClickableImage
+  src="/images/work/ridenote-baseline-model.png"
+  alt="Baseline vs ride note concept"
+  caption="Baseline settings vs. ride notes, two distinct concepts that made the app click"
+/>
+
+
+## Key Decision: Three-Dimensional Feedback
+
+Instead of a single "How was the ride?" star rating, I added three sliders: Grip, Feel, and Control. Each on a 1-5 scale.
+
+Tire pressure affects grip differently than suspension affects comfort. A single rating loses that nuance. The three sliders take about 10 seconds to adjust, fast enough to not feel burdensome, detailed enough to be useful when reviewing past rides.
+
+Beta testers said this was the feature that made RideNote feel purpose-built rather than generic. A small detail that signals the app understands mountain biking.
+
+<ClickableImage
+  src="/images/work/ridenote-feedback-sliders.png"
+  alt="Three-dimensional feedback sliders"
+  caption="Grip, Feel, Control. Purpose-built feedback that a generic notes app can't offer"
+/>
+
+
+## Technical Challenge: The Slider That Kept Breaking
+
+A React Native slider component worked perfectly in development but caused Expo builds to fail every time. Each cloud build took about an hour, so failures were costly.
+
+The slider required React Native Reanimated v5, but Expo's cloud builds used v3. The fix was a preflight script that checks critical dependencies before each build, catching issues before wasting an hour on a failed build.
+
+Small fix in retrospect, but it saved hours. AI can help debug once you know what's broken, but recognizing the constraint requires experience.
+
+<ClickableImage
+  src="/images/work/ridenote-slider-debug.png"
+  alt="Debugging the slider build issue"
+  caption="The slider that worked in dev but broke every production build"
+/>
+
+
+## App Store: First Submission
+
+First submission was rejected. Two issues: config file had `iPad: true` for a non-iPad app, and iPad screenshots were accidentally included. Straightforward fix, config change, screenshot removal, resubmit. Approved in two days.
+
+<ClickableImage
+  src="/images/work/ridenote-app-store.png"
+  alt="App Store Connect showing rejection and resolution"
+  caption="First submission: rejected. Second submission: approved. The real process of shipping."
+/>
+
+While waiting for approval, I added three features users had mentioned: a pre-ride checklist, free-form notes, and custom checklists. These made the app more flexible without adding complexity to core ride tracking.
+
+<ClickableImage
+  src="/images/ridenote-live-in-appstore.png"
+  alt="RideNote in the App Store"
+  caption="Live in the App Store, from concept to production in 30 days"
+/>
+
+
+## Beta Testing & Feedback
+
+I tested with mountain biking friends, informal conversations after rides, handing them my phone and watching them use the app.
+
+Feedback was consistent: "works smooth" and "looks premium." The offline-first architecture paid off. No one ever saw a loading spinner. The brand execution exceeded expectations for a first version.
+
+Testing also caught language inconsistencies. Early versions used "ride logging" language like Strava, but users weren't logging rides. They were tracking bike setups. That subtle framing shift made the app's purpose clearer.
+
+## Results & Impact
+
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 my-8">
+  <FeatureCard title="Shipped to App Store">
+    Production iOS app, live and downloadable. Not a prototype, not a web app. Real software.
+  </FeatureCard>
+  <FeatureCard title="30-Day Build">
+    From PRD to App Store approval in about 30 days of focused work, solo.
+  </FeatureCard>
+  <FeatureCard title="Beta Validation">
+    "Smooth" and "premium" feedback. The baseline + experimentation model made sense to real riders.
+  </FeatureCard>
+  <FeatureCard title="Zero Backend">
+    Offline-first architecture meant no DevOps, no server costs, no auth headaches, and better UX.
+  </FeatureCard>
+</div>
+
+## Reflection: What Worked
+
+The PRD as a self-contract kept me disciplined. Writing down what I would NOT build was just as important as defining what I would. The offline-first architecture compounded benefits over time: faster development, better UX, simpler privacy model. Good architectural decisions make later decisions easier.
+
+AI tools sped up execution significantly. Cursor helped me build features in hours instead of days. Claude helped with product strategy and marketing copy. But the real value came from using AI strategically, not as a replacement for thinking.
+
+## Reflection: What I'd Do Differently
+
+I waited until the app was "done" to get beta feedback. Should have shared rough builds much sooner. Early feedback would have caught the "ride logging" vs. "setup tracking" language issue weeks earlier.
+
+I didn't document technical decisions as I went, which meant reconstructing context for this case study. A quick decision log would have helped.
+
+I mixed App Store prep with bug fixes, which was inefficient. Screenshots and copy writing require a different mindset than debugging. Should have blocked a full day just for submission assets.
+
+## What's Next
+
+Short term: recruiting beta testers from Reddit and Pinkbike mountain biking communities. Validating whether the baseline + ride note model helps riders remember settings over time.
+
+Longer term: freemium model with a free tier (one bike, last 10 ride notes) and premium features (unlimited bikes, full history, cloud sync). Exploring voice notes as a quick logging option for premium, capture thoughts immediately after a descent without typing.
+
+A detailed go-to-market case study will follow once there are real metrics to analyze.
+
+</div>

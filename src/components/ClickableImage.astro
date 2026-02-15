@@ -53,8 +53,8 @@ const imageSrc = src.startsWith('/') ? src : `/${src}`;
       const modalImg = modal.querySelector('img')!;
       const closeBtn = document.getElementById('closeModalBtn')!;
 
-      function setBodyScrollLock(lock) {
-        const w = window;
+      function setBodyScrollLock(lock: boolean) {
+        const w = window as Window & { __scrollLockCount?: number; __scrollLockPrevOverflow?: string; __scrollLockPrevPaddingRight?: string };
         const b = document.body;
         if (typeof w.__scrollLockCount !== 'number') w.__scrollLockCount = 0;
 
@@ -68,7 +68,7 @@ const imageSrc = src.startsWith('/') ? src : `/${src}`;
           }
           w.__scrollLockCount += 1;
         } else {
-          w.__scrollLockCount = Math.max(0, w.__scrollLockCount - 1);
+          w.__scrollLockCount = Math.max(0, (w.__scrollLockCount ?? 0) - 1);
           if (w.__scrollLockCount === 0) {
             b.style.overflow = w.__scrollLockPrevOverflow || '';
             b.style.paddingRight = w.__scrollLockPrevPaddingRight || '';
