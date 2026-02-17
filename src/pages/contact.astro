@@ -1,4 +1,5 @@
 ---
+export const prerender = true;
 import Layout from '../layouts/Layout.astro';
 
 const emailAddress = 'hello@nasifsalaam.com';
@@ -13,7 +14,7 @@ const responseTime = '24 hours';
 >
   <section class="py-10 sm:py-14">
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-2xl mx-auto">
+      <div class="max-w-2xl mx-auto stagger-children">
         <h1 class="type-h1 text-white/95">Get in touch</h1>
         <p class="mt-4 type-lead text-white/80">
           Have a project in mind? Send a note and I'll reply with next steps.

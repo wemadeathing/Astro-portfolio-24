@@ -551,6 +551,7 @@ export default function ChatInterface({ latestPost, projects = [] }: ChatInterfa
 
   const menuLinks = [
     { title: 'Work', description: 'Browse featured case studies', href: '/projects' },
+    { title: 'Work With Me', description: 'Services, process, and how to get started', href: '/work-with-me' },
     { title: 'About', description: 'Background and approach', href: '/about' },
     { title: 'Insights', description: 'Writing on AI and product craft', href: '/blog' },
     { title: 'Resources', description: 'Curated tools, videos, and links', href: '/resources' },

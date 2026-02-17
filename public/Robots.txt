@@ -1,8 +1,9 @@
 User-agent: *
 Allow: /
+Disallow: /api/
+Disallow: /thank-you
 
-
-# Allow AI search and agent use (Explicitly welcoming AI bots)
+# Allow AI search and agent use
 User-agent: OAI-SearchBot
 User-agent: ChatGPT-User
 User-agent: PerplexityBot

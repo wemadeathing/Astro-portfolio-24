@@ -1,6 +1,8 @@
 import rss from '@astrojs/rss';
 import { getCollection } from 'astro:content';
 
+export const prerender = true;
+
 export async function GET(context) {
   const blog = await getCollection('blog');
   const projects = await getCollection('projects');
@@ -16,7 +18,7 @@ export async function GET(context) {
       link: `/blog/${post.slug}/`,
     })),
     ...projects
-      .filter((project) => project.data.published)
+      .filter((project) => project.data.published !== false)
       .map((project) => ({
         title: project.data.title,
         // Projects might not have a pubDate, so we might need a fallback or exclude them if strictly time-based

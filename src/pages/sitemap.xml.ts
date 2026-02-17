@@ -2,7 +2,10 @@ import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { tagToSlug } from '../lib/tag-utils';
 
+export const prerender = true;
+
 export const GET: APIRoute = async ({ site }) => {
+  const buildDate = '2025-02-17';
   const baseUrl = String(site || 'https://www.nasifsalaam.com').replace(/\/$/, '');
   
   // Get all blog posts
@@ -15,39 +18,51 @@ export const GET: APIRoute = async ({ site }) => {
   const staticPages = [
     {
       url: '/',
-      lastmod: new Date().toISOString().split('T')[0],
+      lastmod: buildDate,
       changefreq: 'monthly',
       priority: '1.0'
     },
     {
       url: '/projects',
-      lastmod: new Date().toISOString().split('T')[0],
+      lastmod: buildDate,
       changefreq: 'monthly',
       priority: '0.8'
     },
     {
       url: '/about',
-      lastmod: new Date().toISOString().split('T')[0],
+      lastmod: buildDate,
       changefreq: 'monthly',
       priority: '0.7'
     },
     {
       url: '/contact',
-      lastmod: new Date().toISOString().split('T')[0],
+      lastmod: buildDate,
       changefreq: 'monthly',
       priority: '0.7'
     },
     {
       url: '/blog',
-      lastmod: new Date().toISOString().split('T')[0],
+      lastmod: buildDate,
       changefreq: 'weekly',
       priority: '0.8'
     },
     {
       url: '/resources',
-      lastmod: new Date().toISOString().split('T')[0],
+      lastmod: buildDate,
       changefreq: 'weekly',
       priority: '0.7'
+    },
+    {
+      url: '/work-with-me',
+      lastmod: buildDate,
+      changefreq: 'monthly',
+      priority: '0.7'
+    },
+    {
+      url: '/tools',
+      lastmod: buildDate,
+      changefreq: 'monthly',
+      priority: '0.5'
     }
   ];
 
@@ -70,17 +85,17 @@ export const GET: APIRoute = async ({ site }) => {
     )
   ).map((slug) => ({
     url: `/blog/tags/${slug}`,
-    lastmod: new Date().toISOString().split('T')[0],
+    lastmod: buildDate,
     changefreq: 'weekly',
     priority: '0.4'
   }));
 
   // Project pages
   const projectPages = projects
-    .filter(project => project.data.published)
+    .filter(project => project.data.published !== false)
     .map(project => ({
       url: `/projects/${project.slug}`,
-      lastmod: new Date().toISOString().split('T')[0],
+      lastmod: buildDate,
       changefreq: 'monthly',
       priority: '0.6'
     }));

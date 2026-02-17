@@ -1,0 +1,251 @@
+---
+export const prerender = true;
+import Layout from '../layouts/Layout.astro';
+import Button from '../components/Button.astro';
+
+const services = [
+  {
+    number: '01',
+    label: 'Get Online & Look the Part',
+    heading: 'A professional presence that actually brings in business.',
+    body: "Your website and brand are often the first thing a potential customer sees. If it looks outdated, rushed, or generic — they move on. I design and build websites and brand identities that make small and medium businesses look credible, modern, and trustworthy.",
+    includes: [
+      'New websites from scratch',
+      'Brand identity — logo, colours, typography',
+      'Redesigns and refreshes',
+    ],
+    audience: "Small business owners, service providers, and entrepreneurs who know their business is good but their online presence doesn't reflect it yet.",
+    image: '/images/work-with-me-01.png',
+    imageAlt: 'Website and brand identity design by Nasif Salaam',
+  },
+  {
+    number: '02',
+    label: 'Turn Your Idea Into a Working Product',
+    heading: 'From idea to working product in weeks, not months.',
+    body: "Got a business idea that needs an app or a digital platform but no technical team? I handle design, build, and shipping myself. One person, no gaps, no waiting on someone else to pick it up.",
+    includes: [
+      'MVP builds for web and mobile',
+      'Working prototypes to test',
+      'Full product — design to deployment',
+    ],
+    audience: 'Founders, entrepreneurs, and corporate innovation teams who have a clear idea and need someone to execute it end to end.',
+    image: '/images/work-with-me-02.png',
+    imageAlt: 'Product and MVP development by Nasif Salaam',
+  },
+  {
+    number: '03',
+    label: 'Get Your Team Using AI Properly',
+    heading: 'AI is changing how businesses work. Let me show your team how.',
+    body: "I run practical, hands-on workshops that teach teams how to use tools like Claude, ChatGPT, and other AI platforms in their actual day-to-day work. Not theory. Real workflows, real tools, real results.",
+    includes: [
+      'Half-day workshops (up to 20)',
+      'Custom sessions for your industry',
+      'Follow-up support',
+    ],
+    audience: 'Business owners and team leads who want their people to work smarter and faster using AI — without the overwhelm.',
+    image: '/images/work-with-me-03.png',
+    imageAlt: 'AI training workshops by Nasif Salaam',
+  },
+];
+
+const steps = [
+  {
+    number: '1',
+    title: 'We talk',
+    description: "Book a free 30-minute call. Tell me what you need. I'll tell you honestly whether I'm the right person to help.",
+  },
+  {
+    number: '2',
+    title: 'I put a plan together',
+    description: "Based on our conversation, I'll come back with a clear scope, timeline, and price. No vague proposals.",
+  },
+  {
+    number: '3',
+    title: 'We build it',
+    description: "I get to work. You stay in the loop. Most projects move fast — I'm not the kind of person who disappears for weeks.",
+  },
+  {
+    number: '4',
+    title: "You've got something real",
+    description: "Whether it's a website, a product, or a newly AI-capable team — you walk away with something that works.",
+  },
+];
+
+const calLink = 'https://calendly.com/salaam-nasif/30min';
+const emailAddress = 'hello@nasifsalaam.com';
+---
+
+<Layout
+  title="Work With Me | Nasif Salaam — Product Designer & Builder"
+  description="I design brands, build products, and train teams on AI. Whether you need a professional online presence, a working MVP, or AI workshops — let's talk."
+>
+  <!-- Hero -->
+  <section class="py-10 sm:py-14">
+    <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-[68ch]">
+        <h1 class="text-4xl sm:text-5xl md:text-[54px] font-medium tracking-[-0.03em] leading-[1.05] text-white/95">
+          Let's build something that actually works.
+        </h1>
+        <p class="mt-5 type-lead text-white/80">
+          I'm Nasif — a product designer with 15 years of experience who doesn't just design things, I build them. Whether you need a professional online presence, a working product, or your team trained on AI — I can help you get there fast.
+        </p>
+        <div class="mt-7">
+          <Button href={calLink} text="Book a free 30-minute call →" variant="primary" external />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="h-px bg-white/10"></div>
+
+  <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
+
+    <!-- What I Can Do For You -->
+    <section id="services" class="py-12 sm:py-14 scroll-mt-28">
+      <div class="mb-10">
+        <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-3">Services</div>
+        <h2 class="type-h2 text-white/90">What I can do for you</h2>
+        <p class="mt-3 type-lead text-white/70 max-w-[56ch]">
+          Here's where I spend my time and where I can add the most value to your business.
+        </p>
+      </div>
+
+      <div class="space-y-5">
+        {services.map((service, i) => (
+          <div class="group rounded-2xl border border-white/10 bg-white/[0.03] overflow-hidden transition-colors hover:bg-white/[0.05] hover:border-white/15">
+            <div class:list={[
+              'grid grid-cols-1 lg:grid-cols-2 gap-0',
+              i % 2 === 1 ? 'lg:[direction:rtl]' : '',
+            ]}>
+              {/* Image */}
+              <div class="relative aspect-[16/10] lg:aspect-auto overflow-hidden lg:[direction:ltr]">
+                <img
+                  src={service.image}
+                  alt={service.imageAlt}
+                  class="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent lg:bg-none"></div>
+              </div>
+
+              {/* Content */}
+              <div class="p-6 sm:p-8 flex flex-col justify-center lg:[direction:ltr]">
+                <div class="flex items-baseline gap-3">
+                  <span class="text-primary font-semibold text-sm tabular-nums">{service.number}</span>
+                  <span class="text-xs tracking-[0.22em] uppercase text-white/50">{service.label}</span>
+                </div>
+
+                <h3 class="text-lg sm:text-xl font-semibold text-white/92 mt-3">
+                  {service.heading}
+                </h3>
+
+                <p class="mt-3 text-sm leading-[1.65] text-white/70">
+                  {service.body}
+                </p>
+
+                {/* Compact includes list */}
+                <ul class="mt-4 flex flex-wrap gap-2">
+                  {service.includes.map((item) => (
+                    <li class="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/65">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+
+                <p class="mt-4 text-xs text-white/45 leading-[1.6]">
+                  <span class="text-white/55 font-medium">For:</span> {service.audience}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <div class="h-px bg-white/10"></div>
+
+    <!-- How It Works -->
+    <section id="process" class="py-12 sm:py-14 scroll-mt-28">
+      <div class="mb-10">
+        <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-3">Process</div>
+        <h2 class="type-h2 text-white/90">How it works</h2>
+        <p class="mt-3 type-lead text-white/70 max-w-[56ch]">
+          No long discovery phases or complicated processes. Here's what working together actually looks like.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {steps.map((step) => (
+          <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-5 sm:p-6">
+            <div class="w-9 h-9 rounded-xl bg-primary/15 border border-primary/25 flex items-center justify-center text-primary text-sm font-semibold mb-4">
+              {step.number}
+            </div>
+            <h3 class="text-base font-semibold text-white/90">{step.title}</h3>
+            <p class="mt-2 text-sm text-white/65 leading-[1.65]">{step.description}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <div class="h-px bg-white/10"></div>
+
+    <!-- About Me -->
+    <section id="about" class="py-12 sm:py-14 scroll-mt-28">
+      <div class="mb-8">
+        <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-3">Background</div>
+        <h2 class="type-h2 text-white/90">A bit about me</h2>
+      </div>
+
+      <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-6 sm:p-8">
+        <div class="grid grid-cols-1 lg:grid-cols-[1fr_200px] gap-8 items-start">
+          <div class="space-y-4 text-sm sm:text-base leading-[1.65] text-white/75">
+            <p>
+              15 years designing digital products for ABSA, Old Mutual, Standard Bank, Clicks, Shoprite, and many smaller businesses. I've led design teams and run innovation sprints; now I also build — so I can take a product from sketch to shipped without a dev team.
+            </p>
+            <p>
+              I work independently from Cape Town (Nexevo Studios), with clients locally and remotely. One person who understands design and delivery, and moves fast because of it.
+            </p>
+          </div>
+          <div class="hidden lg:block">
+            <img
+              src="/images/NS-profile-2.png"
+              alt="Nasif Salaam"
+              class="w-full aspect-square object-cover rounded-2xl"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="pb-14 sm:pb-20">
+      <div class="rounded-3xl border border-white/10 bg-[#121212]/70 backdrop-blur-xl p-8 sm:p-10">
+        <div class="max-w-[72ch]">
+          <h2 class="type-h2 text-white/92">
+            Ready to get started?
+          </h2>
+          <p class="mt-3 text-base sm:text-lg leading-[1.65] text-white/80">
+            Whether you've got a clear brief or just an idea you want to talk through — reach out. No pressure, no pitch.
+          </p>
+          <div class="mt-6 flex flex-wrap items-center gap-3">
+            <Button href={calLink} text="Book a free call →" variant="primary" external />
+            <span class="text-sm text-white/55">
+              Prefer email? <a href={`mailto:${emailAddress}`} class="text-white/80 underline underline-offset-4 decoration-white/25 hover:text-white hover:decoration-white/50 transition-colors">{emailAddress}</a>
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Footer note -->
+  <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8 pb-6">
+    <p class="text-xs text-white/40 text-center">
+      Based in Cape Town. Available for local and remote projects.
+    </p>
+  </div>
+</Layout>

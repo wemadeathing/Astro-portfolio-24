@@ -14,7 +14,10 @@ interface Props {
   hideNav?: boolean;
   hideFooter?: boolean;
   schema?: object;
+  ogType?: string;
 }
+
+const gaMeasurementId = import.meta.env.GA_MEASUREMENT_ID || '';
 
 const { 
   title,
@@ -24,7 +27,8 @@ const {
   robots = "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1",
   hideNav = false,
   hideFooter = false,
-  schema
+  schema,
+  ogType = "website"
 } = Astro.props;
 
 const siteUrl = "https://www.nasifsalaam.com"; // Your actual domain
@@ -83,13 +87,12 @@ const structuredData = {
 <html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     
     <!-- Primary Meta Tags -->
     <title>{title}</title>
     <meta name="title" content={title} />
     <meta name="description" content={description} />
-    <meta name="keywords" content="Technical Product Designer, AI Product Designer, Design Systems Specialist, Full-stack Designer, AI-accelerated product design, Enterprise design systems, Designer who codes, Rapid prototyping with AI, Cursor AI, Claude AI, Design to development, Nasif Salaam" />
     <meta name="author" content="Nasif Salaam" />
     <meta name="google-site-verification" content="0AkXWv8ep3tS3TRVwSrSE670DTYpn--SyBuwlz1P9H8"/>
     
@@ -107,7 +110,7 @@ const structuredData = {
     <link rel="canonical" href={canonical} />
     
     <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
     <meta property="og:site_name" content={siteName} />
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
@@ -138,13 +141,36 @@ const structuredData = {
     <ViewTransitions fallback="none" />
 
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FMSF6Y2DYL"></script>
-    <script is:inline>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-FMSF6Y2DYL');
-    </script>
+    {gaMeasurementId && (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${gaMeasurementId}`}></script>
+        <script is:inline define:vars={{ gaMeasurementId }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', gaMeasurementId, { send_page_view: false });
+
+          // Fire initial page view
+          gtag('event', 'page_view', {
+            page_location: window.location.href,
+            page_title: document.title,
+          });
+
+          // Track SPA navigations via Astro View Transitions
+          document.addEventListener('astro:page-load', function () {
+            // Skip the very first load (already tracked above)
+            if (!window.__gaInitialPageTracked) {
+              window.__gaInitialPageTracked = true;
+              return;
+            }
+            gtag('event', 'page_view', {
+              page_location: window.location.href,
+              page_title: document.title,
+            });
+          });
+        </script>
+      </>
+    )}
   </head>
   <body class="min-h-screen bg-background font-sans antialiased flex flex-col relative overflow-x-hidden text-sm leading-6">
     <!-- Skip to content link for keyboard accessibility -->

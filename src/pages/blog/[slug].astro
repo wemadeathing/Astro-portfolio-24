@@ -118,7 +118,7 @@ const relatedPosts = sortedPosts
   }));
 ---
 
-<Layout title={post.data.title} description={post.data.description} image={post.data.image} schema={articleSchema}>
+<Layout title={post.data.title} description={post.data.description} image={post.data.image} schema={articleSchema} ogType="article">
   <article class="min-h-screen">
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 pb-16">
       {/* Mobile back to feed */}
