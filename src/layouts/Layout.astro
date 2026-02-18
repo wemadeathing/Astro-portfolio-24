@@ -115,20 +115,20 @@ const structuredData = {
     <meta property="og:url" content={canonical} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:image" content={new URL(image, siteUrl)} />
+    <meta property="og:image" content={String(new URL(image, siteUrl))} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={title} />
     
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:site" content="@nasifsalaam" />
-    <meta property="twitter:creator" content="@nasifsalaam" />
-    <meta property="twitter:url" content={canonical} />
-    <meta property="twitter:title" content={title} />
-    <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={new URL(image, siteUrl)} />
-    <meta property="twitter:image:alt" content={title} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@nasifsalaam" />
+    <meta name="twitter:creator" content="@nasifsalaam" />
+    <meta name="twitter:url" content={canonical} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={String(new URL(image, siteUrl))} />
+    <meta name="twitter:image:alt" content={title} />
     
     <!-- Additional Meta Tags -->
     <meta name="generator" content={Astro.generator} />
