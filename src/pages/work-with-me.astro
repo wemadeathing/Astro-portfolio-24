@@ -198,16 +198,13 @@ const emailAddress = 'hello@nasifsalaam.com';
       </div>
 
       <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-6 sm:p-8">
-        <div class="grid grid-cols-1 lg:grid-cols-[1fr_200px] gap-8 items-start">
-          <div class="space-y-4 text-sm sm:text-base leading-[1.65] text-white/75">
+        <div class="flex flex-col lg:flex-row gap-8 items-start lg:items-center">
+          <div class="space-y-4 text-sm sm:text-base leading-[1.65] text-white/75 lg:flex-1">
             <p>
-              15 years designing digital products for ABSA, Old Mutual, Standard Bank, Clicks, Shoprite, and many smaller businesses. I've led design teams and run innovation sprints; now I also build — so I can take a product from sketch to shipped without a dev team.
-            </p>
-            <p>
-              I work independently from Cape Town (Nexevo Studios), with clients locally and remotely. One person who understands design and delivery, and moves fast because of it.
+              15 years designing digital products. Worked in-house and at external agencies for ABSA, Old Mutual, Bidvest Bank, Clicks, Rabie Properties, and many more businesses, large and small. I've trained professionals on AI use and close the gap between design and delivery. One person who can take your project from concept to shipped.
             </p>
           </div>
-          <div class="hidden lg:block">
+          <div class="hidden lg:block lg:shrink-0 lg:w-[180px] xl:w-[200px]">
             <img
               src="/images/NS-profile-2.png"
               alt="Nasif Salaam"
@@ -231,7 +228,7 @@ const emailAddress = 'hello@nasifsalaam.com';
             Whether you've got a clear brief or just an idea you want to talk through — reach out. No pressure, no pitch.
           </p>
           <div class="mt-6 flex flex-wrap items-center gap-3">
-            <Button href={calLink} text="Book a free call →" variant="primary" external />
+            <Button href={calLink} text="Book a free 30-minute call →" variant="primary" external />
             <span class="text-sm text-white/55">
               Prefer email? <a href={`mailto:${emailAddress}`} class="text-white/80 underline underline-offset-4 decoration-white/25 hover:text-white hover:decoration-white/50 transition-colors">{emailAddress}</a>
             </span>
