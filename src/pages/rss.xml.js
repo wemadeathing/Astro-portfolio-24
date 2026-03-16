@@ -40,7 +40,7 @@ export async function GET(context) {
 
   return rss({
     title: 'Nasif Salaam | Insights',
-    description: 'Technical Product Designer & AI Integration Specialist. Notes on AI-powered workflows, product craft, and the practical side of shipping.',
+    description: 'Design Engineer. Notes on AI-powered workflows, product craft, and the practical side of shipping.',
     site: context.site,
     items: blogItems,
   });

@@ -89,7 +89,7 @@ const filteredPosts = sortedPosts.filter((p) => (p.data.tags ?? []).includes(act
         </div>
       )}
 
-      <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+      <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 stagger-children">
         {filteredPosts.map((post) => (
           <BlogCard
             title={post.data.title}

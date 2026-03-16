@@ -5,7 +5,7 @@ export const presentationData = {
   foundation: {
     whoIAm: {
       name: "Nasif Salaam",
-      title: "Product Designer who builds",
+      title: "Design Engineer",
       descriptors: [
         "15+ years experience",
         "Designer who codes",
@@ -456,9 +456,9 @@ export const presentationData = {
     lookingFor: {
       title: "What I'm Looking For",
       content: [
-        "Lead / Senior product designer roles",
+        "Lead / Senior design engineer roles",
         "Organizations that value innovation and execution",
-        "Opportunities to leverage my broad skill set",
+        "Opportunities to use my broad skill set",
         "Environments where I can teach and impart knowledge"
       ],
       availability: "Available immediately (no notice period)"

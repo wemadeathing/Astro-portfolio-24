@@ -739,10 +739,10 @@ export default function ChatInterface({ latestPost, projects = [] }: ChatInterfa
                 className="w-full flex flex-col items-center text-center animate-[fadeSlideUp_0.35s_ease-out_both]"
               >
                 <h1 className="text-2xl md:text-3xl font-medium leading-tight text-foreground/95 mb-2 max-w-[680px]">
-                  Hi, I'm Nasif. Product Designer who builds.
+                  Hi, I'm Nasif. Design Engineer.
                 </h1>
                 <p className="text-sm md:text-base text-muted-foreground/80 max-w-[680px] mb-0">
-                  I design brands, build products and ship apps. 15+ years designing and building solutions. My first language is design, but I also speak dev and AI.
+                  I design brands, build products, and ship apps. 15+ years designing and building solutions. My first language is design, but I also speak dev and AI.
                 </p>
 
                 {/* Input (intro) */}
@@ -902,7 +902,9 @@ export default function ChatInterface({ latestPost, projects = [] }: ChatInterfa
                       </a>
 
                       <a
-                        href="/projects?tag=Builds"
+                        href="https://ai.nasifsalaam.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className={[
                           tileBase,
                           'bg-black bg-cover bg-center relative text-white',
@@ -914,7 +916,7 @@ export default function ChatInterface({ latestPost, projects = [] }: ChatInterfa
                         <div className="absolute inset-0 bg-black/40 transition-colors group-hover:bg-black/30" />
                         <div className="relative z-10 h-full">
                           <div className="absolute bottom-2 left-2 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/55 px-2.5 py-1 text-sm font-semibold text-white/95 backdrop-blur">
-                            Builds <span className="text-white/70">↘</span>
+                            AI Training <span className="text-white/70">↗</span>
                           </div>
                         </div>
                       </a>
@@ -979,10 +981,10 @@ export default function ChatInterface({ latestPost, projects = [] }: ChatInterfa
                 className="w-full flex flex-col items-center animate-[fadeSlideUp_0.35s_ease-out_both]"
               >
                 <h1 className="text-3xl md:text-4xl lg:text-5xl font-medium leading-tight text-foreground/95 max-w-[680px]">
-                  Hi, I'm Nasif. Product Designer who builds.
+                  Hi, I'm Nasif. Design Engineer.
                 </h1>
                 <p className="text-base md:text-lg text-muted-foreground/80 max-w-[680px] mt-4">
-                  I design brands, build products and ship apps. 15+ years designing and building solutions. My first language is design, but I also speak dev and AI.
+                  I design brands, build products, and ship apps. 15+ years designing and building solutions. My first language is design, but I also speak dev and AI.
                 </p>
 
                 {/* Projects Grid */}
