@@ -691,7 +691,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     // 3. LLM call via OpenRouter (paid)
     const PRIMARY_MODEL = 'deepseek/deepseek-v4-flash';
-    const FALLBACK_MODEL = 'deepseek/deepseek-v3.2';
+    const FALLBACK_MODEL = 'google/gemini-2.5-flash-lite';
 
     const callOpenRouter = async (
       messages: { role: 'system' | 'user' | 'assistant'; content: string }[],
@@ -716,11 +716,6 @@ export const POST: APIRoute = async ({ request }) => {
             temperature: 0.4,
             max_tokens: 2048,
             response_format: { type: 'json_object' },
-            provider: {
-              order: ['DeepSeek', 'AkashML', 'DeepInfra'],
-              allow_fallbacks: true,
-              require_parameters: true,
-            },
           }),
           signal: controller.signal,
         });
