@@ -495,7 +495,6 @@ export default function ChatInterface({ latestPost, projects = [] }: ChatInterfa
   const clearConversation = () => {
     setMessages([]);
     setInput('');
-    setIsIntro(true);
     setHasStarted(false);
     setLastUserText(null);
   };
@@ -549,14 +548,14 @@ export default function ChatInterface({ latestPost, projects = [] }: ChatInterfa
     };
   }, [isIntro]);
 
-  const menuLinks = [
+  const menuLinks: { title: string; description: string; href: string; external?: boolean }[] = [
     { title: 'Work', description: 'Browse featured case studies', href: '/projects' },
     { title: 'Work With Me', description: 'Services, process, and how to get started', href: '/work-with-me' },
     { title: 'About', description: 'Background and approach', href: '/about' },
     { title: 'Insights', description: 'Writing on AI and product craft', href: '/blog' },
     { title: 'Resources', description: 'Curated tools, videos, and links', href: '/resources' },
     { title: 'Contact', description: 'Send a message or start a project', href: '/contact' },
-  ] as const;
+  ];
 
   const typingMessageId =
     isLoading && messages.length > 0 && messages[messages.length - 1].role === 'assistant'
@@ -739,10 +738,10 @@ export default function ChatInterface({ latestPost, projects = [] }: ChatInterfa
                 className="w-full flex flex-col items-center text-center animate-[fadeSlideUp_0.35s_ease-out_both]"
               >
                 <h1 className="text-2xl md:text-3xl font-medium leading-tight text-foreground/95 mb-2 max-w-[680px]">
-                  Hi, I'm Nasif. Design Engineer.
+                  Hi, I'm Nasif. Design Engineer
                 </h1>
                 <p className="text-sm md:text-base text-muted-foreground/80 max-w-[680px] mb-0">
-                  I design brands, build products, and ship apps. 15+ years designing and building solutions. My first language is design, but I also speak dev and AI.
+                  I design and build AI systems. 15+ years across design, product, and engineering means I approach every system as a designer first. I also help organisations govern AI use responsibly.
                 </p>
 
                 {/* Input (intro) */}
@@ -981,10 +980,10 @@ export default function ChatInterface({ latestPost, projects = [] }: ChatInterfa
                 className="w-full flex flex-col items-center animate-[fadeSlideUp_0.35s_ease-out_both]"
               >
                 <h1 className="text-3xl md:text-4xl lg:text-5xl font-medium leading-tight text-foreground/95 max-w-[680px]">
-                  Hi, I'm Nasif. Design Engineer.
+                  Hi, I'm Nasif. Design Engineer
                 </h1>
                 <p className="text-base md:text-lg text-muted-foreground/80 max-w-[680px] mt-4">
-                  I design brands, build products, and ship apps. 15+ years designing and building solutions. My first language is design, but I also speak dev and AI.
+                  I design and build AI systems. 15+ years across design, product, and engineering means I approach every system as a designer first. I also help organisations govern AI use responsibly.
                 </p>
 
                 {/* Projects Grid */}
@@ -1257,7 +1256,7 @@ export default function ChatInterface({ latestPost, projects = [] }: ChatInterfa
                             setInput(followUp);
                             inputRef.current?.focus();
                             setTimeout(() => {
-                              inputRef.current?.parentElement?.querySelector('button[type="submit"]')?.click();
+                              inputRef.current?.parentElement?.querySelector<HTMLButtonElement>('button[type="submit"]')?.click();
                             }, 100);
                           }}
                           className="text-xs md:text-sm px-3 py-1.5 bg-primary/10 hover:bg-primary/20 border border-primary/30 rounded-full transition-colors text-foreground/90 hover:text-foreground"

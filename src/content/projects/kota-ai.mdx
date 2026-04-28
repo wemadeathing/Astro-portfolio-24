@@ -1,0 +1,228 @@
+---
+title: "Kota AI - Multi-Agent Operations Platform"
+description: "Designed and built a production multi-agent AI system for South African SMEs. From system architecture to deployed platform — solo."
+ai_summary: "End-to-end design and build of a multi-agent operations platform for SA small businesses. Covers system architecture decisions, LangGraph orchestration, RAG knowledge base design, Generative UI response contract, multi-tenant data isolation, and the folder-as-architecture pattern. Demonstrates full ownership of a production AI system from concept through pre-launch testing."
+image: "/images/work/kota/kota.png"
+tags: ["Builds", "AI Systems", "Multi-Agent", "LangGraph", "Architecture", "Solo Founder"]
+use_for_questions: ["Multi-agent systems", "AI architecture", "LangGraph", "RAG", "Knowledge base design", "Generative UI", "Agentic AI", "FastAPI", "Supabase", "AI governance", "SA SME", "Solo building"]
+featured: true
+published: true
+order: 2
+---
+import ClickableImage from '../../components/ClickableImage.astro';
+import FeatureCard from '../../components/FeatureCard.astro';
+import ProjectStats from '../../components/ProjectStats.astro';
+import TechStack from '../../components/TechStack.astro';
+import KotaAgentFlowDiagram from '../../components/KotaAgentFlowDiagram';
+import KotaKnowledgeBaseDiagram from '../../components/KotaKnowledgeBaseDiagram';
+
+<ProjectStats
+  stats={[
+    { label: "Timeline", value: "In Progress" },
+    { label: "Role", value: "Architect & Solo Builder" },
+    { label: "Type", value: "Multi-Agent Web App" },
+    { label: "Status", value: "Pre-Launch Testing" }
+  ]}
+/>
+
+<div class="prose prose-lg max-w-none">
+
+## Project Overview
+
+SA small business owners wear every hat. The same person writing proposals at 7am is chasing invoices at noon and doing outreach at 10pm. There is no operations team. There is a person, a WhatsApp group, and a slowly filling inbox.
+
+Most AI tools make this harder, not easier. A blank chat box with no business context means the owner still has to do the thinking. Kota AI is different: it knows the business, remembers what has been done before, and responds in a format that is actually useful — not a wall of text, but a rendered invoice, a structured proposal, a researched brief.
+
+The system runs three coordinated agents: a Router that classifies every request, a General Agent that handles single-turn tasks across six surfaces, and a Workflow Agent that handles multi-step tasks that require a reasoning loop. The whole thing is built on LangGraph, FastAPI, and Supabase, with a RAG knowledge base underneath and a Generative UI response contract on top.
+
+I am the architect, designer, and sole builder. This case study documents the decisions that shaped the system.
+
+## Tools & Technologies
+
+<TechStack
+  items={[
+    { category: "Orchestration", tools: ["LangGraph", "Python"] },
+    { category: "Backend", tools: ["FastAPI", "SSE streaming"] },
+    { category: "Database", tools: ["Supabase", "PostgreSQL", "pgvector", "RLS"] },
+    { category: "LLM", tools: ["OpenRouter", "Claude API", "Tavily"] },
+    { category: "Frontend", tools: ["Astro", "React Islands", "TypeScript"] },
+    { category: "Observability", tools: ["LangSmith", "PostHog"] },
+    { category: "Deploy", tools: ["Railway", "Netlify"] }
+  ]}
+/>
+
+## The Problem Worth Solving
+
+Three specific failures define what SA SME owners deal with every day.
+
+Admin kills momentum. Invoices go out late because nothing prompts them. Proposals get forgotten because there is no follow-up tracker. Documents look unprofessional because starting from scratch every time is the only option.
+
+Leads go cold. Without a system to surface follow-ups, warm leads disappear between conversations. Most small business owners do not lose work because they are bad at selling. They lose it because they are too busy to follow up.
+
+Every task starts from zero. A blank page for every proposal. Recalling context from memory for every follow-up. The tools do not know the business, so nothing compounds.
+
+The design question was: what does an AI tool look like when it actually knows the business context, and responds in a format that does not require the owner to do extra work to use the output?
+
+## The Architecture Decision: Two Agents, Not Six
+
+The first instinct was to build one agent per surface: a Finance Agent, a Clients Agent, a Comms Agent. It sounds organised. It would have been a mistake.
+
+The actual intelligence difference between "show me my overdue invoices" and "show me Acme's contact history" is minimal. Both hit the same database. Both return structured data. Both are single-turn tasks. Building separate agents for each surface would have meant six parallel systems to maintain, with most of the complexity in the routing layer that decides which one to call.
+
+The better model: one General Agent that handles single-turn tasks across all surfaces, and one Workflow Agent that handles multi-step tasks requiring a reasoning loop. Surface-specific behaviour comes from context injection, not separate agents. When the user is on the Finance surface, the system prompt includes Finance-specific instructions and tools. Same agent, different context window.
+
+A new agent earns its existence when the task genuinely requires a fundamentally different reasoning loop, not when it requires different data.
+
+<KotaAgentFlowDiagram client:load />
+
+## The Knowledge Base: Silent, Not Configurable
+
+The knowledge base is the memory layer. It is not a settings screen. It is not something the user manages. It builds through use.
+
+When a user confirms a new service price in chat, that price is stored. When they describe their brand voice during onboarding, that description is stored. When they use payment terms on an invoice for the first time, those terms are stored. Agents query this layer silently before generating any output. The user does not set it up. The system learns it.
+
+The underlying architecture is a `business_context` table in Supabase with pgvector embeddings through OpenRouter. When an agent needs to generate a proposal, it does a semantic search across the knowledge base before writing a word. The result is an invoice that already knows the payment terms, a follow-up draft that already knows the brand voice, a proposal that already knows the service pricing.
+
+This is a RAG pattern, but the retrieval trigger is not a user search query. It is the agent deciding what it needs before it can produce a useful output.
+
+<KotaKnowledgeBaseDiagram client:load />
+
+## Generative UI: The Agent Picks the Frame
+
+Most chat interfaces return text. Kota AI returns typed responses that the frontend renders as components.
+
+Every agent response follows a contract:
+
+```json
+{
+  "type": "table",
+  "message": "You have 3 open proposals. The oldest is 14 days old.",
+  "title": "Open Proposals",
+  "data": {
+    "columns": ["Client", "Value", "Status", "Days Open"],
+    "rows": [...]
+  }
+}
+```
+
+The agent never generates UI code. It decides what kind of response fits the request and returns structured data. The React frontend reads `type` and renders the matching component. Six types: text, list, table, document, chart, and action.
+
+The action type is the human-in-the-loop mechanism. When the agent needs confirmation before proceeding — sending a document, saving a service price, creating a client record — it renders an inline action component and waits. The agent never sends, publishes, or transmits anything without explicit user confirmation.
+
+This distinction between "the agent picks the frame" and "the frontend fills it" keeps the system predictable. New response types can be added without touching agent logic. Agent improvements do not require frontend changes.
+
+<ClickableImage
+  src="/images/work/kota/kota-gen-ui.png"
+  alt="Generative UI response types rendered in the chat interface"
+  caption="Six response types. The agent classifies, the frontend renders."
+/>
+
+## The Folder-as-Architecture Pattern
+
+Agent logic lives in files, not in application code.
+
+Every agent is a folder. `prompt.md` contains the system prompt. `config.yaml` defines the model, temperature, and token limits. `tools/` contains tool definitions. `surfaces/` contains context files per surface. `tasks/` contains self-contained workflow definitions for the Workflow Agent.
+
+```
+agents/
+├── router/
+│   ├── prompt.md
+│   ├── config.yaml
+│   └── examples.json
+├── general/
+│   ├── prompt.md
+│   ├── config.yaml
+│   ├── tools/
+│   └── surfaces/
+│       ├── home.md
+│       ├── finance.md
+│       └── comms.md
+└── workflow/
+    ├── prompt.md
+    ├── config.yaml
+    ├── tools/
+    └── tasks/
+        ├── research-and-outreach/
+        └── proposal-generation/
+```
+
+Adding a new surface means adding a markdown file, not refactoring a router. Adding a new workflow means adding a folder. The orchestration layer — LangGraph — is the disposable part. The agent knowledge survives any framework change intact.
+
+This matters for governance as much as it matters for maintainability. Every agent prompt is readable, versionable, and auditable. You can see exactly what the system is instructed to do without reading application code.
+
+## Multi-Tenancy from Day One
+
+Every table in Supabase has a Row Level Security policy scoped to `organisation_id`. This is enforced at the database level, not in application code. A user can only ever see their own data, even if there is a query mistake in the application layer.
+
+This was a deliberate decision to build at day one rather than retrofit later. Multi-tenancy retrofitted into a single-tenant system is one of the most painful rewrites in software. Getting the RLS policies right at the start means every agent tool that reads or writes Supabase is automatically scoped, without any additional code.
+
+The onboarding flow creates an organisation record. Everything else is downstream of that.
+
+## The Streaming Contract
+
+Streaming Generative UI requires a specific approach. You cannot render a typed component until you know the `type` field. If you stream the entire JSON response token-by-token, the frontend has to wait for the full payload before rendering anything.
+
+The solution is two-phase streaming. Phase one: the conversational `message` field streams token-by-token as a standard chat message. The user sees "Searching for solar energy companies..." in real time. Phase two: once the agent has completed its work, the full structured `data` payload is sent as a single JSON block. The frontend reads `type` and renders the component.
+
+The `/chat` endpoint uses Server-Sent Events with two event types: `message_delta` for streaming text tokens and `component` for the complete JSON payload.
+
+This means the user always gets immediate feedback — they are never staring at a blank screen waiting for something to happen — and the component renders cleanly once the data is ready.
+
+
+
+## SA-Specific Design Decisions
+
+Building for the SA market shaped several decisions that would not appear in a generic product.
+
+VAT at 15% is applied globally to VAT-registered businesses, shown as a line item, and toggled during onboarding. Not a per-invoice setting. Not optional on individual documents. A business is either VAT-registered or not, and the system handles it accordingly.
+
+Payment terms default to 30 days EFT. Banking details are stored in the knowledge base and printed on every invoice automatically. The user enters them once; the system remembers.
+
+The app does not send messages. It drafts them. The user copies into WhatsApp, email, LinkedIn, or SMS. WhatsApp is the primary B2B communication channel for SA SMEs, so drafts are formatted accordingly: no HTML, conversational tone, short paragraphs.
+
+Compliance documents — BEE certificates, CIPC registration, tax clearance — are stored in the knowledge base. Enterprise clients regularly request these. The agent surfaces them on demand. Expiry dates are stored where relevant and the Advisor flags upcoming expiries.
+
+<ClickableImage
+  src="/images/work/kota/kota-dash.png"
+  alt="Two-phase streaming: message delta then component payload"
+  caption=""
+/>
+
+## The Advisor: Not an Agent Call
+
+The Home surface shows a daily briefing: overdue invoices, stale proposals, uninvoiced jobs. It looks like an AI-generated summary. It is not.
+
+The Advisor on Home is a deterministic database query, not an agent call. Overdue invoices are a SQL query with a date filter. Stale proposals are a query on documents with no status change in 7 days. The results are fed into a lightweight prompt for a summary sentence, but the data is already known before the LLM is called.
+
+This was a deliberate decision to keep the critical path reliable. If the agent fails, the home screen still shows accurate data. The failure surface is the summary sentence, not the data that informs every morning's priorities.
+
+## Results So Far
+
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6 my-8">
+  <FeatureCard title="Pre-Launch Testing">
+    System is in pre-launch with initial testers. Architectural concerns reviewed and resolved before onboarding non-technical users.
+  </FeatureCard>
+  <FeatureCard title="Full System Architecture">
+    Router, General Agent, Workflow Agent, RAG knowledge base, Generative UI contract, multi-tenant RLS — all designed and built solo.
+  </FeatureCard>
+  <FeatureCard title="SA-First Design">
+    VAT, EFT, WhatsApp formatting, BEE compliance, CIPC — every SA-specific constraint is built into the system, not bolted on.
+  </FeatureCard>
+  <FeatureCard title="Production-Grade from Day One">
+    No prototype shortcuts. Multi-tenancy, observability, streaming, error handling — designed in at the start.
+  </FeatureCard>
+</div>
+
+
+
+
+
+## What's Next
+
+Kota AI is targeting a pilot launch with five SA small businesses. The goal is to observe usage patterns before building tier infrastructure, payment integration, or additional surfaces. The pilot will answer the question that architecture cannot: what do people actually use it for?
+
+Phase 2 items are scoped but deliberately deferred: OAuth-based Gmail integration, WhatsApp AI integration where users can communicate with agents directly. None of those ship until the pilot tells us what matters.
+
+While users are testing the system, I am building a governance framework as well as the branding and marketing materials.
+
+</div>

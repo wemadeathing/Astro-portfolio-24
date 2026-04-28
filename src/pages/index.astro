@@ -5,7 +5,18 @@ import ChatInterface from '../components/Chat/ChatInterface';
 import { getCollection } from 'astro:content';
 
 const blogPosts = await getCollection('blog');
-const latestPost = blogPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())[0];
+const latestPostEntry = blogPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())[0];
+const latestPost = latestPostEntry
+  ? {
+      slug: latestPostEntry.slug,
+      data: {
+        title: latestPostEntry.data.title ?? '',
+        description: latestPostEntry.data.description ?? '',
+        pubDate: latestPostEntry.data.pubDate ?? new Date(),
+        tags: latestPostEntry.data.tags ?? [],
+      },
+    }
+  : undefined;
 
 const allProjects = await getCollection('projects');
 const projects = allProjects
@@ -21,17 +32,16 @@ const projects = allProjects
   }));
 ---
 
-<Layout 
-  title="Nasif Salaam | Design Engineer"
+<Layout
+  title="Nasif Salaam | Design Engineer · AI Systems, Skills & Governance"
   description="Talk to my AI assistant to learn about my work, experience, and how I can help you."
   hideNav={true}
   hideFooter={true}
 >
   <div class="sr-only">
-    <h1>Nasif Salaam - Design Engineer</h1>
+    <h1>Nasif Salaam — Design Engineer · AI Systems, Skills & Governance</h1>
     <p>
-      I design brands, build products, and ship apps. 15+ years designing and building solutions.
-      My first language is design, but I also speak dev and AI.
+      I design and build AI systems. 15+ years across design, product, and engineering means I approach every system as a designer first. I also help organisations govern AI use responsibly.
     </p>
     <h2>Latest Insights</h2>
     <ul>
@@ -41,10 +51,10 @@ const projects = allProjects
     </ul>
     <h2>Core Expertise</h2>
     <ul>
-      <li>AI-Accelerated Development</li>
-      <li>Enterprise Design Systems</li>
-      <li>Rapid Prototyping</li>
-      <li>Full-stack Design Engineering</li>
+      <li>AI Systems Architecture</li>
+      <li>Multi-Agent & Agentic AI</li>
+      <li>AI Governance & ISO 42001</li>
+      <li>Design Engineering</li>
     </ul>
     <nav>
       <a href="/work-with-me">Work With Me</a>

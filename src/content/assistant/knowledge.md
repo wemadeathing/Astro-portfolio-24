@@ -1,11 +1,11 @@
 ---
 name: "Nasif Salaam"
-headline: "Design Engineer, execution-focused with 15+ years bridging design and development"
+headline: "Design Engineer · AI Systems, Skills & Governance — 15+ years bridging design, engineering, and AI"
 years_experience: "15+"
 primary_focus:
-  - "Closing the gap between design and development"
-  - "AI-accelerated design and development workflows"
-  - "Branding and product design"
+  - "AI systems architecture and multi-agent development"
+  - "AI governance, ISO 42001, and responsible AI adoption"
+  - "Design engineering — product, brand, and full-stack"
 ---
 
 <!-- Knowledge base for the site chat assistant -->
@@ -47,10 +47,10 @@ When the user's question pattern suggests they are a recruiter or hiring manager
 ## Canonical positioning
 
 ### One-liner
-Nasif is an execution-focused design engineer with 15+ years of experience who closes the gap between design and development by understanding technical constraints, speaking the language of engineering teams, and building production-ready solutions himself.
+Nasif is a design engineer with 15+ years of experience who designs and builds AI systems, governs their responsible use, and ships digital products end to end. Design is how he thinks — it shapes every system he builds before a line of code is written.
 
 ### Short bio
-Nasif brings 15+ years of design experience spanning brand, digital, and product design. He's an execution-focused design engineer who specializes in bridging design and development, with deep expertise in design, and AI-accelerated workflows. Unlike research-heavy designers, Nasif focuses on shipping, understanding technical constraints, collaborating closely with developers, and building functional solutions.
+Nasif brings 15+ years across brand, product, and engineering. He designs and builds AI systems — multi-agent architectures, RAG pipelines, knowledge bases, and the interfaces on top of them. Design is his foundation: he approaches every AI system as a designer first, which means the things he builds are well-structured before they are well-engineered. He holds ISO 42001 Lead Auditor certification and helps organisations put real AI governance in place. He also ships digital products end to end — RideNote is live on the iOS App Store, Android in testing.
 
 ### Experience Breakdown (for recruitment queries)
 - **Total experience**: 15+ years in design (2009-present)
@@ -58,7 +58,8 @@ Nasif brings 15+ years of design experience spanning brand, digital, and product
 - **Product design**: 7+ years (2018-present, transitioned from pure UI/visual to product focus)
 - **Design systems**: 5+ years (2019-present, with major projects at Immersion Group)
 - **Technical implementation/coding**: 3+ years actively building production apps (2021-present, accelerated with AI tools)
-- **AI integration & training**: 2+ years (2022-present, formalized with ISO 42001 in 2024)
+- **AI systems architecture**: 3+ years (2022-present) — multi-agent systems, RAG, agentic workflows, LangGraph, MCP, LangSmith
+- **AI governance**: 1+ year (2025-present) — ISO 42001 Lead Auditor certified, AI risk assessments, governance frameworks, policy documentation
 - **Team leadership/mentoring**: 3+ years (2022-2024 at Immersion Group as Lead UI Designer)
 - **Graphic design**: 15+ years (started career in print/brand design, still applies to digital work)
 - **Brand design**: 15+ years (foundational skill from early career through present)
@@ -69,7 +70,8 @@ Nasif brings 15+ years of design experience spanning brand, digital, and product
 - **Proven team leadership**: Led team of 3 designers plus innovation initiative with 6-7 designers, focusing on building initiative and capability
 - **Rapid delivery**: Created service proposition that validated concepts in weeks instead of months using functional prototypes with real databases
 - **Design systems at scale**: Shipped production design system for major financial institution, grounded in Atomic Design and Material Design patterns
-- **AI integration expertise**: ISO 42001 certified, trains teams on responsible AI adoption with focus on workflows, privacy, and critical thinking
+- **AI systems depth**: Designs and builds multi-agent systems from architecture to deployment — LangGraph, RAG, MCP, tool calling, Generative UI. Not just AI-assisted design, but AI as the primary system being built.
+- **ISO 42001 Lead Auditor**: Formal AI governance certification. Helps organisations build real frameworks — documented workflows, risk assessments, policy — not compliance theatre.
 - **Multi-disciplinary range**: 15+ years spanning brand design, UI, UX, design systems, technical implementation, can wear multiple hats
 - **Builds production code**: Uses AI-accelerated tools (Cursor, AstroJS, Supabase) to take concepts from design through deployment independently
 
@@ -81,9 +83,9 @@ Nasif brings 15+ years of design experience spanning brand, digital, and product
 
 - **Rapid Prototyping & Validation**: Building functional prototypes with real databases and APIs, not just clickable mockups. Uses tools like FlutterFlow, Cursor, and modern frameworks to validate ideas in weeks instead of months. For organizations needing to test concepts with real users quickly. Typical outputs: working mobile/web apps, validated concepts, technical feasibility assessments.
 
-- **AI-Accelerated Development**: Designing and building production applications using AI-powered development tools. Merges design and development into iterative workflows. For startups and product teams needing to move fast from concept to market. Typical outputs: production-ready applications, MVPs, technical prototypes.
+- **AI Systems Design & Development**: Building multi-agent AI systems, agentic workflows, and the interfaces that sit on top of them. Architecture, orchestration, knowledge base design, and Generative UI. Stack: LangGraph, FastAPI, Supabase, OpenRouter, Claude API, React, Astro. For product teams and organisations who need someone who can think through the system architecture and build it. Typical outputs: multi-agent systems, RAG pipelines, agentic workflows, AI-powered products.
 
-- **Responsible AI Integration**: Training teams on AI workflows with focus on data privacy, critical thinking, and systematic process design. ISO 42001 certified. For organizations wanting to embrace AI innovation safely. Typical outputs: workflow documentation, training sessions, governance frameworks, risk assessments.
+- **AI Governance & Training**: Helping organisations adopt AI with a clear framework around it — not just the tools, but the rules, the risk assessment, and the documentation that makes it defensible. ISO 42001 Lead Auditor certified. Sessions cover practical tools, responsible workflows, and governance questions that matter when AI goes wrong. Typical outputs: AI risk assessments, governance packs, policy documentation, staff training, ISO 42001-aligned frameworks.
 
 - **Team Collaboration & Mentorship**: Cross-functional collaboration between design and development teams. Mentoring junior to intermediate designers. For organizations needing to upskill teams or improve design-dev collaboration. Typical outputs: improved processes, mentored designers, team alignment, knowledge transfer.
 
@@ -123,15 +125,15 @@ Note: Nasif is selective about engagements. The right fit means organizations th
 ### Professional Journey (detailed for recruiters)
 
 **Current Status (Dec 2024 - Present)**
-- Independent design engineer building personal projects and seeking full-time senior roles
+- Independent design engineer building AI systems, shipping mobile apps, and delivering AI governance advisory. Seeking senior roles in AI systems, knowledge architecture, and AI enablement.
 - Open to remote positions with US-based companies or startups that value execution-focused designers
 - No notice period required; can start immediately for the right opportunity
 
-**AI & Design Specialist** (Self-Employed/Nasif Studios)
-*Immersion Group, Cape Town - 2024 (Post-retrenchment)*
-- Continuing innovation work after company restructuring
-- Building production apps independently using AI-accelerated development tools
-- Training teams on responsible AI adoption
+**AI Systems Designer & Builder** (Independent)
+*2025 - Present*
+- Designing and building Kota AI — a multi-agent operations platform for SA SMEs running on LangGraph, FastAPI, and Supabase. Router agent, General Agent, and Workflow Agent coordinated via intent classification. RAG knowledge base using pgvector. Generative UI response contract (typed JSON to React components). Multi-tenant RLS from day one.
+- Shipped RideNote — a local-first suspension tuning app for mountain bikers. React Native + Expo + SQLite. No backend by design. Live on iOS App Store. Android version in Play Store testing.
+- Delivering AI governance workshops and advisory — 30 to 40 people trained across corporate and professional cohorts. ISO 42001 Lead Auditor certified. Governance packs include AI use inventory, risk assessment, policy documentation, and staff training.
 
 **Lead UI Designer**
 *Immersion Group, Cape Town - 2022-2024*
@@ -200,21 +202,40 @@ Note: Nasif is selective about engagements. The right fit means organizations th
 - Version control basics
 
 
-### AI workflow & governance
-- **Tools**: Cursor (primary IDE for production), Claude AI, Replit (prototyping), Lovable (prototyping), Bolt (prototyping), various AI development assistants
-- **Certifications**: ISO 42001 (AI Management System), Anthropic AI Fluency certification
-- **Applications**: 
-  - Designs and builds in code using AI-powered IDEs
-  - Creates repeatable AI workflows for teams
-  - Focuses on data privacy, critical thinking, and systematic process design
-  - Helps teams move beyond basic summarization to strategic AI integration
-- **Philosophy**: AI is powerful but requires responsible implementation. Most people lack understanding of capabilities, data privacy implications, and systematic workflow thinking. Nasif helps bridge this gap by teaching strategic AI adoption, not just tool usage.
+### AI Systems & Architecture
+- Multi-agent orchestration: LangGraph, routing patterns, Workflow and General agent design
+- RAG and knowledge base design: pgvector, semantic search, OpenRouter embeddings
+- Tool calling and MCP (Model Context Protocol) integration
+- Generative UI: typed JSON response contracts, React component rendering from agent output
+- LLM integration: OpenRouter, Claude API, Anthropic SDK, prompt engineering, structured output, context management
+- Observability: LangSmith (agent traces, tool calls, latency, cost per run)
+
+### AI Governance
+- ISO/IEC 42001:2023 Lead Auditor — Mastermind Assurance, 2026
+- ISO/IEC 42001 Foundation — UKAS, 2026
+- AI risk assessment and governance framework design
+- Policy documentation and staff training
+- POPIA-aware data handling in AI systems
+
+### AI Tools
+- Cursor (primary IDE), Claude AI, Claude Code, Warp
+- Replit, Lovable, Bolt (prototyping)
+- PostHog (user analytics), LangSmith (agent observability)
 
 ### Traditional design tools
 - Figma (primary design tool, including plugins and developer handoff)
 - Adobe Creative Suite (Photoshop, Illustrator, InDesign from print background)
 - Affinity Designer
 - Miro for collaboration and workshops
+
+## Certifications
+
+1. ISO/IEC 42001:2023 Lead Auditor — Mastermind Assurance, 2026
+2. ISO/IEC 42001 Foundation — UKAS, 2026
+3. Claude Certified Architect — Foundations — Anthropic (in progress)
+4. AI Security & Governance — Securiti, 2025
+5. AI Fluency — Anthropic, 2025
+6. Introduction to Generative AI — Google Cloud, 2024
 
 ## This Portfolio (Self-Reference Examples)
 
@@ -248,8 +269,12 @@ The chat assistant demonstrates:
 - **Hire / contact / collaboration / booking / availability / pricing** → `/contact`
 
 ### Deep link triggers
-- "Show me AI projects" → `/projects/everprompt`, `/projects/whatsapp-flow-builder`
-- "Show me your AI work" → `/projects/everprompt`, `/blog`
+- "Show me AI projects" → `/projects/kota-ai`, `/projects/prompt-management-app`, `/projects/ai-powered-whatsapp-flow-builder`
+- "Show me Kota AI" → `/projects/kota-ai`
+- "Show me your AI work" → `/projects/kota-ai`, `/projects/prompt-management-app`
+- "Show me RideNote" → `/projects/ridenote`
+- "AI governance" or "ISO 42001" → `/about` (certifications section), `/contact`
+- "Read about AI workflow" or "AI design process" → `/blog`
 - "Design systems examples" → `/projects/enterprise-design-system`, `/projects/financial-institution-digital-transformation`
 - "Coffee directory" or "personal projects" → `/projects/ai-accelerated-coffee-directory`
 - "Read about AI workflow" or "AI design process" → `/blog/visual-development-no-code-tools`, `/blog/journey-from-design-to-development`
@@ -260,10 +285,10 @@ The chat assistant demonstrates:
 ## FAQ bank (answer-ready)
 
 ### "What do you do?"
-I'm a design engineer who closes the gap between design and development. I'm execution-focused. I design solutions that teams can actually build because I understand technical constraints, work collaboratively with developers, and can build production applications myself when needed.
+I design and build AI systems, help organisations govern their AI use responsibly, and ship digital products end to end. Design is how I think — it shapes how I approach a system before any code gets written. 15 years across brand, product, and engineering. For the past three years, AI has been the main focus.
 
 ### "Are you a designer who codes?"
-Yes, but it's more nuanced than that. I understand development concepts, databases, APIs, and technical constraints deeply enough to design within reality. When I'm building my own projects, I merge design and development into one process using AI-powered tools like Cursor. When working with development teams, I design in Figma but with full awareness of what's technically feasible. I research frameworks and platform limitations before finalizing designs.
+It's more than that. I design and build AI systems — multi-agent architectures, RAG pipelines, agentic workflows, and the interfaces on top of them. Design is the foundation. When I approach a system, I think about what it needs to do and how people will use it before I think about how to build it. That produces better systems, not just better-looking ones.
 
 
 ### "What kinds of projects do you love working on?"
@@ -276,7 +301,19 @@ I'm currently open to the right opportunities, both full-time roles and select c
 It depends on the scope and fit. I can build production applications using modern frameworks (React, AstroJS, Supabase, etc.) and AI-accelerated development tools. This portfolio you're looking at is a real example - I built it with Astro, React, and Tailwind, including the AI chat assistant you're using right now. For the right projects, I can take you from concept through design to a working product. For larger or more complex builds, I'm better suited to design the system and collaborate closely with your development team. Let's talk about what you're trying to accomplish.
 
 ### "Do you do workshops or training?"
-Yes. I facilitate workshops on design systems, AI workflows, and team collaboration. My training focuses on practical application, not just theory. For AI specifically, I teach systematic workflow design, data privacy, and responsible adoption grounded in ISO 42001 principles. I've mentored multiple designers and led team upskilling initiatives.
+Yes. I run AI governance workshops and advisory sessions. ISO 42001 Lead Auditor certified. I have trained 30 to 40 people across corporate and professional cohorts. Sessions cover practical tools, responsible workflows, and the governance questions that matter when AI goes wrong — risk assessment, policy documentation, and frameworks teams can actually use. I also run design system and AI workflow workshops.
+
+### "Can you build AI agents / multi-agent systems?"
+Yes, that's a core part of what I do. I design and build multi-agent systems using LangGraph — routing, agent coordination, tool calling, workflow loops. I also design the knowledge architecture underneath: RAG pipelines, knowledge bases, semantic search. And I build the interfaces on top using Generative UI patterns. Kota AI is my current build — a multi-agent operations platform for SA small businesses, which I am both the architect and builder of.
+
+### "What is ISO 42001 and why does it matter?"
+ISO/IEC 42001 is the international standard for AI management systems — how organisations govern AI use, manage risk, and align practice with published standards. Nasif is a Lead Auditor, which means he is trained to assess those practices against the standard. In practice, it translates to helping organisations build documented AI frameworks: what AI they are using, what the risks are, what the rules are, and what evidence they can stand behind. It matters because using AI without governance creates liability, inconsistency, and trust problems. I help organisations get ahead of that.
+
+### "What is Kota AI?"
+Kota AI is an AI-powered operations platform I am designing and building for South African small businesses. SA SME owners wear every hat — the same person writing proposals at 7am is chasing invoices at noon. Most AI tools make this harder because they have no business context. Kota AI knows the business: products, pricing, clients, brand voice. It runs three coordinated agents — a Router that classifies every request, a General Agent that handles single-turn tasks across six surfaces (finance, clients, comms, content, research, ops), and a Workflow Agent for multi-step tasks requiring a reasoning loop. The backend is LangGraph and FastAPI. The database is Supabase with RLS for multi-tenancy. There is a RAG knowledge base using pgvector that builds silently through use. Responses follow a Generative UI contract — the agent returns typed JSON, the React frontend renders the matching component (table, document, chart, action). I am the architect and sole builder. Currently in pre-launch testing.
+
+### "What is RideNote?"
+RideNote is an iOS and Android app for mountain bikers to track suspension settings across rides. Local-first — no backend, no account, all data lives on-device via SQLite. Built with React Native and Expo. Live on the iOS App Store. Android version currently in Play Store testing. I designed and built it end to end, and have been running a post-launch feedback loop to iterate on the product.
 
 ### "What's your approach to design systems?"
 I ground design systems in established patterns and research. I typically work from Atomic Design methodology and research relevant frameworks (Material Design, Polaris, IBM Carbon, etc.) to build on proven foundations rather than starting from scratch. Focus is on tokens, scalable component architecture, clear documentation, and governance that enables adoption. I design systems that developers can actually implement and teams can actually use.
@@ -299,7 +336,7 @@ I have 15+ years of UI design experience spanning my entire career. I started wi
 About 7 years of product design specifically, transitioning from pure UI/visual work around 2018. The past 3 years have been heavily execution-focused, building functional prototypes and production applications rather than just designing screens.
 
 ### "What was your last role and why did you leave?"
-I was Lead UI Designer at Immersion Group in Cape Town from 2022-2024. I was retrenched at the end of 2024 when the company restructured. During my time there, I led a team of 3 designers, initiated an innovation project that created a new service offering, and shipped a production design system for a major bank.
+I am currently independent, building Kota AI (a multi-agent SME platform), shipping RideNote (iOS/Android), and delivering AI governance advisory. Before that, I was Lead UI Designer at Immersion Group in Cape Town from 2022-2024. I was retrenched at the end of 2024 when the company restructured. During my time there, I led a team of 3 designers, initiated an innovation project that created a new service offering, and shipped a production design system for a major bank.
 
 ### "Have you managed teams? How many people?"
 Yes. As Lead UI Designer at Immersion Group (2022-2024), I had 3 direct reports and mentored them from junior to intermediate levels. I also led a rotating innovation team of 6-7 designers over a 12-month period. My management style focuses on building initiative and curiosity rather than micromanaging execution.
@@ -311,7 +348,7 @@ I'm currently independent and have no notice period. I can start immediately for
 I don't discuss specific numbers until we've had a discovery conversation about scope, responsibilities, and fit. For senior design engineer roles at US-based companies, I'm targeting market rates for remote positions. Let's discuss what you're offering and whether there's alignment first.
 
 ### "Why are you looking for work?"
-I was retrenched from Immersion Group at the end of 2024 during company restructuring. I'm now seeking a senior design engineer role where I can leverage my full skill set (design, technical implementation, AI integration, and mentoring) in an environment that values execution and innovation.
+I have been independent since the end of 2024, building AI systems, shipping products, and delivering governance advisory. I am now looking for a senior role where I can apply this depth — AI systems architecture, knowledge design, governance — in an organisation that takes AI seriously. The work I am doing independently is real, but I want to apply it at scale.
 
 ### "Can you do graphic design?"
 Yes, absolutely. I started my career in graphic design (2009-2012) working on print materials, promotional assets, and internal marketing for major retail brands like Musica and Clicks. That foundation in typography, layout, and visual communication still applies to all my digital and product work today.
@@ -354,7 +391,7 @@ Nasif's broad skill set (brand, UI, UX, technical implementation, AI integration
 Most teams make three mistakes with AI: they only use it for basic tasks (summarization, data analysis), they don't think systematically about workflows, and they ignore data privacy. Nasif helps teams move beyond basic usage to strategic integration by teaching repeatable workflow design, critical thinking about what AI should and shouldn't do, and proper data handling. His ISO 42001 certification grounds this in formal AI governance frameworks.
 
 ### On his learning approach
-Nasif learns by building constantly. He doesn't wait for the perfect business idea before creating products. Instead, he builds projects to learn new tools, validate concepts, and keep skills sharp. This approach means when he finds an idea worth pursuing seriously, he has deep experience to draw from. Current projects like EverPrompt and the coffee directory serve as both learning exercises and case studies.
+Nasif learns by building constantly. He doesn't wait for the perfect business idea before creating products. Instead, he builds projects to learn new tools, validate concepts, and keep skills sharp. This approach means when he finds an idea worth pursuing seriously, he has deep experience to draw from. Current projects like Kota AI and RideNote serve as both learning exercises and case studies.
 
 ### On working within constraints vs blue-sky design
 There's a time for blue-sky thinking, but implementation requires working within reality. Nasif prefers understanding constraints early (technical, business, regulatory) and designing elegant solutions within those boundaries. This prevents redesign cycles and ensures what gets designed actually ships. Example: researching Flutter capabilities before designing a Flutter app, or understanding API limitations before designing an onboarding flow.

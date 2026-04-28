@@ -6,17 +6,17 @@ import Button from '../components/Button.astro';
 const expertise = [
   {
     title: 'AI-Powered Design & Product Development',
-    description: `Ship functional products with AI integration using Astro, React, Supabase, and Claude. Recent projects: EverPrompt (prompt management platform), WhatsApp Flow Builder (Figma plugin integration), and findmeacoffee.co.za (coffee directory with custom scraping).`,
+    description: `I build AI systems end to end — multi-agent architectures, RAG pipelines, agentic workflows, and the interfaces that sit on top of them. Stack: LangGraph, FastAPI, Supabase, OpenRouter, React, Astro. Recent: Kota AI (multi-agent SME platform), RideNote (iOS/Android, App Store live).`,
     icon: 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5',
   },
   {
     title: 'AI Training & Consulting',
-    description: `Deliver AI implementation workshops focused on practical adoption, workflow automation, and responsible use of tools like Claude, Cursor, and other AI platforms.`,
+    description: `I run workshops and advisory sessions on practical AI adoption and governance. ISO 42001 Lead Auditor certified. I have trained 30 to 40 people across corporate and professional cohorts. Sessions cover real tools, real workflows, and the governance questions that matter when AI is going into production.`,
     icon: 'M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z',
   },
   {
     title: 'End-to-End Product Design',
-    description: `Take products from research to launch, either building the MVP or collaborating closely with dev teams to shape and ship production-ready work.`,
+    description: `15 years designing digital products across financial services, retail, property, and tech. I can take a product from zero to deployed, or come in at any stage to shape and ship.`,
     icon: 'M13 2L3 14h9l-1 8 10-12h-9l1-8z',
   },
   {
@@ -39,14 +39,22 @@ const skills = [
     ],
   },
   {
-    title: 'AI-Assisted Development',
+    title: 'AI Systems & Architecture',
     items: [
-      'AI-assisted frontend development',
-      'AI feature integration (APIs)',
-      'Rapid MVP prototyping',
-      'MCP integrations',
-      'Supabase/Convex/Neon backends + auth (Supabase/Clerk)',
-      'AI adoption workshops',
+      'LangGraph',
+      'multi-agent orchestration',
+      'RAG',
+      'vector search',
+      'MCP',
+      'tool calling',
+      'agentic workflows',
+      'FastAPI',
+      'OpenRouter',
+      'Claude API',
+      'prompt engineering',
+      'structured output',
+      'LangSmith',
+      'PostHog',
     ],
   },
   {
@@ -120,10 +128,10 @@ const industry = [
 
 const experience = [
   {
-    role: 'Independent Designer & Design Engineer',
-    company: '',
+    role: 'AI Systems Designer & Builder',
+    company: 'Independent',
     period: '2025 - Present',
-    description: `AI-powered product development, AI training workshops, design and web development for select clients`,
+    description: `Building Kota AI — a production multi-agent operations platform for SA SMEs using LangGraph, FastAPI, Supabase, and OpenRouter. Designed the full system architecture: Router and Workflow agents, RAG knowledge base, Generative UI response contract, multi-tenant RLS. Also shipping RideNote (iOS App Store live, Android in testing) and running AI governance workshops and advisory for organisations adopting AI.`,
   },
   {
     role: 'Lead Designer',
@@ -152,9 +160,9 @@ const experience = [
 ];
 ---
 
-<Layout 
-  title="About | Nasif Salaam — Design Engineer"
-  description="15+ years building enterprise design systems, AI-powered applications, and production-ready prototypes. Designer who codes with expertise in Figma, React, Astro, and AI integration."
+<Layout
+  title="About | Design Engineer · AI Systems, Skills & Governance"
+  description="Design Engineer with 15+ years across design, product, and AI systems. Building Kota AI, ISO 42001 Lead Auditor certified, and helping organisations govern AI responsibly."
 >
   <!-- Hero (wider / near full-width) -->
   <section class="py-10 sm:py-14">
@@ -163,13 +171,19 @@ const experience = [
       <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8 sm:gap-10 items-center">
         <div class="max-w-[68ch]">
           <h1 class="text-4xl sm:text-5xl md:text-[54px] font-medium tracking-[-0.03em] leading-[1.05] text-white/95">
-            Design Engineer.
+            Design Engineer · AI Systems, Skills & Governance
           </h1>
           <div class="mt-4 text-xs tracking-[0.22em] uppercase text-white/55">
-            15+ years • Design + build • AI-integrated MVPs
+            15+ years • AI systems design • Governance & ISO 42001 · Builder
           </div>
       <p class="mt-5 type-lead text-white/80">
-            Design engineer with 15+ years across brand, product, and front-end development. I design, build, and deploy web and mobile products end to end, from UX flows and UI through to front-end implementations, data models, and AI integrations. I work best in environments where I can explore ideas, prototype quickly, validate with users, and work across both design and engineering. That's as true in a team as it is working solo.
+            15 years across brand, product, and engineering — working with organisations in financial services, retail, property, and tech. Design is my foundation. It shapes how I approach every problem before anything else gets built.
+          </p>
+          <p class="mt-4 type-lead text-white/80">
+            For the past three years AI has been the main focus. I build agentic systems, design the knowledge architecture underneath them, and think seriously about what responsible use actually looks like in practice. I got ISO 42001 Lead Auditor certified because most AI conversations are about capability, not risk. That thinking now shapes everything I build.
+          </p>
+          <p class="mt-4 type-lead text-white/80">
+            I work across the full stack, solo. Design to deployment.
           </p>
 
         </div>
@@ -241,6 +255,36 @@ const experience = [
               <p class="text-sm text-white/70 leading-[1.75]">
                 {group.items.join(' • ')}
               </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <div class="h-px bg-white/10"></div>
+
+    <!-- Certifications -->
+    <section id="certifications" class="py-12 sm:py-14 scroll-mt-28">
+      <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-3">Certifications</div>
+      <h2 class="type-h2 text-white/90">Credentials</h2>
+
+      <div class="mt-8 rounded-2xl border border-white/10 bg-white/[0.03] p-6 sm:p-7">
+        <div class="space-y-4 stagger-children">
+          {[
+            { name: 'ISO/IEC 42001:2023 Lead Auditor', issuer: 'Mastermind Assurance', year: '2026' },
+            { name: 'Claude Certified Architect — Foundations', issuer: 'Anthropic', year: 'In progress' },
+            { name: 'AI Security & Governance', issuer: 'Securiti', year: '2025' },
+            { name: 'AI Fluency', issuer: 'Anthropic', year: '2025' },
+            { name: 'Introduction to Generative AI', issuer: 'Google Cloud', year: '2024' },
+          ].map((cert) => (
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <div class="text-sm font-semibold text-white/85">{cert.name}</div>
+                <div class="text-xs text-white/50 mt-0.5">{cert.issuer}</div>
+              </div>
+              <div class="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/55 shrink-0">
+                {cert.year}
+              </div>
             </div>
           ))}
         </div>
