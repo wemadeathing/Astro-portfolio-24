@@ -690,8 +690,8 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // 3. LLM call via OpenRouter (paid)
-    const PRIMARY_MODEL = 'deepseek/deepseek-v4-flash';
-    const FALLBACK_MODEL = 'google/gemini-2.5-flash-lite';
+    const PRIMARY_MODEL = 'google/gemini-2.5-flash-lite';
+    const FALLBACK_MODEL = 'deepseek/deepseek-v4-flash';
 
     const callOpenRouter = async (
       messages: { role: 'system' | 'user' | 'assistant'; content: string }[],
