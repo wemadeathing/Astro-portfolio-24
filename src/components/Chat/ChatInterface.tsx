@@ -737,7 +737,7 @@ export default function ChatInterface({ latestPost, projects = [] }: ChatInterfa
               <div
                 className="w-full flex flex-col items-center text-center animate-[fadeSlideUp_0.35s_ease-out_both]"
               >
-                <h1 className="text-2xl md:text-3xl font-medium leading-tight text-foreground/95 mb-2 max-w-[680px]">
+                <h1 className="text-3xl md:text-4xl lg:text-5xl font-medium leading-tight text-foreground/95 mb-2 max-w-[680px]">
                   Hi, I'm Nasif. Design Engineer
                 </h1>
                 <p className="text-sm md:text-base text-muted-foreground/80 max-w-[680px] mb-0">
