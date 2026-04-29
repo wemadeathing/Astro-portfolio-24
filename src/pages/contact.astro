@@ -6,11 +6,31 @@ const emailAddress = 'hello@nasifsalaam.com';
 // WhatsApp link with obfuscated number (assembled at runtime)
 const whatsappHref = `https://wa.me/${['27', '81', '462', '3628'].join('')}?text=${encodeURIComponent("Hi! I'd like to discuss a project with you.")}`;
 const responseTime = '24 hours';
+
+const agentMarkdown = `# Contact — Nasif Salaam
+
+> Looking to hire, collaborate, or book a workshop. Send a note and I will reply with next steps. Usually within ${responseTime}.
+
+## Channels
+
+- **Email:** ${emailAddress}
+- **Calendly (30 min):** https://calendly.com/salaam-nasif/30min
+- **LinkedIn:** https://www.linkedin.com/in/nasifsalaam/
+- **Contact form:** https://www.nasifsalaam.com/contact/
+
+## What to include
+
+- What you are trying to build / solve
+- Timeline and any hard deadlines
+- Budget range (helps me reply with a useful answer)
+- Whether you need design, build, training, or all of the above`;
 ---
 
 <Layout 
   title="Contact | Nasif Salaam — Design Engineer"
   description="Design engineer available for design systems, AI integration, rapid prototyping, and product development projects."
+  agentMarkdown={agentMarkdown}
+  agentPathLabel="~/nasifsalaam / contact.md"
 >
   <section class="py-10 sm:py-14">
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">

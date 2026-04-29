@@ -1,0 +1,727 @@
+---
+/**
+ * AgentView — a Speakeasy-style "agent mode" toggle that flips the entire site
+ * into a markdown-rendered, terminal-flavoured view of the current page.
+ *
+ * Architecture (mirrors Speakeasy):
+ *  - A single `agent-mode` class on `<html>` controls visibility via CSS.
+ *  - Layout.astro injects a tiny *blocking* inline script in `<head>` that
+ *    reads localStorage["nasifsalaam-view-mode"] BEFORE paint, so there is
+ *    no flash of the wrong view on page load.
+ *  - The page's markdown is embedded server-side inside a
+ *    `<script type="text/markdown">` tag — readable by AI crawlers that
+ *    don't execute JS, and rendered into the agent view by a tiny inline
+ *    markdown→HTML converter on the client.
+ *  - Three pieces are always present in the DOM:
+ *      1. `FloatingViewToggle`  — bottom-right pill button
+ *      2. `AgentNav`            — left sidebar nav (only visible in agent mode)
+ *      3. `GlobalAgentView`     — full-screen markdown overlay (only visible in agent mode)
+ */
+
+interface NavItem {
+  label: string;
+  href: string;
+}
+
+interface Props {
+  markdown?: string;
+  pathLabel?: string; // e.g. "~/nasifsalaam / about.md"
+  navItems?: NavItem[];
+}
+
+const defaultNav: NavItem[] = [
+  { label: 'Home', href: '/' },
+  { label: 'Work with me', href: '/work-with-me' },
+  { label: 'Projects', href: '/projects' },
+  { label: 'About', href: '/about' },
+  { label: 'Blog', href: '/blog' },
+  { label: 'Resources', href: '/resources' },
+  { label: 'Contact', href: '/contact' },
+];
+
+const { markdown = '', pathLabel, navItems = defaultNav } = Astro.props;
+
+const pageUrl = Astro.url?.pathname || '/';
+const computedPath =
+  pathLabel ||
+  `~/nasifsalaam${pageUrl === '/' ? '/index.md' : `${pageUrl.replace(/\/$/, '')}.md`}`;
+
+// Direct .md URL for the current page (Speakeasy pattern: every page has a .md sibling).
+const mdUrl = pageUrl === '/' ? '/index.md' : `${pageUrl.replace(/\/$/, '')}.md`;
+---
+
+{markdown && (
+  <>
+    {/* Embedded agent-readable markdown.
+        Type intentionally not executable so the browser does nothing with it,
+        but the bytes are present in the SSR'd HTML for crawlers / agents. */}
+    <script
+      type="text/markdown"
+      data-agent-markdown
+      data-agent-path={computedPath}
+      data-agent-md-url={mdUrl}
+      set:html={markdown}
+    />
+
+    {/* (1) Floating toggle button — bottom-right pill */}
+    <button
+      type="button"
+      id="agent-view-toggle"
+      class="agent-view-toggle"
+      aria-pressed="false"
+      aria-controls="agent-view-overlay"
+      aria-label="Switch to agent view"
+    >
+      <span class="agent-view-toggle__icon" data-state="human" aria-hidden="true">
+        <!-- Robot icon: shown when in human mode (click to enter agent view) -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="18" height="10" x="3" y="11" rx="2" />
+          <circle cx="12" cy="5" r="2" />
+          <path d="M12 7v4" />
+          <line x1="8" x2="8" y1="16" y2="16" />
+          <line x1="16" x2="16" y1="16" y2="16" />
+        </svg>
+      </span>
+      <span class="agent-view-toggle__icon" data-state="agent" aria-hidden="true">
+        <!-- Person icon: shown when in agent mode (click to return to human view) -->
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+      </span>
+      <span class="agent-view-toggle__label" data-state="human">Agent view</span>
+      <span class="agent-view-toggle__label" data-state="agent">Human view</span>
+    </button>
+
+    {/* (2) Agent nav — left sidebar visible only when agent-mode is active */}
+    <aside id="agent-view-nav" class="agent-view-nav" aria-label="Agent view navigation">
+      <div class="agent-view-nav__brand">
+        <span class="agent-view-nav__prompt">$</span>
+        <a href="/" class="agent-view-nav__brand-link">nasifsalaam</a>
+      </div>
+      <nav class="agent-view-nav__list" aria-label="Site files">
+        {navItems.map((item) => (
+          <a
+            href={item.href}
+            class="agent-view-nav__link"
+            data-agent-nav-link
+            data-href={item.href}
+          >
+            <span class="agent-view-nav__bullet">›</span>
+            <span class="agent-view-nav__label">{item.label}</span>
+          </a>
+        ))}
+      </nav>
+      <div class="agent-view-nav__footer">
+        <a href={mdUrl} class="agent-view-nav__raw" rel="alternate" type="text/markdown">
+          View raw .md ↗
+        </a>
+      </div>
+    </aside>
+
+    {/* (3) Global agent overlay — full-screen markdown view */}
+    <div
+      id="agent-view-overlay"
+      class="agent-view-overlay"
+      role="region"
+      aria-label="Agent view: page rendered as markdown"
+    >
+      <header class="agent-view-overlay__bar">
+        <div class="agent-view-overlay__path" data-agent-path-display>{computedPath}</div>
+      </header>
+      <div class="agent-view-overlay__scroll">
+        <article class="agent-view-overlay__content" data-agent-rendered>
+          {/* Filled in by client-side markdown renderer. */}
+        </article>
+      </div>
+    </div>
+  </>
+)}
+
+<style is:global>
+  /* ============================================================
+   *  Agent View — global styles
+   *  Single source of truth: html.agent-mode toggles everything.
+   * ============================================================ */
+
+  /* Toggle pill — always visible (so users can enter/exit agent mode) */
+  .agent-view-toggle {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 80;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px 8px 12px;
+    border-radius: 9999px;
+    background: rgba(15, 16, 22, 0.82);
+    color: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    font-family: "Geist Mono Variable", "Geist Mono", ui-monospace, monospace;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35),
+                0 1px 0 rgba(255, 255, 255, 0.04) inset;
+    transition: background-color 0.15s ease, transform 0.15s ease, border-color 0.15s ease;
+  }
+
+  .agent-view-toggle:hover {
+    background: rgba(20, 22, 30, 0.95);
+    border-color: rgba(255, 255, 255, 0.24);
+  }
+
+  .agent-view-toggle:active {
+    transform: translateY(1px);
+  }
+
+  .agent-view-toggle:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px hsl(var(--primary) / 0.45),
+                0 6px 24px rgba(0, 0, 0, 0.35);
+  }
+
+  .agent-view-toggle__icon,
+  .agent-view-toggle__label {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* Default (human view): show robot + "Agent view" */
+  html:not(.agent-mode) .agent-view-toggle__icon[data-state="agent"],
+  html:not(.agent-mode) .agent-view-toggle__label[data-state="agent"] {
+    display: none;
+  }
+
+  /* Agent view active: show person + "Human view" */
+  html.agent-mode .agent-view-toggle__icon[data-state="human"],
+  html.agent-mode .agent-view-toggle__label[data-state="human"] {
+    display: none;
+  }
+
+  /* ----- Hidden by default; revealed when .agent-mode is set ----- */
+  .agent-view-nav,
+  .agent-view-overlay {
+    display: none;
+  }
+
+  /* ----- Agent mode active ----- */
+  html.agent-mode {
+    background: #0a0b0f;
+  }
+
+  html.agent-mode body {
+    background: #0a0b0f;
+    overflow: hidden;
+  }
+
+  /* Hide the human site chrome when in agent mode.
+     We hide the *direct* children of <body> except our agent UI,
+     keeping site loaders / scripts / styles intact. */
+  html.agent-mode body > *:not(.agent-view-overlay):not(.agent-view-nav):not(.agent-view-toggle):not(#site-loader):not(script):not(style):not(noscript):not(astro-island) {
+    display: none !important;
+  }
+  html.agent-mode body > astro-island {
+    display: none !important;
+  }
+
+  html.agent-mode .agent-view-nav,
+  html.agent-mode .agent-view-overlay {
+    display: flex;
+  }
+
+  /* ============================================================
+   *  Left sidebar nav (visible in agent mode)
+   * ============================================================ */
+  .agent-view-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 240px;
+    z-index: 70;
+    flex-direction: column;
+    gap: 24px;
+    padding: 20px 18px;
+    background: #0a0b0f;
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    color: #e6e6e6;
+    font-family: "Geist Mono Variable", "Geist Mono", ui-monospace, monospace;
+    font-size: 13px;
+  }
+
+  .agent-view-nav__brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-bottom: 16px;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.12);
+  }
+
+  .agent-view-nav__prompt {
+    color: #7dd3fc;
+    font-weight: 600;
+  }
+
+  .agent-view-nav__brand-link {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .agent-view-nav__brand-link:hover {
+    color: #7dd3fc;
+  }
+
+  .agent-view-nav__list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  .agent-view-nav__link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    color: rgba(230, 230, 230, 0.78);
+    text-decoration: none;
+    transition: background-color 0.12s ease, color 0.12s ease;
+  }
+
+  .agent-view-nav__link:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+  }
+
+  .agent-view-nav__link[data-active="true"] {
+    background: rgba(125, 211, 252, 0.1);
+    color: #7dd3fc;
+  }
+
+  .agent-view-nav__bullet {
+    color: rgba(255, 255, 255, 0.35);
+    flex-shrink: 0;
+  }
+
+  .agent-view-nav__link[data-active="true"] .agent-view-nav__bullet {
+    color: #7dd3fc;
+  }
+
+  .agent-view-nav__footer {
+    padding-top: 16px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.12);
+  }
+
+  .agent-view-nav__raw {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: rgba(230, 230, 230, 0.6);
+    text-decoration: none;
+    font-size: 12px;
+    transition: color 0.12s ease;
+  }
+
+  .agent-view-nav__raw:hover {
+    color: #7dd3fc;
+  }
+
+  /* ============================================================
+   *  Full-screen markdown overlay (visible in agent mode)
+   * ============================================================ */
+  .agent-view-overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 240px; /* right of the sidebar */
+    right: 0;
+    z-index: 65;
+    background: #0a0b0f;
+    color: #e6e6e6;
+    flex-direction: column;
+    font-family: "Geist Mono Variable", "Geist Mono", ui-monospace, monospace;
+  }
+
+  .agent-view-overlay__bar {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .agent-view-overlay__path {
+    font-size: 12px;
+    color: rgba(230, 230, 230, 0.7);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .agent-view-overlay__bar-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .agent-view-overlay__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: rgba(255, 255, 255, 0.04);
+    color: rgba(230, 230, 230, 0.9);
+    font: inherit;
+    font-size: 12px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .agent-view-overlay__btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.24);
+  }
+
+  .agent-view-overlay__scroll {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 40px 32px 96px;
+  }
+
+  .agent-view-overlay__content {
+    max-width: 780px;
+    margin: 0 auto;
+    font-family: "Geist Mono Variable", "Geist Mono", ui-monospace, monospace;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #e6e6e6;
+  }
+
+  .agent-view-overlay__content h1,
+  .agent-view-overlay__content h2,
+  .agent-view-overlay__content h3,
+  .agent-view-overlay__content h4 {
+    font-weight: 600;
+    color: #ffffff;
+    margin: 1.6em 0 0.6em;
+    line-height: 1.3;
+  }
+
+  .agent-view-overlay__content h1 { font-size: 24px; margin-top: 0; }
+  .agent-view-overlay__content h2 { font-size: 18px; }
+  .agent-view-overlay__content h3 { font-size: 15px; }
+  .agent-view-overlay__content h4 { font-size: 14px; }
+
+  .agent-view-overlay__content p { margin: 0 0 1em; color: rgba(230, 230, 230, 0.85); }
+  .agent-view-overlay__content ul,
+  .agent-view-overlay__content ol { margin: 0 0 1em 1.4em; color: rgba(230, 230, 230, 0.85); }
+  .agent-view-overlay__content li { margin: 0.25em 0; }
+  .agent-view-overlay__content a { color: #7dd3fc; text-decoration: underline; text-underline-offset: 2px; }
+  .agent-view-overlay__content a:hover { color: #bae6fd; }
+  .agent-view-overlay__content strong { color: #fff; font-weight: 600; }
+  .agent-view-overlay__content em { color: #fff; font-style: italic; }
+  .agent-view-overlay__content code {
+    font: inherit;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: #fcd34d;
+  }
+  .agent-view-overlay__content pre {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin: 1em 0;
+    overflow-x: auto;
+  }
+  .agent-view-overlay__content pre code {
+    background: transparent;
+    padding: 0;
+    color: #e6e6e6;
+  }
+  .agent-view-overlay__content hr {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin: 1.5em 0;
+  }
+  .agent-view-overlay__content blockquote {
+    border-left: 2px solid rgba(125, 211, 252, 0.5);
+    padding-left: 14px;
+    margin: 1em 0;
+    color: rgba(230, 230, 230, 0.7);
+  }
+
+  /* ----- Mobile: collapse the sidebar ----- */
+  @media (max-width: 720px) {
+    .agent-view-nav {
+      width: 100%;
+      bottom: auto;
+      height: auto;
+      flex-direction: row;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      overflow-x: auto;
+      border-right: none;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .agent-view-nav__brand { border-bottom: none; padding-bottom: 0; flex-shrink: 0; }
+    .agent-view-nav__list { flex-direction: row; gap: 4px; }
+    .agent-view-nav__link { padding: 4px 8px; white-space: nowrap; font-size: 12px; }
+    .agent-view-nav__footer { display: none; }
+
+    .agent-view-overlay { left: 0; top: 49px; }
+    .agent-view-overlay__bar { padding: 12px 16px; }
+    .agent-view-overlay__scroll { padding: 28px 16px 96px; }
+
+    .agent-view-toggle {
+      bottom: 16px;
+      right: 16px;
+      padding: 7px 12px 7px 10px;
+      font-size: 11px;
+    }
+  }
+
+  @media print {
+    .agent-view-toggle,
+    .agent-view-nav,
+    .agent-view-overlay { display: none !important; }
+  }
+</style>
+
+<script>
+  // Tiny markdown -> HTML renderer (no deps).
+  // Handles: # ## ### ####, paragraphs, - / 1. lists, **bold**, *italic*,
+  // `code`, fenced ```code blocks, [text](url), --- horizontal rules, > blockquotes.
+  function renderMarkdown(md: string): string {
+    const escape = (s: string) =>
+      s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    // Pull fenced code blocks first so their bodies aren't transformed.
+    const codeBlocks: string[] = [];
+    md = md.replace(/```([\s\S]*?)```/g, (_, body) => {
+      codeBlocks.push(`<pre><code>${escape(body.replace(/^\n/, ''))}</code></pre>`);
+      return `\u0000CB${codeBlocks.length - 1}\u0000`;
+    });
+
+    const inline = (s: string) =>
+      escape(s)
+        .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" rel="noopener">$1</a>')
+        .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+        .replace(/(?<!\*)\*([^*\n]+)\*(?!\*)/g, '<em>$1</em>')
+        .replace(/`([^`]+)`/g, '<code>$1</code>');
+
+    const lines = md.split(/\n/);
+    const out: string[] = [];
+    let i = 0;
+
+    const flushList = (items: string[], ordered: boolean) => {
+      if (!items.length) return;
+      const tag = ordered ? 'ol' : 'ul';
+      out.push(`<${tag}>${items.map((it) => `<li>${inline(it)}</li>`).join('')}</${tag}>`);
+    };
+
+    while (i < lines.length) {
+      const line = lines[i];
+      if (!line.trim()) { i++; continue; }
+
+      const cbMatch = line.match(/^\u0000CB(\d+)\u0000$/);
+      if (cbMatch) { out.push(codeBlocks[Number(cbMatch[1])]); i++; continue; }
+
+      const h = line.match(/^(#{1,4})\s+(.*)$/);
+      if (h) { out.push(`<h${h[1].length}>${inline(h[2])}</h${h[1].length}>`); i++; continue; }
+
+      if (/^---+\s*$/.test(line)) { out.push('<hr />'); i++; continue; }
+
+      if (/^>\s?/.test(line)) {
+        const buf: string[] = [];
+        while (i < lines.length && /^>\s?/.test(lines[i])) {
+          buf.push(lines[i].replace(/^>\s?/, ''));
+          i++;
+        }
+        out.push(`<blockquote>${inline(buf.join(' '))}</blockquote>`);
+        continue;
+      }
+
+      if (/^[-*]\s+/.test(line)) {
+        const items: string[] = [];
+        while (i < lines.length && /^[-*]\s+/.test(lines[i])) {
+          items.push(lines[i].replace(/^[-*]\s+/, ''));
+          i++;
+        }
+        flushList(items, false);
+        continue;
+      }
+
+      if (/^\d+\.\s+/.test(line)) {
+        const items: string[] = [];
+        while (i < lines.length && /^\d+\.\s+/.test(lines[i])) {
+          items.push(lines[i].replace(/^\d+\.\s+/, ''));
+          i++;
+        }
+        flushList(items, true);
+        continue;
+      }
+
+      const para: string[] = [line];
+      i++;
+      while (
+        i < lines.length &&
+        lines[i].trim() &&
+        !/^(#{1,4}\s+|---+\s*$|>\s?|[-*]\s+|\d+\.\s+|\u0000CB\d+\u0000)/.test(lines[i])
+      ) {
+        para.push(lines[i]);
+        i++;
+      }
+      out.push(`<p>${inline(para.join(' '))}</p>`);
+    }
+
+    return out.join('\n');
+  }
+
+  const STORAGE_KEY = 'nasifsalaam-view-mode';
+  const isAgentMode = () => document.documentElement.classList.contains('agent-mode');
+
+  const setAgentMode = (on: boolean) => {
+    document.documentElement.classList.toggle('agent-mode', on);
+    const toggle = document.getElementById('agent-view-toggle');
+    if (toggle) toggle.setAttribute('aria-pressed', on ? 'true' : 'false');
+    try {
+      if (on) localStorage.setItem(STORAGE_KEY, 'agent');
+      else localStorage.removeItem(STORAGE_KEY);
+    } catch {}
+  };
+
+  /**
+   * Re-apply the `agent-mode` class on `<html>` from localStorage.
+   * Astro's <ViewTransitions /> swaps the document on client-side navigations,
+   * which CAN strip classes off `<html>` and stops the inline blocking
+   * <head> script from re-running. Without this, clicking a sidebar link
+   * appears to "exit" agent mode. We restore it ASAP.
+   */
+  const restoreAgentMode = () => {
+    try {
+      const want = localStorage.getItem(STORAGE_KEY) === 'agent';
+      document.documentElement.classList.toggle('agent-mode', want);
+    } catch {}
+  };
+
+  const initAgentView = () => {
+    // 1. Restore mode FIRST (before any other DOM work) so the user never
+    //    sees a flash of human view when navigating between pages.
+    restoreAgentMode();
+
+    const w = window as any;
+    const mdNode = document.querySelector(
+      'script[type="text/markdown"][data-agent-markdown]'
+    ) as HTMLScriptElement | null;
+    const overlay = document.getElementById('agent-view-overlay');
+    const rendered = overlay?.querySelector('[data-agent-rendered]') as HTMLElement | null;
+    const pathDisplay = overlay?.querySelector('[data-agent-path-display]') as HTMLElement | null;
+
+    // Render the page-specific markdown (overlay + path).
+    if (mdNode && rendered) {
+      const md = mdNode.textContent || '';
+      rendered.innerHTML = renderMarkdown(md);
+      if (pathDisplay) {
+        const path = mdNode.getAttribute('data-agent-path') || pathDisplay.textContent || '';
+        pathDisplay.textContent = path;
+      }
+    }
+
+    // Mark the active nav link.
+    const currentPath = window.location.pathname.replace(/\/$/, '') || '/';
+    document.querySelectorAll<HTMLAnchorElement>('[data-agent-nav-link]').forEach((link) => {
+      const linkPath = (link.getAttribute('data-href') || '').replace(/\/$/, '') || '/';
+      if (linkPath === currentPath) link.setAttribute('data-active', 'true');
+      else link.removeAttribute('data-active');
+    });
+
+    // Sync aria-pressed with the (possibly already-set) html class.
+    const toggle = document.getElementById('agent-view-toggle');
+    if (toggle) toggle.setAttribute('aria-pressed', isAgentMode() ? 'true' : 'false');
+
+    // Bind global click + key handlers ONCE.
+    if (!w.__agentViewBound) {
+      w.__agentViewBound = true;
+
+      document.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement | null;
+        if (!target) return;
+
+        if (target.closest('#agent-view-toggle')) {
+          setAgentMode(!isAgentMode());
+          return;
+        }
+
+        if (target.closest('#agent-view-copy')) {
+          const node = document.querySelector(
+            'script[type="text/markdown"][data-agent-markdown]'
+          ) as HTMLScriptElement | null;
+          const text = node?.textContent || '';
+          navigator.clipboard?.writeText(text).then(() => {
+            const label = document.querySelector('[data-copy-label]') as HTMLElement | null;
+            if (label) {
+              const prev = label.textContent;
+              label.textContent = 'Copied';
+              setTimeout(() => { if (label) label.textContent = prev; }, 1400);
+            }
+          });
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && isAgentMode()) {
+          setAgentMode(false);
+        }
+      });
+    }
+  };
+
+  initAgentView();
+
+  /**
+   * Astro view-transitions lifecycle:
+   *   astro:before-preparation  → before fetching new page
+   *   astro:after-preparation   → new doc fetched, not yet swapped (event.newDocument)
+   *   astro:before-swap         → about to swap in newDocument; mutate it here!
+   *   astro:after-swap          → DOM has been replaced, scripts not yet rerun
+   *   astro:page-load           → equivalent to DOMContentLoaded for new page
+   *
+   * The KEY one is astro:before-swap: we mutate event.newDocument.documentElement
+   * so the new <html> already has `agent-mode` BEFORE it's painted. This is the
+   * only way to avoid a flash of human view when navigating in agent mode.
+   */
+  document.addEventListener('astro:before-swap', (e) => {
+    try {
+      const event = e as unknown as { newDocument: Document };
+      if (localStorage.getItem(STORAGE_KEY) === 'agent') {
+        event.newDocument.documentElement.classList.add('agent-mode');
+      } else {
+        event.newDocument.documentElement.classList.remove('agent-mode');
+      }
+    } catch {}
+  });
+
+  // Belt-and-braces: also restore on the live document after swap completes,
+  // in case the event above didn't run (older browsers, fallback path).
+  document.addEventListener('astro:after-swap', restoreAgentMode);
+  document.addEventListener('astro:page-load', initAgentView);
+</script>

@@ -73,11 +73,44 @@ const steps = [
 
 const calLink = 'https://calendly.com/salaam-nasif/30min';
 const emailAddress = 'hello@nasifsalaam.com';
+
+const agentMarkdown = `# Work With Me — Nasif Salaam
+
+> Design engineer with 15 years across product, design, and AI systems. I design and build AI systems, take digital products from idea to shipped, and help organisations govern AI responsibly.
+
+## Services
+
+${services
+  .map(
+    (s, idx) => `### ${idx + 1}. ${s.label}
+
+**${s.heading}**
+
+${s.body}
+
+**Includes:**
+${s.includes.map((i) => `- ${i}`).join('\n')}
+
+**Best for:** ${s.audience}`
+  )
+  .join('\n\n')}
+
+## Process
+
+${steps.map((s) => `${s.number}. **${s.title}** — ${s.description}`).join('\n')}
+
+## Get Started
+
+- Book a 30-minute call: ${calLink}
+- Email: ${emailAddress}
+- Site: https://www.nasifsalaam.com`;
 ---
 
 <Layout
   title="Work With Me | Nasif Salaam"
   description="Design engineer with 15 years across product, design, and AI systems. I design and build AI systems, take digital products from idea to shipped, and help organisations govern AI responsibly."
+  agentMarkdown={agentMarkdown}
+  agentPathLabel="~/nasifsalaam / work-with-me.md"
   image="/images/work-with-me-01.png"
 >
   <!-- Hero -->

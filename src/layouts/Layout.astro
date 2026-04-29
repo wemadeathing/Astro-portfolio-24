@@ -1,8 +1,10 @@
 ---
 import '@fontsource/dm-sans';
+import '@fontsource-variable/geist-mono';
 import '../styles/globals.css';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
+import AgentView from '../components/AgentView.astro';
 import { ViewTransitions } from 'astro:transitions';
 
 interface Props {
@@ -15,6 +17,15 @@ interface Props {
   hideFooter?: boolean;
   schema?: object;
   ogType?: string;
+  /**
+   * Markdown content rendered into the Agent View overlay AND embedded in the
+   * SSR'd HTML inside a <script type="text/markdown"> block so AI crawlers
+   * (ChatGPT, Claude, Perplexity) that don't execute JS can still read the
+   * structured page content.
+   */
+  agentMarkdown?: string;
+  /** Optional path label shown in the Agent View header bar. */
+  agentPathLabel?: string;
 }
 
 const gaMeasurementId = import.meta.env.GA_MEASUREMENT_ID || '';
@@ -28,7 +39,9 @@ const {
   hideNav = false,
   hideFooter = false,
   schema,
-  ogType = "website"
+  ogType = "website",
+  agentMarkdown,
+  agentPathLabel,
 } = Astro.props;
 
 const siteUrl = "https://www.nasifsalaam.com"; // Your actual domain
@@ -36,6 +49,9 @@ const siteName = "Nasif Salaam";
 const themeColor = "#0b0b0b";
 
 const canonical = canonicalURL ?? new URL(Astro.url.pathname, siteUrl).href;
+
+const _pathname = Astro.url.pathname.replace(/\/$/, '') || '/';
+const mdHref = `${siteUrl}${_pathname === '/' ? '/index' : _pathname}.md`;
 
 const structuredData = {
   "@context": "https://schema.org",
@@ -57,9 +73,8 @@ const structuredData = {
       url: siteUrl,
       image: `${siteUrl}/images/ns26/logo26w.png`,
       sameAs: [
-        "https://linkedin.com/in/nasifsalaam",
-        "https://twitter.com/nasifsalaam",
-        "https://github.com/nasifsalaam",
+        "https://www.linkedin.com/in/nasifsalaam/",
+        "https://github.com/wemadeathing",
       ],
       jobTitle: "Design Engineer",
       description:
@@ -88,6 +103,24 @@ const structuredData = {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    {/* Agent View — restore mode BEFORE paint to prevent FOUC. Mirrors Speakeasy's pattern. */}
+    <script is:inline>
+      (function () {
+        function applyAgentMode() {
+          try {
+            if (localStorage.getItem('nasifsalaam-view-mode') === 'agent') {
+              document.documentElement.classList.add('agent-mode');
+            } else {
+              document.documentElement.classList.remove('agent-mode');
+            }
+          } catch (e) {}
+        }
+        applyAgentMode();
+        // Re-apply after Astro View Transition swaps so the class isn't lost on navigation.
+        document.addEventListener('astro:after-swap', applyAgentMode);
+      })();
+    </script>
     
     <!-- Primary Meta Tags -->
     <title>{title}</title>
@@ -108,6 +141,10 @@ const structuredData = {
     
     <!-- Canonical URL -->
     <link rel="canonical" href={canonical} />
+
+    <!-- Machine-readable markdown for AI agents -->
+    <link rel="alternate" type="text/markdown" href={mdHref} />
+    <meta name="llms" content={mdHref} />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content={ogType} />
@@ -200,6 +237,7 @@ const structuredData = {
       <slot />
     </main>
     {!hideFooter && <Footer />}
+    <AgentView markdown={agentMarkdown} pathLabel={agentPathLabel} />
   </body>
 </html>
 

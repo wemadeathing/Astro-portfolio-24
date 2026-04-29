@@ -86,11 +86,25 @@ const cards = await Promise.all(
     };
   })
 );
+const agentMarkdown = [
+  '# Resources',
+  '',
+  '> Curated tools, articles, videos, and templates I actually use — for designers and builders working in AI and product.',
+  '',
+  `${totalCount} resources across docs, libraries, tools, articles, and more.`,
+  '',
+  ...cards.map((c) => {
+    const line = `- **[${c.title}](${c.href})**${c.description ? ` — ${c.description}` : ''}`;
+    return line;
+  }),
+].join('\n');
 ---
 
 <Layout
   title="Resources | Tools, videos, and links for designers who ship"
-  description="Curated resources: tools, videos, articles, and templates for designers and builders working in AI and product." 
+  description="Curated resources: tools, videos, articles, and templates for designers and builders working in AI and product."
+  agentMarkdown={agentMarkdown}
+  agentPathLabel="~/nasifsalaam/resources.md"
 >
   <section class="py-10 sm:py-14">
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">

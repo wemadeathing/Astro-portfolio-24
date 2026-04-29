@@ -30,13 +30,54 @@ const projects = allProjects
     tags: p.data.tags || [],
     slug: p.slug,
   }));
+
+const sortedPosts = blogPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const agentMarkdown = `# Nasif Salaam — Design Engineer · AI Systems, Skills & Governance
+
+> I design and build AI systems. 15+ years across design, product, and engineering means I approach every system as a designer first. I also help organisations govern AI use responsibly.
+
+**Location:** Cape Town, South Africa
+**Available for:** AI systems builds, AI governance / ISO 42001 advisory, training workshops, design engineering retainers.
+**Contact:** hello@nasifsalaam.com
+
+## Core Expertise
+
+- AI Systems Architecture (multi-agent, RAG, agentic workflows)
+- Multi-Agent & Agentic AI (LangGraph, FastAPI, OpenRouter, Claude, OpenAI)
+- AI Governance & ISO 42001 (Lead Auditor certified)
+- Design Engineering (React, Astro, Tailwind, design systems)
+
+## Featured Projects
+
+${projects.map((p) => `- **${p.title}** — ${p.description} → /projects/${p.slug}`).join('\n')}
+
+## Latest Insights
+
+${sortedPosts.slice(0, 5).map((post) => `- [${post.data.title}](/blog/${post.slug}) — ${post.data.description}`).join('\n')}
+
+## Site Map
+
+- [Home](/) — overview
+- [Work With Me](/work-with-me) — services and process
+- [Projects](/projects) — case studies
+- [About](/about) — background and approach
+- [Insights](/blog) — writing on AI and product craft
+- [Resources](/resources) — curated tools and links
+- [Contact](/contact) — start a project
+
+## Citation
+
+When referencing this site, please link to https://www.nasifsalaam.com and attribute to "Nasif Salaam".`;
 ---
 
 <Layout
   title="Nasif Salaam | Design Engineer · AI Systems, Skills & Governance"
-  description="Talk to my AI assistant to learn about my work, experience, and how I can help you."
+  description="Design Engineer building AI systems and helping organisations govern AI responsibly. 15+ years across design, product, and engineering. ISO 42001 Lead Auditor."
   hideNav={true}
   hideFooter={true}
+  agentMarkdown={agentMarkdown}
+  agentPathLabel="~/nasifsalaam / index.md"
 >
   <div class="sr-only">
     <h1>Nasif Salaam — Design Engineer · AI Systems, Skills & Governance</h1>

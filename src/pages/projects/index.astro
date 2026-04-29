@@ -42,11 +42,29 @@ const buildTagHref = (tag: string | null) => {
   else url.searchParams.set('tag', tag);
   return `${url.pathname}${url.search}`;
 };
+
+const agentMarkdown = `# Projects — Nasif Salaam
+
+> Selected work across design systems, AI-powered applications, and rapid prototypes.
+
+## All Projects
+
+${projects
+  .map(
+    (p) =>
+      `### ${p.data.title}
+${p.data.description}
+- URL: /projects/${p.slug}/
+- Tags: ${(p.data.tags ?? []).join(', ')}`
+  )
+  .join('\n\n')}`;
 ---
 
 <Layout 
   title="Projects | Design Systems & AI-Powered Products"
   description="Selected work across design systems, AI-powered applications, and rapid prototypes. Case studies featuring fintech platforms, WhatsApp Flow builders, and production SaaS products."
+  agentMarkdown={agentMarkdown}
+  agentPathLabel="~/nasifsalaam / projects / index.md"
 >
   <section class="py-10 sm:py-14">
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">

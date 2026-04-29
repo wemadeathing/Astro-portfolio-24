@@ -2,6 +2,21 @@
   command = "npm run build"
   publish = "dist"
 
+# Force apex (nasifsalaam.com) -> www (www.nasifsalaam.com) so requests match the
+# canonical URLs declared in <link rel="canonical">. Without this, both hosts
+# served 200s with conflicting canonical/redirect signals.
+[[redirects]]
+  from = "https://nasifsalaam.com/*"
+  to = "https://www.nasifsalaam.com/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "http://nasifsalaam.com/*"
+  to = "https://www.nasifsalaam.com/:splat"
+  status = 301
+  force = true
+
 # Rate limiting for chat API endpoint
 # Limits: 10 requests per minute per IP (reduced to prevent API quota exhaustion)
 [[rate_limit]]

@@ -158,11 +158,43 @@ const experience = [
     description: `In-house design for retail marketing materials, promotional campaigns, and brand assets across multiple product lines.`,
   },
 ];
+
+const agentMarkdown = `# About — Nasif Salaam
+
+> Design Engineer · AI Systems, Skills & Governance. 15 years across brand, product, and engineering. ISO 42001 Lead Auditor.
+
+## Current Focus
+
+Building **Kota AI** — a production multi-agent operations platform for South African SMEs (LangGraph, FastAPI, Supabase, OpenRouter). Shipping **RideNote** (iOS App Store live, Android in testing). Running AI governance workshops and advisory.
+
+## Expertise
+
+${expertise.map((e) => `### ${e.title}\n${e.description}`).join('\n\n')}
+
+## Skills
+
+${skills.map((s) => `### ${s.title}\n${s.items.map((i) => `- ${i}`).join('\n')}`).join('\n\n')}
+
+## Industries
+
+${industry.map((i) => `- **${i.title}:** ${i.items.join(', ')}`).join('\n')}
+
+## Experience
+
+${experience.map((e) => `### ${e.role} — ${e.company} (${e.period})\n${e.description}`).join('\n\n')}
+
+## Contact
+
+- Email: hello@nasifsalaam.com
+- LinkedIn: https://www.linkedin.com/in/nasifsalaam/
+- Site: https://www.nasifsalaam.com`;
 ---
 
 <Layout
   title="About | Design Engineer · AI Systems, Skills & Governance"
   description="Design Engineer with 15+ years across design, product, and AI systems. Building Kota AI, ISO 42001 Lead Auditor certified, and helping organisations govern AI responsibly."
+  agentMarkdown={agentMarkdown}
+  agentPathLabel="~/nasifsalaam / about.md"
 >
   <!-- Hero (wider / near full-width) -->
   <section class="py-10 sm:py-14">
