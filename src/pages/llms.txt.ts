@@ -3,7 +3,7 @@ import { getCollection } from 'astro:content';
 
 export const prerender = true;
 
-const BASE = 'https://www.nasifsalaam.com';
+const BASE = 'https://nasifsalaam.com';
 
 export const GET: APIRoute = async () => {
   const blogPosts = await getCollection('blog');

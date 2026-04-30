@@ -81,7 +81,7 @@ export const getResourceMeta = async (rawUrl: string): Promise<ResourceMeta> => 
 
   const headers = {
     'User-Agent':
-      'Mozilla/5.0 (compatible; NasifSalaamBot/1.0; +https://www.nasifsalaam.com)',
+      'Mozilla/5.0 (compatible; NasifSalaamBot/1.0; +https://nasifsalaam.com)',
     Accept: 'text/html,application/json;q=0.9,*/*;q=0.8',
   };
 

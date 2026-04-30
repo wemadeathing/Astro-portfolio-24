@@ -90,7 +90,7 @@ const fetchText = async (url: string, timeoutMs: number, maxBytes: number) => {
       redirect: 'follow',
       headers: {
         // Keep this simple; many sites block unknown UAs.
-        'User-Agent': 'Mozilla/5.0 (compatible; NasifAuditBot/1.0; +https://www.nasifsalaam.com/audit)',
+        'User-Agent': 'Mozilla/5.0 (compatible; NasifAuditBot/1.0; +https://nasifsalaam.com/audit)',
         Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
       },
       signal: controller.signal,
@@ -119,7 +119,7 @@ const headStatus = async (url: string, timeoutMs: number) => {
       method: 'GET',
       redirect: 'follow',
       headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; NasifAuditBot/1.0; +https://www.nasifsalaam.com/audit)',
+        'User-Agent': 'Mozilla/5.0 (compatible; NasifAuditBot/1.0; +https://nasifsalaam.com/audit)',
         Accept: 'text/plain, text/*;q=0.9, */*;q=0.2',
       },
       signal: controller.signal,

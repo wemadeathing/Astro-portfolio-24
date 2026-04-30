@@ -2,18 +2,20 @@
   command = "npm run build"
   publish = "dist"
 
-# Force apex (nasifsalaam.com) -> www (www.nasifsalaam.com) so requests match the
-# canonical URLs declared in <link rel="canonical">. Without this, both hosts
-# served 200s with conflicting canonical/redirect signals.
+# Force www (www.nasifsalaam.com) -> apex (nasifsalaam.com) so requests match the
+# canonical URLs declared in <link rel="canonical">. The Netlify dashboard has
+# nasifsalaam.com set as the primary domain; redirecting in the same direction
+# avoids the ERR_TOO_MANY_REDIRECTS loop that occurred when these rules pointed
+# the other way.
 [[redirects]]
-  from = "https://nasifsalaam.com/*"
-  to = "https://www.nasifsalaam.com/:splat"
+  from = "https://www.nasifsalaam.com/*"
+  to = "https://nasifsalaam.com/:splat"
   status = 301
   force = true
 
 [[redirects]]
-  from = "http://nasifsalaam.com/*"
-  to = "https://www.nasifsalaam.com/:splat"
+  from = "http://www.nasifsalaam.com/*"
+  to = "https://nasifsalaam.com/:splat"
   status = 301
   force = true
 

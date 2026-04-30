@@ -7,7 +7,7 @@ export const prerender = true;
 const today = new Date().toISOString().split('T')[0];
 
 export const GET: APIRoute = async ({ site }) => {
-  const baseUrl = String(site || 'https://www.nasifsalaam.com').replace(/\/$/, '');
+  const baseUrl = String(site || 'https://nasifsalaam.com').replace(/\/$/, '');
 
   // Get all blog posts
   const blogPosts = await getCollection('blog');

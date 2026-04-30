@@ -74,7 +74,7 @@ export async function buildHomeAgentMarkdown(): Promise<AgentPage> {
     '',
     '## Citation',
     '',
-    'When referencing this site, please link to https://www.nasifsalaam.com and attribute to "Nasif Salaam".',
+    'When referencing this site, please link to https://nasifsalaam.com and attribute to "Nasif Salaam".',
   ].join('\n');
 
   return { markdown, pathLabel: '~/nasifsalaam / index.md' };
@@ -139,7 +139,7 @@ export async function buildBlogPostAgentMarkdown(slug: string): Promise<AgentPag
     `**Published:** ${pub.toISOString().split('T')[0]}`,
     upd ? `**Updated:** ${upd.toISOString().split('T')[0]}` : null,
     tags.length ? `**Tags:** ${tags.join(', ')}` : null,
-    `**URL:** https://www.nasifsalaam.com/blog/${slug}/`,
+    `**URL:** https://nasifsalaam.com/blog/${slug}/`,
     '',
     '---',
     '',
@@ -193,7 +193,7 @@ export async function buildProjectAgentMarkdown(slug: string): Promise<AgentPage
     `> ${project.data.description}`,
     '',
     `**Tags:** ${(project.data.tags ?? []).join(', ')}`,
-    `**URL:** https://www.nasifsalaam.com/projects/${slug}/`,
+    `**URL:** https://nasifsalaam.com/projects/${slug}/`,
     '',
     '---',
     '',
@@ -333,7 +333,7 @@ In-house design for retail marketing materials, promotional campaigns, and brand
 
 - Email: hello@nasifsalaam.com
 - LinkedIn: https://www.linkedin.com/in/nasifsalaam/
-- Site: https://www.nasifsalaam.com
+- Site: https://nasifsalaam.com
 `;
 
 const WORK_WITH_ME_MD = `# Work With Me — Nasif Salaam
@@ -368,7 +368,7 @@ Practical AI adoption, not compliance theatre. Workshops and advisory that help 
 
 - Book a 30-minute call: https://calendly.com/salaam-nasif/30min
 - Email: hello@nasifsalaam.com
-- Site: https://www.nasifsalaam.com
+- Site: https://nasifsalaam.com
 `;
 
 const CONTACT_MD = `# Contact — Nasif Salaam
@@ -380,7 +380,7 @@ const CONTACT_MD = `# Contact — Nasif Salaam
 - **Email:** hello@nasifsalaam.com
 - **Calendly (30 min):** https://calendly.com/salaam-nasif/30min
 - **LinkedIn:** https://www.linkedin.com/in/nasifsalaam/
-- **Contact form:** https://www.nasifsalaam.com/contact/
+- **Contact form:** https://nasifsalaam.com/contact/
 
 ## What to include
 
