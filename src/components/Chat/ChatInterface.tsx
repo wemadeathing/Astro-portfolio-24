@@ -54,9 +54,11 @@ interface LatestPostData {
 interface ChatInterfaceProps {
   latestPost?: LatestPostData;
   projects?: ProjectData[];
+  /** When true, Layout provides Navbar + backdrop; skip duplicate chrome here. */
+  globalSiteNav?: boolean;
 }
 
-export default function ChatInterface({ latestPost, projects = [] }: ChatInterfaceProps) {
+export default function ChatInterface({ latestPost, projects = [], globalSiteNav = false }: ChatInterfaceProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const messagesRef = useRef<Message[]>([]);
 
@@ -79,9 +81,11 @@ export default function ChatInterface({ latestPost, projects = [] }: ChatInterfa
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'chat' | 'portfolio'>(() => {
     if (typeof window !== 'undefined') {
-      return (localStorage.getItem('preferred-view') as 'chat' | 'portfolio') || 'chat';
+      const stored = localStorage.getItem('preferred-view') as 'chat' | 'portfolio' | null;
+      if (stored === 'chat' || stored === 'portfolio') return stored;
+      return 'portfolio';
     }
-    return 'chat';
+    return 'portfolio';
   });
   const [displayedView, setDisplayedView] = useState<'chat' | 'portfolio'>(viewMode);
 
@@ -550,10 +554,7 @@ export default function ChatInterface({ latestPost, projects = [] }: ChatInterfa
 
   const menuLinks: { title: string; description: string; href: string; external?: boolean }[] = [
     { title: 'Work', description: 'Browse featured case studies', href: '/projects' },
-    { title: 'Work With Me', description: 'Services, process, and how to get started', href: '/work-with-me' },
     { title: 'About', description: 'Background and approach', href: '/about' },
-    { title: 'Insights', description: 'Writing on AI and product craft', href: '/blog' },
-    { title: 'Resources', description: 'Curated tools, videos, and links', href: '/resources' },
     { title: 'Contact', description: 'Send a message or start a project', href: '/contact' },
   ];
 
@@ -583,113 +584,113 @@ export default function ChatInterface({ latestPost, projects = [] }: ChatInterfa
     <div className="flex flex-col min-h-screen h-[100dvh] overflow-hidden bg-background text-foreground relative">
       
       {/* Background Gradient & Noise */}
-      <div className="absolute inset-0 pointer-events-none -z-20">
-        <div className="site-backdrop" />
-      </div>
+      {!globalSiteNav && (
+        <div className="absolute inset-0 pointer-events-none -z-20">
+          <div className="site-backdrop" />
+        </div>
+      )}
       <div className="absolute inset-0 bg-noise opacity-[0.03] -z-10 pointer-events-none" />
 
-      {/* Top Nav */}
-      <div className="fixed top-4 left-0 right-0 z-40 px-4">
-        <div className="max-w-[1100px] mx-auto relative">
-          <nav className={`flex items-center justify-between h-14 rounded-full px-4 backdrop-blur-xl transition-all duration-300 ${
-            isScrolled 
-              ? 'bg-card/80 border border-border/60' 
-              : 'bg-transparent border-transparent'
-          }`}>
-            <a 
-              href="/" 
-              className="flex items-center hover:opacity-80 transition-opacity"
-            >
-              <img 
-                src="/images/ns26/logo26w-gradient.svg" 
-                alt="Nasif Salaam" 
-                className="h-7 sm:h-8 w-auto"
-              />
-            </a>
+      {!globalSiteNav && (
+        <>
+          {/* Top Nav */}
+          <div className="fixed top-4 left-0 right-0 z-40 px-4">
+            <div className="max-w-[1100px] mx-auto relative">
+              <nav
+                className={`flex items-center justify-between h-14 rounded-full px-4 backdrop-blur-xl transition-all duration-300 ${
+                  isScrolled ? 'bg-card/80 border border-border/60' : 'bg-transparent border-transparent'
+                }`}
+              >
+                <a href="/" className="flex items-center hover:opacity-80 transition-opacity">
+                  <img src="/images/ns26/logo26w-gradient.svg" alt="Nasif Salaam" className="h-7 sm:h-8 w-auto" />
+                </a>
 
-            {/* Burger */}
-            <button
-              type="button"
-              aria-label="Open menu"
-              aria-expanded={isMenuOpen}
-              aria-controls="site-menu"
-              onClick={() => setIsMenuOpen(true)}
-              className="w-10 h-10 flex items-center justify-center rounded-full bg-muted/30 border border-border/60 text-foreground/80 hover:bg-muted/45 transition-colors duration-200"
-            >
-              <Menu size={18} />
-            </button>
-          </nav>
-        </div>
-      </div>
-
-      {/* Menu Flyout */}
-      <div
-        id="site-menu"
-        role="dialog"
-        aria-modal="true"
-        className={[
-          'fixed inset-0 z-50 transition-opacity duration-200',
-          isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none',
-        ].join(' ')}
-        onClick={() => setIsMenuOpen(false)}
-      >
-        <div className="absolute inset-0 bg-black/45 backdrop-blur-[2px]" />
-
-        <div className="absolute top-4 left-0 right-0 px-4" onClick={(e) => e.stopPropagation()}>
-          <div className="max-w-[1100px] mx-auto flex justify-end">
-            <div
-              ref={menuPanelRef}
-              className={[
-                'origin-top-right rounded-2xl border border-border/60 bg-popover/92 backdrop-blur-xl shadow-2xl',
-                'w-full max-w-[560px] overflow-hidden',
-                'transition-all duration-300 ease-out',
-                isMenuOpen ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 -translate-y-2 scale-[0.98]',
-              ].join(' ')}
-            >
-              <div className="px-4 py-3 border-b border-border/60 flex items-center justify-between">
-                <div className="text-xs tracking-wide uppercase text-foreground/60">Menu</div>
                 <button
-                  ref={menuCloseButtonRef}
                   type="button"
-                  aria-label="Close menu"
-                  onClick={() => setIsMenuOpen(false)}
-                  className="w-9 h-9 rounded-full bg-muted/30 border border-border/60 text-foreground/80 flex items-center justify-center hover:bg-muted/45 transition-colors"
+                  aria-label="Open menu"
+                  aria-expanded={isMenuOpen}
+                  aria-controls="site-menu"
+                  onClick={() => setIsMenuOpen(true)}
+                  className="w-10 h-10 flex items-center justify-center rounded-full bg-muted/30 border border-border/60 text-foreground/80 hover:bg-muted/45 transition-colors duration-200"
                 >
-                  <X size={18} />
+                  <Menu size={18} />
                 </button>
-              </div>
+              </nav>
+            </div>
+          </div>
 
-              <div className="p-3 md:p-4 max-h-[calc(100vh-7rem)] overflow-auto">
-                <div className="grid grid-cols-1 gap-2">
-                  {menuLinks.map((item) => (
-                    <a
-                      key={item.title}
-                      href={item.href}
-                      target={item.external ? '_blank' : undefined}
-                      rel={item.external ? 'noopener noreferrer' : undefined}
-                      className="group flex items-start justify-between gap-4 rounded-xl p-3 hover:bg-muted/30 transition-colors"
+          {/* Menu Flyout */}
+          <div
+            id="site-menu"
+            role="dialog"
+            aria-modal="true"
+            className={[
+              'fixed inset-0 z-50 transition-opacity duration-200',
+              isMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none',
+            ].join(' ')}
+            onClick={() => setIsMenuOpen(false)}
+          >
+            <div className="absolute inset-0 bg-black/45 backdrop-blur-[2px]" />
+
+            <div className="absolute top-4 left-0 right-0 px-4" onClick={(e) => e.stopPropagation()}>
+              <div className="max-w-[1100px] mx-auto flex justify-end">
+                <div
+                  ref={menuPanelRef}
+                  className={[
+                    'origin-top-right rounded-2xl border border-border/60 bg-popover/92 backdrop-blur-xl shadow-2xl',
+                    'w-full max-w-[560px] overflow-hidden',
+                    'transition-all duration-300 ease-out',
+                    isMenuOpen ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 -translate-y-2 scale-[0.98]',
+                  ].join(' ')}
+                >
+                  <div className="px-4 py-3 border-b border-border/60 flex items-center justify-between">
+                    <div className="text-xs tracking-wide uppercase text-foreground/60">Menu</div>
+                    <button
+                      ref={menuCloseButtonRef}
+                      type="button"
+                      aria-label="Close menu"
                       onClick={() => setIsMenuOpen(false)}
+                      className="w-9 h-9 rounded-full bg-muted/30 border border-border/60 text-foreground/80 flex items-center justify-center hover:bg-muted/45 transition-colors"
                     >
-                      <div className="flex items-start gap-3">
-                        <div className="mt-2 w-2 h-2 rounded-full bg-primary opacity-70 group-hover:opacity-100 transition-opacity" />
-                        <div className="text-left">
-                          <div className="text-foreground/92 font-medium leading-tight">{item.title}</div>
-                          <div className="text-foreground/60 text-sm leading-snug">{item.description}</div>
-                        </div>
-                      </div>
-                      <div className="shrink-0 text-foreground/40 group-hover:text-foreground/70 transition-colors">↘</div>
-                    </a>
-                  ))}
+                      <X size={18} />
+                    </button>
+                  </div>
+
+                  <div className="p-3 md:p-4 max-h-[calc(100vh-7rem)] overflow-auto">
+                    <div className="grid grid-cols-1 gap-2">
+                      {menuLinks.map((item) => (
+                        <a
+                          key={item.title}
+                          href={item.href}
+                          target={item.external ? '_blank' : undefined}
+                          rel={item.external ? 'noopener noreferrer' : undefined}
+                          className="group flex items-start justify-between gap-4 rounded-xl p-3 hover:bg-muted/30 transition-colors"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className="mt-2 w-2 h-2 rounded-full bg-primary opacity-70 group-hover:opacity-100 transition-opacity" />
+                            <div className="text-left">
+                              <div className="text-foreground/92 font-medium leading-tight">{item.title}</div>
+                              <div className="text-foreground/60 text-sm leading-snug">{item.description}</div>
+                            </div>
+                          </div>
+                          <div className="shrink-0 text-foreground/40 group-hover:text-foreground/70 transition-colors">↘</div>
+                        </a>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
 
       {/* Intro Screen */}
       {isIntro && (
-        <div className="flex-1 overflow-y-auto px-4 pt-24 sm:pt-28 pb-6 relative z-20">
+        <div
+          className={`flex-1 overflow-y-auto px-4 pb-6 relative z-20 ${globalSiteNav ? 'pt-4 sm:pt-6' : 'pt-24 sm:pt-28'}`}
+        >
           <div className="w-full max-w-[1100px] mx-auto flex flex-col items-center text-center">
             {/* Persistent Glass View Toggle */}
             <div
@@ -703,20 +704,10 @@ export default function ChatInterface({ latestPost, projects = [] }: ChatInterfa
                 <div
                   className="absolute top-0.5 bottom-0.5 rounded-full bg-white/[0.1] shadow-[0_1px_6px_rgba(0,0,0,0.15)] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
                   style={{
-                    left: viewMode === 'chat' ? '2px' : 'calc(50%)',
+                    left: viewMode === 'portfolio' ? '2px' : 'calc(50%)',
                     width: 'calc(50% - 2px)',
                   }}
                 />
-                <button
-                  type="button"
-                  onClick={() => switchView('chat')}
-                  className={[
-                    'relative z-10 px-3.5 py-[3px] rounded-full text-[11px] font-medium transition-colors duration-200',
-                    viewMode === 'chat' ? 'text-foreground' : 'text-muted-foreground/50 hover:text-muted-foreground',
-                  ].join(' ')}
-                >
-                  AI Chat
-                </button>
                 <button
                   type="button"
                   onClick={() => switchView('portfolio')}
@@ -726,6 +717,16 @@ export default function ChatInterface({ latestPost, projects = [] }: ChatInterfa
                   ].join(' ')}
                 >
                   Portfolio
+                </button>
+                <button
+                  type="button"
+                  onClick={() => switchView('chat')}
+                  className={[
+                    'relative z-10 px-3.5 py-[3px] rounded-full text-[11px] font-medium transition-colors duration-200',
+                    viewMode === 'chat' ? 'text-foreground' : 'text-muted-foreground/50 hover:text-muted-foreground',
+                  ].join(' ')}
+                >
+                  AI Chat
                 </button>
               </div>
             </div>
@@ -1073,7 +1074,7 @@ export default function ChatInterface({ latestPost, projects = [] }: ChatInterfa
           ref={chatContainerRef}
           className="flex-1 overflow-y-auto p-4 md:p-8 transition-all duration-500 opacity-100 scroll-smooth"
         >
-          <div className="max-w-[720px] mx-auto space-y-6 pt-20">
+          <div className={`max-w-[720px] mx-auto space-y-6 ${globalSiteNav ? 'pt-6' : 'pt-20'}`}>
             {messages.map((msg) => (
               <div
                 key={msg.id}

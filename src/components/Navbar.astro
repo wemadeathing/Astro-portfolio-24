@@ -1,10 +1,14 @@
 ---
-const navItems = [
+type NavItem = {
+  href: string;
+  label: string;
+  description: string;
+  external?: boolean;
+};
+
+const navItems: NavItem[] = [
   { href: '/projects', label: 'Work', description: 'Browse featured case studies' },
-  { href: '/work-with-me', label: 'Work With Me', description: 'Services, process, and how to get started' },
   { href: '/about', label: 'About', description: 'Background and approach' },
-  { href: '/blog', label: 'Insights', description: 'Writing on AI and product craft' },
-  { href: '/resources', label: 'Resources', description: 'Curated tools, videos, and links' },
   { href: '/contact', label: 'Contact', description: 'Send a message or start a project' },
 ];
 
@@ -14,8 +18,8 @@ const isHome = pathname === '/' || pathname === '';
 
 <header class="fixed top-4 left-0 right-0 z-50 px-4">
   <div class="max-w-[1100px] mx-auto relative">
-    <nav class="flex items-center justify-between h-14 rounded-full bg-card/80 border border-border/60 backdrop-blur-xl px-2">
-      <div class="flex items-center gap-3">
+    <nav class="flex items-center justify-between h-14 rounded-full bg-card/80 border border-border/60 backdrop-blur-xl px-3 sm:px-4">
+      <div class="flex items-center gap-3 min-w-0">
         {!isHome && (
           <a 
             href="/" 

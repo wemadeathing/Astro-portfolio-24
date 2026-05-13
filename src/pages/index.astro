@@ -74,8 +74,6 @@ When referencing this site, please link to https://nasifsalaam.com and attribute
 <Layout
   title="Nasif Salaam | Design Engineer · AI Systems, Skills & Governance"
   description="Design Engineer building AI systems and helping organisations govern AI responsibly. 15+ years across design, product, and engineering. ISO 42001 Lead Auditor."
-  hideNav={true}
-  hideFooter={true}
   agentMarkdown={agentMarkdown}
   agentPathLabel="~/nasifsalaam / index.md"
 >
@@ -102,10 +100,11 @@ When referencing this site, please link to https://nasifsalaam.com and attribute
       <a href="/projects">Projects</a>
       <a href="/about">About</a>
       <a href="/blog">Insights</a>
+      <a href="/resources">Resources</a>
       <a href="/contact">Contact</a>
     </nav>
   </div>
-  <ChatInterface client:only="react" latestPost={latestPost} projects={projects}>
+  <ChatInterface client:only="react" globalSiteNav={true} latestPost={latestPost} projects={projects}>
     <div slot="fallback" class="w-full h-[100dvh] flex flex-col bg-background relative overflow-hidden">
       <!-- Skeleton Nav -->
       <div class="fixed top-4 left-0 right-0 z-40 px-4">
