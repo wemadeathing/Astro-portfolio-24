@@ -514,6 +514,8 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
   };
 
   const isIntro = !hasStarted && messages.length === 0;
+  /** With Layout nav + footer, avoid nested scroll: let the document scroll instead of an inner overflow pane. */
+  const useDocumentScrollIntro = Boolean(globalSiteNav && isIntro);
   const retryLast = () => {
     if (!lastUserText) return;
     startChatWithPrompt(lastUserText);
@@ -581,7 +583,13 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
   };
 
   return (
-    <div className="flex flex-col min-h-screen h-[100dvh] overflow-hidden bg-background text-foreground relative">
+    <div
+      className={
+        useDocumentScrollIntro
+          ? 'flex flex-col min-h-screen bg-background text-foreground relative'
+          : 'flex flex-col min-h-screen h-[100dvh] overflow-hidden bg-background text-foreground relative'
+      }
+    >
       
       {/* Background Gradient & Noise */}
       {!globalSiteNav && (
@@ -689,7 +697,11 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
       {/* Intro Screen */}
       {isIntro && (
         <div
-          className={`flex-1 overflow-y-auto px-4 pb-6 relative z-20 ${globalSiteNav ? 'pt-4 sm:pt-6' : 'pt-24 sm:pt-28'}`}
+          className={
+            useDocumentScrollIntro
+              ? 'px-4 pt-4 sm:pt-6 pb-6 relative z-20'
+              : 'flex-1 overflow-y-auto px-4 pb-6 relative z-20 pt-24 sm:pt-28'
+          }
         >
           <div className="w-full max-w-[1100px] mx-auto flex flex-col items-center text-center">
             {/* Persistent Glass View Toggle */}
