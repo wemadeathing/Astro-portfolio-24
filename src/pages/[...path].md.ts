@@ -1,5 +1,5 @@
 /**
- * Catch-all .md endpoint — Speakeasy-style direct markdown access for any page.
+ * Catch-all .md endpoint, Speakeasy-style direct markdown access for any page.
  *
  * Examples:
  *   /index.md
@@ -111,7 +111,7 @@ export const GET: APIRoute = async ({ params }) => {
     if (result) return respond(result.markdown);
   }
 
-  return new Response('# 404 — Not Found\n\nNo markdown source for this path.\n', {
+  return new Response('# 404, Not Found\n\nNo markdown source for this path.\n', {
     status: 404,
     headers: { 'Content-Type': 'text/markdown; charset=utf-8' },
   });

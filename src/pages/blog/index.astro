@@ -19,11 +19,11 @@ const allTags = Array.from(
 ).sort((a, b) => a.localeCompare(b));
 
 const agentPostLines = sortedPosts
-  .map((p) => '- [' + p.data.title + '](/blog/' + p.slug + '/) — ' + p.data.description + ' (' + p.data.pubDate.toISOString().split('T')[0] + ')')
+  .map((p) => '- [' + p.data.title + '](/blog/' + p.slug + '/): ' + p.data.description + ' (' + p.data.pubDate.toISOString().split('T')[0] + ')')
   .join('\n');
 const agentTopicLines = allTags.map((t) => '- ' + t).join('\n');
 const agentMarkdown = [
-  '# Insights — Nasif Salaam',
+  '# Insights: Nasif Salaam',
   '',
   '> Notes on AI-powered workflows, product craft, and the practical side of shipping.',
   '',

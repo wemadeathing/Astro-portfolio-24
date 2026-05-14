@@ -89,12 +89,12 @@ const cards = await Promise.all(
 const agentMarkdown = [
   '# Resources',
   '',
-  '> Curated tools, articles, videos, and templates I actually use — for designers and builders working in AI and product.',
+  '> Curated tools, articles, videos, and templates I actually use for designers and builders working in AI and product.',
   '',
   `${totalCount} resources across docs, libraries, tools, articles, and more.`,
   '',
   ...cards.map((c) => {
-    const line = `- **[${c.title}](${c.href})**${c.description ? ` — ${c.description}` : ''}`;
+    const line = `- **[${c.title}](${c.href})**${c.description ? `: ${c.description}` : ''}`;
     return line;
   }),
 ].join('\n');

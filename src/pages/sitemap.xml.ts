@@ -15,7 +15,7 @@ export const GET: APIRoute = async ({ site }) => {
   // Get all projects
   const projects = await getCollection('projects');
 
-  // Static pages — trailing slashes match the canonical URLs emitted by Layout.astro
+  // Static pages, trailing slashes match the canonical URLs emitted by Layout.astro
   const staticPages = [
     { url: '/', lastmod: today, changefreq: 'monthly', priority: '1.0' },
     { url: '/projects/', lastmod: today, changefreq: 'monthly', priority: '0.8' },
@@ -27,7 +27,7 @@ export const GET: APIRoute = async ({ site }) => {
     { url: '/tools/', lastmod: today, changefreq: 'monthly', priority: '0.5' },
   ];
 
-  // Blog post pages — real lastmod from frontmatter
+  // Blog post pages, real lastmod from frontmatter
   const blogPages = blogPosts.map((post) => ({
     url: `/blog/${post.slug}/`,
     lastmod: (post.data.updatedDate || post.data.pubDate).toISOString().split('T')[0],
@@ -35,7 +35,7 @@ export const GET: APIRoute = async ({ site }) => {
     priority: '0.6',
   }));
 
-  // Tag pages — only include tags with >= 3 posts to avoid thin-content tag pages.
+  // Tag pages, only include tags with >= 3 posts to avoid thin-content tag pages.
   const tagCounts = blogPosts
     .flatMap((p) => p.data.tags ?? [])
     .map((t) => String(t).trim())

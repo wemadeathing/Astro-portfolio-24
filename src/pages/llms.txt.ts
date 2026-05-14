@@ -26,10 +26,10 @@ export const GET: APIRoute = async () => {
 
   const body = `# Nasif Salaam
 
-> Design Engineer specialising in AI systems, skills & governance. 15+ years across brand, product, and front-end development. Based in Cape Town, South Africa.
+> Design Engineer with 15+ years across brand, product, frontend development, and AI. Based in Cape Town, South Africa.
 
 - Contact: hello@nasifsalaam.com
-- Available for: AI systems builds, AI governance / ISO 42001 advisory, training workshops, design engineering retainers
+- Available for: Web and product design, frontend development, MVP builds, design engineering roles
 - LinkedIn: https://www.linkedin.com/in/nasifsalaam/
 - GitHub: https://github.com/wemadeathing
 

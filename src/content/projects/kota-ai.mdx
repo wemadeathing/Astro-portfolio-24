@@ -1,10 +1,10 @@
 ---
 title: "Kota AI - Multi-Agent Operations Platform"
-description: "Designed and built a production multi-agent AI system for South African SMEs. From system architecture to deployed platform — solo."
+description: "Designed and built a production multi-agent AI system for South African SMEs. From system architecture to deployed platform, solo."
 ai_summary: "End-to-end design and build of a multi-agent operations platform for SA small businesses. Covers system architecture decisions, LangGraph orchestration, RAG knowledge base design, Generative UI response contract, multi-tenant data isolation, and the folder-as-architecture pattern. Demonstrates full ownership of a production AI system from concept through pre-launch testing."
 image: "/images/work/kota/kota.png"
 tags: ["Builds", "AI Systems", "Multi-Agent", "LangGraph", "Architecture", "Solo Founder"]
-use_for_questions: ["Multi-agent systems", "AI architecture", "LangGraph", "RAG", "Knowledge base design", "Generative UI", "Agentic AI", "FastAPI", "Supabase", "AI governance", "SA SME", "Solo building"]
+use_for_questions: ["Multi-agent systems", "AI architecture", "LangGraph", "RAG", "Knowledge base design", "Generative UI", "Agentic AI", "FastAPI", "Supabase", "SA SME", "Solo building"]
 featured: true
 published: true
 order: 2
@@ -31,7 +31,7 @@ import KotaKnowledgeBaseDiagram from '../../components/KotaKnowledgeBaseDiagram'
 
 SA small business owners wear every hat. The same person writing proposals at 7am is chasing invoices at noon and doing outreach at 10pm. There is no operations team. There is a person, a WhatsApp group, and a slowly filling inbox.
 
-Most AI tools make this harder, not easier. A blank chat box with no business context means the owner still has to do the thinking. Kota AI is different: it knows the business, remembers what has been done before, and responds in a format that is actually useful — not a wall of text, but a rendered invoice, a structured proposal, a researched brief.
+Most AI tools make this harder, not easier. A blank chat box with no business context means the owner still has to do the thinking. Kota AI is different: it knows the business, remembers what has been done before, and responds in a format that is actually useful, not a wall of text, but a rendered invoice, a structured proposal, a researched brief.
 
 The system runs three coordinated agents: a Router that classifies every request, a General Agent that handles single-turn tasks across six surfaces, and a Workflow Agent that handles multi-step tasks that require a reasoning loop. The whole thing is built on LangGraph, FastAPI, and Supabase, with a RAG knowledge base underneath and a Generative UI response contract on top.
 
@@ -40,7 +40,7 @@ I am the architect, designer, and sole builder. This case study documents the de
 <ClickableImage
   src="/images/work/kota/kota-dash.png"
   alt="Kota AI dashboard interface"
-  caption="The Kota AI dashboard — six operational surfaces, one agent layer underneath."
+  caption="The Kota AI dashboard, six operational surfaces, one agent layer underneath."
 />
 
 ## Tools & Technologies
@@ -113,7 +113,7 @@ Every agent response follows a contract:
 
 The agent never generates UI code. It decides what kind of response fits the request and returns structured data. The React frontend reads `type` and renders the matching component. Six types: text, list, table, document, chart, and action.
 
-The action type is the human-in-the-loop mechanism. When the agent needs confirmation before proceeding — sending a document, saving a service price, creating a client record — it renders an inline action component and waits. The agent never sends, publishes, or transmits anything without explicit user confirmation.
+The action type is the human-in-the-loop mechanism. When the agent needs confirmation before proceeding, sending a document, saving a service price, creating a client record, it renders an inline action component and waits. The agent never sends, publishes, or transmits anything without explicit user confirmation.
 
 This distinction between "the agent picks the frame" and "the frontend fills it" keeps the system predictable. New response types can be added without touching agent logic. Agent improvements do not require frontend changes.
 
@@ -152,7 +152,7 @@ agents/
         └── proposal-generation/
 ```
 
-Adding a new surface means adding a markdown file, not refactoring a router. Adding a new workflow means adding a folder. The orchestration layer — LangGraph — is the disposable part. The agent knowledge survives any framework change intact.
+Adding a new surface means adding a markdown file, not refactoring a router. Adding a new workflow means adding a folder. The orchestration layer, LangGraph, is the disposable part. The agent knowledge survives any framework change intact.
 
 This matters for governance as much as it matters for maintainability. Every agent prompt is readable, versionable, and auditable. You can see exactly what the system is instructed to do without reading application code.
 
@@ -172,7 +172,7 @@ The solution is two-phase streaming. Phase one: the conversational `message` fie
 
 The `/chat` endpoint uses Server-Sent Events with two event types: `message_delta` for streaming text tokens and `component` for the complete JSON payload.
 
-This means the user always gets immediate feedback — they are never staring at a blank screen waiting for something to happen — and the component renders cleanly once the data is ready.
+This means the user always gets immediate feedback, they are never staring at a blank screen waiting for something to happen, and the component renders cleanly once the data is ready.
 
 
 
@@ -186,7 +186,7 @@ Payment terms default to 30 days EFT. Banking details are stored in the knowledg
 
 The app does not send messages. It drafts them. The user copies into WhatsApp, email, LinkedIn, or SMS. WhatsApp is the primary B2B communication channel for SA SMEs, so drafts are formatted accordingly: no HTML, conversational tone, short paragraphs.
 
-Compliance documents — BEE certificates, CIPC registration, tax clearance — are stored in the knowledge base. Enterprise clients regularly request these. The agent surfaces them on demand. Expiry dates are stored where relevant and the Advisor flags upcoming expiries.
+Compliance documents, BEE certificates, CIPC registration, tax clearance, are stored in the knowledge base. Enterprise clients regularly request these. The agent surfaces them on demand. Expiry dates are stored where relevant and the Advisor flags upcoming expiries.
 
 <ClickableImage
   src="/images/work/kota/kota-dash.png"
@@ -209,13 +209,13 @@ This was a deliberate decision to keep the critical path reliable. If the agent 
     System is in pre-launch with initial testers. Architectural concerns reviewed and resolved before onboarding non-technical users.
   </FeatureCard>
   <FeatureCard title="Full System Architecture">
-    Router, General Agent, Workflow Agent, RAG knowledge base, Generative UI contract, multi-tenant RLS — all designed and built solo.
+    Router, General Agent, Workflow Agent, RAG knowledge base, Generative UI contract, multi-tenant RLS, all designed and built solo.
   </FeatureCard>
   <FeatureCard title="SA-First Design">
-    VAT, EFT, WhatsApp formatting, BEE compliance, CIPC — every SA-specific constraint is built into the system, not bolted on.
+    VAT, EFT, WhatsApp formatting, BEE compliance, CIPC, every SA-specific constraint is built into the system, not bolted on.
   </FeatureCard>
   <FeatureCard title="Production-Grade from Day One">
-    No prototype shortcuts. Multi-tenancy, observability, streaming, error handling — designed in at the start.
+    No prototype shortcuts. Multi-tenancy, observability, streaming, error handling, designed in at the start.
   </FeatureCard>
 </div>
 

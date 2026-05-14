@@ -22,7 +22,7 @@ const services = [
     number: '02',
     label: 'Turn Your Idea Into a Working Product',
     heading: 'From idea to working product in weeks, not months.',
-    body: "Need a product built? I handle the whole thing — architecture, design, build, deployment. Web and mobile. AI-powered or not. One person end to end, no handoff gaps.",
+    body: "Need a product built? I handle the whole thing: architecture, design, build, deployment. Web and mobile. AI-powered or not. One person end to end, no handoff gaps.",
     includes: [
       'Web and mobile MVPs',
       'AI-powered product builds',
@@ -31,20 +31,6 @@ const services = [
     audience: 'Founders, product teams, and corporate innovation leads who need someone who can think and build at the same time.',
     image: '/images/work-with-me-02.png',
     imageAlt: 'Product and MVP development by Nasif Salaam',
-  },
-  {
-    number: '03',
-    label: 'AI Governance & Training',
-    heading: 'Practical AI adoption, not compliance theatre.',
-    body: "I run workshops and advisory sessions that help organisations actually use AI well — and avoid the risks that come with using it badly. ISO 42001 Lead Auditor certified. Sessions cover practical tools, responsible workflows, and the governance questions that matter.",
-    includes: [
-      'Half-day and full-day workshops',
-      'AI governance advisory and risk assessment',
-      'ISO 42001 aligned frameworks',
-    ],
-    audience: 'Business owners, team leads, and compliance-aware organisations who want AI that works and doesn\'t create new problems.',
-    image: '/images/work-with-me-03.png',
-    imageAlt: 'AI training workshops by Nasif Salaam',
   },
 ];
 
@@ -67,16 +53,16 @@ const steps = [
   {
     number: '4',
     title: "You've got something real",
-    description: "Whether it's a website, a product, or a newly AI-capable team, you walk away with something that works.",
+    description: "Whether it's a website, a product, or a refreshed brand, you walk away with something that works.",
   },
 ];
 
 const calLink = 'https://calendly.com/salaam-nasif/30min';
 const emailAddress = 'hello@nasifsalaam.com';
 
-const agentMarkdown = `# Work With Me — Nasif Salaam
+const agentMarkdown = `# Work With Me: Nasif Salaam
 
-> Design engineer with 15 years across product, design, and AI systems. I design and build AI systems, take digital products from idea to shipped, and help organisations govern AI responsibly.
+> Design Engineer with 15+ years across brand, product, frontend development, and AI. I take projects from brief to shipped, with no handoffs and no gaps between design and build.
 
 ## Services
 
@@ -97,7 +83,7 @@ ${s.includes.map((i) => `- ${i}`).join('\n')}
 
 ## Process
 
-${steps.map((s) => `${s.number}. **${s.title}** — ${s.description}`).join('\n')}
+${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
 
 ## Get Started
 
@@ -108,7 +94,7 @@ ${steps.map((s) => `${s.number}. **${s.title}** — ${s.description}`).join('\n'
 
 <Layout
   title="Work With Me | Nasif Salaam"
-  description="Design engineer with 15 years across product, design, and AI systems. I design and build AI systems, take digital products from idea to shipped, and help organisations govern AI responsibly."
+  description="Design Engineer with 15+ years across brand, product, frontend development, and AI. I take projects from brief to shipped."
   agentMarkdown={agentMarkdown}
   agentPathLabel="~/nasifsalaam / work-with-me.md"
   image="/images/work-with-me-01.png"
@@ -121,7 +107,7 @@ ${steps.map((s) => `${s.number}. **${s.title}** — ${s.description}`).join('\n'
           Let's build something worth building.
         </h1>
         <p class="mt-5 type-lead text-white/80">
-          I'm Nasif. Design engineer with 15 years across product, design, and AI systems. I design and build AI systems, take digital products from idea to shipped, and help organisations govern AI responsibly.
+          I'm Nasif. Design Engineer with 15+ years across brand, product, frontend development, and AI. I take projects from brief to shipped, with no handoffs and no gaps between design and build.
         </p>
         <div class="mt-7">
           <Button href={calLink} text="Book a free 30-minute call →" variant="primary" external />
@@ -235,13 +221,7 @@ ${steps.map((s) => `${s.number}. **${s.title}** — ${s.description}`).join('\n'
         <div class="flex flex-col lg:flex-row gap-8 items-start lg:items-center">
           <div class="space-y-4 text-sm sm:text-base leading-[1.65] text-white/75 lg:flex-1">
             <p>
-              15 years across brand, product, and engineering — working with organisations in financial services, retail, property, and tech. Design is my foundation. It shapes how I approach every problem before anything else gets built.
-            </p>
-            <p>
-              For the past three years AI has been the main focus. I build agentic systems, design the knowledge architecture underneath them, and think seriously about what responsible use actually looks like in practice. I got ISO 42001 Lead Auditor certified because most AI conversations are about capability, not risk. That thinking now shapes everything I build.
-            </p>
-            <p>
-              I work across the full stack, solo. Design to deployment.
+              15 years across brand, product, and engineering, working with organisations in financial services, retail, property, and tech. Design is my foundation. It shapes how I approach every problem before anything else gets built.
             </p>
           </div>
           <div class="hidden lg:block lg:shrink-0 lg:w-[180px] xl:w-[200px]">

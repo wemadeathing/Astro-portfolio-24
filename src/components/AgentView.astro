@@ -1,6 +1,6 @@
 ---
 /**
- * AgentView — a Speakeasy-style "agent mode" toggle that flips the entire site
+ * AgentView: a Speakeasy-style "agent mode" toggle that flips the entire site
  * into a markdown-rendered, terminal-flavoured view of the current page.
  *
  * Architecture (mirrors Speakeasy):
@@ -9,13 +9,13 @@
  *    reads localStorage["nasifsalaam-view-mode"] BEFORE paint, so there is
  *    no flash of the wrong view on page load.
  *  - The page's markdown is embedded server-side inside a
- *    `<script type="text/markdown">` tag — readable by AI crawlers that
+ *    `<script type="text/markdown">` tag, readable by AI crawlers that
  *    don't execute JS, and rendered into the agent view by a tiny inline
  *    markdown→HTML converter on the client.
  *  - Three pieces are always present in the DOM:
- *      1. `FloatingViewToggle`  — bottom-right pill button
- *      2. `AgentNav`            — left sidebar nav (only visible in agent mode)
- *      3. `GlobalAgentView`     — full-screen markdown overlay (only visible in agent mode)
+ *      1. `FloatingViewToggle`: bottom-right pill button
+ *      2. `AgentNav`: left sidebar nav (only visible in agent mode)
+ *      3. `GlobalAgentView`: full-screen markdown overlay (only visible in agent mode)
  */
 
 interface NavItem {
@@ -63,7 +63,7 @@ const mdUrl = pageUrl === '/' ? '/index.md' : `${pageUrl.replace(/\/$/, '')}.md`
       set:html={markdown}
     />
 
-    {/* (1) Floating toggle button — bottom-right pill */}
+    {/* (1) Floating toggle button, bottom-right pill */}
     <button
       type="button"
       id="agent-view-toggle"
@@ -93,7 +93,7 @@ const mdUrl = pageUrl === '/' ? '/index.md' : `${pageUrl.replace(/\/$/, '')}.md`
       <span class="agent-view-toggle__label" data-state="agent">Human view</span>
     </button>
 
-    {/* (2) Agent nav — left sidebar visible only when agent-mode is active */}
+    {/* (2) Agent nav, left sidebar visible only when agent-mode is active */}
     <aside id="agent-view-nav" class="agent-view-nav" aria-label="Agent view navigation">
       <div class="agent-view-nav__brand">
         <span class="agent-view-nav__prompt">$</span>
@@ -114,7 +114,7 @@ const mdUrl = pageUrl === '/' ? '/index.md' : `${pageUrl.replace(/\/$/, '')}.md`
       </nav>
     </aside>
 
-    {/* (3) Global agent overlay — full-screen markdown view */}
+    {/* (3) Global agent overlay, full-screen markdown view */}
     <div
       id="agent-view-overlay"
       class="agent-view-overlay"
@@ -135,11 +135,11 @@ const mdUrl = pageUrl === '/' ? '/index.md' : `${pageUrl.replace(/\/$/, '')}.md`
 
 <style is:global>
   /* ============================================================
-   *  Agent View — global styles
+   *  Agent View, global styles
    *  Single source of truth: html.agent-mode toggles everything.
    * ============================================================ */
 
-  /* Toggle pill — always visible (so users can enter/exit agent mode) */
+  /* Toggle pill, always visible (so users can enter/exit agent mode) */
   .agent-view-toggle {
     position: fixed;
     bottom: 24px;
@@ -503,7 +503,7 @@ const mdUrl = pageUrl === '/' ? '/index.md' : `${pageUrl.replace(/\/$/, '')}.md`
 
 <script>
   // Tiny markdown -> HTML renderer (no deps).
-  // Handles: # ## ### ####, paragraphs, - / 1. lists, **bold**, *italic*,
+  // Handles: # ## ### ####, paragraphs, - / 1. lists, **bold**: *italic*,
   // `code`, fenced ```code blocks, [text](url), --- horizontal rules, > blockquotes.
   function renderMarkdown(md: string): string {
     const escape = (s: string) =>

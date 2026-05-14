@@ -91,12 +91,12 @@ const getStepGallery = (stepIndex: number, size = 3) => {
               class="group rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl text-left overflow-hidden transition-colors hover:bg-white/[0.05] hover:border-white/20 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
               data-gallery-item={stepImage}
               data-gallery-items={JSON.stringify(gallery)}
-              aria-label={`Open visual for ${caseStudy.title} — ${step.phase}`}
+              aria-label={`Open visual for ${caseStudy.title}: ${step.phase}`}
             >
               <div class="relative w-full aspect-[16/9]">
                 <img
                   src={stepImage}
-                  alt={`${caseStudy.title} — ${step.phase}`}
+                  alt={`${caseStudy.title}: ${step.phase}`}
                   class="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                   loading="lazy"
                   decoding="async"

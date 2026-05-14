@@ -5,14 +5,9 @@ import Button from '../components/Button.astro';
 
 const expertise = [
   {
-    title: 'AI-Powered Design & Product Development',
-    description: `I build AI systems end to end — multi-agent architectures, RAG pipelines, agentic workflows, and the interfaces that sit on top of them. Stack: LangGraph, FastAPI, Supabase, OpenRouter, React, Astro. Recent: Kota AI (multi-agent SME platform), RideNote (iOS/Android, App Store live).`,
+    title: 'Product Design & Engineering',
+    description: `I design and build digital products end-to-end: from initial concept and UX through to production code. I use AI-accelerated workflows to ship faster and take on the kind of work that would typically require a larger team. Recent builds: Kota AI (multi-agent SME platform), RideNote (iOS/Android, App Store live).`,
     icon: 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5',
-  },
-  {
-    title: 'AI Training & Consulting',
-    description: `I run workshops and advisory sessions on practical AI adoption and governance. ISO 42001 Lead Auditor certified. I have trained 30 to 40 people across corporate and professional cohorts. Sessions cover real tools, real workflows, and the governance questions that matter when AI is going into production.`,
-    icon: 'M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z',
   },
   {
     title: 'End-to-End Product Design',
@@ -39,34 +34,18 @@ const skills = [
     ],
   },
   {
-    title: 'AI Systems & Architecture',
-    items: [
-      'LangGraph',
-      'multi-agent orchestration',
-      'RAG',
-      'vector search',
-      'MCP',
-      'tool calling',
-      'agentic workflows',
-      'FastAPI',
-      'OpenRouter',
-      'Claude API',
-      'prompt engineering',
-      'structured output',
-      'LangSmith',
-      'PostHog',
-    ],
-  },
-  {
-    title: 'Technical Implementation',
+    title: 'Frontend & Product Engineering',
     items: [
       'React',
       'AstroJS',
+      'Tailwind CSS',
       'HTML/CSS',
+      'TypeScript',
       'PostgreSQL',
       'WordPress',
-      'API Integration',
-      'Third-party API integration and data scraping',
+      'API integration',
+      'Responsive layouts',
+      'Component-driven UI',
       'Cross-functional collaboration with dev teams',
     ],
   },
@@ -128,10 +107,10 @@ const industry = [
 
 const experience = [
   {
-    role: 'AI Systems Designer & Builder',
+    role: 'Design Engineer',
     company: 'Independent',
     period: '2025 - Present',
-    description: `Building Kota AI — a production multi-agent operations platform for SA SMEs using LangGraph, FastAPI, Supabase, and OpenRouter. Designed the full system architecture: Router and Workflow agents, RAG knowledge base, Generative UI response contract, multi-tenant RLS. Also shipping RideNote (iOS App Store live, Android in testing) and running AI governance workshops and advisory for organisations adopting AI.`,
+    description: `Project-based client work across brand identity, web design, and frontend development, managing projects end to end from brief through to delivery. Built custom websites and digital assets for clients across various industries. Also built Kota AI (a multi-agent business operations platform designed and built end-to-end) and RideNote (iOS App Store live, Android in testing), using AI-accelerated workflows to ship complex products fast.`,
   },
   {
     role: 'Lead Designer',
@@ -159,13 +138,13 @@ const experience = [
   },
 ];
 
-const agentMarkdown = `# About — Nasif Salaam
+const agentMarkdown = `# About: Nasif Salaam
 
-> Design Engineer · AI Systems, Skills & Governance. 15 years across brand, product, and engineering. ISO 42001 Lead Auditor.
+> Design Engineer with 15+ years of experience designing and building digital products across complex environments. I work across brand, UX, UI design, frontend development, and AI, taking projects from brief to shipped.
 
 ## Current Focus
 
-Building **Kota AI** — a production multi-agent operations platform for South African SMEs (LangGraph, FastAPI, Supabase, OpenRouter). Shipping **RideNote** (iOS App Store live, Android in testing). Running AI governance workshops and advisory.
+Project-based client work across brand identity, web design, and frontend development. Building **Kota AI** (multi-agent business operations platform, designed and built end-to-end) and **RideNote** (iOS App Store live, Android in testing).
 
 ## Expertise
 
@@ -181,7 +160,7 @@ ${industry.map((i) => `- **${i.title}:** ${i.items.join(', ')}`).join('\n')}
 
 ## Experience
 
-${experience.map((e) => `### ${e.role} — ${e.company} (${e.period})\n${e.description}`).join('\n\n')}
+${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.description}`).join('\n\n')}
 
 ## Contact
 
@@ -191,8 +170,8 @@ ${experience.map((e) => `### ${e.role} — ${e.company} (${e.period})\n${e.descr
 ---
 
 <Layout
-  title="About | Design Engineer · AI Systems, Skills & Governance"
-  description="Design Engineer with 15+ years across design, product, and AI systems. Building Kota AI, ISO 42001 Lead Auditor certified, and helping organisations govern AI responsibly."
+  title="About | Design Engineer"
+  description="Design Engineer with 15+ years across brand, product, frontend development, and AI, from brief to shipped."
   agentMarkdown={agentMarkdown}
   agentPathLabel="~/nasifsalaam / about.md"
 >
@@ -203,19 +182,13 @@ ${experience.map((e) => `### ${e.role} — ${e.company} (${e.period})\n${e.descr
       <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8 sm:gap-10 items-center">
         <div class="max-w-[68ch]">
           <h1 class="text-4xl sm:text-5xl md:text-[54px] font-medium tracking-[-0.03em] leading-[1.05] text-white/95">
-            Design Engineer · AI Systems, Skills & Governance
+            Design Engineer
           </h1>
           <div class="mt-4 text-xs tracking-[0.22em] uppercase text-white/55">
-            15+ years • AI systems design • Governance & ISO 42001 · Builder
+            15+ years • Brand, UX & UI • Frontend development · Builder
           </div>
       <p class="mt-5 type-lead text-white/80">
-            15 years across brand, product, and engineering — working with organisations in financial services, retail, property, and tech. Design is my foundation. It shapes how I approach every problem before anything else gets built.
-          </p>
-          <p class="mt-4 type-lead text-white/80">
-            For the past three years AI has been the main focus. I build agentic systems, design the knowledge architecture underneath them, and think seriously about what responsible use actually looks like in practice. I got ISO 42001 Lead Auditor certified because most AI conversations are about capability, not risk. That thinking now shapes everything I build.
-          </p>
-          <p class="mt-4 type-lead text-white/80">
-            I work across the full stack, solo. Design to deployment.
+            15 years across brand, product, and engineering, working with organisations in financial services, retail, property, and tech. Design is my foundation. It shapes how I approach every problem before anything else gets built.
           </p>
 
         </div>
@@ -304,7 +277,7 @@ ${experience.map((e) => `### ${e.role} — ${e.company} (${e.period})\n${e.descr
         <div class="space-y-4 stagger-children">
           {[
             { name: 'ISO/IEC 42001:2023 Lead Auditor', issuer: 'Mastermind Assurance', year: '2026' },
-            { name: 'Claude Certified Architect — Foundations', issuer: 'Anthropic', year: 'In progress' },
+            { name: 'Claude Certified Architect, Foundations', issuer: 'Anthropic', year: 'In progress' },
             { name: 'AI Security & Governance', issuer: 'Securiti', year: '2025' },
             { name: 'AI Fluency', issuer: 'Anthropic', year: '2025' },
             { name: 'Introduction to Generative AI', issuer: 'Google Cloud', year: '2024' },

@@ -78,7 +78,7 @@ export default function KotaKnowledgeBaseDiagram() {
   const contextY = 182;
   const llmY = 90;
 
-  // Response below the diagram — we'll add it differently
+  // Response below the diagram, we'll add it differently
   const responseY = 368;
 
   return (
@@ -95,14 +95,14 @@ export default function KotaKnowledgeBaseDiagram() {
             <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
           </filter>
 
-          {/* Left column — ingestion flows DOWN */}
+          {/* Left column, ingestion flows DOWN */}
           <path id="kbd-p1" d={`M ${LX} ${sourcesY + 23} L ${LX} ${processY - 23}`} />
           <path id="kbd-p2" d={`M ${LX} ${processY + 23} L ${LX} ${storeY - 23}`} />
 
           {/* Horizontal: Agent Query → pgvector (right to left) */}
           <path id="kbd-p3" d={`M ${RX - 110} ${storeY} L ${LX + 110} ${storeY}`} />
 
-          {/* Right column — retrieval flows UP */}
+          {/* Right column, retrieval flows UP */}
           <path id="kbd-p4" d={`M ${RX} ${storeY - 23} L ${RX} ${contextY + 23}`} />
           <path id="kbd-p5" d={`M ${RX} ${contextY - 23} L ${RX} ${llmY + 23}`} />
 
@@ -178,7 +178,7 @@ export default function KotaKnowledgeBaseDiagram() {
         color: 'rgba(255,255,255,0.35)',
         marginTop: 12, marginBottom: 0,
       }}>
-        Data ingests on the left. At query time, the agent decides what it needs — retrieval happens silently before any output is generated.
+        Data ingests on the left. At query time, the agent decides what it needs, retrieval happens silently before any output is generated.
       </p>
     </div>
   );

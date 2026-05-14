@@ -4,13 +4,6 @@ import Layout from '../../layouts/Layout.astro';
 
 const tools = [
   {
-    title: 'AI Readiness Audit',
-    description: 'Check if your site is readable to AI agents and crawlers like ChatGPT, Claude, and Perplexity.',
-    href: '/audit',
-    icon: 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z',
-    badge: 'Popular'
-  },
-  {
     title: 'llms.txt Generator',
     description: 'Create a standard "map" file for AI agents to easily understand your website structure.',
     href: '/tools/llms-generator',
@@ -22,7 +15,7 @@ const tools = [
 
 <Layout
   title="Free AI & SEO Tools | Nasif Salaam"
-  description="Free tools to help you optimize your website for the AI era. Audit your site's AI readiness and generate standard files."
+  description="Free tools to help you optimize your website for the AI era. Generate standard llms.txt files for crawlers and agents."
 >
   <section class="py-10 sm:py-14">
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -33,7 +26,7 @@ const tools = [
         </p>
       </div>
 
-      <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6 stagger-children">
+      <div class="mt-10 max-w-xl">
         {tools.map(tool => (
           <a
             href={tool.href}

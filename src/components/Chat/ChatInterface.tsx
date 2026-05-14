@@ -754,7 +754,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                   Hi, I'm Nasif. Design Engineer
                 </h1>
                 <p className="text-sm md:text-base text-muted-foreground/80 max-w-[680px] mb-0">
-                  I design and build AI systems. 15+ years across design, product, and engineering means I approach every system as a designer first. I also help organisations govern AI use responsibly.
+                  Design Engineer with 15+ years of experience designing and building digital products. I work across brand, UX, UI design, frontend development, and AI, taking projects from brief to shipped.
                 </p>
 
                 {/* Input (intro) */}
@@ -914,9 +914,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                       </a>
 
                       <a
-                        href="https://ai.nasifsalaam.com"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        href="/work-with-me"
                         className={[
                           tileBase,
                           'bg-black bg-cover bg-center relative text-white',
@@ -928,7 +926,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                         <div className="absolute inset-0 bg-black/40 transition-colors group-hover:bg-black/30" />
                         <div className="relative z-10 h-full">
                           <div className="absolute bottom-2 left-2 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/55 px-2.5 py-1 text-sm font-semibold text-white/95 backdrop-blur">
-                            AI Training <span className="text-white/70">↗</span>
+                            Work With Me <span className="text-white/70">↘</span>
                           </div>
                         </div>
                       </a>
@@ -996,7 +994,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                   Hi, I'm Nasif. Design Engineer
                 </h1>
                 <p className="text-base md:text-lg text-muted-foreground/80 max-w-[680px] mt-4">
-                  I design and build AI systems. 15+ years across design, product, and engineering means I approach every system as a designer first. I also help organisations govern AI use responsibly.
+                  Design Engineer with 15+ years of experience designing and building digital products. I work across brand, UX, UI design, frontend development, and AI, taking projects from brief to shipped.
                 </p>
 
                 {/* Projects Grid */}

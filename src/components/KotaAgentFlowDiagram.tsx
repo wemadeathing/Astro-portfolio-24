@@ -51,7 +51,7 @@ export default function KotaAgentFlowDiagram() {
   const pillY = 416;
   const pillTop = pillY - 14;
 
-  // Line endpoints — all terminate at node edges, never pass through nodes
+  // Line endpoints, all terminate at node edges, never pass through nodes
   const userBot    = userC.y + 23;
   const routerTop  = routerC.y - 23;
   const routerBot  = routerC.y + 23;
@@ -111,7 +111,7 @@ export default function KotaAgentFlowDiagram() {
             stroke={LINE} strokeWidth={1} />
         ))}
 
-        {/* ── NODES (drawn after lines — sit on top) ── */}
+        {/* ── NODES (drawn after lines, sit on top) ── */}
         <Node cx={userC.x}     cy={userC.y}     w={200} label="User Message"          sub="incoming request" />
         <Node cx={routerC.x}   cy={routerC.y}   w={250} label="Router Agent"          sub="intent classification" highlight />
         <Node cx={generalC.x}  cy={generalC.y}  w={210} label="General Agent"         sub="single-turn · 6 surfaces" />
@@ -138,7 +138,7 @@ export default function KotaAgentFlowDiagram() {
       </svg>
 
       <p style={{ textAlign: 'center', fontSize: 12, color: 'rgba(255,255,255,0.32)', marginTop: 12, marginBottom: 0 }}>
-        Router classifies every request. Surface context is injected at request time — same agent, different context window.
+        Router classifies every request. Surface context is injected at request time, same agent, different context window.
       </p>
     </div>
   );

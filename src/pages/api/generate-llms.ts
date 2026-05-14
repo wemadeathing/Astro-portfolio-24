@@ -4,7 +4,7 @@ import { z } from 'zod';
 
 export const prerender = false;
 
-// Helpers (reused from audit.ts, good candidate for shared lib)
+// OpenAI key helper (shared pattern with other API routes)
 const getOpenAiKey = () => {
   const vite = import.meta.env.OPENAI_API_KEY;
   if (typeof vite === 'string' && vite.trim()) return vite.trim();
