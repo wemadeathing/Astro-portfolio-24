@@ -754,7 +754,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                   Hi, I'm Nasif. Design Engineer
                 </h1>
                 <p className="text-sm md:text-base text-muted-foreground/80 max-w-[680px] mb-0">
-                  Design Engineer with 15+ years of experience designing and building digital products. I work across brand, UX, UI design, frontend development, and AI, taking projects from brief to shipped.
+                  Design Engineer with 15+ years of experience designing and building digital products. I work across brand, UX, UI design, frontend development, and AI.
                 </p>
 
                 {/* Input (intro) */}
@@ -994,7 +994,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                   Hi, I'm Nasif. Design Engineer
                 </h1>
                 <p className="text-base md:text-lg text-muted-foreground/80 max-w-[680px] mt-4">
-                  Design Engineer with 15+ years of experience designing and building digital products. I work across brand, UX, UI design, frontend development, and AI, taking projects from brief to shipped.
+                  Design Engineer with 15+ years of experience designing and building digital products. I work across brand, UX, UI design, frontend development, and AI.
                 </p>
 
                 {/* Projects Grid */}
