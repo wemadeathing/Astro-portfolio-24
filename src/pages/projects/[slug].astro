@@ -32,6 +32,9 @@ if (Astro.props?.project) {
 
 const { Content, headings } = await project.render();
 
+const showSidebar = project.data.sidebar !== false;
+const showFeaturedImage = project.data.show_featured_image !== false;
+
 const siteUrl = "https://nasifsalaam.com";
 const shareUrl = new URL(Astro.url.pathname, siteUrl).href;
 
@@ -84,7 +87,7 @@ ${project.body}`;
 >
   <article class="min-h-screen bg-background">
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 pb-16">
-      <div class="grid grid-cols-1 lg:grid-cols-[1fr_240px] gap-10">
+      <div class={showSidebar ? "grid grid-cols-1 lg:grid-cols-[1fr_240px] gap-10" : ""}>
         <!-- Main Content Area with Light Background -->
         <div class="rounded-2xl border border-white/10 bg-white/[0.03] shadow-sm px-6 sm:px-8 md:px-12 py-7 md:py-10">
           <Breadcrumb 
@@ -112,7 +115,7 @@ ${project.body}`;
           </div>
 
           <!-- Featured Image -->
-          {project.data.image && (
+          {showFeaturedImage && project.data.image && (
             <div class="rounded-xl overflow-hidden mb-12">
               <img
                 src={project.data.image}
@@ -130,24 +133,26 @@ ${project.body}`;
         </div>
 
         <!-- Sidebar -->
-        <aside class="hidden lg:block">
-          <div class="sticky top-32 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-            <div class="text-xs tracking-wide uppercase text-white/60 mb-4">On this page</div>
-            <ul class="space-y-1 text-sm">
-              {headings.map((heading) => (
-                <li>
-                  <a
-                    href={`#${heading.slug}`}
-                    class="toc-link block rounded-lg px-2 py-1.5 text-white/70 hover:text-white/90 hover:bg-white/5 transition-colors"
-                    style={`margin-left: ${(heading.depth - 1) * 1}rem`}
-                  >
-                    {heading.text}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </aside>
+        {showSidebar && (
+          <aside class="hidden lg:block">
+            <div class="sticky top-32 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+              <div class="text-xs tracking-wide uppercase text-white/60 mb-4">On this page</div>
+              <ul class="space-y-1 text-sm">
+                {headings.map((heading) => (
+                  <li>
+                    <a
+                      href={`#${heading.slug}`}
+                      class="toc-link block rounded-lg px-2 py-1.5 text-white/70 hover:text-white/90 hover:bg-white/5 transition-colors"
+                      style={`margin-left: ${(heading.depth - 1) * 1}rem`}
+                    >
+                      {heading.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </aside>
+        )}
       </div>
     </div>
   </article>

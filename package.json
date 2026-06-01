@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
+    "present": "astro dev --host 127.0.0.1 --port 4323 --open /presentation",
+    "present:local": "astro build && python3 -m http.server 4323 --bind 127.0.0.1 --directory dist",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"

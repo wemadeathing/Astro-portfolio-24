@@ -32,6 +32,9 @@ const projects = defineCollection({
     // AI-facing metadata (optional)
     ai_summary: z.string().optional(),
     use_for_questions: z.array(z.string()).optional().default([]),
+    // Layout overrides
+    sidebar: z.boolean().default(true),
+    show_featured_image: z.boolean().default(true),
   }),
 });
 
