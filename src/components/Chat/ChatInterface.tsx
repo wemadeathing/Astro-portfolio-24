@@ -670,10 +670,10 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                       AI Chat
                     </motion.div>
                     <motion.h1 variants={heroItem} className="mt-5 text-3xl md:text-4xl font-medium leading-[1.02] tracking-[-0.03em] text-foreground/95">
-                      Ask about the work,<br />the systems, or how I build.
+                      Ask anything.<br />Get a real answer.
                     </motion.h1>
-                    <motion.p variants={heroItem} className="mx-auto mt-4 max-w-[52ch] text-sm leading-[1.8] text-muted-foreground/88">
-                      Product designer and AI builder with 15+ years across brand, digital products, systems, and implementation.
+                    <motion.p variants={heroItem} className="mx-auto mt-4 max-w-[48ch] text-sm leading-[1.8] text-muted-foreground/88">
+                      Ask about projects, process, tech stack, availability, or how I approach AI builds. The AI has full context on the work.
                     </motion.p>
 
                     <motion.form
@@ -743,9 +743,9 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                     >
                       <div className="flex flex-wrap justify-center gap-2">
                         {[
-                          'What have you built recently?',
-                          'How do you use AI in a real build?',
-                          'Are you available for work?',
+                          'What projects have you shipped?',
+                          'How do you approach AI product builds?',
+                          'Are you available right now?',
                         ].map((suggestion) => (
                           <button
                             key={suggestion}
