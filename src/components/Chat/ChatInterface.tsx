@@ -797,29 +797,11 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                     </motion.h1>
                     <motion.p
                       variants={heroItem}
-                      className="mx-auto mt-5 max-w-[60ch] text-base leading-[1.8] text-muted-foreground/88 md:text-lg"
+                      className="mx-auto mt-5 max-w-[60ch] text-sm leading-[1.8] text-muted-foreground/88"
                     >
                       Product designer and AI builder with 15+ years across brand, digital products, and systems. When a product is powered by AI, building it well means designing how the agents receive context, use their tools, and respond.
                     </motion.p>
 
-                    {/* CTA row */}
-                    <motion.div variants={heroItem} className="mt-8 flex flex-wrap items-center justify-center gap-3">
-                      <a href="/contact" className="btn-stripe min-h-[44px] px-5">
-                        Get in touch
-                      </a>
-                      <a href="/projects" className="btn-stripe min-h-[44px] px-5" data-tone="muted">
-                        View work
-                      </a>
-                      <a
-                        href="/?view=chat"
-                        className="inline-flex items-center gap-2 border border-border/80 px-4 py-2.5 font-mono text-[11px] uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:border-primary/30 hover:text-foreground min-h-[44px]"
-                      >
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                          <circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" />
-                        </svg>
-                        Ask the AI
-                      </a>
-                    </motion.div>
                   </motion.div>
 
                   {/* Stats bar */}
@@ -845,7 +827,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
 
                   {/* Selected work */}
                   <motion.div
-                    className="mt-12 w-full"
+                    className="mt-12 w-full text-left"
                     variants={sectionReveal}
                     initial="hidden"
                     whileInView="visible"
@@ -853,10 +835,9 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                   >
                     <div className="mb-6 flex items-center gap-4">
                       <div className="section-kicker">Selected Work</div>
-                      <div className="h-px flex-1 bg-border/50" />
                       <a
                         href="/projects"
-                        className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground/70 transition-colors hover:text-foreground"
+                        className="ml-auto font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground/70 transition-colors hover:text-foreground"
                       >
                         All projects ↗
                       </a>
@@ -886,7 +867,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                     viewport={{ once: true, margin: '-60px' }}
                   >
                     <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
-                      <div>
+                      <div className="text-left">
                         <div className="section-kicker mb-4">Practice</div>
                         <p className="text-sm leading-7 text-muted-foreground max-w-[34ch]">
                           I work across AI product design, product systems, and high-trust digital experiences. The through-line is structure: better context, clearer interfaces, and faster paths from idea to working product.
@@ -916,35 +897,6 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                     </div>
                   </motion.div>
 
-                  {/* Chat CTA */}
-                  <motion.div
-                    className="mt-16 w-full border border-border/60 p-8 md:p-10 text-left relative overflow-hidden"
-                    variants={sectionReveal}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, margin: '-60px' }}
-                  >
-                    <div className="absolute inset-0 pointer-events-none"
-                      style={{
-                        background: 'radial-gradient(ellipse at 80% 50%, hsl(160 56% 63% / 0.06) 0%, transparent 65%)',
-                      }}
-                    />
-                    <div className="relative max-w-[560px]">
-                      <div className="section-kicker mb-4">AI-Powered Portfolio</div>
-                      <h2 className="text-xl md:text-2xl font-medium leading-[1.1] tracking-[-0.03em] text-foreground/95 mb-3">
-                        Don't browse. Ask.
-                      </h2>
-                      <p className="text-sm leading-7 text-muted-foreground mb-6">
-                        Ask about my projects, process, experience, or availability. The AI knows the work and can point you exactly where you need to go.
-                      </p>
-                      <a
-                        href="/?view=chat"
-                        className="btn-stripe min-h-[44px] px-5 inline-flex"
-                      >
-                        Open AI Chat ↗
-                      </a>
-                    </div>
-                  </motion.div>
 
                   {/* Footer for standalone mode */}
                   {!globalSiteNav && (
