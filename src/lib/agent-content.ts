@@ -39,20 +39,20 @@ export async function buildHomeAgentMarkdown(): Promise<AgentPage> {
     .join('\n');
 
   const markdown = [
-    '# Nasif Salaam: Design Engineer',
+    '# Nasif Salaam: Product Designer / AI Builder',
     '',
-    '> Design Engineer with 15+ years of experience designing and building digital products across complex environments. I work across brand, UX, UI design, frontend development, and AI, taking projects from brief to shipped.',
+    '> Product designer and AI builder with 15+ years across brand, digital products, systems, and implementation. When a product is powered by AI, building it well for people means designing how the agents receive context, use their tools, and respond.',
     '',
     '**Location:** Cape Town, South Africa',
-    '**Available for:** Web and product design, frontend development, MVP builds, design engineering roles.',
+    '**Available for:** AI product builds, MVPs, product design, and high-trust digital presence work. Open to project work and full-time roles.',
     '**Contact:** hello@nasifsalaam.com',
     '',
     '## Core Expertise',
     '',
-    '- Product Design & UI/UX (web and mobile)',
-    '- Brand Identity & Graphic Design',
-    '- Frontend Development (React, Astro, Tailwind, HTML/CSS)',
-    '- AI-Accelerated Product Builds',
+    '- AI products and MVPs, designed and built end-to-end',
+    '- Product systems and cross-platform UX',
+    '- Frontend implementation (React, Astro, Tailwind, HTML/CSS)',
+    '- Designing how AI agents receive context and use tools inside human products',
     '',
     '## Featured Projects',
     '',
@@ -172,7 +172,7 @@ export async function buildProjectsIndexAgentMarkdown(): Promise<AgentPage> {
   const markdown = [
     '# Projects: Nasif Salaam',
     '',
-    '> Selected work across design systems, AI-powered applications, and rapid prototypes.',
+    '> Selected work across AI product builds, product systems, and high-trust digital experiences. When a product is AI-powered, building it well for people includes designing how the agents receive context, use their tools, and respond.',
     '',
     '## All Projects',
     '',
@@ -270,33 +270,33 @@ export const STATIC_AGENT_PAGES: Record<string, () => AgentPage> = {
 
 const ABOUT_MD = `# About: Nasif Salaam
 
-> Design Engineer with 15+ years of experience designing and building digital products across complex environments. I work across brand, UX, UI design, frontend development, and AI, taking projects from brief to shipped.
+> Product designer and AI builder with 15+ years across brand, digital products, systems, and implementation. When a product is powered by AI, building it well for people means designing how the agents receive context, use their tools, and respond, not just the human interface.
 
 ## Current Focus
 
-Project-based client work across brand identity, web design, and frontend development. Building **Kota AI** (multi-agent business operations platform, designed and built end-to-end) and **RideNote** (iOS App Store live, Android in testing).
+Project-based client work across brand identity, web design, and frontend development. Building **Kota AI** (multi-agent business operations platform, designed and built end-to-end) and **RideNote** (iOS App Store live, Android in testing). Open to product design / AI build roles and to project work.
 
 ## Expertise
 
 ### Product Design & Engineering
-I design and build digital products end-to-end: from initial concept and UX through to production code. I use AI-accelerated workflows to ship faster and take on the kind of work that would typically require a larger team. Recent builds: Kota AI (multi-agent SME platform), RideNote (iOS/Android, App Store live).
+I design and build digital products end-to-end: from initial concept and UX through to production code. I use AI-accelerated workflows to move faster and take on the kind of work that would typically require a larger team. When a product is AI-powered, that means designing how the agents receive context, use their tools, and respond, in service of the person using it. Recent builds: Kota AI (multi-agent SME platform), RideNote (iOS/Android, App Store live).
 
 ### End-to-End Product Design
-15 years designing digital products across financial services, retail, property, and tech. Take a product from zero to deployed, or come in at any stage to shape and ship.
+15 years designing digital products across financial services, retail, property, and tech. Take a product from zero to deployed, or come in at any stage to shape and build.
 
 ### Design & Web Development
 Brand identities, marketing materials, and responsive websites built with AstroJS, Webflow, Framer, WordPress, and HTML/CSS/JavaScript.
 
 ## Skills
 
-### Technical Implementation
-React, AstroJS, HTML/CSS, PostgreSQL, WordPress, API integration.
+### What I can do
+End-to-end product design (research to launch), UI/UX for web and mobile, design systems, brand identity, frontend implementation, AI product builds, and designing how AI agents receive context and use tools inside human products.
 
-### Design Tools
-Figma, Adobe Creative Suite (Photoshop, Illustrator, InDesign), Affinity, Canva.
+### What I work with
+React, Astro, Tailwind, TypeScript, Figma, Adobe Creative Suite, Affinity, Claude, Cursor, Claude Code, PostgreSQL, WordPress, and APIs.
 
-### AI Tools & Platforms
-Claude AI, Mistral, Cursor, OpenAI, Perplexity, Replit, Lovable, Bolt, Claude Code, Warp, Gamma.
+### How I work
+End to end, without handoff gaps. AI-accelerated workflows, close collaboration with dev teams, Agile delivery, Git-based, with user research and usability testing.
 
 ## Industries
 
@@ -308,8 +308,8 @@ Claude AI, Mistral, Cursor, OpenAI, Perplexity, Replit, Lovable, Bolt, Claude Co
 
 ## Experience
 
-### Design Engineer: Independent (2025 – Present)
-Project-based client work across brand identity, web design, and frontend development, managing projects end to end from brief through to delivery. Built custom websites and digital assets for clients across various industries. Also built Kota AI (a multi-agent business operations platform designed and built end-to-end) and RideNote (iOS App Store live, Android in testing), using AI-accelerated workflows to ship complex products fast.
+### Product Designer / AI Builder: Independent (2025 – Present)
+Project-based client work across brand identity, web design, and frontend development, managing projects end to end from brief through to delivery. Built custom websites and digital assets for clients across various industries. Also built Kota AI (a multi-agent business operations platform designed and built end-to-end) and RideNote (iOS App Store live, Android in testing), using AI-accelerated workflows to build complex products fast.
 
 ### Lead Designer: Immersion Group (2022 – 2024, Remote)
 Banking suite development across mobile, web, and dashboard. Led design system creation spanning three product streams. Delivered rapid innovation projects for Old Mutual and ABSA using FlutterFlow and Supabase. Initiated and led internal innovation program with cross-functional team of 6 throughout 2024.
@@ -332,17 +332,17 @@ In-house design for retail marketing materials, promotional campaigns, and brand
 
 const WORK_WITH_ME_MD = `# Work With Me: Nasif Salaam
 
-> Design Engineer with 15+ years across brand, product, frontend development, and AI. I take projects from brief to shipped, with no handoffs and no gaps between design and build.
+> Product designer and AI builder with 15+ years across brand, product, frontend, and AI. No handoffs and no gaps between design and build. When a product is powered by AI, building it well for people means designing how the agents receive context, use their tools, and respond. Open to project work and full-time roles.
 
 ## Services
 
-### 1. Get Online & Look the Part
-A professional presence that actually brings in business. Websites and brand identities that make small and medium businesses look credible, modern, and trustworthy.
+### 1. High-Trust Digital Presence
+Brand-led websites that make a business feel credible fast. Identity, web design, and implementation for service businesses, founders, and small teams whose offer is strong but whose digital presence makes them look smaller than they are.
 
 **Includes:** new websites, brand identity (logo, colours, typography), redesigns and refreshes.
 
-### 2. Turn Your Idea Into a Working Product
-From idea to working product in weeks, not months. I handle architecture, design, build, deployment. Web and mobile. AI-powered or not. One person end to end.
+### 2. AI Products, MVPs & Product Design
+From concept to working product without the usual handoff gaps. Product framing, UX, system thinking, interface design, and implementation. When the product is AI-powered, that includes designing how the agents inside it receive context, use their tools, and respond, so it works for the person using it.
 
 **Includes:** web and mobile MVPs, AI-powered product builds, full stack (design to deployment).
 
@@ -362,7 +362,7 @@ From idea to working product in weeks, not months. I handle architecture, design
 
 const CONTACT_MD = `# Contact: Nasif Salaam
 
-> Looking to hire, collaborate, or start a project. Send a note and I will reply with next steps. Usually within 24 hours.
+> Looking to hire, collaborate, or start a project. Open to project work and full-time roles. Send a note and I will reply with next steps. Usually within 24 hours.
 
 ## Channels
 

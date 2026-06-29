@@ -684,9 +684,6 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
           <div className="w-full max-w-[1100px] mx-auto flex flex-col items-center text-center">
             {/* Content area with crossfade */}
             <div className="w-full relative">
-              <div className="surface-gloss" aria-hidden="true">
-                <div className="surface-gloss__sheen" />
-              </div>
               {/* Chat View Content */}
               {introMode === 'chat' && (
               <div
@@ -705,7 +702,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                   Ask about the work, the systems, or how I build.
                 </h1>
                 <p className="text-base md:text-lg text-muted-foreground/90 max-w-[720px] mt-5 mx-auto leading-[1.7]">
-                  Product designer and AI builder with 15+ years across brand, product, systems, and implementation.
+                  Product designer and AI builder with 15+ years across brand, digital products, systems, and implementation.
                 </p>
 
                 {/* Input (intro) */}
@@ -776,9 +773,9 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                 >
                   <div className="flex flex-wrap justify-center gap-2">
                     {[
-                      'What makes you different from other designers?',
-                      'Walk me through your design process',
-                      'Show me your AI projects',
+                      'What have you shipped recently?',
+                      'How do you use AI in a real build?',
+                      'Are you available for work?',
                     ].map((suggestion) => (
                       <button
                         key={suggestion}
@@ -824,10 +821,10 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                     Product Designer + AI Builder
                   </div>
                 <h1 className="mt-6 text-3xl md:text-4xl lg:text-5xl font-medium leading-tight tracking-[-0.03em] text-foreground/95">
-                  Product design, AI work, and digital experiences with a clear point of view.
+                  I design & build products with AI, for humans. And AI.
                 </h1>
                   <p className="text-base md:text-lg text-muted-foreground/90 max-w-[720px] mt-5 mx-auto leading-[1.7]">
-                    Rooted in graphic design and shaped by years in digital product, I work across interface design, systems, and AI-assisted product building.
+                    Product designer and AI builder with 15+ years across brand, digital products, and systems. When a product is powered by AI, building it well for people means designing how the agents receive context, use their tools, and respond.
                   </p>
                 </div>
 
@@ -875,8 +872,22 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
 
                 <div className="w-full max-w-[760px] mt-12 md:mt-14 text-center">
                   <p className="text-sm md:text-base leading-[1.8] text-muted-foreground/90">
-                    The thread across these projects is thoughtful design with enough technical range to move ideas into working products, clearer systems, and stronger digital presence.
+                    Currently available for project work and full-time roles. If you are building AI-powered products for real people, I would love to hear about it.
                   </p>
+                  <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
+                    <a
+                      href="/contact"
+                      className="inline-flex h-11 items-center justify-center rounded-full bg-primary px-6 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+                    >
+                      Get in touch
+                    </a>
+                    <a
+                      href="/work-with-me"
+                      className="inline-flex h-11 items-center justify-center rounded-full border border-border/60 bg-muted/14 px-6 text-sm font-semibold text-foreground/85 transition-colors hover:bg-muted/25"
+                    >
+                      How I can help
+                    </a>
+                  </div>
                 </div>
               </div>
               )}
