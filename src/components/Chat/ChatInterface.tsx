@@ -651,15 +651,15 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
               useDocumentScrollIntro
                 ? 'px-4 pt-4 sm:pt-6 pb-16 relative z-20'
                 : introMode === 'chat'
-                ? 'flex-1 px-4 pt-18 sm:pt-22 pb-4 relative z-20 overflow-hidden'
+                ? 'flex-1 flex flex-col px-4 pb-4 relative z-20 overflow-hidden'
                 : 'flex-1 overflow-y-auto px-4 pb-6 relative z-20 pt-24 sm:pt-28'
             }
           >
-            <div className="w-full max-w-[1100px] mx-auto flex flex-col items-center text-center">
+            <div className={introMode === 'chat' ? 'flex-1 flex flex-col w-full max-w-[1100px] mx-auto items-center text-center' : 'w-full max-w-[1100px] mx-auto flex flex-col items-center text-center'}>
 
               {/* ── Chat View ── */}
               {introMode === 'chat' && (
-                <div className="w-full min-h-[calc(100dvh-8.75rem)] flex flex-col items-center justify-start text-center pt-[15vh] md:pt-[17vh] pb-4">
+                <div className="flex-1 w-full flex flex-col items-center justify-center text-center py-8">
                   <motion.div
                     className="w-full max-w-[700px] px-2 py-2 md:px-4 md:py-3"
                     variants={heroContainer}
@@ -754,7 +754,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                               e.preventDefault();
                               fillInput(suggestion);
                             }}
-                            className="border border-border/80 px-3 py-1.5 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:border-primary/35 hover:text-foreground"
+                            className="border border-border/80 px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:border-primary/35 hover:text-foreground"
                           >
                             {suggestion}
                           </button>
@@ -947,7 +947,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                       <div
                         className={`relative group ${
                           msg.role === 'user'
-                            ? 'max-w-[78%] border border-border/80 bg-background px-5 py-3.5 text-foreground'
+                            ? 'max-w-[78%] bg-muted/[0.08] px-5 py-3.5 text-foreground'
                             : 'max-w-[92%] px-0 py-0 text-foreground'
                         }`}
                       >
@@ -1084,7 +1084,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                                   inputRef.current?.parentElement?.querySelector<HTMLButtonElement>('button[type="submit"]')?.click();
                                 }, 100);
                               }}
-                              className="inline-flex items-center border border-border/80 px-3 py-1.5 font-mono text-xs uppercase tracking-[0.12em] text-foreground transition-colors hover:border-primary/25 hover:text-foreground md:text-sm"
+                              className="inline-flex items-center border border-border/80 px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:border-primary/25 hover:text-foreground"
                             >
                               {followUp}
                             </button>
