@@ -28,7 +28,7 @@ export default function ProjectCard({ title, description, image, tags, slug }: P
 
       {/* Content */}
       <div className="flex flex-col p-4">
-        <h4 className="text-sm font-semibold text-foreground transition-colors line-clamp-1 group-hover:text-primary">
+        <h4 className="text-sm font-semibold text-foreground transition-colors line-clamp-2 leading-snug group-hover:text-primary">
           {title}
         </h4>
         <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground line-clamp-2">
