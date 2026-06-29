@@ -45,7 +45,7 @@ const agentMarkdown = [
 >
   <section class="py-10 sm:py-14">
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-[68ch]">
+      <div class="max-w-[68ch] reveal">
         <div class="section-kicker">Writing</div>
         <h1 class="type-h1 mt-4">Insights</h1>
         <p class="mt-4 type-lead">
@@ -75,7 +75,7 @@ const agentMarkdown = [
         </div>
       )}
 
-      <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 stagger-children">
+      <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 stagger-children">
         {sortedPosts.map((post) => {
           const rt = readingTime(post.body);
           return (

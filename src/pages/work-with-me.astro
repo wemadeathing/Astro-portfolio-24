@@ -100,7 +100,7 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
 >
   <section class="py-10 sm:py-14">
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-[70ch]">
+      <div class="max-w-[70ch] reveal">
         <div class="">
           <div class="section-kicker">Work With Me</div>
           <h1 class="type-h1 mt-4">
@@ -135,10 +135,10 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
         </p>
       </div>
 
-      <div class="mt-10 grid gap-12 stagger-children">
+      <div class="mt-10 grid gap-12">
         {services.map((service, i) => (
-          <div class="grid gap-6 border-t border-border/80 pt-5 lg:grid-cols-[72px_minmax(0,1fr)_minmax(300px,0.9fr)] lg:gap-8">
-            <div class="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+          <div class={`reveal reveal-d${i + 1} grid gap-6 border-t border-border/80 pt-5 lg:grid-cols-[72px_minmax(0,1fr)_minmax(300px,0.9fr)] lg:gap-8`}>
+            <div class="font-mono text-3xl font-bold text-primary/40 leading-none tabular-nums">
               {service.number}
             </div>
 
@@ -173,7 +173,7 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
     </section>
 
     <section id="process" class="py-12 sm:py-14 scroll-mt-28">
-      <div class="max-w-[56ch]">
+      <div class="max-w-[56ch] reveal">
         <div class="section-kicker">Process</div>
         <h2 class="type-h2 mt-4">How the work moves</h2>
         <p class="mt-4 text-sm leading-[1.8] text-muted-foreground/88">
@@ -181,10 +181,10 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
         </p>
       </div>
 
-      <div class="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4 stagger-children">
-        {steps.map((step) => (
-          <div class="border-t border-border/80 pt-4">
-            <div class="mb-3 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+      <div class="mt-10 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        {steps.map((step, i) => (
+          <div class={`reveal reveal-d${i + 1} border-t border-border/80 pt-4`}>
+            <div class="mb-3 font-mono text-[11px] uppercase tracking-[0.18em] text-primary/70">
               0{step.number}
             </div>
             <h3 class="text-base font-semibold text-foreground">{step.title}</h3>
@@ -195,7 +195,7 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
     </section>
 
     <section id="about" class="py-12 sm:py-14 scroll-mt-28">
-      <div class="grid gap-10 lg:grid-cols-[minmax(0,1fr)_260px] lg:gap-16">
+      <div class="reveal grid gap-10 lg:grid-cols-[minmax(0,1fr)_260px] lg:gap-16">
         <div>
           <div class="section-kicker mb-3">Background</div>
           <h2 class="type-h2">Why this work fits me</h2>
@@ -223,7 +223,7 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
     </section>
 
     <section class="pb-14 pt-6 sm:pb-20 sm:pt-10">
-      <div class="max-w-[68ch]">
+      <div class="max-w-[68ch] reveal">
         <div class="section-kicker">Next step</div>
         <h2 class="type-h2 mt-4">
           Ready to get started?
