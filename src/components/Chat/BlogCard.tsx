@@ -1,5 +1,4 @@
 import React from 'react';
-import { Calendar } from 'lucide-react';
 
 interface BlogCardProps {
   title: string;
@@ -19,41 +18,38 @@ const formatDate = (date: Date | string): string => {
 };
 
 export default function BlogCard({ title, description, slug, pubDate, tags }: BlogCardProps) {
-  const visibleTags = tags.slice(0, 3);
+  const visibleTags = tags.slice(0, 2);
 
   return (
     <a
       href={`/blog/${slug}`}
-      className="group block h-full border-t border-border/80 pt-4 transition-colors hover:border-primary/30"
+      className="group flex h-full flex-col border border-border/80 transition-colors hover:border-primary/35 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
     >
-      <div className="text-left">
-        <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground/60 mb-2">
-          <Calendar className="w-3 h-3" />
-          <span>{formatDate(pubDate)}</span>
+      <div className="flex flex-1 flex-col p-4">
+        <div className="flex-1">
+          <h4 className="text-sm font-semibold text-foreground transition-colors line-clamp-2 leading-snug group-hover:text-primary">
+            {title}
+          </h4>
+          {description && (
+            <p className="mt-1.5 text-xs text-muted-foreground line-clamp-2 leading-relaxed">{description}</p>
+          )}
         </div>
 
-        <h4 className="mb-2 text-sm font-semibold text-foreground transition-colors line-clamp-1 group-hover:text-primary">
-          {title}
-        </h4>
-
-        {description && (
-          <p className="mb-3 text-xs text-muted-foreground line-clamp-2">{description}</p>
-        )}
-
-        <div className="flex items-center gap-x-2 gap-y-1.5 flex-wrap">
+        <div className="mt-3 flex items-center gap-x-2 border-t border-border/60 pt-3">
           {visibleTags.map((tag) => (
             <span
               key={tag}
-              className="inline-flex items-center font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground"
+              className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground"
             >
               {tag}
             </span>
           ))}
-          {tags.length > 3 && (
-            <span className="text-[10px] text-muted-foreground font-medium">
-              +{tags.length - 3}
-            </span>
+          {tags.length > 2 && (
+            <span className="font-mono text-[10px] text-muted-foreground">+{tags.length - 2}</span>
           )}
+          <span className="ml-auto font-mono text-[10px] text-muted-foreground">
+            {formatDate(pubDate)}
+          </span>
         </div>
       </div>
     </a>

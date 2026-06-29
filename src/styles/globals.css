@@ -101,7 +101,7 @@
     @apply text-xl sm:text-2xl font-semibold leading-tight;
   }
   .type-lead {
-    @apply text-base sm:text-lg leading-[1.7] text-muted-foreground;
+    @apply text-sm leading-[1.8] text-muted-foreground;
   }
   .type-muted {
     @apply text-sm leading-6 text-muted-foreground;
