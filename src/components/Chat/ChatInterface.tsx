@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Copy, Menu, Send, StopCircle, User, X } from 'lucide-react';
 import ProjectCard from './ProjectCard';
 import ResourceCard from './ResourceCard';
@@ -58,6 +59,46 @@ interface ChatInterfaceProps {
   globalSiteNav?: boolean;
 }
 
+// ─── Animation config ────────────────────────────────────────────────────────
+
+const ease = [0.25, 0, 0, 1] as const;
+
+const heroContainer = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.1, delayChildren: 0.05 },
+  },
+};
+
+const heroItem = {
+  hidden: { opacity: 0, y: 16 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease } },
+};
+
+const sectionReveal = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease } },
+};
+
+const cardGrid = {
+  hidden: {},
+  visible: {
+    transition: { staggerChildren: 0.07, delayChildren: 0.1 },
+  },
+};
+
+const cardItem = {
+  hidden: { opacity: 0, y: 12 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease } },
+};
+
+const messageEnter = {
+  hidden: { opacity: 0, y: 8 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease } },
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 export default function ChatInterface({ latestPost, projects = [], globalSiteNav = false }: ChatInterfaceProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const messagesRef = useRef<Message[]>([]);
@@ -68,7 +109,6 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
 
   const [hasStarted, setHasStarted] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [introMounted, setIntroMounted] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -91,38 +131,6 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
   const menuCloseButtonRef = useRef<HTMLButtonElement>(null);
   const lastFocusedRef = useRef<Element | null>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
-
-  // Typewriter Effect State (Removed)
-  // const [text, setText] = useState('');
-  // const [isDeleting, setIsDeleting] = useState(false);
-  // const [loopNum, setLoopNum] = useState(0);
-  // const [typingSpeed, setTypingSpeed] = useState(150);
-
-  // const roles = ["Product Designer", "Visual Designer", "Rapid Prototyper", "AI Design Specialist"];
-
-  // useEffect(() => {
-    // const handleType = () => {
-      // const i = loopNum % roles.length;
-      // const fullText = roles[i];
-
-      // setText(isDeleting 
-        // ? fullText.substring(0, text.length - 1) 
-        // ? fullText.substring(0, text.length + 1)
-      // );
-
-      // setTypingSpeed(isDeleting ? 30 : 150);
-
-      // if (!isDeleting && text === fullText) {
-        // setTimeout(() => setIsDeleting(true), 2000);
-      // } else if (isDeleting && text === '') {
-        // setIsDeleting(false);
-        // setLoopNum(loopNum + 1);
-      // }
-    // };
-
-    // const timer = setTimeout(handleType, typingSpeed);
-    // return () => clearTimeout(timer);
-  // }, [text, isDeleting, loopNum, roles, typingSpeed]);
 
   useEffect(() => {
     messagesRef.current = messages;
@@ -194,7 +202,6 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
     };
 
     if (!isMenuOpen) {
-      // restore focus to whatever opened the menu
       requestAnimationFrame(() => {
         const prev = lastFocusedRef.current as HTMLElement | null;
         if (prev?.focus) prev.focus();
@@ -237,7 +244,6 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
     return () => document.removeEventListener('keydown', onKeyDown);
   }, [isMenuOpen]);
 
-  // Scroll detection for nav background
   useEffect(() => {
     const container = chatContainerRef.current;
     if (!container) return;
@@ -248,9 +254,8 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
 
     container.addEventListener('scroll', handleScroll, { passive: true });
     return () => container.removeEventListener('scroll', handleScroll);
-  }, [hasStarted]); // Re-bind when chat starts (and container renders)
+  }, [hasStarted]);
 
-  // Show onboarding tooltip after a delay (only on first visit)
   useEffect(() => {
     const hasSeenTooltip = sessionStorage.getItem('chat-tooltip-seen');
     if (hasSeenTooltip || hasStarted) return;
@@ -262,7 +267,6 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
     return () => clearTimeout(timer);
   }, [hasStarted]);
 
-  // Auto-dismiss tooltip so it doesn't linger and block content.
   useEffect(() => {
     if (!showTooltip) return;
 
@@ -274,7 +278,6 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showTooltip]);
 
-  // Ensure tooltip disappears once chat starts.
   useEffect(() => {
     if (!hasStarted) return;
     if (!showTooltip) return;
@@ -296,20 +299,17 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
     sessionStorage.setItem('chat-tooltip-seen', 'true');
   };
 
-
   const scrollToBottom = () => {
     const scroll = () => {
       messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
     };
     scroll();
-    // Double-tap scroll to handle any layout shifts (cards/images loading)
     setTimeout(scroll, 100);
     setTimeout(scroll, 300);
   };
 
   const fillInput = (text: string) => {
     setInput(text);
-    // Focus + move cursor to end on next paint
     requestAnimationFrame(() => {
       const el = inputRef.current;
       if (!el) return;
@@ -318,7 +318,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
       try {
         el.setSelectionRange(end, end);
       } catch {
-        // ignore (some input types don't support selection)
+        // ignore
       }
     });
   };
@@ -336,7 +336,6 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
 
     if (!hasStarted) setHasStarted(true);
 
-    // Snapshot history including this new user message.
     const prev = messagesRef.current;
     const nextUser: Message = {
       id: Date.now().toString(),
@@ -361,7 +360,6 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
     try {
       const history = nextMessages.slice(-12).map((m) => ({ role: m.role, content: m.content }));
 
-      // Create a placeholder assistant message so we can stream into it.
       assistantId = (Date.now() + 1).toString();
       const placeholder: Message = { id: assistantId, role: 'assistant', content: '' };
       setMessages((curr) => [...curr, placeholder]);
@@ -441,7 +439,6 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
         if (done) break;
         buffer += decoder.decode(value, { stream: true });
 
-        // Process complete SSE events separated by blank line.
         let idx;
         while ((idx = buffer.indexOf('\n\n')) !== -1) {
           const chunk = buffer.slice(0, idx);
@@ -456,10 +453,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
         }
       }
     } catch (e: any) {
-      if (e?.name === 'AbortError') {
-        // Keep whatever has streamed so far.
-        return;
-      }
+      if (e?.name === 'AbortError') return;
       if (assistantId) {
         setMessages((curr) =>
           curr.map((m) =>
@@ -511,38 +505,11 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
   };
 
   const isIntro = !hasStarted && messages.length === 0;
-  /** With Layout nav + footer, avoid nested scroll: let the document scroll instead of an inner overflow pane. */
   const useDocumentScrollIntro = Boolean(globalSiteNav && isIntro && introMode === 'portfolio');
   const retryLast = () => {
     if (!lastUserText) return;
     startChatWithPrompt(lastUserText);
   };
-
-  // Subtle staged intro animation: top block first, then bento.
-  useEffect(() => {
-    if (!isIntro) {
-      setIntroMounted(false);
-      return;
-    }
-
-    let raf = 0;
-
-    const prefersReduce =
-      typeof window !== 'undefined' &&
-      window.matchMedia &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    if (prefersReduce) {
-      setIntroMounted(true);
-      return;
-    }
-
-    raf = window.requestAnimationFrame(() => setIntroMounted(true));
-
-    return () => {
-      if (raf) window.cancelAnimationFrame(raf);
-    };
-  }, [isIntro]);
 
   const menuLinks: { title: string; description: string; href: string; external?: boolean }[] = [
     { title: 'Work', description: 'Browse featured case studies', href: '/projects' },
@@ -556,6 +523,12 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
       ? messages[messages.length - 1].id
       : null;
 
+  const practiceItems = [
+    'AI product design and MVP delivery',
+    'Design systems and interface architecture',
+    'Frontend build work for teams that need execution, not just direction',
+  ];
+
   return (
     <div
       className={
@@ -566,8 +539,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
           : 'flex flex-col min-h-screen h-[100dvh] overflow-hidden bg-background text-foreground relative'
       }
     >
-      
-      {/* Background Gradient & Noise */}
+      {/* Background noise */}
       {!globalSiteNav && (
         <div className="absolute inset-0 pointer-events-none -z-20">
           <div className="site-backdrop" />
@@ -575,9 +547,9 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
       )}
       <div className="absolute inset-0 bg-noise opacity-[0.03] -z-10 pointer-events-none" />
 
+      {/* Standalone nav (not used when globalSiteNav=true) */}
       {!globalSiteNav && (
         <>
-          {/* Top Nav */}
           <div className="sticky top-0 z-40 pt-3">
             <div className="shell-wrap relative">
               <nav
@@ -588,7 +560,6 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                 <a href="/" className="flex items-center transition-opacity hover:opacity-80">
                   <img src="/images/ns26/logo26w-gradient.svg" alt="Nasif Salaam" className="h-7 sm:h-8 w-auto" />
                 </a>
-
                 <button
                   type="button"
                   aria-label="Open menu"
@@ -603,7 +574,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
             </div>
           </div>
 
-          {/* Menu Flyout */}
+          {/* Menu flyout */}
           <div
             id="site-menu"
             role="dialog"
@@ -615,7 +586,6 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
             onClick={() => setIsMenuOpen(false)}
           >
             <div className="absolute inset-0 bg-black/55" />
-
             <div className="absolute left-0 right-0 top-3" onClick={(e) => e.stopPropagation()}>
               <div className="shell-wrap flex justify-end">
                 <div
@@ -639,7 +609,6 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                       <X size={18} />
                     </button>
                   </div>
-
                   <div className="max-h-[calc(100vh-7rem)] overflow-auto p-4">
                     <div className="grid grid-cols-1 gap-0">
                       {menuLinks.map((item) => (
@@ -670,489 +639,562 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
         </>
       )}
 
-      {/* Intro Screen */}
-      {isIntro && (
-        <div
-          className={
-            useDocumentScrollIntro
-              ? 'px-4 pt-4 sm:pt-6 pb-6 relative z-20'
-              : introMode === 'chat'
-              ? 'flex-1 px-4 pt-18 sm:pt-22 pb-4 relative z-20 overflow-hidden'
-              : 'flex-1 overflow-y-auto px-4 pb-6 relative z-20 pt-24 sm:pt-28'
-          }
-        >
-          <div className="w-full max-w-[1100px] mx-auto flex flex-col items-center text-center">
-            {/* Content area with crossfade */}
-            <div className="w-full relative">
-              {/* Chat View Content */}
+      {/* ── Intro Screen ─────────────────────────────────────────────────────── */}
+      <AnimatePresence mode="wait">
+        {isIntro && (
+          <motion.div
+            key="intro"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, y: -8, transition: { duration: 0.2, ease } }}
+            className={
+              useDocumentScrollIntro
+                ? 'px-4 pt-4 sm:pt-6 pb-16 relative z-20'
+                : introMode === 'chat'
+                ? 'flex-1 px-4 pt-18 sm:pt-22 pb-4 relative z-20 overflow-hidden'
+                : 'flex-1 overflow-y-auto px-4 pb-6 relative z-20 pt-24 sm:pt-28'
+            }
+          >
+            <div className="w-full max-w-[1100px] mx-auto flex flex-col items-center text-center">
+
+              {/* ── Chat View ── */}
               {introMode === 'chat' && (
-              <div
-                className="w-full min-h-[calc(100dvh-8.75rem)] flex flex-col items-center justify-start text-center animate-[fadeSlideUp_0.35s_ease-out_both] pt-[15vh] md:pt-[17vh] pb-4"
-              >
-                <div
-                  className={[
-                    'w-full max-w-[700px] px-2 py-2 transition-all duration-500 ease-out will-change-transform md:px-4 md:py-3',
-                    introMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2',
-                  ].join(' ')}
-                >
-                <div className="section-kicker justify-center">
-                  AI Chat
-                </div>
-                <h1 className="mt-5 text-3xl md:text-4xl font-medium leading-[1.02] tracking-[-0.03em] text-foreground/95">
-                  Ask about the work, the systems, or how I build.
-                </h1>
-                <p className="mx-auto mt-4 max-w-[60ch] text-base leading-[1.75] text-muted-foreground/88 md:text-lg">
-                  Product designer and AI builder with 15+ years across brand, digital products, systems, and implementation.
-                </p>
-
-                {/* Input (intro) */}
-                <form
-                  onSubmit={handleSubmit}
-                  className="relative mt-8 flex w-full max-w-[680px] items-center gap-2 border border-border/80 bg-background px-2"
-                >
-                  {/* Onboarding tooltip */}
-                  {showTooltip && (
-                    <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 z-10">
-                      <div className="relative bg-primary/92 px-4 py-2 text-sm font-medium text-primary-foreground shadow-lg whitespace-nowrap">
-                        <div className="absolute left-1/2 -translate-x-1/2 bottom-full w-0 h-0 border-l-8 border-r-8 border-b-8 border-l-transparent border-r-transparent border-b-primary/95" />
-                        Try asking me anything about my work!
-                        <button
-                          type="button"
-                          onClick={dismissTooltip}
-                          className="ml-2 opacity-70 hover:opacity-100 transition-opacity"
-                          aria-label="Dismiss tooltip"
-                        >
-                          ×
-                        </button>
-                      </div>
-                    </div>
-                  )}
-                  <input
-                    type="text"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onFocus={() => setShowSuggestions(true)}
-                    onBlur={() => setShowSuggestions(false)}
-                    ref={inputRef}
-                    placeholder="Ask me about my projects, skills, or experience..."
-                    className="w-full bg-transparent py-3.5 pl-4 pr-14 text-base outline-none transition-all placeholder:text-muted-foreground/55 placeholder:font-normal md:py-4 md:pl-5"
-                    disabled={isLoading}
-                  />
-                  <div className="absolute inset-y-0 right-2 flex items-center gap-1">
-                    {isLoading ? (
-                      <button
-                        type="button"
-                        onClick={stopRequest}
-                        className="border border-border/80 p-2 text-foreground transition-all hover:border-primary/25"
-                        aria-label="Stop"
-                      >
-                        <StopCircle size={20} />
-                      </button>
-                    ) : (
-                      <button
-                        type="submit"
-                        disabled={!input.trim() || isLoading}
-                        className="border border-border/80 bg-primary p-2 text-primary-foreground transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
-                        aria-label="Send"
-                      >
-                        <Send size={20} />
-                      </button>
-                    )}
-                  </div>
-                </form>
-
-                {/* Suggestions - animate open on focus */}
-                <div
-                  aria-hidden={!showSuggestions}
-                  className={[
-                    'mt-4 overflow-hidden transition-all duration-200 ease-out',
-                    showSuggestions
-                      ? 'max-h-28 opacity-100 translate-y-0'
-                      : 'max-h-0 opacity-0 -translate-y-1 pointer-events-none',
-                  ].join(' ')}
-                >
-                  <div className="flex flex-wrap justify-center gap-2">
-                    {[
-                      'What have you shipped recently?',
-                      'How do you use AI in a real build?',
-                      'Are you available for work?',
-                    ].map((suggestion) => (
-                      <button
-                        key={suggestion}
-                        type="button"
-                        onMouseDown={(e) => {
-                          e.preventDefault();
-                          fillInput(suggestion);
-                        }}
-                        className="border border-border/80 px-3 py-1.5 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:border-primary/35 hover:text-foreground md:text-sm"
-                      >
-                        {suggestion}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="mt-6 flex flex-col items-center gap-3">
-                  <div className="h-px w-14 bg-border/45" />
-                  <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-muted-foreground/82">
-                    <span>Prefer browsing?</span>
-                    <a href="/projects" className="hover:text-foreground transition-colors">
-                      Work
-                    </a>
-                    <a href="/about" className="hover:text-foreground transition-colors">
-                      About
-                    </a>
-                    <a href="/contact" className="hover:text-foreground transition-colors">
-                      Contact
-                    </a>
-                  </div>
-                </div>
-                </div>
-              </div>
-              )}
-
-              {/* Portfolio View Content */}
-              {introMode === 'portfolio' && (
-              <div
-                className="w-full flex flex-col items-center animate-[fadeSlideUp_0.35s_ease-out_both]"
-              >
-                <div className="w-full max-w-[700px] text-center">
-                  <div className="section-kicker justify-center">
-                    Product Designer + AI Builder
-                  </div>
-                <h1 className="mt-5 text-3xl md:text-4xl font-medium leading-[1.02] tracking-[-0.03em] text-foreground/95">
-                  I design & build products with AI, for humans. And AI.
-                </h1>
-                  <p className="mx-auto mt-4 max-w-[62ch] text-base leading-[1.75] text-muted-foreground/88 md:text-lg">
-                    Product designer and AI builder with 15+ years across brand, digital products, and systems. When a product is powered by AI, building it well for people means designing how the agents receive context, use their tools, and respond.
-                  </p>
-                </div>
-
-                <div className="mt-12 grid w-full gap-10 text-left lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-12">
-                  <div className="border-t border-border/80 pt-4">
-                    <div className="mb-3 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-                      Practice
-                    </div>
-                    <p className="max-w-[34ch] text-sm leading-7 text-muted-foreground sm:text-base">
-                      I work across AI product design, product systems, and high-trust digital experiences. The through-line is structure: better context, clearer interfaces, and faster paths from idea to working product.
-                    </p>
-                    <div className="mt-6 grid gap-4">
-                      {[
-                        'AI product design and MVP delivery',
-                        'Design systems and interface architecture',
-                        'Frontend build work for teams that need execution, not just direction',
-                      ].map((item, index) => (
-                        <div key={item} className="border-t border-border/70 pt-3">
-                          <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-                            0{index + 1}
-                          </div>
-                          <p className="mt-2 text-sm leading-6 text-foreground/88">{item}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="border-t border-border/80 pt-4">
-                    <div className="mb-6 flex items-center gap-4">
-                      <div className="section-kicker">Selected Work</div>
-                      <div className="h-px flex-1 bg-border/60" />
-                    </div>
-                    <div className="grid gap-x-6 gap-y-8 sm:grid-cols-2">
-                      {projects.slice(0, 6).map((project) => (
-                        <ProjectCard key={project.slug} {...project} />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="w-full max-w-[760px] mt-12 md:mt-14 text-center">
-                  <p className="text-sm md:text-base leading-[1.8] text-muted-foreground/90">
-                    Currently available for project work and full-time roles. If you are building AI-powered products for real people, I would love to hear about it.
-                  </p>
-                  <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
-                    <a
-                      href="/contact"
-                      className="btn-stripe min-h-[44px] px-5"
-                    >
-                      Get in touch
-                    </a>
-                    <a
-                      href="/projects"
-                      className="btn-stripe min-h-[44px] px-5"
-                      data-tone="muted"
-                    >
-                      View all work
-                    </a>
-                  </div>
-                </div>
-              </div>
-              )}
-            </div>
-
-            {/* Footer */}
-            {!globalSiteNav && (
-            <footer className="w-full border-t border-border/40 mt-8 pt-6 pb-4 text-xs text-muted-foreground/60">
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div>© {new Date().getFullYear()} Nasif Salaam</div>
-                <div className="flex gap-4">
-                  <a href="https://github.com/wemadeathing" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
-                    GitHub
-                  </a>
-                  <a href="https://www.linkedin.com/in/nasifsalaam/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">
-                    LinkedIn
-                  </a>
-                </div>
-              </div>
-            </footer>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* Chat Area */}
-      {!isIntro && (
-        <div 
-          ref={chatContainerRef}
-          className="flex-1 overflow-y-auto px-4 pt-4 pb-28 md:px-8 md:pt-8 md:pb-36 transition-all duration-500 opacity-100 scroll-smooth"
-        >
-          <div className={`max-w-[720px] mx-auto space-y-6 ${globalSiteNav ? 'pt-6' : 'pt-20'}`}>
-            {messages.map((msg) => (
-              <div
-                key={msg.id}
-                className={`flex flex-col gap-4 ${
-                  msg.role === 'user' ? 'items-end' : 'items-start'
-                }`}
-              >
-                <div className={`flex gap-3 max-w-full ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  {msg.role === 'assistant' && (
-                    <div className="mt-1 shrink-0 flex items-start justify-center">
-                      <img src="/images/ns26/logo26w-gradient.svg" alt="NS" className="w-5 h-5 object-contain opacity-90" />
-                    </div>
-                  )}
-                  
-                  <div
-                    className={`relative group ${
-                      msg.role === 'user'
-                        ? 'max-w-[78%] border border-border/80 bg-background px-5 py-3.5 text-foreground'
-                        : 'max-w-[92%] px-0 py-0 text-foreground'
-                    }`}
+                <div className="w-full min-h-[calc(100dvh-8.75rem)] flex flex-col items-center justify-start text-center pt-[15vh] md:pt-[17vh] pb-4">
+                  <motion.div
+                    className="w-full max-w-[700px] px-2 py-2 md:px-4 md:py-3"
+                    variants={heroContainer}
+                    initial="hidden"
+                    animate="visible"
                   >
-                    {msg.role === 'assistant' && msg.id === typingMessageId && !msg.content ? (
-                      <div className="flex items-center gap-2 px-1 py-2" role="status" aria-live="polite">
-                        <span className="sr-only">Assistant is typing a response...</span>
-                        <div className="h-2 w-2 bg-foreground/50 animate-bounce" aria-hidden="true" />
-                        <div className="h-2 w-2 bg-foreground/50 animate-bounce delay-75" aria-hidden="true" />
-                        <div className="h-2 w-2 bg-foreground/50 animate-bounce delay-150" aria-hidden="true" />
-                      </div>
-                    ) : (
-                      <>
-                        <p className={`whitespace-pre-wrap ${
-                          msg.role === 'user'
-                            ? 'leading-relaxed'
-                            : 'text-[15px] leading-8 text-foreground/92'
-                        }`}>
-                          {msg.content}
-                        </p>
-                        {msg.role === 'assistant' && msg.content && (
+                    <motion.div variants={heroItem} className="section-kicker justify-center">
+                      AI Chat
+                    </motion.div>
+                    <motion.h1 variants={heroItem} className="mt-5 text-3xl md:text-4xl font-medium leading-[1.02] tracking-[-0.03em] text-foreground/95">
+                      Ask about the work, the systems, or how I build.
+                    </motion.h1>
+                    <motion.p variants={heroItem} className="mx-auto mt-4 max-w-[60ch] text-base leading-[1.75] text-muted-foreground/88 md:text-lg">
+                      Product designer and AI builder with 15+ years across brand, digital products, systems, and implementation.
+                    </motion.p>
+
+                    <motion.form
+                      variants={heroItem}
+                      onSubmit={handleSubmit}
+                      className="relative mt-8 flex w-full max-w-[680px] items-center gap-2 border border-border/80 bg-background px-2"
+                    >
+                      {showTooltip && (
+                        <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 z-10">
+                          <div className="relative bg-primary/92 px-4 py-2 text-sm font-medium text-primary-foreground shadow-lg whitespace-nowrap">
+                            <div className="absolute left-1/2 -translate-x-1/2 bottom-full w-0 h-0 border-l-8 border-r-8 border-b-8 border-l-transparent border-r-transparent border-b-primary/95" />
+                            Try asking me anything about my work!
+                            <button
+                              type="button"
+                              onClick={dismissTooltip}
+                              className="ml-2 opacity-70 hover:opacity-100 transition-opacity"
+                              aria-label="Dismiss tooltip"
+                            >
+                              ×
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                      <input
+                        type="text"
+                        value={input}
+                        onChange={(e) => setInput(e.target.value)}
+                        onFocus={() => setShowSuggestions(true)}
+                        onBlur={() => setShowSuggestions(false)}
+                        ref={inputRef}
+                        placeholder="Ask me about my projects, skills, or experience..."
+                        className="w-full bg-transparent py-3.5 pl-4 pr-14 text-base outline-none transition-all placeholder:text-muted-foreground/55 placeholder:font-normal md:py-4 md:pl-5"
+                        disabled={isLoading}
+                      />
+                      <div className="absolute inset-y-0 right-2 flex items-center gap-1">
+                        {isLoading ? (
                           <button
                             type="button"
-                            onClick={() => copyToClipboard(msg.content, msg.id)}
-                            className="absolute -top-1 right-0 border border-border/80 bg-background p-1.5 opacity-0 transition-all hover:border-primary/25 group-hover:opacity-100"
-                            aria-label="Copy response"
-                            title="Copy to clipboard"
+                            onClick={stopRequest}
+                            className="border border-border/80 p-2 text-foreground transition-all hover:border-primary/25"
+                            aria-label="Stop"
                           >
-                            {copiedId === msg.id ? (
-                              <Check size={14} className="text-green-600" />
-                            ) : (
-                              <Copy size={14} className="text-muted-foreground" />
-                            )}
+                            <StopCircle size={20} />
+                          </button>
+                        ) : (
+                          <button
+                            type="submit"
+                            disabled={!input.trim() || isLoading}
+                            className="border border-border/80 bg-primary p-2 text-primary-foreground transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+                            aria-label="Send"
+                          >
+                            <Send size={20} />
                           </button>
                         )}
-                      </>
-                    )}
-                  </div>
+                      </div>
+                    </motion.form>
 
-                  {msg.role === 'user' && (
-                    <div className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center border border-border/80">
-                      <User size={16} className="text-foreground/75" />
-                    </div>
-                  )}
-                </div>
-
-                {msg.role === 'assistant' && msg.content.toLowerCase().includes('retry') && lastUserText && (
-                  <div className="pl-12">
-                    <button
-                      type="button"
-                      onClick={retryLast}
-                      className="border border-border/80 px-3 py-1.5 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:border-primary/25 hover:text-foreground"
+                    <motion.div
+                      variants={heroItem}
+                      aria-hidden={!showSuggestions}
+                      className={[
+                        'mt-4 overflow-hidden transition-all duration-200 ease-out',
+                        showSuggestions
+                          ? 'max-h-28 opacity-100 translate-y-0'
+                          : 'max-h-0 opacity-0 -translate-y-1 pointer-events-none',
+                      ].join(' ')}
                     >
-                      Retry
-                    </button>
-                  </div>
-                )}
+                      <div className="flex flex-wrap justify-center gap-2">
+                        {[
+                          'What have you built recently?',
+                          'How do you use AI in a real build?',
+                          'Are you available for work?',
+                        ].map((suggestion) => (
+                          <button
+                            key={suggestion}
+                            type="button"
+                            onMouseDown={(e) => {
+                              e.preventDefault();
+                              fillInput(suggestion);
+                            }}
+                            className="border border-border/80 px-3 py-1.5 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:border-primary/35 hover:text-foreground"
+                          >
+                            {suggestion}
+                          </button>
+                        ))}
+                      </div>
+                    </motion.div>
 
-                {/* Render Project Cards if present */}
-                {msg.projects && msg.projects.length > 0 && (
-                  <div className="w-full pl-12 pr-2 text-left">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Projects</span>
+                    <motion.div variants={heroItem} className="mt-6 flex flex-col items-center gap-3">
+                      <div className="h-px w-14 bg-border/45" />
+                      <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-muted-foreground/82">
+                        <span>Prefer browsing?</span>
+                        <a href="/projects" className="hover:text-foreground transition-colors">Work</a>
+                        <a href="/about" className="hover:text-foreground transition-colors">About</a>
+                        <a href="/contact" className="hover:text-foreground transition-colors">Contact</a>
+                      </div>
+                    </motion.div>
+                  </motion.div>
+                </div>
+              )}
+
+              {/* ── Portfolio View (Home Page) ── */}
+              {introMode === 'portfolio' && (
+                <div className="w-full flex flex-col items-center">
+
+                  {/* Hero */}
+                  <motion.div
+                    className="w-full max-w-[700px] text-center"
+                    variants={heroContainer}
+                    initial="hidden"
+                    animate="visible"
+                  >
+                    <motion.div variants={heroItem} className="section-kicker justify-center">
+                      Product Designer + AI Builder
+                    </motion.div>
+                    <motion.h1
+                      variants={heroItem}
+                      className="mt-5 text-3xl md:text-5xl font-medium leading-[1.02] tracking-[-0.04em] text-foreground/95"
+                    >
+                      I design &amp; build products with AI, for humans.
+                    </motion.h1>
+                    <motion.p
+                      variants={heroItem}
+                      className="mx-auto mt-5 max-w-[60ch] text-base leading-[1.8] text-muted-foreground/88 md:text-lg"
+                    >
+                      Product designer and AI builder with 15+ years across brand, digital products, and systems. When a product is powered by AI, building it well means designing how the agents receive context, use their tools, and respond.
+                    </motion.p>
+
+                    {/* CTA row */}
+                    <motion.div variants={heroItem} className="mt-8 flex flex-wrap items-center justify-center gap-3">
+                      <a href="/contact" className="btn-stripe min-h-[44px] px-5">
+                        Get in touch
+                      </a>
+                      <a href="/projects" className="btn-stripe min-h-[44px] px-5" data-tone="muted">
+                        View work
+                      </a>
+                      <a
+                        href="/?view=chat"
+                        className="inline-flex items-center gap-2 border border-border/80 px-4 py-2.5 font-mono text-[11px] uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:border-primary/30 hover:text-foreground min-h-[44px]"
+                      >
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                          <circle cx="11" cy="11" r="7" /><path d="m20 20-3.5-3.5" />
+                        </svg>
+                        Ask the AI
+                      </a>
+                    </motion.div>
+                  </motion.div>
+
+                  {/* Stats bar */}
+                  <motion.div
+                    className="mt-12 w-full border-t border-border/60 grid grid-cols-2 sm:grid-cols-4 divide-x divide-border/60"
+                    variants={sectionReveal}
+                    initial="hidden"
+                    animate="visible"
+                    transition={{ delay: 0.45 }}
+                  >
+                    {[
+                      { label: 'Years experience', value: '15+' },
+                      { label: 'Live on App Store', value: 'RideNote' },
+                      { label: 'AI builds', value: 'Kota AI' },
+                      { label: 'Available', value: 'Now' },
+                    ].map((stat) => (
+                      <div key={stat.label} className="px-4 py-5 text-left first:pl-0 last:border-r-0 sm:last:border-r sm:last:border-border/60">
+                        <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground/70 mb-1">{stat.label}</div>
+                        <div className="text-base font-medium text-foreground tracking-[-0.02em]">{stat.value}</div>
+                      </div>
+                    ))}
+                  </motion.div>
+
+                  {/* Selected work */}
+                  <motion.div
+                    className="mt-12 w-full"
+                    variants={sectionReveal}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: '-60px' }}
+                  >
+                    <div className="mb-6 flex items-center gap-4">
+                      <div className="section-kicker">Selected Work</div>
+                      <div className="h-px flex-1 bg-border/50" />
                       <a
                         href="/projects"
-                        className="text-xs text-muted-foreground/80 hover:text-foreground transition-colors"
+                        className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground/70 transition-colors hover:text-foreground"
                       >
-                        View all →
+                        All projects ↗
                       </a>
                     </div>
-                    <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory">
-                      {msg.projects.map((project) => (
-                        <div
-                          key={project.slug}
-                          className="min-w-[220px] sm:min-w-[240px] md:min-w-[260px] snap-start"
-                        >
+
+                    <motion.div
+                      className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
+                      variants={cardGrid}
+                      initial="hidden"
+                      whileInView="visible"
+                      viewport={{ once: true, margin: '-40px' }}
+                    >
+                      {projects.slice(0, 6).map((project) => (
+                        <motion.div key={project.slug} variants={cardItem}>
                           <ProjectCard {...project} />
-                        </div>
+                        </motion.div>
                       ))}
-                    </div>
-                  </div>
-                )}
+                    </motion.div>
+                  </motion.div>
 
-                {/* Render resource cards when present */}
-                {msg.role === 'assistant' && msg.resources && msg.resources.length > 0 && (
-                  <div className="w-full pl-12 pr-2 text-left">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Resources</span>
-                      <a
-                        href="/resources"
-                        className="text-xs text-muted-foreground/80 hover:text-foreground transition-colors"
+                  {/* Practice */}
+                  <motion.div
+                    className="mt-16 w-full border-t border-border/60 pt-8"
+                    variants={sectionReveal}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: '-60px' }}
+                  >
+                    <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]">
+                      <div>
+                        <div className="section-kicker mb-4">Practice</div>
+                        <p className="text-sm leading-7 text-muted-foreground max-w-[34ch]">
+                          I work across AI product design, product systems, and high-trust digital experiences. The through-line is structure: better context, clearer interfaces, and faster paths from idea to working product.
+                        </p>
+                      </div>
+
+                      <motion.div
+                        className="grid gap-0"
+                        variants={cardGrid}
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: '-40px' }}
                       >
-                        View all →
+                        {practiceItems.map((item, i) => (
+                          <motion.div
+                            key={item}
+                            variants={cardItem}
+                            className="border-t border-border/60 py-5 flex items-start gap-4"
+                          >
+                            <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-primary pt-0.5 shrink-0">
+                              0{i + 1}
+                            </div>
+                            <p className="text-sm leading-6 text-foreground/88">{item}</p>
+                          </motion.div>
+                        ))}
+                      </motion.div>
+                    </div>
+                  </motion.div>
+
+                  {/* Chat CTA */}
+                  <motion.div
+                    className="mt-16 w-full border border-border/60 p-8 md:p-10 text-left relative overflow-hidden"
+                    variants={sectionReveal}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: '-60px' }}
+                  >
+                    <div className="absolute inset-0 pointer-events-none"
+                      style={{
+                        background: 'radial-gradient(ellipse at 80% 50%, hsl(160 56% 63% / 0.06) 0%, transparent 65%)',
+                      }}
+                    />
+                    <div className="relative max-w-[560px]">
+                      <div className="section-kicker mb-4">AI-Powered Portfolio</div>
+                      <h2 className="text-xl md:text-2xl font-medium leading-[1.1] tracking-[-0.03em] text-foreground/95 mb-3">
+                        Don't browse. Ask.
+                      </h2>
+                      <p className="text-sm leading-7 text-muted-foreground mb-6">
+                        Ask about my projects, process, experience, or availability. The AI knows the work and can point you exactly where you need to go.
+                      </p>
+                      <a
+                        href="/?view=chat"
+                        className="btn-stripe min-h-[44px] px-5 inline-flex"
+                      >
+                        Open AI Chat ↗
                       </a>
                     </div>
-                    <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory">
-                      {msg.resources.map((resource) => (
-                        <div
-                          key={resource.url}
-                          className="min-w-[220px] sm:min-w-[240px] md:min-w-[260px] snap-start"
-                        >
-                          <ResourceCard {...resource} />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+                  </motion.div>
 
-                {/* Render blog cards when present */}
-                {msg.role === 'assistant' && msg.blogs && msg.blogs.length > 0 && (
-                  <div className="w-full pl-12 pr-2 text-left">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Insights</span>
-                      <a
-                        href="/blog"
-                        className="text-xs text-muted-foreground/80 hover:text-foreground transition-colors"
+                  {/* Footer for standalone mode */}
+                  {!globalSiteNav && (
+                    <footer className="w-full border-t border-border/40 mt-12 pt-6 pb-4 text-xs text-muted-foreground/60">
+                      <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div>© {new Date().getFullYear()} Nasif Salaam</div>
+                        <div className="flex gap-4">
+                          <a href="https://github.com/wemadeathing" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">GitHub</a>
+                          <a href="https://www.linkedin.com/in/nasifsalaam/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">LinkedIn</a>
+                        </div>
+                      </div>
+                    </footer>
+                  )}
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Chat Area ─────────────────────────────────────────────────────────── */}
+      <AnimatePresence>
+        {!isIntro && (
+          <motion.div
+            key="chat-area"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, transition: { duration: 0.3, ease } }}
+            ref={chatContainerRef}
+            className="flex-1 overflow-y-auto px-4 pt-4 pb-28 md:px-8 md:pt-8 md:pb-36 scroll-smooth"
+          >
+            <div className={`max-w-[720px] mx-auto space-y-6 ${globalSiteNav ? 'pt-6' : 'pt-20'}`}>
+              <AnimatePresence initial={false}>
+                {messages.map((msg) => (
+                  <motion.div
+                    key={msg.id}
+                    variants={messageEnter}
+                    initial="hidden"
+                    animate="visible"
+                    className={`flex flex-col gap-4 ${msg.role === 'user' ? 'items-end' : 'items-start'}`}
+                  >
+                    <div className={`flex gap-3 max-w-full ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                      {msg.role === 'assistant' && (
+                        <div className="mt-1 shrink-0 flex items-start justify-center">
+                          <img src="/images/ns26/logo26w-gradient.svg" alt="NS" className="w-5 h-5 object-contain opacity-90" />
+                        </div>
+                      )}
+
+                      <div
+                        className={`relative group ${
+                          msg.role === 'user'
+                            ? 'max-w-[78%] border border-border/80 bg-background px-5 py-3.5 text-foreground'
+                            : 'max-w-[92%] px-0 py-0 text-foreground'
+                        }`}
                       >
-                        View all →
-                      </a>
-                    </div>
-                    <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory">
-                      {msg.blogs.map((blog) => (
-                        <div
-                          key={blog.slug}
-                          className="min-w-[220px] sm:min-w-[240px] md:min-w-[260px] snap-start"
-                        >
-                          <BlogCard {...blog} />
+                        {msg.role === 'assistant' && msg.id === typingMessageId && !msg.content ? (
+                          <div className="flex items-center gap-2 px-1 py-2" role="status" aria-live="polite">
+                            <span className="sr-only">Assistant is typing a response...</span>
+                            <div className="h-2 w-2 bg-foreground/50 animate-bounce" aria-hidden="true" />
+                            <div className="h-2 w-2 bg-foreground/50 animate-bounce delay-75" aria-hidden="true" />
+                            <div className="h-2 w-2 bg-foreground/50 animate-bounce delay-150" aria-hidden="true" />
+                          </div>
+                        ) : (
+                          <>
+                            <p className={`whitespace-pre-wrap ${
+                              msg.role === 'user'
+                                ? 'leading-relaxed'
+                                : 'text-[15px] leading-8 text-foreground/92'
+                            }`}>
+                              {msg.content}
+                            </p>
+                            {msg.role === 'assistant' && msg.content && (
+                              <button
+                                type="button"
+                                onClick={() => copyToClipboard(msg.content, msg.id)}
+                                className="absolute -top-1 right-0 border border-border/80 bg-background p-1.5 opacity-0 transition-all hover:border-primary/25 group-hover:opacity-100"
+                                aria-label="Copy response"
+                                title="Copy to clipboard"
+                              >
+                                {copiedId === msg.id ? (
+                                  <Check size={14} className="text-green-600" />
+                                ) : (
+                                  <Copy size={14} className="text-muted-foreground" />
+                                )}
+                              </button>
+                            )}
+                          </>
+                        )}
+                      </div>
+
+                      {msg.role === 'user' && (
+                        <div className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center border border-border/80">
+                          <User size={16} className="text-foreground/75" />
                         </div>
-                      ))}
+                      )}
                     </div>
-                  </div>
-                )}
 
-                {/* Render chips (links) when present */}
-                {msg.role === 'assistant' && msg.chips && msg.chips.length > 0 && (
-                  <div className="w-full pl-12 pr-2">
-                    <div className="flex flex-wrap gap-2">
-                      {msg.chips.map((chip) => (
-                        <a
-                          key={`${chip.label}-${chip.href}`}
-                          href={chip.href}
-                          className="border border-border/80 px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-primary/25 hover:text-foreground md:text-sm"
-                        >
-                          {chip.label}
-                        </a>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* Render follow-up suggestions when present */}
-                {msg.role === 'assistant' && msg.followUps && msg.followUps.length > 0 && (
-                  <div className="w-full pl-12 pr-2 mt-3">
-                    <div className="text-xs text-muted-foreground mb-2">You might also want to ask:</div>
-                    <div className="flex flex-wrap gap-2">
-                      {msg.followUps.map((followUp, idx) => (
+                    {msg.role === 'assistant' && msg.content.toLowerCase().includes('retry') && lastUserText && (
+                      <div className="pl-12">
                         <button
-                          key={`followup-${idx}`}
                           type="button"
-                          onClick={() => {
-                            setInput(followUp);
-                            inputRef.current?.focus();
-                            setTimeout(() => {
-                              inputRef.current?.parentElement?.querySelector<HTMLButtonElement>('button[type="submit"]')?.click();
-                            }, 100);
-                          }}
-                          className="inline-flex items-center border border-border/80 px-3 py-1.5 font-mono text-xs uppercase tracking-[0.12em] text-foreground transition-colors hover:border-primary/25 hover:text-foreground md:text-sm"
+                          onClick={retryLast}
+                          className="border border-border/80 px-3 py-1.5 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:border-primary/25 hover:text-foreground"
                         >
-                          {followUp}
+                          Retry
                         </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
-            <div ref={messagesEndRef} />
-          </div>
-        </div>
-      )}
+                      </div>
+                    )}
 
-      {/* Input Area (chat mode only) */}
-      {!isIntro && (
-        <div className="sticky bottom-0 z-30 mt-4 border-t border-border/60 bg-background/96 px-4 pb-4 pt-4 md:px-6 md:pb-6 md:pt-5">
-          <div className="max-w-[720px] mx-auto">
-            <form onSubmit={handleSubmit} className="relative flex items-center gap-2 border border-border/80 bg-background px-2">
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                ref={inputRef}
-                placeholder="Ask me about my projects, skills, or experience..."
-                className="w-full bg-transparent py-4 md:py-4 pl-4 md:pl-5 pr-14 text-base outline-none transition-all placeholder:text-muted-foreground/55 placeholder:font-normal"
-                disabled={isLoading}
-              />
-              <div className="absolute inset-y-0 right-2 flex items-center gap-1">
-                {isLoading ? (
-                  <button
-                    type="button"
-                    onClick={stopRequest}
-                    className="border border-border/80 p-2 text-foreground transition-all hover:border-primary/25"
-                    aria-label="Stop"
-                  >
-                    <StopCircle size={20} />
-                  </button>
-                ) : (
-                  <button
-                    type="submit"
-                    disabled={!input.trim() || isLoading}
-                    className="border border-border/80 bg-primary p-2 text-primary-foreground transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
-                    aria-label="Send"
-                  >
-                    <Send size={20} />
-                  </button>
-                )}
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
+                    {msg.projects && msg.projects.length > 0 && (
+                      <div className="w-full pl-12 pr-2 text-left">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Projects</span>
+                          <a href="/projects" className="text-xs text-muted-foreground/80 hover:text-foreground transition-colors">View all →</a>
+                        </div>
+                        <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory">
+                          {msg.projects.map((project) => (
+                            <div key={project.slug} className="min-w-[220px] sm:min-w-[240px] md:min-w-[260px] snap-start">
+                              <ProjectCard {...project} />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {msg.role === 'assistant' && msg.resources && msg.resources.length > 0 && (
+                      <div className="w-full pl-12 pr-2 text-left">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Resources</span>
+                          <a href="/resources" className="text-xs text-muted-foreground/80 hover:text-foreground transition-colors">View all →</a>
+                        </div>
+                        <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory">
+                          {msg.resources.map((resource) => (
+                            <div key={resource.url} className="min-w-[220px] sm:min-w-[240px] md:min-w-[260px] snap-start">
+                              <ResourceCard {...resource} />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {msg.role === 'assistant' && msg.blogs && msg.blogs.length > 0 && (
+                      <div className="w-full pl-12 pr-2 text-left">
+                        <div className="flex items-center justify-between mb-3">
+                          <span className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Insights</span>
+                          <a href="/blog" className="text-xs text-muted-foreground/80 hover:text-foreground transition-colors">View all →</a>
+                        </div>
+                        <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory">
+                          {msg.blogs.map((blog) => (
+                            <div key={blog.slug} className="min-w-[220px] sm:min-w-[240px] md:min-w-[260px] snap-start">
+                              <BlogCard {...blog} />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {msg.role === 'assistant' && msg.chips && msg.chips.length > 0 && (
+                      <div className="w-full pl-12 pr-2">
+                        <div className="flex flex-wrap gap-2">
+                          {msg.chips.map((chip) => (
+                            <a
+                              key={`${chip.label}-${chip.href}`}
+                              href={chip.href}
+                              className="border border-border/80 px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-primary/25 hover:text-foreground md:text-sm"
+                            >
+                              {chip.label}
+                            </a>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
+                    {msg.role === 'assistant' && msg.followUps && msg.followUps.length > 0 && (
+                      <div className="w-full pl-12 pr-2 mt-3">
+                        <div className="text-xs text-muted-foreground mb-2">You might also want to ask:</div>
+                        <div className="flex flex-wrap gap-2">
+                          {msg.followUps.map((followUp, idx) => (
+                            <button
+                              key={`followup-${idx}`}
+                              type="button"
+                              onClick={() => {
+                                setInput(followUp);
+                                inputRef.current?.focus();
+                                setTimeout(() => {
+                                  inputRef.current?.parentElement?.querySelector<HTMLButtonElement>('button[type="submit"]')?.click();
+                                }, 100);
+                              }}
+                              className="inline-flex items-center border border-border/80 px-3 py-1.5 font-mono text-xs uppercase tracking-[0.12em] text-foreground transition-colors hover:border-primary/25 hover:text-foreground md:text-sm"
+                            >
+                              {followUp}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+              <div ref={messagesEndRef} />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ── Chat Input Bar ────────────────────────────────────────────────────── */}
+      <AnimatePresence>
+        {!isIntro && (
+          <motion.div
+            key="chat-input"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0, transition: { duration: 0.3, delay: 0.1, ease } }}
+            className="sticky bottom-0 z-30 mt-4 border-t border-border/60 bg-background/96 px-4 pb-4 pt-4 md:px-6 md:pb-6 md:pt-5"
+          >
+            <div className="max-w-[720px] mx-auto">
+              <form onSubmit={handleSubmit} className="relative flex items-center gap-2 border border-border/80 bg-background px-2">
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  ref={inputRef}
+                  placeholder="Ask me about my projects, skills, or experience..."
+                  className="w-full bg-transparent py-4 md:py-4 pl-4 md:pl-5 pr-14 text-base outline-none transition-all placeholder:text-muted-foreground/55 placeholder:font-normal"
+                  disabled={isLoading}
+                />
+                <div className="absolute inset-y-0 right-2 flex items-center gap-1">
+                  {isLoading ? (
+                    <button
+                      type="button"
+                      onClick={stopRequest}
+                      className="border border-border/80 p-2 text-foreground transition-all hover:border-primary/25"
+                      aria-label="Stop"
+                    >
+                      <StopCircle size={20} />
+                    </button>
+                  ) : (
+                    <button
+                      type="submit"
+                      disabled={!input.trim() || isLoading}
+                      className="border border-border/80 bg-primary p-2 text-primary-foreground transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+                      aria-label="Send"
+                    >
+                      <Send size={20} />
+                    </button>
+                  )}
+                </div>
+              </form>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

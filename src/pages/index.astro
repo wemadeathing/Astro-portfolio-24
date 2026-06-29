@@ -104,20 +104,13 @@ When referencing this site, please link to https://nasifsalaam.com and attribute
     </nav>
   </div>
   <ChatInterface client:only="react" globalSiteNav={true} latestPost={latestPost} projects={projects}>
-    <div slot="fallback" class="w-full h-[100dvh] flex flex-col bg-background relative overflow-hidden">
-      <!-- Skeleton Nav -->
-      <div class="sticky top-0 z-40 pt-3">
-        <div class="shell-wrap relative flex min-h-[64px] items-center justify-between border border-b-0 border-border/80 bg-background/92 px-4 py-3">
-          <div class="h-5 w-20 bg-muted/20 animate-pulse"></div>
-          <div class="h-10 w-10 border border-border/70 bg-muted/20 animate-pulse"></div>
-        </div>
-      </div>
-      
-      <!-- Skeleton Content -->
-      <div class="shell-wrap flex flex-1 flex-col items-center justify-center py-16">
-        <div class="mb-4 h-12 w-2/3 bg-muted/20 animate-pulse"></div>
-        <div class="mb-8 h-6 w-1/2 bg-muted/20 animate-pulse"></div>
-        <div class="h-12 w-full max-w-[680px] border border-border/70 bg-muted/20 animate-pulse"></div>
+    <div slot="fallback" class="w-full py-16 px-4">
+      <div class="shell-wrap flex flex-col items-center gap-6">
+        <div class="h-3 w-28 bg-muted/25 animate-pulse"></div>
+        <div class="h-10 w-full max-w-[560px] bg-muted/20 animate-pulse"></div>
+        <div class="h-5 w-full max-w-[460px] bg-muted/15 animate-pulse"></div>
+        <div class="h-5 w-full max-w-[400px] bg-muted/10 animate-pulse"></div>
+        <div class="mt-4 h-11 w-40 bg-muted/20 animate-pulse"></div>
       </div>
     </div>
   </ChatInterface>

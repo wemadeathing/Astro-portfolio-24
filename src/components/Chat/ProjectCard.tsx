@@ -14,9 +14,10 @@ export default function ProjectCard({ title, description, image, tags, slug }: P
   return (
     <a
       href={`/projects/${slug}`}
-      className="group block h-full border-t border-border/80 pt-4 transition-colors hover:border-primary/30 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+      className="group block h-full border border-border/80 transition-colors hover:border-primary/35 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
     >
-      <div className="aspect-[16/9] w-full overflow-hidden border-y border-border/80 bg-muted/20 relative">
+      {/* Image */}
+      <div className="relative aspect-[16/10] w-full overflow-hidden bg-muted/20">
         <img
           src={image}
           alt={title}
@@ -25,28 +26,35 @@ export default function ProjectCard({ title, description, image, tags, slug }: P
         />
       </div>
 
-      <div className="pt-4 text-left">
-        <h4 className="mb-2 text-sm font-semibold text-foreground transition-colors line-clamp-1 group-hover:text-primary">
+      {/* Content */}
+      <div className="flex flex-col p-4">
+        <h4 className="text-sm font-semibold text-foreground transition-colors line-clamp-1 group-hover:text-primary">
           {title}
         </h4>
-        <p className="mb-3 text-xs text-muted-foreground line-clamp-2">
+        <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground line-clamp-2">
           {description}
         </p>
 
-        <div className="flex items-center gap-x-2 gap-y-1.5 flex-wrap">
+        {/* Footer */}
+        <div className="mt-3 flex items-center gap-x-2 border-t border-border/60 pt-3">
           {visibleTags.map((tag) => (
             <span
               key={tag}
-              className="inline-flex items-center font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground"
+              className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground"
             >
               {tag}
             </span>
           ))}
           {tags.length > 2 && (
-            <span className="text-[10px] text-muted-foreground font-medium">
-              +{tags.length - 2}
-            </span>
+            <span className="font-mono text-[10px] text-muted-foreground">+{tags.length - 2}</span>
           )}
+          <svg
+            className="ml-auto h-3 w-3 -translate-x-1 text-primary opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+            strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"
+          >
+            <path d="M7 17L17 7" /><path d="M7 7h10v10" />
+          </svg>
         </div>
       </div>
     </a>
