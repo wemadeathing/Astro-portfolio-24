@@ -1,22 +1,22 @@
 ---
-import NewsletterForm from './NewsletterForm.astro';
 ---
 
-<footer class="mt-10 border-t border-border/80 bg-background/70 backdrop-blur">
+<footer class="site-footer mt-10 border-t border-border/80 bg-background/70 backdrop-blur">
   <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
     <div class="md:hidden mb-8 space-y-8">
       <div>
-        <div class="text-xs tracking-[0.22em] uppercase text-muted-foreground/70 mb-3">About</div>
+        <div class="text-xs tracking-[0.22em] uppercase text-muted-foreground/70 mb-3">Positioning</div>
         <div class="text-sm text-muted-foreground leading-[1.65]">
-          Design Engineer with 15+ years of experience designing and building digital products. I work across brand, UX, UI design, frontend development, and AI, taking projects from brief to shipped.
+          Product designer and AI builder. Fifteen plus years across brand, product, systems, and implementation.
         </div>
       </div>
       <div>
-        <div class="text-xs tracking-[0.22em] uppercase text-muted-foreground/70 mb-3">Services & writing</div>
+        <div class="text-xs tracking-[0.22em] uppercase text-muted-foreground/70 mb-3">Primary paths</div>
         <nav class="flex flex-wrap gap-x-4 gap-y-2 text-sm">
-          <a href="/work-with-me" class="text-muted-foreground hover:text-foreground transition-colors">Work With Me</a>
-          <a href="/blog" class="text-muted-foreground hover:text-foreground transition-colors">Insights</a>
-          <a href="/resources" class="text-muted-foreground hover:text-foreground transition-colors">Resources</a>
+          <a href="/projects" class="text-muted-foreground hover:text-foreground transition-colors">Work</a>
+          <a href="/about" class="text-muted-foreground hover:text-foreground transition-colors">About</a>
+          <a href="/?view=chat" class="text-muted-foreground hover:text-foreground transition-colors">AI Chat</a>
+          <a href="/contact" class="text-muted-foreground hover:text-foreground transition-colors">Contact</a>
         </nav>
       </div>
       <div>
@@ -28,28 +28,29 @@ import NewsletterForm from './NewsletterForm.astro';
         </nav>
       </div>
       <div>
-        <div class="text-xs tracking-[0.22em] uppercase text-muted-foreground/70 mb-3">Newsletter</div>
-        <div class="text-sm text-muted-foreground leading-[1.65] mb-3">
-          Occasional product + AI notes. 1–2 emails/month. No spam.
-        </div>
-        <NewsletterForm />
+        <div class="text-xs tracking-[0.22em] uppercase text-muted-foreground/70 mb-3">Secondary</div>
+        <nav class="flex flex-wrap gap-x-4 gap-y-2 text-sm">
+          <a href="/blog" class="text-muted-foreground hover:text-foreground transition-colors">Insights</a>
+          <a href="/resources" class="text-muted-foreground hover:text-foreground transition-colors">Resources</a>
+        </nav>
       </div>
     </div>
 
-    <div class="hidden md:grid grid-cols-[1.1fr_0.75fr_0.75fr_1.4fr] gap-10 mb-6">
+    <div class="hidden md:grid grid-cols-[1.2fr_0.9fr_0.8fr_0.9fr] gap-10 mb-6">
       <div class="max-w-[56ch]">
-        <div class="text-xs tracking-[0.22em] uppercase text-muted-foreground/70 mb-3">About</div>
-        <div class="text-sm text-muted-foreground leading-[1.65]">
-          Design Engineer with 15+ years of experience designing and building digital products. I work across brand, UX, UI design, frontend development, and AI, taking projects from brief to shipped.
-        </div>
+      <div class="text-xs tracking-[0.22em] uppercase text-muted-foreground/70 mb-3">Positioning</div>
+      <div class="text-sm text-muted-foreground leading-[1.65]">
+          Product designer and AI builder. Fifteen plus years across brand, product, systems, and implementation.
+      </div>
       </div>
 
       <div>
-        <div class="text-xs tracking-[0.22em] uppercase text-muted-foreground/70 mb-3">Services & writing</div>
+        <div class="text-xs tracking-[0.22em] uppercase text-muted-foreground/70 mb-3">Primary paths</div>
         <nav class="space-y-2">
-          <a href="/work-with-me" class="block text-sm text-muted-foreground hover:text-foreground transition-colors">Work With Me</a>
-          <a href="/blog" class="block text-sm text-muted-foreground hover:text-foreground transition-colors">Insights</a>
-          <a href="/resources" class="block text-sm text-muted-foreground hover:text-foreground transition-colors">Resources</a>
+          <a href="/projects" class="block text-sm text-muted-foreground hover:text-foreground transition-colors">Work</a>
+          <a href="/about" class="block text-sm text-muted-foreground hover:text-foreground transition-colors">About</a>
+          <a href="/?view=chat" class="block text-sm text-muted-foreground hover:text-foreground transition-colors">AI Chat</a>
+          <a href="/contact" class="block text-sm text-muted-foreground hover:text-foreground transition-colors">Contact</a>
         </nav>
       </div>
 
@@ -69,13 +70,11 @@ import NewsletterForm from './NewsletterForm.astro';
       </div>
 
       <div>
-        <div class="text-xs tracking-[0.22em] uppercase text-muted-foreground/70 mb-3">Newsletter</div>
-        <div class="text-sm text-muted-foreground leading-[1.65]">
-          Occasional product + AI notes. 1–2 emails/month. No spam.
-        </div>
-        <div class="mt-4">
-          <NewsletterForm />
-        </div>
+        <div class="text-xs tracking-[0.22em] uppercase text-muted-foreground/70 mb-3">Secondary</div>
+        <nav class="space-y-2">
+          <a href="/blog" class="block text-sm text-muted-foreground hover:text-foreground transition-colors">Insights</a>
+          <a href="/resources" class="block text-sm text-muted-foreground hover:text-foreground transition-colors">Resources</a>
+        </nav>
       </div>
     </div>
 
@@ -83,11 +82,11 @@ import NewsletterForm from './NewsletterForm.astro';
       <div class="text-[11px] text-muted-foreground/70 text-center sm:text-left max-w-xl leading-relaxed">
         <span class="text-muted-foreground/80">© {new Date().getFullYear()} Nasif Salaam.</span>
         <span class="block sm:inline sm:ml-1 text-muted-foreground/60">
-          This portfolio doubles as a sandbox for experiments in UI, AI, and how I ship work.
+          Product designer and AI builder for thoughtful digital products and stronger online presence.
         </span>
       </div>
       <div class="flex items-center gap-3 text-[11px]">
-        <a href="/contact" class="text-muted-foreground/70 hover:text-foreground transition-colors">Let’s connect</a>
+        <a href="/contact" class="text-muted-foreground/70 hover:text-foreground transition-colors">Start a conversation</a>
       </div>
     </div>
   </div>

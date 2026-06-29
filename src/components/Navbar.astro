@@ -9,6 +9,7 @@ type NavItem = {
 const navItems: NavItem[] = [
   { href: '/projects', label: 'Work', description: 'Browse featured case studies' },
   { href: '/about', label: 'About', description: 'Background and approach' },
+  { href: '/?view=chat', label: 'AI Chat', description: 'Ask about projects, process, and capabilities' },
   { href: '/contact', label: 'Contact', description: 'Send a message or start a project' },
 ];
 
@@ -46,7 +47,9 @@ const isHome = pathname === '/' || pathname === '';
       <!-- Desktop Navigation (visible on md+) -->
       <nav class="hidden md:flex items-center gap-1">
         {navItems.slice(0, -1).map((item) => {
-          const isActive = pathname.startsWith(item.href);
+          const isActive = item.href === '/?view=chat'
+            ? pathname === '/' && Astro.url.searchParams.get('view') === 'chat'
+            : pathname.startsWith(item.href);
           return (
             <a 
               href={item.href}

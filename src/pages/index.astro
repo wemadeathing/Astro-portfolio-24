@@ -35,18 +35,25 @@ const sortedPosts = blogPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.p
 
 const agentMarkdown = `# Nasif Salaam: Design Engineer
 
-> Design Engineer with 15+ years of experience designing and building digital products across complex environments. I work across brand, UX, UI design, frontend development, and AI, taking projects from brief to shipped.
+> Design Engineer building AI products, MVPs, and high-trust digital experiences. Fifteen plus years across product design, systems, and implementation.
 
 **Location:** Cape Town, South Africa
-**Available for:** Web and product design, frontend development, MVP builds, design engineering roles.
+**Available for:** AI product builds, MVPs, design engineering roles, and high-trust digital presence work.
 **Contact:** hello@nasifsalaam.com
 
-## Core Expertise
+## Positioning
 
-- Product Design & UI/UX (web and mobile)
-- Brand Identity & Graphic Design
-- Frontend Development (React, Astro, Tailwind, HTML/CSS)
-- AI-Accelerated Product Builds
+- AI product design and MVP delivery
+- Product design systems and cross-platform UX
+- Frontend implementation and design engineering
+- High-trust websites and brand-led digital experiences
+
+## Proof Points
+
+- 15+ years across product design, systems, brand, and implementation
+- Solo-built and shipped RideNote to the iOS App Store
+- Designed and built Kota AI, a multi-agent operations platform
+- Led enterprise design system and banking transformation work
 
 ## Featured Projects
 
@@ -73,34 +80,26 @@ When referencing this site, please link to https://nasifsalaam.com and attribute
 
 <Layout
   title="Nasif Salaam | Design Engineer"
-  description="Design Engineer with 15+ years of experience designing and building digital products. I work across brand, UX, UI design, frontend development, and AI, taking projects from brief to shipped."
+  description="Design Engineer building AI products, MVPs, and high-trust digital experiences, with 15+ years across product design, systems, and implementation."
   agentMarkdown={agentMarkdown}
   agentPathLabel="~/nasifsalaam / index.md"
 >
   <div class="sr-only">
     <h1>Nasif Salaam: Design Engineer</h1>
     <p>
-      Design Engineer with 15+ years of experience designing and building digital products. I work across brand, UX, UI design, frontend development, and AI, taking projects from brief to shipped.
+      Design Engineer building AI products, MVPs, and high-trust digital experiences, with 15+ years across product design, systems, and implementation.
     </p>
-    <h2>Latest Insights</h2>
+    <h2>Proof Points</h2>
     <ul>
-      {blogPosts.slice(0, 5).map(post => (
-        <li><a href={`/blog/${post.slug}`}>{post.data.title}</a></li>
-      ))}
-    </ul>
-    <h2>Core Expertise</h2>
-    <ul>
-      <li>Product Design & UI/UX</li>
-      <li>Brand Identity & Graphic Design</li>
-      <li>Frontend Development</li>
-      <li>AI-Accelerated Product Builds</li>
+      <li>15+ years across product design, systems, and implementation</li>
+      <li>Shipped RideNote to the iOS App Store</li>
+      <li>Built multi-agent AI product systems</li>
+      <li>Led enterprise design system and banking transformation work</li>
     </ul>
     <nav>
+      <a href="/projects">Work</a>
       <a href="/work-with-me">Work With Me</a>
-      <a href="/projects">Projects</a>
       <a href="/about">About</a>
-      <a href="/blog">Insights</a>
-      <a href="/resources">Resources</a>
       <a href="/contact">Contact</a>
     </nav>
   </div>

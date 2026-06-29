@@ -103,6 +103,10 @@
     radial-gradient(700px circle at 55% 115%, rgba(255, 255, 255, 0.04), transparent 55%);
 }
 
+body.chat-landing-mode .site-footer {
+  display: none;
+}
+
 /* Global loader overlay (logo-based) */
 .site-loader {
   position: fixed;

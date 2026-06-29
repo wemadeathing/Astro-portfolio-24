@@ -8,7 +8,9 @@ export const prerender = true;
 
 export async function getStaticPaths() {
   const projects = await getCollection('projects');
-  return projects.map((project) => ({
+  return projects
+    .filter((project) => project.data.published !== false)
+    .map((project) => ({
     params: { slug: project.slug },
     props: { project },
   }));
@@ -24,7 +26,7 @@ if (Astro.props?.project) {
 } else {
   // Server-side rendering - fetch by slug
   const projectEntry = await getEntry('projects', slug!);
-  if (!projectEntry) {
+  if (!projectEntry || projectEntry.data.published === false) {
     return Astro.redirect('/404');
   }
   project = projectEntry;

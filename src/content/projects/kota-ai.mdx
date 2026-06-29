@@ -1,6 +1,6 @@
 ---
 title: "Kota AI - Multi-Agent Operations Platform"
-description: "Designed and built a production multi-agent AI system for South African SMEs. From system architecture to deployed platform, solo."
+description: "Designed and built a multi-agent AI operations platform for South African SMEs, from architecture to pre-launch product."
 ai_summary: "End-to-end design and build of a multi-agent operations platform for SA small businesses. Covers system architecture decisions, LangGraph orchestration, RAG knowledge base design, Generative UI response contract, multi-tenant data isolation, and the folder-as-architecture pattern. Demonstrates full ownership of a production AI system from concept through pre-launch testing."
 image: "/images/work/kota/kota.png"
 tags: ["Builds", "AI Systems", "Multi-Agent", "LangGraph", "Architecture", "Solo Founder"]
@@ -29,13 +29,15 @@ import KotaKnowledgeBaseDiagram from '../../components/KotaKnowledgeBaseDiagram'
 
 ## Project Overview
 
-SA small business owners wear every hat. The same person writing proposals at 7am is chasing invoices at noon and doing outreach at 10pm. There is no operations team. There is a person, a WhatsApp group, and a slowly filling inbox.
+**Problem:** South African small business owners do not need another blank AI chat box. They need a system that understands their business context and turns work into usable output.
 
-Most AI tools make this harder, not easier. A blank chat box with no business context means the owner still has to do the thinking. Kota AI is different: it knows the business, remembers what has been done before, and responds in a format that is actually useful, not a wall of text, but a rendered invoice, a structured proposal, a researched brief.
+**Role:** architect, product designer, and solo builder.
 
-The system runs three coordinated agents: a Router that classifies every request, a General Agent that handles single-turn tasks across six surfaces, and a Workflow Agent that handles multi-step tasks that require a reasoning loop. The whole thing is built on LangGraph, FastAPI, and Supabase, with a RAG knowledge base underneath and a Generative UI response contract on top.
+**What shipped:** a multi-agent operations platform built on LangGraph, FastAPI, and Supabase, with a RAG knowledge base and a typed generative UI contract.
 
-I am the architect, designer, and sole builder. This case study documents the decisions that shaped the system.
+**Why it mattered:** the goal was to design AI around real operational constraints, not around novelty.
+
+**Proof:** the platform is in pre-launch testing with core architecture, multi-tenant data design, and operational surfaces already in place.
 
 <ClickableImage
   src="/images/work/kota/kota-dash.png"

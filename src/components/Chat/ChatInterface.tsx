@@ -69,7 +69,6 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
   const [hasStarted, setHasStarted] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [introMounted, setIntroMounted] = useState(false);
-  const [bentoMounted, setBentoMounted] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -79,15 +78,14 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
   const [isScrolled, setIsScrolled] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [viewMode, setViewMode] = useState<'chat' | 'portfolio'>(() => {
+  const [introMode] = useState<'chat' | 'portfolio'>(() => {
     if (typeof window !== 'undefined') {
-      const stored = localStorage.getItem('preferred-view') as 'chat' | 'portfolio' | null;
-      if (stored === 'chat' || stored === 'portfolio') return stored;
+      const urlMode = new URLSearchParams(window.location.search).get('view');
+      if (urlMode === 'chat') return 'chat';
       return 'portfolio';
     }
     return 'portfolio';
   });
-  const [displayedView, setDisplayedView] = useState<'chat' | 'portfolio'>(viewMode);
 
   const menuPanelRef = useRef<HTMLDivElement>(null);
   const menuCloseButtonRef = useRef<HTMLButtonElement>(null);
@@ -285,14 +283,13 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
   }, [hasStarted]);
 
   useEffect(() => {
-    localStorage.setItem('preferred-view', viewMode);
-  }, [viewMode]);
-
-  const switchView = (next: 'chat' | 'portfolio') => {
-    if (next === viewMode) return;
-    setViewMode(next);
-    setDisplayedView(next);
-  };
+    if (typeof document === 'undefined') return;
+    const shouldUseChatShell = globalSiteNav && introMode === 'chat';
+    document.body.classList.toggle('chat-landing-mode', shouldUseChatShell);
+    return () => {
+      document.body.classList.remove('chat-landing-mode');
+    };
+  }, [globalSiteNav, introMode]);
 
   const dismissTooltip = () => {
     setShowTooltip(false);
@@ -515,7 +512,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
 
   const isIntro = !hasStarted && messages.length === 0;
   /** With Layout nav + footer, avoid nested scroll: let the document scroll instead of an inner overflow pane. */
-  const useDocumentScrollIntro = Boolean(globalSiteNav && isIntro);
+  const useDocumentScrollIntro = Boolean(globalSiteNav && isIntro && introMode === 'portfolio');
   const retryLast = () => {
     if (!lastUserText) return;
     startChatWithPrompt(lastUserText);
@@ -525,11 +522,9 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
   useEffect(() => {
     if (!isIntro) {
       setIntroMounted(false);
-      setBentoMounted(false);
       return;
     }
 
-    let t: number | undefined;
     let raf = 0;
 
     const prefersReduce =
@@ -539,24 +534,20 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
 
     if (prefersReduce) {
       setIntroMounted(true);
-      setBentoMounted(true);
       return;
     }
 
-    // Next paint: reveal top section.
     raf = window.requestAnimationFrame(() => setIntroMounted(true));
-    // Shortly after: reveal bento section.
-    t = window.setTimeout(() => setBentoMounted(true), 180);
 
     return () => {
       if (raf) window.cancelAnimationFrame(raf);
-      if (t) window.clearTimeout(t);
     };
   }, [isIntro]);
 
   const menuLinks: { title: string; description: string; href: string; external?: boolean }[] = [
     { title: 'Work', description: 'Browse featured case studies', href: '/projects' },
     { title: 'About', description: 'Background and approach', href: '/about' },
+    { title: 'AI Chat', description: 'Ask about projects, process, and capabilities', href: '/?view=chat' },
     { title: 'Contact', description: 'Send a message or start a project', href: '/contact' },
   ];
 
@@ -565,27 +556,12 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
       ? messages[messages.length - 1].id
       : null;
 
-  const tileBase =
-    'group relative overflow-hidden rounded-2xl border border-border/60 bg-card/60 text-foreground transition-all hover:-translate-y-0.5 hover:shadow-[0_18px_50px_rgba(0,0,0,0.25)] hover:bg-card/75 hover:border-border focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/20 focus-visible:ring-offset-0';
-
-  const tileTone = (tone: 'lavender' | 'lime' | 'white' | 'dark') => {
-    switch (tone) {
-      case 'lavender':
-        return 'bg-card/60 text-foreground';
-      case 'lime':
-        return 'bg-primary/15 border-primary/30 text-foreground';
-      case 'white':
-        return 'bg-muted/30 text-foreground';
-      case 'dark':
-      default:
-        return "bg-card/60 text-foreground before:absolute before:inset-0 before:bg-[radial-gradient(circle_at_1px_1px,rgba(255,255,255,0.08)_1px,transparent_0)] before:bg-[length:3px_3px] before:opacity-20 group-hover:before:opacity-30 before:pointer-events-none";
-    }
-  };
-
   return (
     <div
       className={
-        useDocumentScrollIntro
+        globalSiteNav
+          ? 'flex flex-col h-full min-h-0 bg-background text-foreground relative'
+          : useDocumentScrollIntro
           ? 'flex flex-col min-h-screen bg-background text-foreground relative'
           : 'flex flex-col min-h-screen h-[100dvh] overflow-hidden bg-background text-foreground relative'
       }
@@ -700,72 +676,44 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
           className={
             useDocumentScrollIntro
               ? 'px-4 pt-4 sm:pt-6 pb-6 relative z-20'
+              : introMode === 'chat'
+              ? 'flex-1 px-4 pt-18 sm:pt-22 pb-4 relative z-20 overflow-hidden'
               : 'flex-1 overflow-y-auto px-4 pb-6 relative z-20 pt-24 sm:pt-28'
           }
         >
           <div className="w-full max-w-[1100px] mx-auto flex flex-col items-center text-center">
-            {/* Persistent Glass View Toggle */}
-            <div
-              className={[
-                'transition-all duration-500 ease-out will-change-transform',
-                introMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2',
-              ].join(' ')}
-            >
-              <div className="inline-flex items-center gap-0.5 p-0.5 rounded-full bg-white/[0.06] backdrop-blur-xl shadow-[0_0_15px_rgba(0,0,0,0.1),inset_0_1px_0_rgba(255,255,255,0.05)] mb-4 mt-3 md:mt-5 relative">
-                {/* Sliding indicator */}
-                <div
-                  className="absolute top-0.5 bottom-0.5 rounded-full bg-white/[0.1] shadow-[0_1px_6px_rgba(0,0,0,0.15)] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]"
-                  style={{
-                    left: viewMode === 'portfolio' ? '2px' : 'calc(50%)',
-                    width: 'calc(50% - 2px)',
-                  }}
-                />
-                <button
-                  type="button"
-                  onClick={() => switchView('portfolio')}
-                  className={[
-                    'relative z-10 px-3.5 py-[3px] rounded-full text-[11px] font-medium transition-colors duration-200',
-                    viewMode === 'portfolio' ? 'text-foreground' : 'text-muted-foreground/50 hover:text-muted-foreground',
-                  ].join(' ')}
-                >
-                  Portfolio
-                </button>
-                <button
-                  type="button"
-                  onClick={() => switchView('chat')}
-                  className={[
-                    'relative z-10 px-3.5 py-[3px] rounded-full text-[11px] font-medium transition-colors duration-200',
-                    viewMode === 'chat' ? 'text-foreground' : 'text-muted-foreground/50 hover:text-muted-foreground',
-                  ].join(' ')}
-                >
-                  AI Chat
-                </button>
-              </div>
-            </div>
-
             {/* Content area with crossfade */}
             <div className="w-full relative">
               {/* Chat View Content */}
-              {displayedView === 'chat' && (
+              {introMode === 'chat' && (
               <div
-                className="w-full flex flex-col items-center text-center animate-[fadeSlideUp_0.35s_ease-out_both]"
+                className="w-full min-h-[calc(100dvh-8.75rem)] flex flex-col items-center justify-start text-center animate-[fadeSlideUp_0.35s_ease-out_both] pt-[15vh] md:pt-[17vh] pb-4"
               >
-                <h1 className="text-3xl md:text-4xl lg:text-5xl font-medium leading-tight text-foreground/95 mb-2 max-w-[680px]">
-                  Hi, I'm Nasif. Design Engineer
+                <div
+                  className={[
+                    'w-full max-w-[700px] px-2 py-2 transition-all duration-500 ease-out will-change-transform md:px-4 md:py-3',
+                    introMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2',
+                  ].join(' ')}
+                >
+                <div className="inline-flex items-center px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.28em] text-primary/75">
+                  AI Chat
+                </div>
+                <h1 className="mt-6 text-3xl md:text-4xl lg:text-5xl font-medium leading-tight tracking-[-0.03em] text-foreground/95">
+                  Ask about the work, the systems, or how I build.
                 </h1>
-                <p className="text-sm md:text-base text-muted-foreground/80 max-w-[680px] mb-0">
-                  Design Engineer with 15+ years of experience designing and building digital products. I work across brand, UX, UI design, frontend development, and AI.
+                <p className="text-base md:text-lg text-muted-foreground/80 max-w-[720px] mt-5 mx-auto leading-[1.7]">
+                  Product designer and AI builder with 15+ years across brand, product, systems, and implementation.
                 </p>
 
                 {/* Input (intro) */}
                 <form
                   onSubmit={handleSubmit}
-                  className="relative mt-4 flex items-center gap-2 w-full max-w-[680px]"
+                  className="relative mt-8 flex items-center gap-2 w-full max-w-[680px] mx-auto"
                 >
                   {/* Onboarding tooltip */}
                   {showTooltip && (
                     <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 z-10">
-                      <div className="relative bg-primary/95 text-primary-foreground px-4 py-2 rounded-full text-sm font-medium shadow-lg whitespace-nowrap">
+                      <div className="relative bg-primary/92 text-primary-foreground px-4 py-2 rounded-2xl text-sm font-medium shadow-lg whitespace-nowrap">
                         <div className="absolute left-1/2 -translate-x-1/2 bottom-full w-0 h-0 border-l-8 border-r-8 border-b-8 border-l-transparent border-r-transparent border-b-primary/95" />
                         Try asking me anything about my work!
                         <button
@@ -787,7 +735,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                     onBlur={() => setShowSuggestions(false)}
                     ref={inputRef}
                     placeholder="Ask me about my projects, skills, or experience..."
-                    className="w-full bg-muted/40 border border-border/60 hover:border-border focus:border-primary/70 rounded-full py-3.5 md:py-4 pl-5 md:pl-6 pr-14 text-base outline-none transition-all shadow-sm focus:ring-4 focus:ring-primary/15 focus:bg-muted/50 placeholder:text-muted-foreground/55 placeholder:font-normal"
+                    className="w-full bg-black/20 border border-white/[0.08] hover:border-white/[0.14] focus:border-primary/40 rounded-full py-3.5 md:py-4 pl-5 md:pl-6 pr-14 text-base outline-none transition-all shadow-sm focus:ring-4 focus:ring-primary/10 focus:bg-black/25 placeholder:text-muted-foreground/55 placeholder:font-normal"
                     disabled={isLoading}
                   />
                   <div className="absolute inset-y-0 right-2 flex items-center gap-1">
@@ -817,9 +765,9 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                 <div
                   aria-hidden={!showSuggestions}
                   className={[
-                    'mt-3 overflow-hidden transition-all duration-200 ease-out',
+                    'mt-4 overflow-hidden transition-all duration-200 ease-out',
                     showSuggestions
-                      ? 'max-h-24 opacity-100 translate-y-0'
+                      ? 'max-h-28 opacity-100 translate-y-0'
                       : 'max-h-0 opacity-0 -translate-y-1 pointer-events-none',
                   ].join(' ')}
                 >
@@ -836,7 +784,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                           e.preventDefault();
                           fillInput(suggestion);
                         }}
-                        className="text-xs md:text-sm px-3 py-1.5 bg-muted/20 hover:bg-muted/35 border border-border/40 rounded-full transition-colors text-muted-foreground/90 hover:text-foreground"
+                        className="text-xs md:text-sm px-3 py-1.5 bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] rounded-full transition-colors text-muted-foreground/85 hover:text-foreground"
                       >
                         {suggestion}
                       </button>
@@ -844,170 +792,47 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                   </div>
                 </div>
 
-                {/* Bento Grid Navigation */}
-                <div className="w-full mt-8 md:mt-10 pb-2">
-                  <div
-                    className={[
-                      'w-full',
-                      'transition-all duration-500 ease-out will-change-transform',
-                      bentoMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2',
-                    ].join(' ')}
-                  >
-                    <div className="max-w-[1100px] mx-auto text-left">
-                      <div className="flex items-center justify-between gap-4 mb-3">
-                        <div className="text-xs tracking-wide uppercase text-muted-foreground/70">Quick links</div>
-                        <div className="h-px flex-1 bg-border/60" />
-                      </div>
-                    </div>
-                    {/* Bento layout */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-12 gap-3 md:gap-4 max-w-[1100px] mx-auto auto-rows-[160px] sm:auto-rows-[160px] md:auto-rows-[180px]">
-                      <a
-                        href="/projects"
-                        className={[
-                          tileBase,
-                          'col-span-1 sm:col-span-2 md:col-span-6 p-5 md:p-6 text-left bg-secondary/30',
-                        ].join(' ')}
-                      >
-                        <div className="relative z-10 h-full flex flex-col">
-                          <div className="text-xs opacity-70 mb-2">Projects • Case Studies</div>
-                          <div className="text-lg md:text-xl font-medium leading-snug tracking-tight max-w-[34ch]">
-                            Explore selected work across design systems, AI products, and rapid prototyping
-                          </div>
-                          <div className="absolute bottom-5 right-5 text-lg opacity-70 group-hover:opacity-100 transition-opacity">↘</div>
-                        </div>
-                      </a>
-
-                      <a
-                        href="/about"
-                        className={[
-                          tileBase,
-                          'bg-black bg-cover bg-center relative text-white',
-                          'border-0 hover:border-0 ring-1 ring-inset ring-white/10 hover:ring-white/20',
-                          'col-span-1 md:col-span-3 p-0 text-left min-h-[160px]',
-                        ].join(' ')}
-                        style={{ backgroundImage: "url('/images/abstract/Frame%20120823.png')" }}
-                      >
-                        <div className="absolute inset-0 bg-black/40 transition-colors group-hover:bg-black/30" />
-                        <div className="relative z-10 h-full">
-                          <div className="absolute bottom-2 left-2 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/55 px-2.5 py-1 text-sm font-semibold text-white/95 backdrop-blur">
-                            About <span className="text-white/70">↘</span>
-                          </div>
-                        </div>
-                      </a>
-
-                      <a
-                        href="/blog"
-                        className={[
-                          tileBase,
-                          'bg-black bg-cover bg-center relative text-white',
-                          'border-0 hover:border-0 ring-1 ring-inset ring-white/10 hover:ring-white/20',
-                          'col-span-1 md:col-span-3 p-0 text-left min-h-[160px]',
-                        ].join(' ')}
-                        style={{ backgroundImage: "url('/images/abstract/Frame%20120827.png')" }}
-                      >
-                        <div className="absolute inset-0 bg-black/40 transition-colors group-hover:bg-black/30" />
-                        <div className="relative z-10 h-full">
-                          <div className="absolute bottom-2 left-2 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/55 px-2.5 py-1 text-sm font-semibold text-white/95 backdrop-blur">
-                            Insights <span className="text-white/70">↘</span>
-                          </div>
-                        </div>
-                      </a>
-
-                      <a
-                        href="/work-with-me"
-                        className={[
-                          tileBase,
-                          'bg-black bg-cover bg-center relative text-white',
-                          'border-0 hover:border-0 ring-1 ring-inset ring-white/10 hover:ring-white/20',
-                          'col-span-1 md:col-span-3 p-0 text-left min-h-[160px]',
-                        ].join(' ')}
-                        style={{ backgroundImage: "url('/images/abstract/Frame%20120825.png')" }}
-                      >
-                        <div className="absolute inset-0 bg-black/40 transition-colors group-hover:bg-black/30" />
-                        <div className="relative z-10 h-full">
-                          <div className="absolute bottom-2 left-2 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/55 px-2.5 py-1 text-sm font-semibold text-white/95 backdrop-blur">
-                            Work With Me <span className="text-white/70">↘</span>
-                          </div>
-                        </div>
-                      </a>
-
-                      <a
-                        href="/contact"
-                        className={[
-                          tileBase,
-                          'bg-black bg-cover bg-center relative text-white',
-                          'border-0 hover:border-0 ring-1 ring-inset ring-white/10 hover:ring-white/20',
-                          'col-span-1 md:col-span-3 p-0 text-left min-h-[160px]',
-                        ].join(' ')}
-                        style={{ backgroundImage: "url('/images/abstract/Frame%20120826.png')" }}
-                      >
-                        <div className="absolute inset-0 bg-black/40 transition-colors group-hover:bg-black/30" />
-                        <div className="relative z-10 h-full">
-                          <div className="absolute bottom-2 left-2 inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/55 px-2.5 py-1 text-sm font-semibold text-white/95 backdrop-blur">
-                            Contact <span className="text-white/70">↘</span>
-                          </div>
-                        </div>
-                      </a>
-
-                      {latestPost ? (
-                        <a
-                          href={`/blog/${latestPost.slug}`}
-                          className={[tileBase, 'col-span-1 sm:col-span-2 md:col-span-6 p-5 md:p-6 text-left bg-secondary/30'].join(' ')}
-                        >
-                          <div className="relative z-10 h-full flex flex-col">
-                            <div className="text-xs opacity-70 mb-2">Latest Insight</div>
-                            <div className="text-lg md:text-xl font-medium leading-snug tracking-tight max-w-[36ch]">
-                              {latestPost.data.title}
-                            </div>
-                            <div className="text-sm opacity-60 mt-2 max-w-[42ch] line-clamp-2">
-                              {latestPost.data.description}
-                            </div>
-                            <div className="absolute bottom-5 right-5 text-lg opacity-70 group-hover:opacity-100 transition-opacity">↘</div>
-                          </div>
-                        </a>
-                      ) : (
-                        <a
-                          href="/about"
-                          className={[tileBase, 'col-span-1 sm:col-span-2 md:col-span-6 p-5 md:p-6 text-left bg-secondary/30'].join(' ')}
-                        >
-                          <div className="relative z-10 h-full flex flex-col">
-                            <div className="text-xs opacity-70 mb-2">Resume • Experience</div>
-                            <div className="text-lg md:text-xl font-medium leading-snug tracking-tight max-w-[36ch]">
-                              A quick scan of roles, skills, and outcomes across 15+ years
-                            </div>
-                            <div className="absolute bottom-5 right-5 text-lg opacity-70 group-hover:opacity-100 transition-opacity">↘</div>
-                          </div>
-                        </a>
-                      )}
-                    </div>
+                <div className="mt-6 flex flex-col items-center gap-3">
+                  <div className="h-px w-14 bg-border/45" />
+                  <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-muted-foreground/68">
+                    <span>Prefer browsing?</span>
+                    <a href="/projects" className="hover:text-foreground transition-colors">
+                      Work
+                    </a>
+                    <a href="/about" className="hover:text-foreground transition-colors">
+                      About
+                    </a>
+                    <a href="/contact" className="hover:text-foreground transition-colors">
+                      Contact
+                    </a>
                   </div>
+                </div>
                 </div>
               </div>
               )}
 
               {/* Portfolio View Content */}
-              {displayedView === 'portfolio' && (
+              {introMode === 'portfolio' && (
               <div
                 className="w-full flex flex-col items-center animate-[fadeSlideUp_0.35s_ease-out_both]"
               >
-                <h1 className="text-3xl md:text-4xl lg:text-5xl font-medium leading-tight text-foreground/95 max-w-[680px]">
-                  Hi, I'm Nasif. Design Engineer
-                </h1>
-                <p className="text-base md:text-lg text-muted-foreground/80 max-w-[680px] mt-4">
-                  Design Engineer with 15+ years of experience designing and building digital products. I work across brand, UX, UI design, frontend development, and AI.
-                </p>
+                <div className="w-full max-w-[700px] text-center">
+                  <div className="inline-flex items-center px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.28em] text-primary/75">
+                    Product Designer + AI Builder
+                  </div>
+                  <h1 className="mt-6 text-3xl md:text-4xl lg:text-5xl font-medium leading-tight tracking-[-0.03em] text-foreground/95">
+                    Product design, AI work, and digital experiences with a clear point of view.
+                  </h1>
+                  <p className="text-base md:text-lg text-muted-foreground/80 max-w-[720px] mt-5 mx-auto leading-[1.7]">
+                    Rooted in graphic design and shaped by years in digital product, I work across interface design, systems, and AI-assisted product building.
+                  </p>
+                </div>
 
                 {/* Projects Grid */}
-                <div className="w-full mt-12 md:mt-16 text-left">
-                  <div className="flex items-center justify-between gap-4 mb-6">
+                <div className="w-full mt-12 md:mt-14 text-left">
+                  <div className="flex items-center gap-4 mb-6">
                     <div className="text-xs tracking-wide uppercase text-muted-foreground/70">Selected Work</div>
                     <div className="h-px flex-1 bg-border/60" />
-                    <a
-                      href="/projects"
-                      className="text-xs text-muted-foreground/70 hover:text-foreground transition-colors"
-                    >
-                      View all →
-                    </a>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
@@ -1016,16 +841,16 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                         key={project.slug}
                         href={`/projects/${project.slug}`}
                         className={[
-                          'group block rounded-2xl border border-border/60 bg-card/60 overflow-hidden transition-all hover:bg-card/75 hover:border-border hover:-translate-y-0.5 hover:shadow-[0_18px_50px_rgba(0,0,0,0.25)] focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20',
-                          displayedView === 'portfolio' ? 'animate-[fadeSlideUp_0.4s_ease-out_both]' : '',
+                          'group block rounded-[22px] border border-border/35 bg-card/32 overflow-hidden transition-colors hover:bg-card/42 hover:border-border/55 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20',
+                          introMode === 'portfolio' ? 'animate-[fadeSlideUp_0.4s_ease-out_both]' : '',
                         ].join(' ')}
-                        style={displayedView === 'portfolio' ? { animationDelay: `${i * 60}ms` } : undefined}
+                        style={introMode === 'portfolio' ? { animationDelay: `${i * 60}ms` } : undefined}
                       >
-                        <div className="aspect-video overflow-hidden bg-muted/20 relative">
+                        <div className="aspect-video overflow-hidden bg-muted/14 relative">
                           <img
                             src={project.image}
                             alt={project.title}
-                            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                             loading="lazy"
                           />
                         </div>
@@ -1036,31 +861,26 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                           <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
                             {project.description}
                           </p>
-                          <div className="flex items-center gap-2 mt-3">
-                            {project.tags.slice(0, 2).map((tag) => (
-                              <span
-                                key={tag}
-                                className="inline-flex items-center rounded-md border border-transparent bg-secondary/80 px-2 py-0.5 text-xs font-semibold text-secondary-foreground"
-                              >
-                                {tag}
-                              </span>
-                            ))}
-                            {project.tags.length > 2 && (
-                              <span className="text-[10px] text-muted-foreground font-medium">
-                                +{project.tags.length - 2}
-                              </span>
-                            )}
+                          <div className="mt-3 text-[11px] uppercase tracking-[0.18em] text-muted-foreground/60">
+                            {project.tags.slice(0, 2).join(' • ')}
                           </div>
                         </div>
                       </a>
                     ))}
                   </div>
                 </div>
+
+                <div className="w-full max-w-[760px] mt-12 md:mt-14 text-center">
+                  <p className="text-sm md:text-base leading-[1.8] text-muted-foreground/80">
+                    The thread across these projects is thoughtful design with enough technical range to move ideas into working products, clearer systems, and stronger digital presence.
+                  </p>
+                </div>
               </div>
               )}
             </div>
 
             {/* Footer */}
+            {!globalSiteNav && (
             <footer className="w-full border-t border-border/40 mt-8 pt-6 pb-4 text-xs text-muted-foreground/60">
               <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>© {new Date().getFullYear()} Nasif Salaam</div>
@@ -1074,6 +894,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                 </div>
               </div>
             </footer>
+            )}
           </div>
         </div>
       )}
@@ -1082,7 +903,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
       {!isIntro && (
         <div 
           ref={chatContainerRef}
-          className="flex-1 overflow-y-auto p-4 md:p-8 transition-all duration-500 opacity-100 scroll-smooth"
+          className="flex-1 overflow-y-auto px-4 pt-4 pb-28 md:px-8 md:pt-8 md:pb-36 transition-all duration-500 opacity-100 scroll-smooth"
         >
           <div className={`max-w-[720px] mx-auto space-y-6 ${globalSiteNav ? 'pt-6' : 'pt-20'}`}>
             {messages.map((msg) => (
@@ -1092,30 +913,22 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                   msg.role === 'user' ? 'items-end' : 'items-start'
                 }`}
               >
-                <div className={`flex gap-4 max-w-full ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div className={`flex gap-3 max-w-full ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   {msg.role === 'assistant' && (
-                    <div className="w-8 h-8 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center shrink-0 overflow-hidden">
-                      <img src="/images/ns26/logo26w-gradient.svg" alt="NS" className="w-5 h-5 object-contain" />
+                    <div className="mt-1 shrink-0 flex items-start justify-center">
+                      <img src="/images/ns26/logo26w-gradient.svg" alt="NS" className="w-5 h-5 object-contain opacity-90" />
                     </div>
                   )}
                   
                   <div
-                    style={{
-                      background: msg.role === 'user'
-                        ? 'linear-gradient(135deg, hsl(189 94% 43% / 0.12) 0%, hsl(189 94% 43% / 0.05) 100%)'
-                        : 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%)',
-                      boxShadow: msg.role === 'user'
-                        ? 'inset 0 1px 0 0 hsl(189 94% 43% / 0.2), inset 0 -1px 0 0 rgba(0,0,0,0.1), 0 8px 32px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.1)'
-                        : 'inset 0 1px 0 0 rgba(255,255,255,0.12), inset 0 -1px 0 0 rgba(0,0,0,0.08), 0 8px 32px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08)',
-                    }}
-                    className={`max-w-[85%] rounded-2xl px-6 py-4 relative group backdrop-blur-2xl ${
+                    className={`relative group ${
                       msg.role === 'user'
-                        ? 'border border-primary/20 text-foreground'
-                        : 'border border-white/[0.1] text-foreground'
+                        ? 'max-w-[78%] rounded-[18px] border border-border/70 bg-muted/18 px-5 py-3.5 text-foreground shadow-[0_10px_30px_rgba(0,0,0,0.12)]'
+                        : 'max-w-[92%] px-0 py-0 text-foreground'
                     }`}
                   >
                     {msg.role === 'assistant' && msg.id === typingMessageId && !msg.content ? (
-                      <div className="flex items-center gap-2" role="status" aria-live="polite">
+                      <div className="flex items-center gap-2 px-1 py-2" role="status" aria-live="polite">
                         <span className="sr-only">Assistant is typing a response...</span>
                         <div className="w-2 h-2 bg-foreground/50 rounded-full animate-bounce" aria-hidden="true" />
                         <div className="w-2 h-2 bg-foreground/50 rounded-full animate-bounce delay-75" aria-hidden="true" />
@@ -1123,12 +936,18 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                       </div>
                     ) : (
                       <>
-                        <p className="leading-relaxed whitespace-pre-wrap">{msg.content}</p>
+                        <p className={`whitespace-pre-wrap ${
+                          msg.role === 'user'
+                            ? 'leading-relaxed'
+                            : 'text-[15px] leading-8 text-foreground/92'
+                        }`}>
+                          {msg.content}
+                        </p>
                         {msg.role === 'assistant' && msg.content && (
                           <button
                             type="button"
                             onClick={() => copyToClipboard(msg.content, msg.id)}
-                            className="absolute top-2 right-2 p-1.5 rounded-md bg-background/80 border border-border/60 opacity-0 group-hover:opacity-100 hover:bg-background transition-all"
+                            className="absolute -top-1 right-0 p-1.5 rounded-md bg-background/80 border border-border/60 opacity-0 group-hover:opacity-100 hover:bg-background transition-all"
                             aria-label="Copy response"
                             title="Copy to clipboard"
                           >
@@ -1144,8 +963,8 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                   </div>
 
                   {msg.role === 'user' && (
-                    <div className="w-8 h-8 rounded-full bg-primary/10 backdrop-blur-sm border border-primary/20 flex items-center justify-center shrink-0">
-                      <User size={18} className="text-primary" />
+                    <div className="mt-1 w-7 h-7 rounded-full bg-muted/25 border border-border/60 flex items-center justify-center shrink-0">
+                      <User size={16} className="text-foreground/75" />
                     </div>
                   )}
                 </div>
@@ -1270,7 +1089,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                               inputRef.current?.parentElement?.querySelector<HTMLButtonElement>('button[type="submit"]')?.click();
                             }, 100);
                           }}
-                          className="text-xs md:text-sm px-3 py-1.5 bg-primary/10 hover:bg-primary/20 border border-primary/30 rounded-full transition-colors text-foreground/90 hover:text-foreground"
+                          className="inline-flex items-center text-xs md:text-sm px-3 py-1.5 bg-secondary/70 hover:bg-secondary rounded-full transition-colors text-foreground/90 hover:text-foreground"
                         >
                           {followUp}
                         </button>
@@ -1287,16 +1106,16 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
 
       {/* Input Area (chat mode only) */}
       {!isIntro && (
-        <div className="p-4 md:p-6 bg-background/80 backdrop-blur-md border-t border-border z-30">
+        <div className="sticky bottom-0 z-30 mt-4 border-t border-border/60 bg-background/96 px-4 pb-4 pt-4 backdrop-blur-xl md:px-6 md:pb-6 md:pt-5">
           <div className="max-w-[720px] mx-auto">
-            <form onSubmit={handleSubmit} className="relative flex items-center gap-2">
+            <form onSubmit={handleSubmit} className="relative flex items-center gap-2 rounded-[28px] border border-border/65 bg-muted/14 px-2 shadow-[0_14px_40px_rgba(0,0,0,0.18)]">
               <input
                 type="text"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 ref={inputRef}
                 placeholder="Ask me about my projects, skills, or experience..."
-                className="w-full bg-muted/50 border border-border/60 hover:border-border focus:border-primary/70 rounded-full py-3 md:py-4 pl-5 md:pl-6 pr-14 text-base md:text-lg outline-none transition-all shadow-sm focus:ring-4 focus:ring-primary/15 placeholder:text-muted-foreground/55 placeholder:font-normal"
+                className="w-full bg-transparent py-4 md:py-4 pl-4 md:pl-5 pr-14 text-base outline-none transition-all placeholder:text-muted-foreground/55 placeholder:font-normal"
                 disabled={isLoading}
               />
               <div className="absolute inset-y-0 right-2 flex items-center gap-1">
@@ -1304,7 +1123,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                   <button
                     type="button"
                     onClick={stopRequest}
-                    className="p-2 bg-muted/40 border border-border/60 text-foreground rounded-full hover:bg-muted/55 transition-all"
+                    className="p-2 bg-muted/30 border border-border/50 text-foreground rounded-full hover:bg-muted/45 transition-all"
                     aria-label="Stop"
                   >
                     <StopCircle size={20} />
@@ -1313,7 +1132,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                   <button
                     type="submit"
                     disabled={!input.trim() || isLoading}
-                    className="p-2 bg-primary text-primary-foreground rounded-full hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                    className="p-2 bg-primary text-primary-foreground rounded-full hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
                     aria-label="Send"
                   >
                     <Send size={20} />

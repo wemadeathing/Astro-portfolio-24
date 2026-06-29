@@ -122,6 +122,43 @@ const stripMarkdownLite = (s: string) => {
   return out;
 };
 
+const extractAnswerFromLooseJson = (raw: string): string | null => {
+  const text = String(raw || '').trim();
+  if (!text) return null;
+
+  const answerMatch = text.match(/"answer"\s*:\s*"([\s\S]*?)"\s*(?:,\s*"|$)/);
+  if (answerMatch?.[1]) {
+    return answerMatch[1]
+      .replace(/\\"/g, '"')
+      .replace(/\\n/g, '\n')
+      .replace(/\\t/g, '\t')
+      .trim();
+  }
+
+  const replyMatch = text.match(/"reply"\s*:\s*"([\s\S]*?)"\s*(?:,\s*"|$)/);
+  if (replyMatch?.[1]) {
+    return replyMatch[1]
+      .replace(/\\"/g, '"')
+      .replace(/\\n/g, '\n')
+      .replace(/\\t/g, '\t')
+      .trim();
+  }
+
+  return null;
+};
+
+const looksLikeStructuredJsonLeak = (raw: string): boolean => {
+  const text = String(raw || '').trim();
+  if (!text) return false;
+  return (
+    text.startsWith('{') ||
+    /"answer"\s*:/.test(text) ||
+    /"reply"\s*:/.test(text) ||
+    /"chips"\s*:/.test(text) ||
+    /"project_cards"\s*:/.test(text)
+  );
+};
+
 const sanitizeHistoryContent = (content: string): string => {
   if (typeof content !== 'string') return '';
 
@@ -1030,9 +1067,18 @@ ${resourceContext}
       console.error('Failed to parse LLM response as JSON');
       console.error('Raw response:', raw.slice(0, 500));
       console.error('Parse error:', parseError);
+      const extractedAnswer = extractAnswerFromLooseJson(raw);
+      if (extractedAnswer && extractedAnswer.length > 0) {
+        parsed = { answer: extractedAnswer };
+      }
+      // If the model leaked a partial JSON object, do not dump it into the chat UI.
+      // Fall through to the normal default reply instead.
+      if (!parsed && looksLikeStructuredJsonLeak(raw)) {
+        parsed = { answer: '' };
+      }
       // Last resort: use raw text as the answer
       const cleanRaw = raw.replace(/```(?:json)?\s*/gi, '').replace(/```/g, '').trim();
-      if (cleanRaw.length > 10) {
+      if (!parsed && cleanRaw.length > 10) {
         parsed = { answer: cleanRaw };
       }
     }
