@@ -3,9 +3,15 @@ export const prerender = true;
 import Layout from '../layouts/Layout.astro';
 import Button from '../components/Button.astro';
 
+const heroHighlights = [
+  '15+ years across brand, UX, UI, and frontend delivery',
+  'Enterprise systems, founder builds, and AI-native product work',
+  'Trust, clarity, and execution without the handoff gaps',
+];
+
 const expertise = [
   {
-    title: 'AI Products, MVPs, and Design Engineering',
+    title: 'AI Products, MVPs, and AI-Accelerated Build Work',
     description: `I take product ideas from framing to working software, combining product design, system thinking, and implementation. Recent examples include Kota AI, a multi-agent SME platform, and RideNote, a solo-built iOS app shipped to the App Store.`,
     icon: 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5',
   },
@@ -107,7 +113,7 @@ const industry = [
 
 const experience = [
   {
-    role: 'Design Engineer',
+    role: 'Product Designer / AI Builder',
     company: 'Independent',
     period: '2025 - Present',
     description: `Project-based client work across brand identity, web design, and frontend development, managing projects end to end from brief through to delivery. Built custom websites and digital assets for clients across various industries. Also built Kota AI (a multi-agent business operations platform designed and built end-to-end) and RideNote (iOS App Store live, Android in testing), using AI-accelerated workflows to ship complex products fast.`,
@@ -140,7 +146,7 @@ const experience = [
 
 const agentMarkdown = `# About: Nasif Salaam
 
-> Design Engineer building AI products, MVPs, and high-trust digital experiences. Fifteen plus years across product design, systems, and implementation.
+> Product designer and AI builder focused on AI products, product systems, and high-trust digital experiences. Fifteen plus years across design and implementation.
 
 ## Current Focus
 
@@ -170,8 +176,8 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
 ---
 
 <Layout
-  title="About | Design Engineer"
-  description="Design Engineer focused on AI products, product systems, and high-trust digital experiences, with 15+ years across design and implementation."
+  title="About | Product Designer and AI Builder"
+  description="Product designer and AI builder focused on AI products, product systems, and high-trust digital experiences, with 15+ years across design and implementation."
   agentMarkdown={agentMarkdown}
   agentPathLabel="~/nasifsalaam / about.md"
 >
@@ -179,10 +185,10 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
   <section class="py-10 sm:py-14">
     <!-- Match gutters with the main page container -->
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8 sm:gap-10 items-center">
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8 sm:gap-10 items-center relative">
         <div class="max-w-[68ch]">
           <h1 class="text-4xl sm:text-5xl md:text-[54px] font-medium tracking-[-0.03em] leading-[1.05] text-white/95">
-            Design Engineer
+            Product Designer / AI Builder
           </h1>
           <div class="mt-4 text-xs tracking-[0.22em] uppercase text-white/55">
             AI products • Product systems • High-trust digital experiences
@@ -191,17 +197,28 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
             I help teams and founders turn complexity into clear digital products. My background spans enterprise design systems, banking transformation, client websites, and solo-built AI products, which means I can move between strategy, interface, and implementation without losing the thread.
           </p>
 
+          <div class="mt-7 grid gap-3 sm:grid-cols-3">
+            {heroHighlights.map((item) => (
+              <div class="border-l border-primary/45 pl-4 text-sm leading-[1.6] text-white/68">
+                {item}
+              </div>
+            ))}
+          </div>
+
         </div>
 
         <!-- Right-side visual (desktop) -->
         <div class="hidden lg:flex justify-end self-center">
-          <img
-            src="/images/NS-profile-2.png"
-            alt="Nasif Salaam"
-            class="w-full max-w-[240px] aspect-square object-cover rounded-3xl"
-            loading="lazy"
-            decoding="async"
-          />
+          <div class="relative overflow-hidden rounded-[30px] border border-white/12 bg-white/[0.03] p-3 shadow-[0_18px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl">
+            <div class="pointer-events-none absolute inset-x-5 top-0 h-20 rounded-full bg-white/[0.06] blur-2xl"></div>
+            <img
+              src="/images/NS-profile-2.png"
+              alt="Nasif Salaam"
+              class="relative w-full max-w-[240px] aspect-square object-cover rounded-[24px]"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -217,11 +234,14 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
         <div>
           <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-3">Where I’m strongest</div>
           <h2 class="type-h2 text-white/90">The work I’m best suited for</h2>
+          <p class="mt-3 max-w-[58ch] text-sm sm:text-base leading-[1.7] text-white/62">
+            Three lanes, one underlying strength: translating complexity into something people can understand, trust, and use.
+          </p>
         </div>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10 stagger-children">
         {expertise.map((item) => (
-          <div class="max-w-[56ch]">
+          <div class="max-w-[56ch] border-t border-white/10 pt-6">
             <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -251,18 +271,19 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
     <section id="capabilities" class="py-12 sm:py-14 scroll-mt-28">
       <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-3">Capabilities</div>
       <h2 class="type-h2 text-white/90">Skills</h2>
+      <p class="mt-3 max-w-[60ch] text-sm sm:text-base leading-[1.7] text-white/62">
+        Broad on purpose, but not vague. These are the capabilities I actually combine in the work, not a keyword dump.
+      </p>
 
-      <div class="mt-8 rounded-2xl border border-white/10 bg-white/[0.03] p-6 sm:p-7">
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 stagger-children">
-          {skills.map((group) => (
-            <div>
-              <div class="text-sm font-semibold text-white/85 mb-3">{group.title}</div>
-              <p class="text-sm text-white/70 leading-[1.75]">
-                {group.items.join(' • ')}
-              </p>
-            </div>
-          ))}
-        </div>
+      <div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-8 stagger-children">
+        {skills.map((group) => (
+          <div class="max-w-[34ch]">
+            <div class="text-sm font-semibold text-white/85 mb-3">{group.title}</div>
+            <p class="text-sm text-white/70 leading-[1.75]">
+              {group.items.join(' • ')}
+            </p>
+          </div>
+        ))}
       </div>
     </section>
 
@@ -273,26 +294,24 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
       <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-3">Certifications</div>
       <h2 class="type-h2 text-white/90">Credentials</h2>
 
-      <div class="mt-8 rounded-2xl border border-white/10 bg-white/[0.03] p-6 sm:p-7">
-        <div class="space-y-4 stagger-children">
-          {[
-            { name: 'ISO/IEC 42001:2023 Lead Auditor', issuer: 'Mastermind Assurance', year: '2026' },
-            { name: 'Claude Certified Architect, Foundations', issuer: 'Anthropic', year: 'In progress' },
-            { name: 'AI Security & Governance', issuer: 'Securiti', year: '2025' },
-            { name: 'AI Fluency', issuer: 'Anthropic', year: '2025' },
-            { name: 'Introduction to Generative AI', issuer: 'Google Cloud', year: '2024' },
-          ].map((cert) => (
-            <div class="flex items-start justify-between gap-4">
-              <div>
-                <div class="text-sm font-semibold text-white/85">{cert.name}</div>
-                <div class="text-xs text-white/50 mt-0.5">{cert.issuer}</div>
-              </div>
-              <div class="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/55 shrink-0">
-                {cert.year}
-              </div>
+      <div class="mt-8 space-y-4 stagger-children">
+        {[
+          { name: 'ISO/IEC 42001:2023 Lead Auditor', issuer: 'Mastermind Assurance', year: '2026' },
+          { name: 'Claude Certified Architect, Foundations', issuer: 'Anthropic', year: 'In progress' },
+          { name: 'AI Security & Governance', issuer: 'Securiti', year: '2025' },
+          { name: 'AI Fluency', issuer: 'Anthropic', year: '2025' },
+          { name: 'Introduction to Generative AI', issuer: 'Google Cloud', year: '2024' },
+        ].map((cert) => (
+          <div class="flex items-start justify-between gap-4 border-b border-white/8 pb-4 last:border-b-0 last:pb-0">
+            <div>
+              <div class="text-sm font-semibold text-white/85">{cert.name}</div>
+              <div class="text-xs text-white/50 mt-0.5">{cert.issuer}</div>
             </div>
-          ))}
-        </div>
+            <div class="text-xs text-white/45 shrink-0 pt-0.5">
+              {cert.year}
+            </div>
+          </div>
+        ))}
       </div>
     </section>
 
@@ -301,18 +320,20 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
     <!-- Industry experience -->
     <section id="industry" class="py-12 sm:py-14 scroll-mt-28">
       <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-3">Selected contexts</div>
+      <h2 class="type-h2 text-white/90">Industry range</h2>
+      <p class="mt-3 max-w-[58ch] text-sm sm:text-base leading-[1.7] text-white/62">
+        Different sectors, same job underneath: reduce complexity, earn trust, and make the interface carry its weight.
+      </p>
 
-      <div class="mt-8 rounded-2xl border border-white/10 bg-white/[0.03] p-6 sm:p-7">
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8 stagger-children">
-          {industry.map((group) => (
-            <div>
-              <div class="text-sm font-semibold text-white/85 mb-3">{group.title}</div>
-              <p class="text-sm text-white/70 leading-[1.75]">
-                {group.items.join(', ')}
-              </p>
-            </div>
-          ))}
-        </div>
+      <div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-8 stagger-children">
+        {industry.map((group) => (
+          <div class="max-w-[34ch]">
+            <div class="text-sm font-semibold text-white/85 mb-3">{group.title}</div>
+            <p class="text-sm text-white/70 leading-[1.75]">
+              {group.items.join(', ')}
+            </p>
+          </div>
+        ))}
       </div>
     </section>
 
@@ -322,10 +343,13 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
     <section id="career" class="py-12 sm:py-14 scroll-mt-28">
       <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-3">Proof</div>
       <h2 class="type-h2 text-white/90">Professional journey</h2>
+      <p class="mt-3 max-w-[62ch] text-sm sm:text-base leading-[1.7] text-white/62">
+        The titles changed over time, but the through-line stayed the same: design that can survive contact with real constraints.
+      </p>
 
       <div class="mt-8 space-y-3 stagger-children">
         {experience.map((item) => (
-          <details class="group rounded-2xl border border-white/10 bg-white/[0.03] px-6 py-5 transition-colors hover:bg-white/[0.05] hover:border-white/20">
+          <details class="group border-b border-white/10 py-5 transition-colors">
             <summary class="cursor-pointer select-none list-none focus:outline-none">
               <div class="flex items-start justify-between gap-4">
                 <div>
@@ -333,7 +357,7 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
                   {item.company && <p class="text-sm text-white/65 mt-1">{item.company}</p>}
                 </div>
                 <div class="flex items-center gap-3 shrink-0">
-                  <div class="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/65">
+                  <div class="text-xs text-white/50">
                     {item.period}
                   </div>
                   <svg
@@ -351,11 +375,9 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
                   </svg>
                 </div>
               </div>
-              <div class="mt-3 text-xs text-white/45 group-open:hidden">Click to expand</div>
             </summary>
             <div class="pt-4">
-              <div class="h-px bg-white/10"></div>
-              <p class="mt-4 text-sm sm:text-base leading-[1.65] text-white/70">{item.description}</p>
+              <p class="text-sm sm:text-base leading-[1.65] text-white/70 max-w-[72ch]">{item.description}</p>
             </div>
           </details>
         ))}
@@ -364,7 +386,7 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
 
     <!-- CTA -->
     <section class="pb-14 sm:pb-20">
-      <div class="rounded-3xl border border-white/10 bg-[#121212]/70 backdrop-blur-xl p-8 sm:p-10">
+      <div class="pt-10">
         <div class="max-w-[72ch]">
           <h2 class="type-h2 text-white/92">
             Let’s build something useful.

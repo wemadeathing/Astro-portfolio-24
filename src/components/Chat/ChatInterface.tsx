@@ -684,6 +684,9 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
           <div className="w-full max-w-[1100px] mx-auto flex flex-col items-center text-center">
             {/* Content area with crossfade */}
             <div className="w-full relative">
+              <div className="surface-gloss" aria-hidden="true">
+                <div className="surface-gloss__sheen" />
+              </div>
               {/* Chat View Content */}
               {introMode === 'chat' && (
               <div
@@ -701,7 +704,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                 <h1 className="mt-6 text-3xl md:text-4xl lg:text-5xl font-medium leading-tight tracking-[-0.03em] text-foreground/95">
                   Ask about the work, the systems, or how I build.
                 </h1>
-                <p className="text-base md:text-lg text-muted-foreground/80 max-w-[720px] mt-5 mx-auto leading-[1.7]">
+                <p className="text-base md:text-lg text-muted-foreground/90 max-w-[720px] mt-5 mx-auto leading-[1.7]">
                   Product designer and AI builder with 15+ years across brand, product, systems, and implementation.
                 </p>
 
@@ -794,7 +797,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
 
                 <div className="mt-6 flex flex-col items-center gap-3">
                   <div className="h-px w-14 bg-border/45" />
-                  <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-muted-foreground/68">
+                  <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-muted-foreground/82">
                     <span>Prefer browsing?</span>
                     <a href="/projects" className="hover:text-foreground transition-colors">
                       Work
@@ -820,10 +823,10 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                   <div className="inline-flex items-center px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.28em] text-primary/75">
                     Product Designer + AI Builder
                   </div>
-                  <h1 className="mt-6 text-3xl md:text-4xl lg:text-5xl font-medium leading-tight tracking-[-0.03em] text-foreground/95">
-                    Product design, AI work, and digital experiences with a clear point of view.
-                  </h1>
-                  <p className="text-base md:text-lg text-muted-foreground/80 max-w-[720px] mt-5 mx-auto leading-[1.7]">
+                <h1 className="mt-6 text-3xl md:text-4xl lg:text-5xl font-medium leading-tight tracking-[-0.03em] text-foreground/95">
+                  Product design, AI work, and digital experiences with a clear point of view.
+                </h1>
+                  <p className="text-base md:text-lg text-muted-foreground/90 max-w-[720px] mt-5 mx-auto leading-[1.7]">
                     Rooted in graphic design and shaped by years in digital product, I work across interface design, systems, and AI-assisted product building.
                   </p>
                 </div>
@@ -831,7 +834,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                 {/* Projects Grid */}
                 <div className="w-full mt-12 md:mt-14 text-left">
                   <div className="flex items-center gap-4 mb-6">
-                    <div className="text-xs tracking-wide uppercase text-muted-foreground/70">Selected Work</div>
+                    <div className="text-xs tracking-wide uppercase text-muted-foreground/82">Selected Work</div>
                     <div className="h-px flex-1 bg-border/60" />
                   </div>
 
@@ -841,12 +844,12 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                         key={project.slug}
                         href={`/projects/${project.slug}`}
                         className={[
-                          'group block rounded-[22px] border border-border/35 bg-card/32 overflow-hidden transition-colors hover:bg-card/42 hover:border-border/55 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20',
+                          'glass-project-card group block focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20',
                           introMode === 'portfolio' ? 'animate-[fadeSlideUp_0.4s_ease-out_both]' : '',
                         ].join(' ')}
                         style={introMode === 'portfolio' ? { animationDelay: `${i * 60}ms` } : undefined}
                       >
-                        <div className="aspect-video overflow-hidden bg-muted/14 relative">
+                        <div className="glass-project-card-media aspect-video">
                           <img
                             src={project.image}
                             alt={project.title}
@@ -854,14 +857,14 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                             loading="lazy"
                           />
                         </div>
-                        <div className="p-5 text-left">
+                        <div className="glass-project-card-body">
                           <h2 className="text-base sm:text-lg font-semibold text-foreground/92 group-hover:text-primary transition-colors line-clamp-1">
                             {project.title}
                           </h2>
-                          <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
+                          <p className="mt-2 text-sm text-muted-foreground/90 line-clamp-2">
                             {project.description}
                           </p>
-                          <div className="mt-3 text-[11px] uppercase tracking-[0.18em] text-muted-foreground/60">
+                          <div className="mt-3 text-[11px] uppercase tracking-[0.18em] text-muted-foreground/78">
                             {project.tags.slice(0, 2).join(' • ')}
                           </div>
                         </div>
@@ -871,7 +874,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                 </div>
 
                 <div className="w-full max-w-[760px] mt-12 md:mt-14 text-center">
-                  <p className="text-sm md:text-base leading-[1.8] text-muted-foreground/80">
+                  <p className="text-sm md:text-base leading-[1.8] text-muted-foreground/90">
                     The thread across these projects is thoughtful design with enough technical range to move ideas into working products, clearer systems, and stronger digital presence.
                   </p>
                 </div>

@@ -70,7 +70,7 @@ ${p.data.description}
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
       <div class="max-w-[68ch]">
         <h1 class="type-h1 text-white/95">Work</h1>
-        <p class="mt-4 type-lead text-white/70">
+        <p class="mt-4 type-lead text-white/78">
           Six selected projects that show how I work across product builds, systems, and digital presence.
         </p>
       </div>
@@ -85,7 +85,7 @@ ${p.data.description}
                 'inline-flex items-center rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors',
                 !activeTag
                   ? 'bg-primary/15 text-white/90 border-primary/30'
-                  : 'bg-white/[0.03] text-white/70 border-white/10 hover:bg-white/[0.06] hover:text-white',
+                  : 'bg-white/[0.03] text-white/78 border-white/10 hover:bg-white/[0.06] hover:text-white',
               ]}
               aria-current={!activeTag ? 'true' : undefined}
             >
@@ -100,7 +100,7 @@ ${p.data.description}
                     'inline-flex items-center rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors',
                     isActive
                       ? 'bg-primary/15 text-white/90 border-primary/30'
-                      : 'bg-white/[0.03] text-white/70 border-white/10 hover:bg-white/[0.06] hover:text-white',
+                      : 'bg-white/[0.03] text-white/78 border-white/10 hover:bg-white/[0.06] hover:text-white',
                   ]}
                   aria-current={isActive ? 'true' : undefined}
                   title={`Filter by ${tag}`}
@@ -121,9 +121,9 @@ ${p.data.description}
         {filteredProjects.map((project) => (
           <a
             href={`/projects/${project.slug}`}
-            class="group block rounded-2xl border border-white/10 bg-white/[0.03] overflow-hidden transition-all hover:bg-white/[0.05] hover:border-white/20 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+            class="glass-project-card group block focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
           >
-            <div class="aspect-video overflow-hidden bg-white/5 relative">
+            <div class="glass-project-card-media aspect-video">
               <div class="absolute inset-0 skeleton-image" aria-hidden="true"></div>
               <img
                 src={project.data.image}
@@ -133,11 +133,11 @@ ${p.data.description}
                 onload="this.parentElement.querySelector('.skeleton-image').style.display='none'"
               />
             </div>
-            <div class="p-5">
+            <div class="glass-project-card-body">
               <h2 class="text-base sm:text-lg font-semibold text-white/92 group-hover:text-primary transition-colors">
                 {project.data.title}
               </h2>
-              <p class="mt-2 text-sm text-white/70 line-clamp-2">
+              <p class="mt-2 text-sm text-white/78 line-clamp-2">
                 {project.data.description}
               </p>
             </div>

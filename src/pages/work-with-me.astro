@@ -20,7 +20,7 @@ const services = [
   },
   {
     number: '02',
-    label: 'AI Products, MVPs & Design Engineering',
+    label: 'AI Products, MVPs & Product Design',
     heading: 'From concept to working product, without the usual handoff gaps.',
     body: "I work across product framing, UX, system thinking, interface design, and implementation to get products moving quickly. This is the stronger fit when you need an MVP, an internal AI tool, or someone who can bridge product design and build.",
     includes: [
@@ -62,7 +62,7 @@ const emailAddress = 'hello@nasifsalaam.com';
 
 const agentMarkdown = `# Work With Me: Nasif Salaam
 
-> Design Engineer building AI products, MVPs, and high-trust digital experiences. I help with both product builds and the digital presence that makes them credible.
+> Product designer and AI builder focused on AI products, MVPs, and high-trust digital experiences. I help with both product builds and the digital presence that makes them credible.
 
 ## Services
 
@@ -94,7 +94,7 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
 
 <Layout
   title="Work With Me | Nasif Salaam"
-  description="Work with Nasif Salaam on AI products, MVPs, design engineering, and high-trust digital presence projects."
+  description="Work with Nasif Salaam on AI products, MVPs, product design, and high-trust digital presence projects."
   agentMarkdown={agentMarkdown}
   agentPathLabel="~/nasifsalaam / work-with-me.md"
   image="/images/work-with-me-01.png"
@@ -104,10 +104,13 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
       <div class="max-w-[68ch]">
         <h1 class="text-4xl sm:text-5xl md:text-[54px] font-medium tracking-[-0.03em] leading-[1.05] text-white/95">
-          Design engineering for products, and digital presence that earns trust.
+          Product design, AI build work, and digital presence that earns trust.
         </h1>
         <p class="mt-5 type-lead text-white/80">
           I work in two lanes: AI products and MVPs that need to get real quickly, and high-trust websites or brand-led digital experiences for businesses that need to look as strong as they are.
+        </p>
+        <p class="mt-3 max-w-[58ch] text-sm sm:text-base leading-[1.7] text-white/62">
+          Product Designer / AI Builder, with enough implementation depth to keep the work moving and enough design judgment to keep it coherent.
         </p>
         <div class="mt-7">
           <Button href={calLink} text="Book a free 30-minute call →" variant="primary" external />
@@ -125,7 +128,7 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
       <div class="mb-10">
         <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-3">Services</div>
         <h2 class="type-h2 text-white/90">What I can do for you</h2>
-        <p class="mt-3 type-lead text-white/70 max-w-[56ch]">
+        <p class="mt-3 type-lead text-white/78 max-w-[56ch]">
           These are the two kinds of work where I add the most value fastest.
         </p>
       </div>
@@ -160,7 +163,7 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
                   {service.heading}
                 </h3>
 
-                <p class="mt-3 text-sm leading-[1.65] text-white/70">
+                <p class="mt-3 text-sm leading-[1.65] text-white/78">
                   {service.body}
                 </p>
 
@@ -185,19 +188,19 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
       <div class="mb-10">
         <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-3">Process</div>
           <h2 class="type-h2 text-white/90">How it works</h2>
-          <p class="mt-3 type-lead text-white/70 max-w-[56ch]">
+          <p class="mt-3 type-lead text-white/78 max-w-[56ch]">
           Straightforward process, clear scope, and a bias toward momentum.
           </p>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {steps.map((step) => (
-          <div class="rounded-[22px] border border-white/8 bg-white/[0.025] p-5 sm:p-6">
+          <div class="border-t border-white/10 pt-5 sm:pt-6">
             <div class="text-[11px] uppercase tracking-[0.22em] text-primary/75 mb-4">
               {step.number}
             </div>
             <h3 class="text-base font-semibold text-white/90">{step.title}</h3>
-            <p class="mt-2 text-sm text-white/65 leading-[1.65]">{step.description}</p>
+            <p class="mt-2 text-sm text-white/72 leading-[1.65]">{step.description}</p>
           </div>
         ))}
       </div>
