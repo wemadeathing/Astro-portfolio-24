@@ -1,93 +1,158 @@
 ---
 ---
 
-<footer class="site-footer mt-10 border-t border-border/80 bg-background/78">
-  <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10">
-    <div class="md:hidden mb-8 space-y-8">
-      <div>
-        <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70 mb-3">Who I Am</div>
-        <div class="text-sm text-muted-foreground leading-[1.65]">
-          Product designer and AI builder with fifteen plus years across brand, digital products, systems, and implementation.
+<footer class="site-footer mt-10">
+  <!-- Diagonal stripe band -->
+  <div class="footer-stripe" aria-hidden="true"></div>
+
+  <div class="footer-body">
+    <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+
+      <!-- Mobile layout -->
+      <div class="md:hidden mb-8 space-y-8">
+        <div>
+          <div class="footer-label">Who I Am</div>
+          <div class="footer-body-text">
+            Product designer and AI builder with fifteen plus years across brand, digital products, systems, and implementation.
+          </div>
+        </div>
+        <div>
+          <div class="footer-label">Start Here</div>
+          <nav class="flex flex-wrap gap-x-4 gap-y-2 text-sm">
+            <a href="/projects" class="footer-link">Work</a>
+            <a href="/about" class="footer-link">About</a>
+            <a href="/?view=chat" class="footer-link">Ask My AI</a>
+          </nav>
+        </div>
+        <div>
+          <div class="footer-label">Find Me Elsewhere</div>
+          <nav class="flex flex-wrap gap-x-4 gap-y-2 text-sm">
+            <a href="https://github.com/wemadeathing" class="footer-link" rel="noopener noreferrer" target="_blank">GitHub</a>
+            <a href="https://www.linkedin.com/in/nasifsalaam/" class="footer-link" rel="noopener noreferrer" target="_blank">LinkedIn</a>
+            <a href="https://www.behance.net/nsalaam" class="footer-link" rel="noopener noreferrer" target="_blank">Behance</a>
+          </nav>
+        </div>
+        <div>
+          <div class="footer-label">More to Explore</div>
+          <nav class="flex flex-wrap gap-x-4 gap-y-2 text-sm">
+            <a href="/blog" class="footer-link">Insights</a>
+            <a href="/resources" class="footer-link">Resources</a>
+            <button type="button" id="footer-agent-toggle" class="footer-link cursor-pointer bg-transparent border-0 p-0 text-left">Agent View</button>
+          </nav>
         </div>
       </div>
-      <div>
-        <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70 mb-3">Start Here</div>
-        <nav class="flex flex-wrap gap-x-4 gap-y-2 text-sm">
-          <a href="/projects" class="text-muted-foreground hover:text-foreground transition-colors">Work</a>
-          <a href="/about" class="text-muted-foreground hover:text-foreground transition-colors">About</a>
-          <a href="/?view=chat" class="text-muted-foreground hover:text-foreground transition-colors">Ask My AI</a>
-          <a href="/contact" class="text-muted-foreground hover:text-foreground transition-colors">Contact</a>
-        </nav>
-      </div>
-      <div>
-        <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70 mb-3">Find Me Elsewhere</div>
-        <nav class="flex flex-wrap gap-x-4 gap-y-2 text-sm">
-          <a href="https://github.com/wemadeathing" class="text-muted-foreground hover:text-foreground transition-colors" rel="noopener noreferrer" target="_blank">GitHub</a>
-          <a href="https://www.linkedin.com/in/nasifsalaam/" class="text-muted-foreground hover:text-foreground transition-colors" rel="noopener noreferrer" target="_blank">LinkedIn</a>
-          <a href="https://www.behance.net/nsalaam" class="text-muted-foreground hover:text-foreground transition-colors" rel="noopener noreferrer" target="_blank">Behance</a>
-        </nav>
-      </div>
-      <div>
-        <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70 mb-3">More to Explore</div>
-        <nav class="flex flex-wrap gap-x-4 gap-y-2 text-sm">
-          <a href="/blog" class="text-muted-foreground hover:text-foreground transition-colors">Insights</a>
-          <a href="/resources" class="text-muted-foreground hover:text-foreground transition-colors">Resources</a>
-        </nav>
-      </div>
-    </div>
 
-    <div class="hidden md:grid grid-cols-[1.2fr_0.9fr_0.8fr_0.9fr] gap-10 mb-6">
-      <div class="max-w-[56ch]">
-      <div class="text-xs tracking-[0.22em] uppercase text-muted-foreground/70 mb-3">Who I Am</div>
-      <div class="text-sm text-muted-foreground leading-[1.65]">
-          Product designer and AI builder with fifteen plus years across brand, digital products, systems, and implementation.
-      </div>
-      </div>
+      <!-- Desktop layout -->
+      <div class="hidden md:grid grid-cols-[1.2fr_0.9fr_0.8fr_0.9fr] gap-10 mb-8">
+        <div class="max-w-[56ch]">
+          <div class="footer-label">Who I Am</div>
+          <div class="footer-body-text">
+            Product designer and AI builder with fifteen plus years across brand, digital products, systems, and implementation.
+          </div>
+        </div>
 
-      <div>
-        <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70 mb-3">Start Here</div>
-        <nav class="space-y-2">
-          <a href="/projects" class="block text-sm text-muted-foreground hover:text-foreground transition-colors">Work</a>
-          <a href="/about" class="block text-sm text-muted-foreground hover:text-foreground transition-colors">About</a>
-          <a href="/?view=chat" class="block text-sm text-muted-foreground hover:text-foreground transition-colors">Ask My AI</a>
-          <a href="/contact" class="block text-sm text-muted-foreground hover:text-foreground transition-colors">Contact</a>
-        </nav>
+        <div>
+          <div class="footer-label">Start Here</div>
+          <nav class="space-y-2">
+            <a href="/projects" class="footer-link block">Work</a>
+            <a href="/about" class="footer-link block">About</a>
+            <a href="/?view=chat" class="footer-link block">Ask My AI</a>
+          </nav>
+        </div>
+
+        <div>
+          <div class="footer-label">Find Me Elsewhere</div>
+          <nav class="space-y-2">
+            <a href="https://github.com/wemadeathing" class="footer-link block" rel="noopener noreferrer" target="_blank">GitHub</a>
+            <a href="https://www.linkedin.com/in/nasifsalaam/" class="footer-link block" rel="noopener noreferrer" target="_blank">LinkedIn</a>
+            <a href="https://www.behance.net/nsalaam" class="footer-link block" rel="noopener noreferrer" target="_blank">Behance</a>
+          </nav>
+        </div>
+
+        <div>
+          <div class="footer-label">More to Explore</div>
+          <nav class="space-y-2">
+            <a href="/blog" class="footer-link block">Insights</a>
+            <a href="/resources" class="footer-link block">Resources</a>
+            <button type="button" id="footer-agent-toggle-desktop" class="footer-link block cursor-pointer bg-transparent border-0 p-0 text-left">Agent View</button>
+          </nav>
+        </div>
       </div>
 
-      <div>
-        <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70 mb-3">Find Me Elsewhere</div>
-        <nav class="space-y-2">
-          <a href="https://github.com/wemadeathing" class="block text-sm text-muted-foreground hover:text-foreground transition-colors" rel="noopener noreferrer" target="_blank">
-            GitHub
-          </a>
-          <a href="https://www.linkedin.com/in/nasifsalaam/" class="block text-sm text-muted-foreground hover:text-foreground transition-colors" rel="noopener noreferrer" target="_blank">
-            LinkedIn
-          </a>
-          <a href="https://www.behance.net/nsalaam" class="block text-sm text-muted-foreground hover:text-foreground transition-colors" rel="noopener noreferrer" target="_blank">
-            Behance
-          </a>
-        </nav>
-      </div>
-
-      <div>
-        <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70 mb-3">More to Explore</div>
-        <nav class="space-y-2">
-          <a href="/blog" class="block text-sm text-muted-foreground hover:text-foreground transition-colors">Insights</a>
-          <a href="/resources" class="block text-sm text-muted-foreground hover:text-foreground transition-colors">Resources</a>
-        </nav>
-      </div>
-    </div>
-
-    <div class="mt-6 pt-4 border-t border-border/70 flex flex-col sm:flex-row items-center justify-between gap-3">
-      <div class="text-[11px] text-muted-foreground/70 text-center sm:text-left max-w-xl leading-relaxed">
-        <span class="text-muted-foreground/80">© {new Date().getFullYear()} Nasif Salaam.</span>
-        <span class="block sm:inline sm:ml-1 text-muted-foreground/60">
-          Product designer and AI builder making thoughtful, AI-powered products for people.
-        </span>
-      </div>
-      <div class="flex items-center gap-3 text-[11px]">
-        <a href="/contact" class="font-mono uppercase tracking-[0.14em] text-primary/70 hover:text-primary transition-colors">Start a conversation</a>
+      <!-- Bottom bar -->
+      <div class="pt-5 border-t border-black/10 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div class="text-[11px] text-black/50 text-center sm:text-left leading-relaxed">
+          <span class="text-black/65">© {new Date().getFullYear()} Nasif Salaam.</span>
+          <span class="block sm:inline sm:ml-1">
+            Product designer and AI builder making thoughtful, AI-powered products for people.
+          </span>
+        </div>
+        <div class="flex items-center gap-3">
+          <a href="/contact" class="font-mono text-[10px] uppercase tracking-[0.14em] text-black/50 hover:text-black transition-colors">Start a conversation</a>
+        </div>
       </div>
     </div>
   </div>
 </footer>
+
+<script is:inline>
+  function initFooterAgentToggle() {
+    const trigger = document.getElementById('agent-view-toggle');
+    ['footer-agent-toggle', 'footer-agent-toggle-desktop'].forEach(function(id) {
+      var btn = document.getElementById(id);
+      if (btn && trigger) {
+        btn.onclick = function() { trigger.click(); };
+      }
+    });
+  }
+  initFooterAgentToggle();
+  document.addEventListener('astro:page-load', initFooterAgentToggle);
+</script>
+
+<style>
+  .footer-stripe {
+    height: 24px;
+    width: 100%;
+    background-image: repeating-linear-gradient(
+      119deg,
+      rgba(0, 0, 0, 0.3) 0 1px,
+      transparent 1px 5px
+    );
+    background-color: #f7f7f6;
+  }
+
+  .footer-body {
+    background-color: #f7f7f6;
+  }
+
+  .footer-label {
+    font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: rgba(0, 0, 0, 0.45);
+    margin-bottom: 0.75rem;
+  }
+
+  .footer-body-text {
+    font-size: 0.875rem;
+    color: rgba(0, 0, 0, 0.62);
+    line-height: 1.65;
+  }
+
+  .footer-link {
+    font-size: 0.875rem;
+    color: rgba(0, 0, 0, 0.62);
+    text-decoration: none;
+    transition: color 150ms ease;
+  }
+
+  .footer-link:hover {
+    color: rgba(0, 0, 0, 0.92);
+  }
+
+  /* Hide the floating agent-view toggle — footer link replaces it */
+  :global(#agent-view-toggle) {
+    display: none !important;
+  }
+</style>

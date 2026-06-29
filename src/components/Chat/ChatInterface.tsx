@@ -804,27 +804,6 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
 
                   </motion.div>
 
-                  {/* Stats bar */}
-                  <motion.div
-                    className="mt-12 w-full border-t border-border/60 grid grid-cols-2 sm:grid-cols-4 divide-x divide-border/60"
-                    variants={sectionReveal}
-                    initial="hidden"
-                    animate="visible"
-                    transition={{ delay: 0.45 }}
-                  >
-                    {[
-                      { label: 'Years experience', value: '15+' },
-                      { label: 'Live on App Store', value: 'RideNote' },
-                      { label: 'AI builds', value: 'Kota AI' },
-                      { label: 'Available', value: 'Now' },
-                    ].map((stat) => (
-                      <div key={stat.label} className="px-4 py-5 text-left first:pl-0 last:border-r-0 sm:last:border-r sm:last:border-border/60">
-                        <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground/70 mb-1">{stat.label}</div>
-                        <div className="text-base font-medium text-foreground tracking-[-0.02em]">{stat.value}</div>
-                      </div>
-                    ))}
-                  </motion.div>
-
                   {/* Selected work */}
                   <motion.div
                     className="mt-12 w-full text-left"
@@ -860,7 +839,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
 
                   {/* Practice */}
                   <motion.div
-                    className="mt-16 w-full border-t border-border/60 pt-8"
+                    className="mt-16 w-full"
                     variants={sectionReveal}
                     initial="hidden"
                     whileInView="visible"
