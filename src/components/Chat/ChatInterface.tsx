@@ -670,9 +670,9 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                       AI Chat
                     </motion.div>
                     <motion.h1 variants={heroItem} className="mt-5 text-3xl md:text-4xl font-medium leading-[1.02] tracking-[-0.03em] text-foreground/95">
-                      Ask about the work, the systems, or how I build.
+                      Ask about the work,<br />the systems, or how I build.
                     </motion.h1>
-                    <motion.p variants={heroItem} className="mx-auto mt-4 max-w-[60ch] text-base leading-[1.75] text-muted-foreground/88 md:text-lg">
+                    <motion.p variants={heroItem} className="mx-auto mt-4 max-w-[52ch] text-sm leading-[1.8] text-muted-foreground/88">
                       Product designer and AI builder with 15+ years across brand, digital products, systems, and implementation.
                     </motion.p>
 
