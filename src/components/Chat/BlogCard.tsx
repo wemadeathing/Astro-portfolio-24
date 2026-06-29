@@ -24,27 +24,27 @@ export default function BlogCard({ title, description, slug, pubDate, tags }: Bl
   return (
     <a
       href={`/blog/${slug}`}
-      className="group block rounded-xl border border-border/50 bg-muted/10 hover:bg-muted/20 hover:border-border transition-all overflow-hidden h-full"
+      className="group block h-full border-t border-border/80 pt-4 transition-colors hover:border-primary/30"
     >
-      <div className="p-3 text-left">
+      <div className="text-left">
         <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground/60 mb-2">
           <Calendar className="w-3 h-3" />
           <span>{formatDate(pubDate)}</span>
         </div>
 
-        <h4 className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1 mb-1">
+        <h4 className="mb-2 text-sm font-semibold text-foreground transition-colors line-clamp-1 group-hover:text-primary">
           {title}
         </h4>
 
         {description && (
-          <p className="text-xs text-muted-foreground line-clamp-2 mb-3">{description}</p>
+          <p className="mb-3 text-xs text-muted-foreground line-clamp-2">{description}</p>
         )}
 
-        <div className="flex items-center gap-1.5 flex-wrap">
+        <div className="flex items-center gap-x-2 gap-y-1.5 flex-wrap">
           {visibleTags.map((tag) => (
             <span
               key={tag}
-              className="inline-flex items-center rounded-full bg-secondary/50 border border-border/30 px-2 py-0.5 text-[10px] font-medium text-secondary-foreground"
+              className="inline-flex items-center font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground"
             >
               {tag}
             </span>

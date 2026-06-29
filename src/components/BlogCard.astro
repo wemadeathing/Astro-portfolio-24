@@ -21,12 +21,12 @@ const formattedDate = pubDate
 
 <a
   href={`/blog/${slug}`}
-  class="group block rounded-[24px] border border-white/[0.12] bg-[#08080c]/95 overflow-hidden shadow-[0_18px_40px_rgba(0,0,0,0.65)] transition-all hover:-translate-y-0.5 hover:border-white/30 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+  class="group block border-t border-border/80 pt-4 transition-colors hover:border-primary/35 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
 >
-  <div class="aspect-video overflow-hidden bg-white/5 relative">
+  <div class="panel-grid relative aspect-video overflow-hidden border-y border-border/80 bg-secondary/20">
     <div class="absolute inset-0 skeleton-image" aria-hidden="true"></div>
     {series ? (
-      <div class="absolute top-3 left-3 z-10 rounded-full border border-white/10 bg-black/60 backdrop-blur-md px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white/90 shadow-sm">
+      <div class="absolute left-3 top-3 z-10 border border-border/80 bg-background/85 px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.16em] text-foreground">
         Part {series.order}
       </div>
     ) : null}
@@ -39,22 +39,22 @@ const formattedDate = pubDate
       onload="this.parentElement.querySelector('.skeleton-image').style.display='none'"
     />
   </div>
-  <div class="px-4 pb-5 pt-4">
-    <div class="flex items-center gap-2 text-[11px] tracking-[0.22em] uppercase text-white/55 line-clamp-1">
+  <div class="pt-4">
+    <div class="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground line-clamp-1">
       {series ? (
-        <span class="text-primary/90 font-bold">{series.name}</span>
+        <span class="font-bold text-primary">{series.name}</span>
       ) : (
         kicker && <span>{kicker}</span>
       )}
     </div>
     <h2 class:list={[
-      'text-[15px] sm:text-base font-semibold text-white/92 group-hover:text-primary transition-colors line-clamp-3 leading-snug',
+      'text-[15px] sm:text-base font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-3 leading-snug',
       'mt-2',
     ]}>
       {title}
     </h2>
     {(formattedDate || readingTime) && (
-      <p class="mt-2 text-xs text-white/55">
+      <p class="mt-2 text-xs text-muted-foreground">
         {formattedDate}{formattedDate && readingTime && ' • '}{readingTime}
       </p>
     )}

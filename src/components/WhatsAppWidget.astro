@@ -1,5 +1,4 @@
 ---
-// WhatsApp widget component with purple styling
 interface Props {
   phoneNumber?: string;
   message?: string;
@@ -29,7 +28,7 @@ const positionClasses = {
     href={whatsappUrl}
     target="_blank"
     rel="noopener noreferrer"
-    class="group flex items-center justify-center bg-primary hover:bg-primary/90 text-primary-foreground w-14 h-14 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+    class="group flex h-14 w-14 items-center justify-center border border-border/80 bg-background text-foreground transition-all duration-300 hover:border-primary/35 hover:text-primary hover:scale-105"
     aria-label="Chat on WhatsApp"
   >
     <!-- WhatsApp Icon -->
@@ -43,10 +42,3 @@ const positionClasses = {
     </svg>
   </a>
 </div>
-
-<style>
-  /* Smooth hover effects */
-  .group:hover {
-    transform: scale(1.05);
-  }
-</style>

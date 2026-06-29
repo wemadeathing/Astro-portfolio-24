@@ -37,30 +37,30 @@ const getStepGallery = (stepIndex: number, size = 3) => {
   <div class="min-h-[100dvh] w-full flex items-center justify-center px-8 pt-6 pb-40">
     <div class="w-full max-w-[1100px] text-center">
       <div class="mx-auto max-w-[80ch]">
-        <div class="type-kicker text-white/50 mb-3">Case study {caseNumber}</div>
-        <h2 class="type-h1 text-white/95">{caseStudy.title}</h2>
-        <div class="mt-3 text-sm text-primary/90 font-semibold">
+        <div class="section-kicker mb-3">Case study {caseNumber}</div>
+        <h2 class="type-h1">{caseStudy.title}</h2>
+        <div class="mt-3 font-mono text-[11px] uppercase tracking-[0.16em] text-primary">
           {caseStudy.subtitle}
         </div>
 
         <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-[900px] mx-auto">
-          <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-5 text-center">
-            <div class="text-xs tracking-[0.22em] uppercase text-white/45 mb-2">{metaLeftLabel}</div>
-            <div class="text-sm sm:text-base text-white/80 leading-[1.65]">
+          <div class="border-t border-border/80 p-5 text-center">
+            <div class="mb-2 font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">{metaLeftLabel}</div>
+            <div class="text-sm sm:text-base leading-[1.65] text-foreground">
               {caseStudy.context.role}
             </div>
           </div>
-          <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-5 text-center">
-            <div class="text-xs tracking-[0.22em] uppercase text-white/45 mb-2">{metaRightLabel}</div>
-            <div class="text-sm sm:text-base text-white/80 leading-[1.65]">
+          <div class="border-t border-border/80 p-5 text-center">
+            <div class="mb-2 font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">{metaRightLabel}</div>
+            <div class="text-sm sm:text-base leading-[1.65] text-foreground">
               {caseStudy.context.duration}
             </div>
           </div>
         </div>
 
-        <div class="mt-4 rounded-2xl border border-primary/25 bg-primary/10 p-6 max-w-[900px] mx-auto">
-          <div class="type-kicker text-primary/80 mb-2">Challenge</div>
-          <div class="text-sm sm:text-base leading-[1.7] text-white/80">
+        <div class="mt-4 border-t border-primary/25 p-6 max-w-[900px] mx-auto">
+          <div class="section-kicker text-primary mb-2">Challenge</div>
+          <div class="text-sm sm:text-base leading-[1.7] text-muted-foreground">
             {caseStudy.context.challenge}
           </div>
         </div>
@@ -74,8 +74,8 @@ const getStepGallery = (stepIndex: number, size = 3) => {
   <div class="min-h-[100dvh] w-full flex items-center justify-center px-8 pt-6 pb-40">
     <div class="w-full max-w-[1300px]">
       <div class="text-center mb-10">
-        <div class="type-kicker text-white/50 mb-3">{caseStudy.title}</div>
-        <h2 class="type-h2 text-white/90">Approach and process</h2>
+        <div class="section-kicker mb-3">{caseStudy.title}</div>
+        <h2 class="type-h2">Approach and process</h2>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -88,7 +88,7 @@ const getStepGallery = (stepIndex: number, size = 3) => {
           return (
             <button
               type="button"
-              class="group rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl text-left overflow-hidden transition-colors hover:bg-white/[0.05] hover:border-white/20 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+              class="group overflow-hidden border border-border/80 bg-card/30 text-left transition-colors hover:bg-card/50 hover:border-primary/25 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
               data-gallery-item={stepImage}
               data-gallery-items={JSON.stringify(gallery)}
               aria-label={`Open visual for ${caseStudy.title}: ${step.phase}`}
@@ -105,12 +105,12 @@ const getStepGallery = (stepIndex: number, size = 3) => {
               </div>
 
               <div class="p-6">
-                <div class="text-lg font-semibold text-white/92">{step.phase}</div>
-                <div class="mt-2 text-sm leading-[1.65] text-white/70">{step.description}</div>
+                <div class="text-lg font-semibold text-foreground">{step.phase}</div>
+                <div class="mt-2 text-sm leading-[1.65] text-muted-foreground">{step.description}</div>
                 <div class="mt-4 space-y-2">
                   {step.deliverables.map((deliverable) => (
-                    <div class="flex items-start gap-3 text-sm text-white/65">
-                      <div class="mt-2 w-2 h-2 rounded-full bg-primary/70"></div>
+                    <div class="flex items-start gap-3 text-sm text-muted-foreground">
+                      <div class="mt-2 h-2 w-2 border border-primary bg-primary/70"></div>
                       <div class="leading-[1.6]">{deliverable}</div>
                     </div>
                   ))}
@@ -129,16 +129,16 @@ const getStepGallery = (stepIndex: number, size = 3) => {
   <div class="min-h-[100dvh] w-full flex items-center justify-center px-8 pt-6 pb-40">
     <div class="w-full max-w-[1300px]">
       <div class="text-center mb-10">
-        <div class="type-kicker text-white/50 mb-3">{caseStudy.title}</div>
-        <h2 class="type-h2 text-white/90">Solution</h2>
+        <div class="section-kicker mb-3">{caseStudy.title}</div>
+        <h2 class="type-h2">Solution</h2>
       </div>
 
       <div class="mx-auto w-full max-w-[1200px] grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-xl text-left">
+        <div class="border border-border/80 p-5 text-left">
           {solutionImage ? (
             <button
               type="button"
-              class="group relative w-full overflow-hidden rounded-xl border border-white/10 bg-white/[0.02] focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+              class="group relative w-full overflow-hidden border border-border/80 bg-card/20 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
               data-gallery-item={solutionImage}
               aria-label={`Open ${caseStudy.title} solution visual`}
             >
@@ -152,26 +152,26 @@ const getStepGallery = (stepIndex: number, size = 3) => {
               <div class="pointer-events-none absolute inset-0 ring-1 ring-inset ring-white/0 transition-colors group-hover:ring-white/10"></div>
             </button>
           ) : (
-            <div class="h-[330px] sm:h-[360px] w-full rounded-xl border border-white/10 bg-white/[0.02]" />
+            <div class="h-[330px] sm:h-[360px] w-full border border-border/80 bg-card/20" />
           )}
         </div>
 
-        <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-7 backdrop-blur-xl text-left">
-          <div class="text-[11px] tracking-[0.22em] uppercase text-white/45 mb-3 text-left">What shipped</div>
+        <div class="border border-border/80 p-7 text-left">
+          <div class="mb-3 text-left font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">What shipped</div>
           <div class="space-y-3">
             {caseStudy.solution.features.map((feature) => (
-              <div class="flex items-start gap-3 text-white/75">
-                <div class="mt-2 w-2 h-2 rounded-full bg-primary/70"></div>
+              <div class="flex items-start gap-3 text-muted-foreground">
+                <div class="mt-2 h-2 w-2 border border-primary bg-primary/70"></div>
                 <div class="text-sm sm:text-base leading-[1.7]">{feature}</div>
               </div>
             ))}
           </div>
 
-          <div class="mt-6 pt-6 border-t border-white/10">
-            <div class="text-[11px] tracking-[0.22em] uppercase text-white/45 mb-3 text-left">{stackLabel}</div>
+          <div class="mt-6 pt-6 border-t border-border/80">
+            <div class="mb-3 text-left font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">{stackLabel}</div>
             <div class="flex flex-wrap gap-2">
               {caseStudy.solution.tech.map((tech) => (
-                <span class="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/70">
+                <span class="inline-flex items-center border border-border/80 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
                   {tech}
                 </span>
               ))}
@@ -188,20 +188,19 @@ const getStepGallery = (stepIndex: number, size = 3) => {
   <div class="min-h-[100dvh] w-full flex items-center justify-center px-8 pt-6 pb-40">
     <div class="w-full max-w-[1300px]">
       <div class="text-center mb-10">
-        <div class="type-kicker text-white/50 mb-3">{caseStudy.title}</div>
-        <h2 class="type-h2 text-white/90">Impact</h2>
+        <div class="section-kicker mb-3">{caseStudy.title}</div>
+        <h2 class="type-h2">Impact</h2>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {caseStudy.impact.metrics.map((metric) => (
-          <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-6 text-center backdrop-blur-xl">
+          <div class="border-t border-border/80 p-6 text-center">
             <div class="text-3xl lg:text-[34px] font-semibold tracking-[-0.03em] text-primary">{metric.value}</div>
-            <div class="mt-2 text-sm font-semibold text-white/85">{metric.label}</div>
-            <div class="mt-2 text-sm leading-[1.6] text-white/60">{metric.description}</div>
+            <div class="mt-2 text-sm font-semibold text-foreground">{metric.label}</div>
+            <div class="mt-2 text-sm leading-[1.6] text-muted-foreground">{metric.description}</div>
           </div>
         ))}
       </div>
     </div>
   </div>
 </section>
-

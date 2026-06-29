@@ -96,90 +96,95 @@ ${formData.urls.map(u => `- [${u.title || 'Page'}](${u.url})`).join('\n')}
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.92fr)]">
       {/* Input Column */}
       <div className="space-y-6">
         
         {/* Auto-fill Section */}
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-           <h3 className="text-lg font-semibold text-white/90 mb-4">Start with a URL (AI Auto-fill)</h3>
+        <div className="border-t border-border/80 pt-4">
+           <div className="mb-4 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Start with a URL</div>
+           <h3 className="mb-4 text-lg font-semibold text-foreground">AI auto-fill</h3>
            <div className="flex gap-2">
              <input
                type="url"
                value={urlInput}
                onChange={(e) => setUrlInput(e.target.value)}
                placeholder="https://example.com"
-               className="flex-1 bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-white/90 focus:border-primary/50 focus:outline-none"
+               className="flex-1 border border-border/80 bg-background px-3 py-2 text-foreground focus:border-primary/50 focus:outline-none"
              />
              <button
                onClick={handleAutoFill}
                disabled={loading || !urlInput}
-               className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium px-4 py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+               className="btn-stripe disabled:cursor-not-allowed disabled:opacity-50"
              >
                {loading ? 'Scanning...' : 'Auto-fill'}
              </button>
            </div>
            {error && <p className="mt-2 text-xs text-red-300">{error}</p>}
-           <p className="mt-2 text-xs text-white/40">Uses AI to scan your homepage and suggest content.</p>
+           <p className="mt-3 text-xs leading-6 text-muted-foreground">Uses AI to scan your homepage and suggest content.</p>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-          <h3 className="text-lg font-semibold text-white/90 mb-4">Site Details</h3>
+        <div className="border-t border-border/80 pt-4">
+          <div className="mb-4 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Site details</div>
+          <h3 className="mb-4 text-lg font-semibold text-foreground">Describe the site</h3>
           
           <div className="space-y-4">
             <div>
-              <label className="block text-xs uppercase tracking-wider text-white/50 mb-1.5">Site Name</label>
+              <label className="mb-1.5 block font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Site Name</label>
               <input
                 type="text"
                 value={formData.title}
                 onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 placeholder="e.g. Nasif Salaam Portfolio"
-                className="w-full bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-white/90 focus:border-primary/50 focus:outline-none"
+                className="w-full border border-border/80 bg-background px-3 py-2 text-foreground focus:border-primary/50 focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-xs uppercase tracking-wider text-white/50 mb-1.5">Summary for AI</label>
+              <label className="mb-1.5 block font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Summary for AI</label>
               <textarea
                 value={formData.summary}
                 onChange={(e) => setFormData({ ...formData, summary: e.target.value })}
                 placeholder="Briefly explain what your site is about..."
                 rows={3}
-                className="w-full bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-white/90 focus:border-primary/50 focus:outline-none"
+                className="w-full border border-border/80 bg-background px-3 py-2 text-foreground focus:border-primary/50 focus:outline-none"
               />
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                <div>
-                <label className="block text-xs uppercase tracking-wider text-white/50 mb-1.5">Sitemap URL (Optional)</label>
+                <label className="mb-1.5 block font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Sitemap URL (Optional)</label>
                 <input
                   type="text"
                   value={formData.sitemapUrl}
                   onChange={(e) => setFormData({ ...formData, sitemapUrl: e.target.value })}
                   placeholder="/sitemap.xml"
-                  className="w-full bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-white/90 focus:border-primary/50 focus:outline-none"
+                  className="w-full border border-border/80 bg-background px-3 py-2 text-foreground focus:border-primary/50 focus:outline-none"
                 />
               </div>
               <div>
-                <label className="block text-xs uppercase tracking-wider text-white/50 mb-1.5">Docs URL (Optional)</label>
+                <label className="mb-1.5 block font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Docs URL (Optional)</label>
                 <input
                   type="text"
                   value={formData.docsUrl}
                   onChange={(e) => setFormData({ ...formData, docsUrl: e.target.value })}
                   placeholder="/docs"
-                  className="w-full bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-white/90 focus:border-primary/50 focus:outline-none"
+                  className="w-full border border-border/80 bg-background px-3 py-2 text-foreground focus:border-primary/50 focus:outline-none"
                 />
               </div>
             </div>
           </div>
         </div>
 
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-          <div className="flex items-center justify-between mb-4">
-             <h3 className="text-lg font-semibold text-white/90">Key Pages</h3>
+        <div className="border-t border-border/80 pt-4">
+          <div className="mb-4 flex items-center justify-between">
+             <div>
+               <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Key pages</div>
+               <h3 className="mt-2 text-lg font-semibold text-foreground">What should AI see first?</h3>
+             </div>
              <button
                 onClick={addUrl}
-                className="text-xs bg-white/5 hover:bg-white/10 border border-white/10 rounded-md px-2 py-1 text-white/80 transition-colors"
+                className="border border-border/80 bg-card/40 px-2 py-1 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:border-primary/25 hover:text-foreground"
              >
                 + Add Page
              </button>
@@ -193,18 +198,18 @@ ${formData.urls.map(u => `- [${u.title || 'Page'}](${u.url})`).join('\n')}
                   value={url.title}
                   onChange={(e) => updateUrl(idx, 'title', e.target.value)}
                   placeholder="Page Title"
-                  className="flex-1 bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-sm text-white/90 focus:border-primary/50 focus:outline-none"
+                  className="flex-1 border border-border/80 bg-background px-3 py-2 text-sm text-foreground focus:border-primary/50 focus:outline-none"
                 />
                 <input
                   type="text"
                   value={url.url}
                   onChange={(e) => updateUrl(idx, 'url', e.target.value)}
                   placeholder="/path"
-                  className="flex-1 bg-black/20 border border-white/10 rounded-lg px-3 py-2 text-sm text-white/90 focus:border-primary/50 focus:outline-none"
+                  className="flex-1 border border-border/80 bg-background px-3 py-2 text-sm text-foreground focus:border-primary/50 focus:outline-none"
                 />
                 <button
                   onClick={() => removeUrl(idx)}
-                  className="shrink-0 text-white/30 hover:text-red-400 p-2"
+                  className="shrink-0 p-2 text-muted-foreground hover:text-red-400"
                   title="Remove"
                 >
                   ✕
@@ -217,32 +222,32 @@ ${formData.urls.map(u => `- [${u.title || 'Page'}](${u.url})`).join('\n')}
 
       {/* Preview Column */}
       <div className="lg:sticky lg:top-32 h-fit">
-        <div className="rounded-2xl border border-white/10 bg-[#070910] overflow-hidden flex flex-col h-full shadow-2xl">
-          <div className="bg-white/5 border-b border-white/10 px-4 py-3 flex items-center justify-between">
-            <span className="text-xs font-mono text-white/60">llms.txt</span>
+        <div className="flex h-full flex-col overflow-hidden border-t border-border/80">
+          <div className="flex items-center justify-between border-b border-border/80 px-0 py-3">
+            <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">llms.txt</span>
             <div className="flex gap-2">
               <button
                 onClick={copyToClipboard}
-                className="text-xs bg-white/5 hover:bg-white/10 border border-white/10 rounded px-2 py-1 text-white/80 transition-colors"
+                className="border border-border/80 bg-card/40 px-2 py-1 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:border-primary/25 hover:text-foreground"
               >
                 Copy
               </button>
               <button
                 onClick={downloadFile}
-                className="text-xs bg-primary/20 hover:bg-primary/30 border border-primary/30 text-primary-foreground rounded px-2 py-1 transition-colors"
+                className="border border-primary/30 bg-primary/12 px-2 py-1 font-mono text-[11px] uppercase tracking-[0.16em] text-primary transition-colors hover:bg-primary/18"
               >
                 Download
               </button>
             </div>
           </div>
-          <div className="p-0 overflow-auto max-h-[600px]">
-             <pre className="p-4 text-sm font-mono text-white/80 whitespace-pre-wrap">{generated}</pre>
+          <div className="overflow-auto max-h-[600px] border-b border-border/80">
+             <pre className="whitespace-pre-wrap px-0 py-4 font-mono text-sm text-foreground">{generated}</pre>
           </div>
         </div>
 
-        <div className="mt-6 rounded-xl bg-blue-500/10 border border-blue-500/20 p-4">
-          <h4 className="text-sm font-semibold text-blue-200 mb-1">What is this?</h4>
-          <p className="text-xs text-blue-200/70 leading-relaxed">
+        <div className="mt-8 border-t border-border/80 pt-4">
+          <div className="mb-2 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">What is this?</div>
+          <p className="text-xs leading-6 text-muted-foreground">
             <code>llms.txt</code> is a standard file that tells AI agents (like ChatGPT, Claude) exactly what your website contains in a format <em>they</em> can read easily. It's like a sitemap, but for robots that read text.
           </p>
         </div>

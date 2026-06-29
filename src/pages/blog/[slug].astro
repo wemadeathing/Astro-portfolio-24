@@ -98,6 +98,7 @@ const formattedUpdated = post.data.updatedDate
 
 // Build the agent-readable markdown for this post (front matter summary + body).
 const agentTags = (post.data.tags ?? []).map(String);
+const agentDivider = '---';
 const agentMarkdown = `# ${post.data.title}
 
 > ${post.data.description}
@@ -108,7 +109,7 @@ const agentMarkdown = `# ${post.data.title}
 **Tags:** ${agentTags.join(', ')}` : ''}
 **URL:** ${shareUrl}
 
----
+${agentDivider}
 
 ${post.body}`;
 
@@ -161,7 +162,7 @@ const relatedPosts = sortedPosts
       <div class="mb-4 sm:mb-6 lg:hidden">
         <a
           href="/blog"
-          class="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-semibold text-white/80 hover:bg-white/[0.06] hover:text-white focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+          class="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -181,8 +182,8 @@ const relatedPosts = sortedPosts
         </a>
       </div>
 
-      <div class="grid grid-cols-1 lg:grid-cols-[1fr_240px] gap-10">
-        <div class="rounded-[26px] border border-white/12 bg-white/[0.03] px-6 sm:px-8 md:px-12 py-6 md:py-10">
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_220px] gap-12 lg:gap-16">
+        <div class="min-w-0">
           <div class="hidden sm:block">
             <Breadcrumb
               items={[
@@ -193,26 +194,29 @@ const relatedPosts = sortedPosts
             />
           </div>
 
-          <div class="mb-8">
+          <div class="mb-10">
             {post.data.series && (
-              <div class="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-medium text-primary">
-                <span class="uppercase tracking-wider font-bold">Series</span>
+              <div class="mb-4 inline-flex items-center gap-2 border-t border-primary/30 px-0 py-2 font-mono text-[11px] uppercase tracking-[0.14em] text-foreground">
+                <span class="font-bold">Series</span>
                 <span class="text-primary/40">|</span>
                 <span>{post.data.series} <span class="opacity-75">· Part {post.data.seriesOrder}</span></span>
               </div>
             )}
-            <h1 class="type-h1 mb-4 text-white/95">{post.data.title}</h1>
-            <p class="text-sm text-white/60 mb-3">
+            <div class="shell-rule">
+              <div class="section-kicker">Writing</div>
+              <h1 class="type-h1 mb-4 mt-4">{post.data.title}</h1>
+            </div>
+            <p class="mb-3 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
               {formattedDate} • {rt.label}
               {formattedUpdated ? ` • Updated ${formattedUpdated}` : ''}
             </p>
 
             {(post.data.tags?.length || post.data.topics?.length) ? (
-              <div class="mb-6 hidden sm:flex flex-wrap gap-2">
+              <div class="mb-6 hidden sm:flex flex-wrap gap-x-4 gap-y-2">
                 {(post.data.tags ?? []).map((t) => (
                   <a
                     href={`/blog/tags/${tagToSlug(String(t))}`}
-                    class="inline-flex items-center rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs font-semibold text-white/70 hover:bg-white/[0.06] hover:text-white transition-colors"
+                    class="inline-flex items-center font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-foreground"
                   >
                     {t}
                   </a>
@@ -230,9 +234,9 @@ const relatedPosts = sortedPosts
           </div>
 
           {relatedPosts.length > 0 ? (
-            <div class="mt-10 pt-8 border-t border-white/10">
-              <div class="text-xs tracking-[0.22em] uppercase text-white/50">Keep reading</div>
-              <h2 class="mt-2 text-lg sm:text-xl font-semibold text-white/92">Related posts</h2>
+            <div class="mt-10 border-t border-border/80 pt-8">
+              <div class="section-kicker">Keep reading</div>
+              <h2 class="mt-2 text-lg sm:text-xl font-semibold text-foreground">Related posts</h2>
               <div class="mt-6">
                 <div
                   class="keep-reading-row flex gap-3 overflow-x-auto pb-2 pl-1 pr-0 snap-x snap-proximity"
@@ -243,9 +247,9 @@ const relatedPosts = sortedPosts
                     <a
                       role="listitem"
                       href={`/blog/${item.post.slug}`}
-                      class="group w-56 sm:w-60 md:w-64 flex-shrink-0 snap-start rounded-[26px] overflow-hidden border border-white/12 bg-[#070910] transition-transform duration-200 hover:-translate-y-0.5 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30 first:ml-1"
+                      class="group w-56 sm:w-60 md:w-64 flex-shrink-0 snap-start border-t border-border/80 pt-4 transition-colors hover:border-primary/35 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30 first:ml-1"
                     >
-                      <div class="aspect-[16/11] overflow-hidden">
+                      <div class="aspect-[16/11] overflow-hidden border-y border-border/80">
                         <img
                           src={item.post.data.image}
                           alt={item.post.data.title}
@@ -254,11 +258,11 @@ const relatedPosts = sortedPosts
                           class="h-full w-full object-cover"
                         />
                       </div>
-                      <div class="p-4">
-                        <h3 class="text-sm font-semibold text-white/95 leading-snug line-clamp-3">
+                      <div class="pt-4">
+                        <h3 class="text-sm font-semibold text-foreground leading-snug line-clamp-3">
                           {item.post.data.title}
                         </h3>
-                        <p class="mt-2 text-xs text-white/60">
+                        <p class="mt-2 text-xs text-muted-foreground">
                           {new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).format(
                             item.post.data.pubDate
                           )}
@@ -273,12 +277,12 @@ const relatedPosts = sortedPosts
           ) : null}
 
 
-          <div class="mt-10 pt-8 border-t border-transparent sm:border-white/10">
-            <div class="text-xs tracking-[0.22em] uppercase text-white/50">Newsletter</div>
-            <h2 class="mt-2 text-lg sm:text-xl font-semibold text-white/92">
+          <div class="mt-10 border-t border-transparent pt-8 sm:border-border/80">
+            <div class="section-kicker">Newsletter</div>
+            <h2 class="mt-2 text-lg sm:text-xl font-semibold text-foreground">
               Get occasional product + AI notes
             </h2>
-            <p class="mt-2 text-sm text-white/70 leading-[1.65]">
+            <p class="mt-2 text-sm text-muted-foreground leading-[1.65]">
               1–2 emails/month. Practical ideas on building, shipping, and using AI well.
             </p>
             <div class="mt-5">
@@ -302,27 +306,27 @@ const relatedPosts = sortedPosts
 <style is:global>
   /* Dark-first prose styles for insight pages */
   .prose {
-    @apply text-base leading-7 text-white/85;
+    @apply text-base leading-7 text-muted-foreground;
   }
 
   .prose h2 {
-    @apply text-2xl font-semibold mt-12 mb-4 scroll-mt-32 text-white/95;
+    @apply text-2xl font-semibold mt-16 mb-5 scroll-mt-32 text-foreground border-t border-border/80 pt-6;
   }
 
   .prose h3 {
-    @apply text-xl font-semibold mt-8 mb-3 scroll-mt-32 text-white/90;
+    @apply text-xl font-semibold mt-8 mb-3 scroll-mt-32 text-foreground;
   }
 
   .prose p {
-    @apply mb-6 text-white/75;
+    @apply mb-6 text-muted-foreground;
   }
 
   .prose ul {
-    @apply list-disc list-outside ml-6 mb-6 text-white/75;
+    @apply list-disc list-outside ml-6 mb-6 text-muted-foreground;
   }
 
   .prose ol {
-    @apply list-decimal list-outside ml-6 mb-6 text-white/75;
+    @apply list-decimal list-outside ml-6 mb-6 text-muted-foreground;
   }
 
   .prose li {
@@ -340,19 +344,19 @@ const relatedPosts = sortedPosts
   }
 
   .prose strong {
-    @apply text-white/95 font-semibold;
+    @apply text-foreground font-semibold;
   }
 
   .prose img {
-    @apply rounded-xl my-12;
+    @apply my-12 border border-border/80;
   }
 
   .prose pre {
-    @apply bg-black/30 border border-white/10 rounded-xl p-6 my-8 overflow-x-auto;
+    @apply bg-black/20 border-y border-border/80 px-0 py-6 my-10 overflow-x-auto;
   }
 
   .prose code {
-    @apply text-sm text-white/90;
+    @apply text-sm text-foreground/90;
   }
 
   .keep-reading-row {

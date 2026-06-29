@@ -35,7 +35,6 @@ const visibleTags = activeTag && !topTags.includes(activeTag) ? [activeTag, ...t
 const filteredProjects = activeTag
   ? projects.filter((p) => (p.data.tags ?? []).includes(activeTag))
   : projects;
-
 const buildTagHref = (tag: string | null) => {
   const url = new URL(Astro.url);
   if (!tag) url.searchParams.delete('tag');
@@ -68,9 +67,10 @@ ${p.data.description}
 >
   <section class="py-10 sm:py-14">
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-[68ch]">
-        <h1 class="type-h1 text-white/95">Work</h1>
-        <p class="mt-4 type-lead text-white/78">
+      <div class="max-w-[68ch] shell-rule">
+        <div class="section-kicker">Selected Work</div>
+        <h1 class="type-h1 mt-4">Work</h1>
+        <p class="mt-4 type-lead">
           Six selected projects that show how I work across product builds, systems, and digital presence.
         </p>
       </div>
@@ -82,10 +82,10 @@ ${p.data.description}
             <a
               href={buildTagHref(null)}
               class:list={[
-                'inline-flex items-center rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors',
+                'inline-flex items-center border px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] transition-colors',
                 !activeTag
-                  ? 'bg-primary/15 text-white/90 border-primary/30'
-                  : 'bg-white/[0.03] text-white/78 border-white/10 hover:bg-white/[0.06] hover:text-white',
+                  ? 'bg-primary/15 text-foreground border-primary/30'
+                  : 'bg-card/50 text-muted-foreground border-border/80 hover:border-primary/35 hover:text-foreground',
               ]}
               aria-current={!activeTag ? 'true' : undefined}
             >
@@ -97,10 +97,10 @@ ${p.data.description}
                 <a
                   href={buildTagHref(tag)}
                   class:list={[
-                    'inline-flex items-center rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors',
+                    'inline-flex items-center border px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] transition-colors',
                     isActive
-                      ? 'bg-primary/15 text-white/90 border-primary/30'
-                      : 'bg-white/[0.03] text-white/78 border-white/10 hover:bg-white/[0.06] hover:text-white',
+                      ? 'bg-primary/15 text-foreground border-primary/30'
+                      : 'bg-card/50 text-muted-foreground border-border/80 hover:border-primary/35 hover:text-foreground',
                   ]}
                   aria-current={isActive ? 'true' : undefined}
                   title={`Filter by ${tag}`}
@@ -117,27 +117,28 @@ ${p.data.description}
         </div>
       )}
 
-      <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 stagger-children">
+      <div class="mt-12 grid grid-cols-1 gap-x-10 gap-y-12 md:grid-cols-2 lg:grid-cols-3 stagger-children">
         {filteredProjects.map((project) => (
           <a
             href={`/projects/${project.slug}`}
-            class="glass-project-card group block focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+            class="group block border-t border-border/80 pt-4 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20 transition-colors hover:border-primary/35"
           >
-            <div class="glass-project-card-media aspect-video">
+            <div class="relative aspect-video overflow-hidden border-y border-border/80">
               <div class="absolute inset-0 skeleton-image" aria-hidden="true"></div>
               <img
                 src={project.data.image}
                 alt={project.data.title}
-                class="relative w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                class="relative w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                 loading="lazy"
                 onload="this.parentElement.querySelector('.skeleton-image').style.display='none'"
               />
             </div>
-            <div class="glass-project-card-body">
-              <h2 class="text-base sm:text-lg font-semibold text-white/92 group-hover:text-primary transition-colors">
+            <div class="pt-5">
+              <div class="mb-3 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Case Study</div>
+              <h2 class="text-base sm:text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                 {project.data.title}
               </h2>
-              <p class="mt-2 text-sm text-white/78 line-clamp-2">
+              <p class="mt-2 text-sm text-muted-foreground line-clamp-2">
                 {project.data.description}
               </p>
             </div>

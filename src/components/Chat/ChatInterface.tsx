@@ -578,14 +578,14 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
       {!globalSiteNav && (
         <>
           {/* Top Nav */}
-          <div className="fixed top-4 left-0 right-0 z-40 px-4">
-            <div className="max-w-[1100px] mx-auto relative">
+          <div className="sticky top-0 z-40 pt-3">
+            <div className="shell-wrap relative">
               <nav
-                className={`flex items-center justify-between h-14 rounded-full px-4 backdrop-blur-xl transition-all duration-300 ${
-                  isScrolled ? 'bg-card/80 border border-border/60' : 'bg-transparent border-transparent'
+                className={`flex min-h-[63px] items-center justify-between border px-4 py-3 transition-all duration-300 ${
+                  isScrolled ? 'border-border/80 bg-background' : 'border-border/80 bg-background'
                 }`}
               >
-                <a href="/" className="flex items-center hover:opacity-80 transition-opacity">
+                <a href="/" className="flex items-center transition-opacity hover:opacity-80">
                   <img src="/images/ns26/logo26w-gradient.svg" alt="Nasif Salaam" className="h-7 sm:h-8 w-auto" />
                 </a>
 
@@ -595,7 +595,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                   aria-expanded={isMenuOpen}
                   aria-controls="site-menu"
                   onClick={() => setIsMenuOpen(true)}
-                  className="w-10 h-10 flex items-center justify-center rounded-full bg-muted/30 border border-border/60 text-foreground/80 hover:bg-muted/45 transition-colors duration-200"
+                  className="flex h-10 w-10 items-center justify-center text-foreground transition-opacity duration-200 hover:opacity-70"
                 >
                   <Menu size={18} />
                 </button>
@@ -614,51 +614,51 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
             ].join(' ')}
             onClick={() => setIsMenuOpen(false)}
           >
-            <div className="absolute inset-0 bg-black/45 backdrop-blur-[2px]" />
+            <div className="absolute inset-0 bg-black/55" />
 
-            <div className="absolute top-4 left-0 right-0 px-4" onClick={(e) => e.stopPropagation()}>
-              <div className="max-w-[1100px] mx-auto flex justify-end">
+            <div className="absolute left-0 right-0 top-3" onClick={(e) => e.stopPropagation()}>
+              <div className="shell-wrap flex justify-end">
                 <div
                   ref={menuPanelRef}
                   className={[
-                    'origin-top-right rounded-2xl border border-border/60 bg-popover/92 backdrop-blur-xl shadow-2xl',
+                    'origin-top-right border border-border/80 bg-background',
                     'w-full max-w-[560px] overflow-hidden',
                     'transition-all duration-300 ease-out',
                     isMenuOpen ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 -translate-y-2 scale-[0.98]',
                   ].join(' ')}
                 >
-                  <div className="px-4 py-3 border-b border-border/60 flex items-center justify-between">
-                    <div className="text-xs tracking-wide uppercase text-foreground/60">Menu</div>
+                  <div className="flex items-center justify-between border-b border-border/80 px-4 py-3">
+                    <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">Navigation</div>
                     <button
                       ref={menuCloseButtonRef}
                       type="button"
                       aria-label="Close menu"
                       onClick={() => setIsMenuOpen(false)}
-                      className="w-9 h-9 rounded-full bg-muted/30 border border-border/60 text-foreground/80 flex items-center justify-center hover:bg-muted/45 transition-colors"
+                      className="flex h-9 w-9 items-center justify-center border border-border/80 text-foreground transition-colors hover:border-primary/25"
                     >
                       <X size={18} />
                     </button>
                   </div>
 
-                  <div className="p-3 md:p-4 max-h-[calc(100vh-7rem)] overflow-auto">
-                    <div className="grid grid-cols-1 gap-2">
+                  <div className="max-h-[calc(100vh-7rem)] overflow-auto p-4">
+                    <div className="grid grid-cols-1 gap-0">
                       {menuLinks.map((item) => (
                         <a
                           key={item.title}
                           href={item.href}
                           target={item.external ? '_blank' : undefined}
                           rel={item.external ? 'noopener noreferrer' : undefined}
-                          className="group flex items-start justify-between gap-4 rounded-xl p-3 hover:bg-muted/30 transition-colors"
+                          className="group flex items-start justify-between gap-4 border-t border-border/80 py-4 transition-colors hover:border-primary/40"
                           onClick={() => setIsMenuOpen(false)}
                         >
                           <div className="flex items-start gap-3">
-                            <div className="mt-2 w-2 h-2 rounded-full bg-primary opacity-70 group-hover:opacity-100 transition-opacity" />
+                            <div className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-primary">+</div>
                             <div className="text-left">
-                              <div className="text-foreground/92 font-medium leading-tight">{item.title}</div>
-                              <div className="text-foreground/60 text-sm leading-snug">{item.description}</div>
+                              <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-foreground">{item.title}</div>
+                              <div className="mt-1 text-sm leading-snug text-muted-foreground">{item.description}</div>
                             </div>
                           </div>
-                          <div className="shrink-0 text-foreground/40 group-hover:text-foreground/70 transition-colors">↘</div>
+                          <div className="shrink-0 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground transition-colors group-hover:text-foreground">↗</div>
                         </a>
                       ))}
                     </div>
@@ -695,25 +695,25 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                     introMounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2',
                   ].join(' ')}
                 >
-                <div className="inline-flex items-center px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.28em] text-primary/75">
+                <div className="section-kicker justify-center">
                   AI Chat
                 </div>
-                <h1 className="mt-6 text-3xl md:text-4xl lg:text-5xl font-medium leading-tight tracking-[-0.03em] text-foreground/95">
+                <h1 className="mt-5 text-3xl md:text-4xl font-medium leading-[1.02] tracking-[-0.03em] text-foreground/95">
                   Ask about the work, the systems, or how I build.
                 </h1>
-                <p className="text-base md:text-lg text-muted-foreground/90 max-w-[720px] mt-5 mx-auto leading-[1.7]">
+                <p className="mx-auto mt-4 max-w-[60ch] text-base leading-[1.75] text-muted-foreground/88 md:text-lg">
                   Product designer and AI builder with 15+ years across brand, digital products, systems, and implementation.
                 </p>
 
                 {/* Input (intro) */}
                 <form
                   onSubmit={handleSubmit}
-                  className="relative mt-8 flex items-center gap-2 w-full max-w-[680px] mx-auto"
+                  className="relative mt-8 flex w-full max-w-[680px] items-center gap-2 border border-border/80 bg-background px-2"
                 >
                   {/* Onboarding tooltip */}
                   {showTooltip && (
                     <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 z-10">
-                      <div className="relative bg-primary/92 text-primary-foreground px-4 py-2 rounded-2xl text-sm font-medium shadow-lg whitespace-nowrap">
+                      <div className="relative bg-primary/92 px-4 py-2 text-sm font-medium text-primary-foreground shadow-lg whitespace-nowrap">
                         <div className="absolute left-1/2 -translate-x-1/2 bottom-full w-0 h-0 border-l-8 border-r-8 border-b-8 border-l-transparent border-r-transparent border-b-primary/95" />
                         Try asking me anything about my work!
                         <button
@@ -735,7 +735,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                     onBlur={() => setShowSuggestions(false)}
                     ref={inputRef}
                     placeholder="Ask me about my projects, skills, or experience..."
-                    className="w-full bg-black/20 border border-white/[0.08] hover:border-white/[0.14] focus:border-primary/40 rounded-full py-3.5 md:py-4 pl-5 md:pl-6 pr-14 text-base outline-none transition-all shadow-sm focus:ring-4 focus:ring-primary/10 focus:bg-black/25 placeholder:text-muted-foreground/55 placeholder:font-normal"
+                    className="w-full bg-transparent py-3.5 pl-4 pr-14 text-base outline-none transition-all placeholder:text-muted-foreground/55 placeholder:font-normal md:py-4 md:pl-5"
                     disabled={isLoading}
                   />
                   <div className="absolute inset-y-0 right-2 flex items-center gap-1">
@@ -743,7 +743,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                       <button
                         type="button"
                         onClick={stopRequest}
-                        className="p-2 mr-1 bg-muted/40 border border-border/60 text-foreground rounded-full hover:bg-muted/55 transition-all shadow-sm"
+                        className="border border-border/80 p-2 text-foreground transition-all hover:border-primary/25"
                         aria-label="Stop"
                       >
                         <StopCircle size={20} />
@@ -752,7 +752,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                       <button
                         type="submit"
                         disabled={!input.trim() || isLoading}
-                        className="p-2 mr-1 bg-primary text-primary-foreground rounded-full hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
+                        className="border border-border/80 bg-primary p-2 text-primary-foreground transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
                         aria-label="Send"
                       >
                         <Send size={20} />
@@ -784,7 +784,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                           e.preventDefault();
                           fillInput(suggestion);
                         }}
-                        className="text-xs md:text-sm px-3 py-1.5 bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] rounded-full transition-colors text-muted-foreground/85 hover:text-foreground"
+                        className="border border-border/80 px-3 py-1.5 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:border-primary/35 hover:text-foreground md:text-sm"
                       >
                         {suggestion}
                       </button>
@@ -817,56 +817,51 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                 className="w-full flex flex-col items-center animate-[fadeSlideUp_0.35s_ease-out_both]"
               >
                 <div className="w-full max-w-[700px] text-center">
-                  <div className="inline-flex items-center px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.28em] text-primary/75">
+                  <div className="section-kicker justify-center">
                     Product Designer + AI Builder
                   </div>
-                <h1 className="mt-6 text-3xl md:text-4xl lg:text-5xl font-medium leading-tight tracking-[-0.03em] text-foreground/95">
+                <h1 className="mt-5 text-3xl md:text-4xl font-medium leading-[1.02] tracking-[-0.03em] text-foreground/95">
                   I design & build products with AI, for humans. And AI.
                 </h1>
-                  <p className="text-base md:text-lg text-muted-foreground/90 max-w-[720px] mt-5 mx-auto leading-[1.7]">
+                  <p className="mx-auto mt-4 max-w-[62ch] text-base leading-[1.75] text-muted-foreground/88 md:text-lg">
                     Product designer and AI builder with 15+ years across brand, digital products, and systems. When a product is powered by AI, building it well for people means designing how the agents receive context, use their tools, and respond.
                   </p>
                 </div>
 
-                {/* Projects Grid */}
-                <div className="w-full mt-12 md:mt-14 text-left">
-                  <div className="flex items-center gap-4 mb-6">
-                    <div className="text-xs tracking-wide uppercase text-muted-foreground/82">Selected Work</div>
-                    <div className="h-px flex-1 bg-border/60" />
+                <div className="mt-12 grid w-full gap-10 text-left lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-12">
+                  <div className="border-t border-border/80 pt-4">
+                    <div className="mb-3 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+                      Practice
+                    </div>
+                    <p className="max-w-[34ch] text-sm leading-7 text-muted-foreground sm:text-base">
+                      I work across AI product design, product systems, and high-trust digital experiences. The through-line is structure: better context, clearer interfaces, and faster paths from idea to working product.
+                    </p>
+                    <div className="mt-6 grid gap-4">
+                      {[
+                        'AI product design and MVP delivery',
+                        'Design systems and interface architecture',
+                        'Frontend build work for teams that need execution, not just direction',
+                      ].map((item, index) => (
+                        <div key={item} className="border-t border-border/70 pt-3">
+                          <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                            0{index + 1}
+                          </div>
+                          <p className="mt-2 text-sm leading-6 text-foreground/88">{item}</p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                    {projects.map((project, i) => (
-                      <a
-                        key={project.slug}
-                        href={`/projects/${project.slug}`}
-                        className={[
-                          'glass-project-card group block focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20',
-                          introMode === 'portfolio' ? 'animate-[fadeSlideUp_0.4s_ease-out_both]' : '',
-                        ].join(' ')}
-                        style={introMode === 'portfolio' ? { animationDelay: `${i * 60}ms` } : undefined}
-                      >
-                        <div className="glass-project-card-media aspect-video">
-                          <img
-                            src={project.image}
-                            alt={project.title}
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-                            loading="lazy"
-                          />
-                        </div>
-                        <div className="glass-project-card-body">
-                          <h2 className="text-base sm:text-lg font-semibold text-foreground/92 group-hover:text-primary transition-colors line-clamp-1">
-                            {project.title}
-                          </h2>
-                          <p className="mt-2 text-sm text-muted-foreground/90 line-clamp-2">
-                            {project.description}
-                          </p>
-                          <div className="mt-3 text-[11px] uppercase tracking-[0.18em] text-muted-foreground/78">
-                            {project.tags.slice(0, 2).join(' • ')}
-                          </div>
-                        </div>
-                      </a>
-                    ))}
+                  <div className="border-t border-border/80 pt-4">
+                    <div className="mb-6 flex items-center gap-4">
+                      <div className="section-kicker">Selected Work</div>
+                      <div className="h-px flex-1 bg-border/60" />
+                    </div>
+                    <div className="grid gap-x-6 gap-y-8 sm:grid-cols-2">
+                      {projects.slice(0, 6).map((project) => (
+                        <ProjectCard key={project.slug} {...project} />
+                      ))}
+                    </div>
                   </div>
                 </div>
 
@@ -877,15 +872,16 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                   <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
                     <a
                       href="/contact"
-                      className="inline-flex h-11 items-center justify-center rounded-full bg-primary px-6 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+                      className="btn-stripe min-h-[44px] px-5"
                     >
                       Get in touch
                     </a>
                     <a
-                      href="/work-with-me"
-                      className="inline-flex h-11 items-center justify-center rounded-full border border-border/60 bg-muted/14 px-6 text-sm font-semibold text-foreground/85 transition-colors hover:bg-muted/25"
+                      href="/projects"
+                      className="btn-stripe min-h-[44px] px-5"
+                      data-tone="muted"
                     >
-                      How I can help
+                      View all work
                     </a>
                   </div>
                 </div>
@@ -937,16 +933,16 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                   <div
                     className={`relative group ${
                       msg.role === 'user'
-                        ? 'max-w-[78%] rounded-[18px] border border-border/70 bg-muted/18 px-5 py-3.5 text-foreground shadow-[0_10px_30px_rgba(0,0,0,0.12)]'
+                        ? 'max-w-[78%] border border-border/80 bg-background px-5 py-3.5 text-foreground'
                         : 'max-w-[92%] px-0 py-0 text-foreground'
                     }`}
                   >
                     {msg.role === 'assistant' && msg.id === typingMessageId && !msg.content ? (
                       <div className="flex items-center gap-2 px-1 py-2" role="status" aria-live="polite">
                         <span className="sr-only">Assistant is typing a response...</span>
-                        <div className="w-2 h-2 bg-foreground/50 rounded-full animate-bounce" aria-hidden="true" />
-                        <div className="w-2 h-2 bg-foreground/50 rounded-full animate-bounce delay-75" aria-hidden="true" />
-                        <div className="w-2 h-2 bg-foreground/50 rounded-full animate-bounce delay-150" aria-hidden="true" />
+                        <div className="h-2 w-2 bg-foreground/50 animate-bounce" aria-hidden="true" />
+                        <div className="h-2 w-2 bg-foreground/50 animate-bounce delay-75" aria-hidden="true" />
+                        <div className="h-2 w-2 bg-foreground/50 animate-bounce delay-150" aria-hidden="true" />
                       </div>
                     ) : (
                       <>
@@ -961,7 +957,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                           <button
                             type="button"
                             onClick={() => copyToClipboard(msg.content, msg.id)}
-                            className="absolute -top-1 right-0 p-1.5 rounded-md bg-background/80 border border-border/60 opacity-0 group-hover:opacity-100 hover:bg-background transition-all"
+                            className="absolute -top-1 right-0 border border-border/80 bg-background p-1.5 opacity-0 transition-all hover:border-primary/25 group-hover:opacity-100"
                             aria-label="Copy response"
                             title="Copy to clipboard"
                           >
@@ -977,7 +973,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                   </div>
 
                   {msg.role === 'user' && (
-                    <div className="mt-1 w-7 h-7 rounded-full bg-muted/25 border border-border/60 flex items-center justify-center shrink-0">
+                    <div className="mt-1 flex h-7 w-7 shrink-0 items-center justify-center border border-border/80">
                       <User size={16} className="text-foreground/75" />
                     </div>
                   )}
@@ -988,7 +984,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                     <button
                       type="button"
                       onClick={retryLast}
-                      className="text-xs px-3 py-1.5 rounded-full border border-border/50 bg-muted/20 hover:bg-muted/35 transition-colors text-muted-foreground hover:text-foreground"
+                      className="border border-border/80 px-3 py-1.5 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:border-primary/25 hover:text-foreground"
                     >
                       Retry
                     </button>
@@ -1078,7 +1074,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                         <a
                           key={`${chip.label}-${chip.href}`}
                           href={chip.href}
-                          className="text-xs md:text-sm px-3 py-1.5 bg-muted/20 hover:bg-muted/35 border border-border/40 rounded-full transition-colors text-muted-foreground hover:text-foreground"
+                          className="border border-border/80 px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-primary/25 hover:text-foreground md:text-sm"
                         >
                           {chip.label}
                         </a>
@@ -1103,7 +1099,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                               inputRef.current?.parentElement?.querySelector<HTMLButtonElement>('button[type="submit"]')?.click();
                             }, 100);
                           }}
-                          className="inline-flex items-center text-xs md:text-sm px-3 py-1.5 bg-secondary/70 hover:bg-secondary rounded-full transition-colors text-foreground/90 hover:text-foreground"
+                          className="inline-flex items-center border border-border/80 px-3 py-1.5 font-mono text-xs uppercase tracking-[0.12em] text-foreground transition-colors hover:border-primary/25 hover:text-foreground md:text-sm"
                         >
                           {followUp}
                         </button>
@@ -1120,9 +1116,9 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
 
       {/* Input Area (chat mode only) */}
       {!isIntro && (
-        <div className="sticky bottom-0 z-30 mt-4 border-t border-border/60 bg-background/96 px-4 pb-4 pt-4 backdrop-blur-xl md:px-6 md:pb-6 md:pt-5">
+        <div className="sticky bottom-0 z-30 mt-4 border-t border-border/60 bg-background/96 px-4 pb-4 pt-4 md:px-6 md:pb-6 md:pt-5">
           <div className="max-w-[720px] mx-auto">
-            <form onSubmit={handleSubmit} className="relative flex items-center gap-2 rounded-[28px] border border-border/65 bg-muted/14 px-2 shadow-[0_14px_40px_rgba(0,0,0,0.18)]">
+            <form onSubmit={handleSubmit} className="relative flex items-center gap-2 border border-border/80 bg-background px-2">
               <input
                 type="text"
                 value={input}
@@ -1137,7 +1133,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                   <button
                     type="button"
                     onClick={stopRequest}
-                    className="p-2 bg-muted/30 border border-border/50 text-foreground rounded-full hover:bg-muted/45 transition-all"
+                    className="border border-border/80 p-2 text-foreground transition-all hover:border-primary/25"
                     aria-label="Stop"
                   >
                     <StopCircle size={20} />
@@ -1146,7 +1142,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                   <button
                     type="submit"
                     disabled={!input.trim() || isLoading}
-                    className="p-2 bg-primary text-primary-foreground rounded-full hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-sm"
+                    className="border border-border/80 bg-primary p-2 text-primary-foreground transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
                     aria-label="Send"
                   >
                     <Send size={20} />

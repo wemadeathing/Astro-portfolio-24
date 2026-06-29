@@ -1,57 +1,57 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=TASA+Orbiter:wght@400;500;600;700;800&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
  
 @layer base {
   :root {
-    /* shadcn-like (zinc + cyan) */
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
+    --background: 210 20% 97%;
+    --foreground: 206 16% 10%;
     --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
+    --card-foreground: 206 16% 10%;
     --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    /* cyan (Nova style reference) */
-    --primary: 189 94% 43%;
-    /* Dark text on primary buttons */
-    --primary-foreground: 240 10% 3.9%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
+    --popover-foreground: 206 16% 10%;
+    --primary: 162 51% 40%;
+    --primary-foreground: 180 20% 96%;
+    --secondary: 210 18% 94%;
+    --secondary-foreground: 206 16% 10%;
+    --muted: 210 16% 94%;
+    --muted-foreground: 210 8% 42%;
+    --accent: 162 51% 40%;
+    --accent-foreground: 206 16% 10%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    /* Slightly stronger outlines (Nova-like) */
-    --border: 240 5.9% 86%;
-    --input: 240 5.9% 86%;
-    --ring: 189 94% 43%;
-    --radius: 0.5rem;
+    --border: 210 14% 86%;
+    --input: 210 14% 86%;
+    --ring: 162 51% 40%;
+    --radius: 0rem;
+    --page-max-width: 1100px;
+    --page-gutter: clamp(1rem, 2.8vw, 1.5rem);
+    --mono-tracking-tight: 0.1em;
+    --mono-tracking-wide: 0.18em;
   }
 
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 189 94% 43%;
-    /* Dark text on primary buttons */
-    --primary-foreground: 240 10% 3.9%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 76%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
+    --background: 200 14% 6%;
+    --foreground: 180 10% 93%;
+    --card: 200 18% 9%;
+    --card-foreground: 180 10% 93%;
+    --popover: 200 18% 9%;
+    --popover-foreground: 180 10% 93%;
+    --primary: 160 56% 63%;
+    --primary-foreground: 200 18% 9%;
+    --secondary: 200 16% 11%;
+    --secondary-foreground: 180 10% 93%;
+    --muted: 200 14% 11%;
+    --muted-foreground: 200 7% 53%;
+    --accent: 180 10% 93%;
+    --accent-foreground: 200 18% 9%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    /* More pronounced outlines in dark mode */
-    --border: 240 3.7% 22%;
-    --input: 240 3.7% 22%;
-    --ring: 189 94% 43%;
+    --border: 200 12% 15%;
+    --input: 200 12% 15%;
+    --ring: 160 56% 63%;
   }
 }
 
@@ -64,51 +64,261 @@
   }
   body {
     @apply bg-background text-foreground text-sm leading-6;
+    font-family: "Inter", "DM Sans", ui-sans-serif, system-ui, sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1;
+    letter-spacing: -0.01em;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: "TASA Orbiter", "Inter", "DM Sans", ui-sans-serif, system-ui, sans-serif;
+    letter-spacing: -0.045em;
+    line-height: 0.98;
+  }
+  a {
+    text-decoration: none;
+  }
+  code,
+  pre {
+    font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  [class*="rounded"] {
+    border-radius: 0 !important;
   }
 }
 
 @layer components {
-  /* Typography scale (shadcn-like: tight, consistent) */
   .type-h1 {
-    @apply text-2xl sm:text-4xl md:text-4xl font-semibold tracking-[-0.03em] leading-[1.1];
+    @apply text-3xl sm:text-4xl md:text-5xl font-semibold leading-[0.96];
   }
   .type-h2 {
-    @apply text-2xl sm:text-3xl font-semibold tracking-[-0.02em] leading-tight;
+    @apply text-3xl sm:text-4xl font-semibold leading-[0.98];
   }
   .type-h3 {
-    @apply text-lg sm:text-xl font-semibold tracking-[-0.01em] leading-snug;
+    @apply text-xl sm:text-2xl font-semibold leading-tight;
   }
   .type-lead {
-    @apply text-base sm:text-lg leading-[1.65];
+    @apply text-base sm:text-lg leading-[1.7] text-muted-foreground;
   }
   .type-muted {
     @apply text-sm leading-6 text-muted-foreground;
   }
   .type-kicker {
-    @apply text-xs tracking-[0.22em] uppercase;
+    font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    @apply text-[11px] uppercase text-muted-foreground;
+    letter-spacing: var(--mono-tracking-wide);
   }
 
+  .shell-wrap {
+    width: min(100%, var(--page-max-width));
+    margin-inline: auto;
+    padding-inline: var(--page-gutter);
+  }
+
+  .shell-rule {
+    position: relative;
+    border-top: 1px solid hsl(var(--border));
+    padding-top: 1rem;
+  }
+
+  .shell-rule::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: 0;
+    width: 4.5rem;
+    height: 2px;
+    background: hsl(var(--primary));
+  }
+
+  .section-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 11px;
+    letter-spacing: var(--mono-tracking-wide);
+    text-transform: uppercase;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .section-kicker::before {
+    content: ">";
+    color: hsl(var(--primary));
+  }
+
+  .btn-stripe {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 2.9rem;
+    padding: 0.9rem 1.25rem;
+    font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 11px;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: var(--mono-tracking-tight);
+    color: hsl(var(--foreground));
+    background-image: repeating-linear-gradient(
+      119deg,
+      color-mix(in srgb, hsl(var(--foreground)) 16%, transparent) 0 1px,
+      transparent 1px 5px
+    );
+    isolation: isolate;
+    transition:
+      color 180ms ease,
+      opacity 180ms ease,
+      transform 180ms ease;
+  }
+
+  .btn-stripe:hover {
+    opacity: 1;
+    transform: translateY(-1px);
+  }
+
+  .btn-stripe::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: hsl(var(--foreground));
+    clip-path: polygon(-1% 0%, -1% 0%, -100% 100%, -1% 100%);
+    transition: clip-path 320ms cubic-bezier(0.25, 0, 0, 1);
+    z-index: -1;
+  }
+
+  .btn-stripe:hover::after {
+    clip-path: polygon(0% 0%, 200% 0%, 100% 100%, 0% 100%);
+  }
+
+  .btn-stripe::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    background-image:
+      linear-gradient(to right, hsl(var(--foreground)) 8px, transparent 8px, transparent calc(100% - 8px), hsl(var(--foreground)) calc(100% - 8px)),
+      linear-gradient(to right, hsl(var(--foreground)) 8px, transparent 8px, transparent calc(100% - 8px), hsl(var(--foreground)) calc(100% - 8px)),
+      linear-gradient(to bottom, hsl(var(--foreground)) 8px, transparent 8px, transparent calc(100% - 8px), hsl(var(--foreground)) calc(100% - 8px)),
+      linear-gradient(to bottom, hsl(var(--foreground)) 8px, transparent 8px, transparent calc(100% - 8px), hsl(var(--foreground)) calc(100% - 8px));
+    background-size: 100% 1px, 100% 1px, 1px 100%, 1px 100%;
+    background-position: 0 0, 0 100%, 0 0, 100% 0;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    transition: inset 200ms cubic-bezier(0.25, 0, 0, 1);
+  }
+
+  .btn-stripe:hover::before {
+    inset: -3px;
+  }
+
+  .btn-stripe:hover {
+    color: hsl(var(--background));
+  }
+
+  .btn-stripe[data-tone="muted"] {
+    background-image: repeating-linear-gradient(
+      119deg,
+      color-mix(in srgb, hsl(var(--foreground)) 9%, transparent) 0 1px,
+      transparent 1px 5px
+    );
+  }
+
+  .btn-stripe[data-tone="muted"]::after {
+    background: hsl(var(--foreground));
+  }
+
+  .panel-grid {
+    background-image:
+      linear-gradient(to right, color-mix(in srgb, hsl(var(--foreground)) 4%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in srgb, hsl(var(--foreground)) 4%, transparent) 1px, transparent 1px);
+    background-size: 6.25% 100%, 100% calc(100% / 14);
+  }
+
+  .liquid-surface,
   .glass-project-card {
-    @apply relative overflow-hidden rounded-[22px] border bg-white/[0.045] backdrop-blur-xl shadow-[0_18px_50px_rgba(0,0,0,0.24)] transition-all;
-    border-color: rgba(255, 255, 255, 0.12);
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    backdrop-filter: blur(24px) saturate(118%);
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.078) 0%, rgba(255, 255, 255, 0.04) 18%, rgba(255, 255, 255, 0.022) 42%, rgba(255, 255, 255, 0.028) 100%),
+      linear-gradient(135deg, rgba(255, 255, 255, 0.032) 0%, rgba(255, 255, 255, 0.012) 35%, rgba(255, 255, 255, 0.03) 68%, rgba(255, 255, 255, 0.016) 100%),
+      rgba(15, 18, 24, 0.46);
+    border: 1px solid rgba(255, 255, 255, 0.13);
+    box-shadow:
+      0 18px 50px rgba(0, 0, 0, 0.24),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transition:
+      background-color 220ms ease,
+      border-color 220ms ease,
+      box-shadow 220ms ease,
+      transform 220ms ease;
   }
 
+  .liquid-surface::before,
   .glass-project-card::before {
     content: "";
     position: absolute;
     inset: 0;
     pointer-events: none;
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.012) 22%, rgba(255, 255, 255, 0) 46%),
-      linear-gradient(115deg, rgba(255, 255, 255, 0.045) 0%, rgba(255, 255, 255, 0) 34%, rgba(255, 255, 255, 0.025) 62%, rgba(255, 255, 255, 0) 100%);
-    opacity: 0.95;
+      linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.045) 16%, rgba(255, 255, 255, 0.012) 34%, rgba(255, 255, 255, 0) 56%),
+      linear-gradient(104deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.028) 20%, rgba(255, 255, 255, 0) 38%, rgba(255, 255, 255, 0.03) 66%, rgba(255, 255, 255, 0) 100%);
+    opacity: 0.96;
   }
 
+  .liquid-surface::after,
+  .glass-project-card::after {
+    content: "";
+    position: absolute;
+    inset: auto -10% -38% auto;
+    width: 62%;
+    height: 78%;
+    pointer-events: none;
+    background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0) 70%);
+    filter: blur(26px);
+    opacity: 0.5;
+  }
+
+  .liquid-surface--pill {
+    border-radius: 0;
+  }
+
+  .liquid-surface--panel {
+    border-radius: 0;
+  }
+
+  .liquid-surface--card,
+  .glass-project-card {
+    border-radius: 0;
+  }
+
+  .liquid-surface--subtle {
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.028) 18%, rgba(255, 255, 255, 0.014) 42%, rgba(255, 255, 255, 0.02) 100%),
+      rgba(12, 15, 20, 0.34);
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow:
+      0 12px 34px rgba(0, 0, 0, 0.18),
+      inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  }
+
+  .liquid-surface--interactive:hover,
   .glass-project-card:hover {
-    @apply bg-white/[0.06] -translate-y-0.5;
-    border-color: rgba(255, 255, 255, 0.22);
-    box-shadow: 0 26px 60px rgba(0, 0, 0, 0.32);
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.24);
+    box-shadow:
+      0 24px 60px rgba(0, 0, 0, 0.28),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  .liquid-surface--interactive:hover::before,
+  .glass-project-card:hover::before {
+    opacity: 1;
   }
 
   .glass-project-card-media {
@@ -120,17 +330,16 @@
   }
 }
 
-/* Subtle site-wide backdrop (non-chat pages).
-   Keep glows away from the top edge so the strip above fixed nav (top-4) matches the page. */
 .site-backdrop {
   position: absolute;
   inset: 0;
   pointer-events: none;
   z-index: -10;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.032) 0%, rgba(255, 255, 255, 0.014) 14%, rgba(255, 255, 255, 0) 32%),
-    linear-gradient(115deg, rgba(255, 255, 255, 0.024) 0%, rgba(255, 255, 255, 0.008) 18%, rgba(255, 255, 255, 0) 34%, rgba(255, 255, 255, 0.018) 58%, rgba(255, 255, 255, 0) 82%),
-    linear-gradient(180deg, rgba(6, 8, 12, 0) 0%, rgba(6, 8, 12, 0.12) 100%);
+    radial-gradient(circle at top center, rgba(255, 224, 35, 0.09), rgba(255, 224, 35, 0) 22rem),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.018) 0%, rgba(255, 255, 255, 0) 22%),
+    hsl(var(--background));
+  overflow: hidden;
 }
 
 .site-backdrop::before,
@@ -142,17 +351,23 @@
 
 .site-backdrop::before {
   background:
-    linear-gradient(104deg, transparent 0%, rgba(255, 255, 255, 0.05) 24%, rgba(255, 255, 255, 0.012) 34%, transparent 46%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 28%);
-  filter: blur(14px);
-  opacity: 0.8;
+    linear-gradient(to right, color-mix(in srgb, hsl(var(--foreground)) 4%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, hsl(var(--foreground)) 4%, transparent) 1px, transparent 1px);
+  background-size: 72px 100%, 100% 72px;
+  opacity: 0.28;
 }
 
 .site-backdrop::after {
-  inset: 0;
-  background: linear-gradient(125deg, transparent 0%, rgba(255, 255, 255, 0.02) 30%, rgba(255, 255, 255, 0) 48%, rgba(255, 255, 255, 0.016) 72%, transparent 100%);
-  filter: blur(28px);
-  opacity: 0.55;
+  inset: auto 0 0 0;
+  height: 22rem;
+  background:
+    linear-gradient(180deg, rgba(3, 3, 4, 0) 0%, rgba(3, 3, 4, 0.65) 100%),
+    repeating-linear-gradient(
+      119deg,
+      color-mix(in srgb, hsl(var(--foreground)) 6%, transparent) 0 1px,
+      transparent 1px 8px
+    );
+  opacity: 0.45;
 }
 
 body.chat-landing-mode .site-footer {
@@ -303,7 +518,7 @@ body.chat-landing-mode .site-footer {
 
 ::-webkit-scrollbar-thumb {
   background: hsl(var(--muted));
-  border-radius: 5px;
+  border-radius: 0;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -327,7 +542,7 @@ body.chat-landing-mode .site-footer {
 }
 
 .skeleton-image {
-  @apply skeleton rounded-xl;
+  @apply skeleton;
 }
 
 /* Respect reduced motion preference */

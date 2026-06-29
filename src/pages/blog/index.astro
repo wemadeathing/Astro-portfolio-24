@@ -45,9 +45,10 @@ const agentMarkdown = [
 >
   <section class="py-10 sm:py-14">
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-[68ch]">
-        <h1 class="type-h1 text-white/95">Insights</h1>
-        <p class="mt-4 type-lead text-white/78">
+      <div class="max-w-[68ch] shell-rule">
+        <div class="section-kicker">Writing</div>
+        <h1 class="type-h1 mt-4">Insights</h1>
+        <p class="mt-4 type-lead">
           Notes on AI-powered workflows, product craft, and the practical side of shipping.
         </p>
       </div>
@@ -57,7 +58,7 @@ const agentMarkdown = [
           <div class="insights-chip-row flex items-center gap-2 overflow-x-auto pb-1 whitespace-nowrap px-4 sm:px-0">
             <a
               href="/blog"
-              class="shrink-0 inline-flex items-center rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors bg-primary/15 text-white/90 border-primary/30"
+              class="shrink-0 inline-flex items-center border px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] transition-colors bg-primary/15 text-foreground border-primary/30"
               aria-current="true"
             >
               All
@@ -65,7 +66,7 @@ const agentMarkdown = [
             {allTags.map((tag) => (
               <a
                 href={`/blog/tags/${tagToSlug(tag)}`}
-                class="shrink-0 inline-flex items-center rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors bg-white/[0.03] text-white/78 border-white/10 hover:bg-white/[0.06] hover:text-white"
+                class="shrink-0 inline-flex items-center border px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] transition-colors text-muted-foreground border-border/80 hover:border-primary/35 hover:text-foreground"
               >
                 {tag}
               </a>

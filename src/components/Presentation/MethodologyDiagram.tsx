@@ -26,7 +26,7 @@ export const MethodologyDiagram: React.FC<MethodologyDiagramProps> = ({ stages, 
 
   return (
     <div className="w-full">
-      {title && <h2 className="type-h2 text-white/90 text-center mb-8">{title}</h2>}
+      {title && <h2 className="type-h2 text-foreground text-center mb-8">{title}</h2>}
 
       <div className="flex flex-wrap items-center justify-center gap-8 mb-10">
         {stages.map((stage, index) => {
@@ -45,24 +45,24 @@ export const MethodologyDiagram: React.FC<MethodologyDiagramProps> = ({ stages, 
                 transition={{ duration: 0.4 }}
                 type="button"
                 onClick={() => setCurrentStage(index)}
-                className="flex flex-col items-center gap-4 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20 rounded-2xl"
+                className="flex flex-col items-center gap-4 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
                 aria-current={isSelected ? 'step' : undefined}
                 aria-label={`Select stage: ${stage.name}`}
               >
                 <div 
-                  className={`w-28 h-28 rounded-full flex items-center justify-center transition-all ${
+                  className={`flex h-28 w-28 items-center justify-center border transition-all ${
                     isActive 
-                      ? 'bg-primary/10 border border-primary/40' 
-                      : 'bg-white/[0.03] border border-white/10'
+                      ? 'bg-primary/10 border-primary/40' 
+                      : 'bg-card/40 border-border/80'
                   }`}
                 >
                   <IconComponent 
-                    className={`w-12 h-12 ${isActive ? 'text-primary' : 'text-white/40'}`}
+                    className={`h-12 w-12 ${isActive ? 'text-primary' : 'text-muted-foreground'}`}
                   />
                 </div>
                 <span 
-                  className={`text-sm font-semibold transition-colors ${
-                    isActive ? 'text-white/90' : 'text-white/40'
+                  className={`font-mono text-[11px] uppercase tracking-[0.16em] transition-colors ${
+                    isActive ? 'text-foreground' : 'text-muted-foreground'
                   }`}
                 >
                   {stage.name}
@@ -91,8 +91,8 @@ export const MethodologyDiagram: React.FC<MethodologyDiagramProps> = ({ stages, 
           transition={{ duration: 0.4 }}
           className="max-w-2xl mx-auto"
         >
-          <h3 className="type-h3 text-white/92 mb-3 text-center">{stages[currentStage].name}</h3>
-          <p className="text-base sm:text-lg leading-[1.75] text-white/70 text-center">
+          <h3 className="type-h3 text-foreground mb-3 text-center">{stages[currentStage].name}</h3>
+          <p className="text-base sm:text-lg leading-[1.75] text-muted-foreground text-center">
             {stages[currentStage].description}
           </p>
         </motion.div>

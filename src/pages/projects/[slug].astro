@@ -67,6 +67,7 @@ const projectSchema = {
   ]
 };
 
+const agentDivider = '---';
 const agentMarkdown = `# ${project.data.title}
 
 > ${project.data.description}
@@ -74,7 +75,7 @@ const agentMarkdown = `# ${project.data.title}
 **Tags:** ${(project.data.tags ?? []).join(', ')}
 **URL:** ${shareUrl}
 
----
+${agentDivider}
 
 ${project.body}`;
 ---
@@ -88,10 +89,9 @@ ${project.body}`;
   agentPathLabel={`~/nasifsalaam / projects / ${project.slug}.md`}
 >
   <article class="min-h-screen bg-background">
-    <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 pb-16">
-      <div class={showSidebar ? "grid grid-cols-1 lg:grid-cols-[1fr_240px] gap-10" : ""}>
-        <!-- Main Content Area with Light Background -->
-        <div class="rounded-2xl border border-white/10 bg-white/[0.03] shadow-sm px-6 sm:px-8 md:px-12 py-7 md:py-10">
+    <div class="container max-w-[1180px] mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 pb-16">
+      <div class={showSidebar ? "grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_210px] gap-12 lg:gap-20" : ""}>
+        <div class="min-w-0">
           <Breadcrumb 
             items={[
               { label: 'Home', href: '/' },
@@ -100,25 +100,29 @@ ${project.body}`;
             ]}
           />
           <!-- Header Section -->
-          <div class="mb-8">
-            <h1 class="type-h1 mb-4 text-white/95">
-              {project.data.title}
-            </h1>
-            <p class="type-lead text-white/70 mb-6">
+          <header class="mb-14">
+            <div class="shell-rule">
+              <div class="section-kicker">Case Study</div>
+              <h1 class="type-h1 mb-5 mt-4 max-w-[14ch]">
+                {project.data.title}
+              </h1>
+            </div>
+            <p class="type-lead mb-10 max-w-[62ch]">
               {project.data.description}
             </p>
-            <div class="flex flex-wrap gap-2">
-              {project.data.tags?.map((tag) => (
-                <span class="px-3 py-1.5 bg-primary/15 text-white/85 rounded-full text-xs font-semibold border border-primary/30">
+            <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
+              {project.data.tags?.map((tag, index) => (
+                <span class="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                  {index > 0 && <span class="mr-3 text-border/80">/</span>}
                   {tag}
                 </span>
               ))}
             </div>
-          </div>
+          </header>
 
           <!-- Featured Image -->
           {showFeaturedImage && project.data.image && (
-            <div class="rounded-xl overflow-hidden mb-12">
+            <div class="mb-18 border-y border-border/80 py-5">
               <img
                 src={project.data.image}
                 alt={project.data.title}
@@ -137,14 +141,14 @@ ${project.body}`;
         <!-- Sidebar -->
         {showSidebar && (
           <aside class="hidden lg:block">
-            <div class="sticky top-32 rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-              <div class="text-xs tracking-wide uppercase text-white/60 mb-4">On this page</div>
+            <div class="sticky top-32 border-t border-border/80 pt-4">
+              <div class="mb-4 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">On this page</div>
               <ul class="space-y-1 text-sm">
                 {headings.map((heading) => (
                   <li>
                     <a
                       href={`#${heading.slug}`}
-                      class="toc-link block rounded-lg px-2 py-1.5 text-white/70 hover:text-white/90 hover:bg-white/5 transition-colors"
+                      class="toc-link block py-1.5 text-muted-foreground transition-colors hover:text-foreground"
                       style={`margin-left: ${(heading.depth - 1) * 1}rem`}
                     >
                       {heading.text}
@@ -163,23 +167,27 @@ ${project.body}`;
 <style is:global>
   /* Dark-first prose styles for project pages */
   .prose {
-    @apply text-base leading-7 text-white/85;
+    @apply text-base leading-7 text-muted-foreground;
+  }
+
+  .prose > *:first-child {
+    @apply mt-0;
   }
 
   .prose h2 {
-    @apply text-2xl font-semibold mt-12 mb-4 scroll-mt-32 text-white/95;
+    @apply mt-16 mb-5 border-t border-border/80 pt-6 text-2xl font-semibold scroll-mt-32 text-foreground;
   }
 
   .prose h3 {
-    @apply text-xl font-semibold mt-8 mb-3 scroll-mt-32 text-white/90;
+    @apply mt-10 mb-3 text-xl font-semibold scroll-mt-32 text-foreground;
   }
 
   .prose h4 {
-    @apply text-base font-medium text-white/75 scroll-mt-32;
+    @apply text-base font-medium text-muted-foreground scroll-mt-32;
   }
 
   .prose p {
-    @apply mb-6 text-white/75;
+    @apply mb-6 text-muted-foreground;
   }
 
   .prose ul {
@@ -187,20 +195,20 @@ ${project.body}`;
   }
 
   .prose ul li {
-    @apply flex items-start text-white/75;
+    @apply flex items-start text-muted-foreground;
   }
 
   .prose ul li::before {
     content: "•";
-    @apply mr-3 text-white/90 font-bold text-lg;
+    @apply mr-3 text-foreground/90 font-bold text-lg;
   }
 
   .prose img {
-    @apply rounded-xl my-12;
+    @apply my-12 border border-border/80;
   }
   
   .prose figure {
-    @apply my-12;
+    @apply my-14;
   }
   
   .prose figure img {
@@ -208,19 +216,19 @@ ${project.body}`;
   }
   
   .prose figcaption {
-    @apply text-sm text-white/60 text-center mt-4 italic;
+    @apply text-sm text-muted-foreground text-center mt-4 italic;
   }
 
   .prose blockquote {
-    @apply border-l-4 border-primary/50 pl-6 my-8 italic text-white/70;
+    @apply my-10 border-y border-border/80 py-5 italic text-muted-foreground;
   }
 
   .prose pre {
-    @apply bg-black/30 border border-white/10 rounded-xl p-6 my-8 overflow-x-auto;
+    @apply my-10 overflow-x-auto border-y border-border/80 bg-black/20 px-0 py-6;
   }
 
   .prose code {
-    @apply text-sm text-white/90;
+    @apply text-sm text-foreground/90;
   }
 
   .prose a {
@@ -234,7 +242,39 @@ ${project.body}`;
   }
 
   .prose strong {
-    @apply text-white/95 font-semibold;
+    @apply text-foreground font-semibold;
+  }
+
+  .prose .not-prose .bg-card,
+  .prose .not-prose [class*="bg-card"] {
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+
+  .prose .not-prose [class*="bg-card"][class*="border"] {
+    border-left: 0 !important;
+    border-right: 0 !important;
+    border-bottom: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+
+  .prose .not-prose [class*="backdrop-blur"] {
+    backdrop-filter: none !important;
+  }
+
+  .prose .not-prose .absolute.inset-0[class*="bg-gradient"] {
+    opacity: 0.2;
+  }
+
+  .prose .not-prose .bg-blue-50,
+  .prose .not-prose .text-blue-800 {
+    background: transparent !important;
+    color: hsl(var(--muted-foreground)) !important;
+  }
+
+  .prose .not-prose .border-blue-300 {
+    border-color: hsl(var(--border)) !important;
   }
 
   /* Enhanced TOC styling */
@@ -243,11 +283,8 @@ ${project.body}`;
     position: relative;
   }
 
-  .toc-link:hover {
-    transform: translateX(4px);
-  }
-
   .toc-link.active {
+    color: hsl(var(--foreground));
     font-weight: 500;
   }
 </style>

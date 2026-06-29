@@ -58,7 +58,7 @@ export const NavigationDock: React.FC = () => {
   return (
     <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 transition-all duration-300">
       <div className="relative">
-        <div className="flex items-center gap-1 rounded-full border border-border/60 bg-card/80 px-2 py-2 backdrop-blur-xl">
+        <div className="flex items-center gap-1 border border-border/80 bg-background/95 px-2 py-2">
           {sections.map((section) => (
             <div key={section.name} className="relative">
               <button
@@ -73,16 +73,16 @@ export const NavigationDock: React.FC = () => {
                   navigate(section.slide);
                   setShowProjectsMenu(false);
                 }}
-                className="inline-flex h-10 items-center gap-2 rounded-full px-4 text-sm font-medium text-foreground/80 transition-colors hover:bg-muted/30 hover:text-foreground focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+                className="inline-flex h-10 items-center gap-2 px-4 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:bg-card/50 hover:text-foreground focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
                 title={section.name}
               >
-                <section.icon className="h-4 w-4 text-foreground/70" />
+                <section.icon className="h-4 w-4 text-muted-foreground" />
                 <span className="hidden sm:inline">{section.name}</span>
               </button>
 
               {section.hasSubmenu && showProjectsMenu && (
-                <div className="absolute bottom-full left-0 mb-2 w-[220px] overflow-hidden rounded-2xl border border-border/60 bg-popover/92 shadow-2xl backdrop-blur-xl">
-                  <div className="px-3 py-2 text-xs tracking-[0.22em] uppercase text-foreground/50">
+                <div className="absolute bottom-full left-0 mb-2 w-[220px] overflow-hidden border border-border/80 bg-background shadow-2xl">
+                  <div className="px-3 py-2 font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
                     Projects
                   </div>
                   <div className="p-2 pt-0">
@@ -96,7 +96,7 @@ export const NavigationDock: React.FC = () => {
                           navigate(project.slide);
                           setShowProjectsMenu(false);
                         }}
-                        className="w-full rounded-xl px-3 py-2 text-left text-sm text-foreground/80 transition-colors hover:bg-muted/30 hover:text-foreground focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+                        className="w-full px-3 py-2 text-left font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:bg-card/50 hover:text-foreground focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
                       >
                         {project.name}
                       </button>

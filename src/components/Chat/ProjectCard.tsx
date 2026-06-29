@@ -14,10 +14,9 @@ export default function ProjectCard({ title, description, image, tags, slug }: P
   return (
     <a
       href={`/projects/${slug}`}
-      className="group block rounded-xl border border-border/50 bg-muted/10 hover:bg-muted/20 hover:border-border transition-all overflow-hidden h-full focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+      className="group block h-full border-t border-border/80 pt-4 transition-colors hover:border-primary/30 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
     >
-      {/* Image Area */}
-      <div className="aspect-[16/9] w-full overflow-hidden bg-muted/20 relative">
+      <div className="aspect-[16/9] w-full overflow-hidden border-y border-border/80 bg-muted/20 relative">
         <img
           src={image}
           alt={title}
@@ -26,21 +25,19 @@ export default function ProjectCard({ title, description, image, tags, slug }: P
         />
       </div>
 
-      {/* Content Area */}
-      <div className="p-3 text-left">
-        <h4 className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1 mb-1">
+      <div className="pt-4 text-left">
+        <h4 className="mb-2 text-sm font-semibold text-foreground transition-colors line-clamp-1 group-hover:text-primary">
           {title}
         </h4>
-        <p className="text-xs text-muted-foreground line-clamp-2 mb-3">
+        <p className="mb-3 text-xs text-muted-foreground line-clamp-2">
           {description}
         </p>
 
-        {/* Tags */}
-        <div className="flex items-center gap-1.5 flex-wrap">
+        <div className="flex items-center gap-x-2 gap-y-1.5 flex-wrap">
           {visibleTags.map((tag) => (
             <span
               key={tag}
-              className="inline-flex items-center rounded-full bg-secondary/50 border border-border/30 px-2 py-0.5 text-[10px] font-medium text-secondary-foreground"
+              className="inline-flex items-center font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground"
             >
               {tag}
             </span>

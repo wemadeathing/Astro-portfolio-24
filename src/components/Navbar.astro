@@ -17,14 +17,14 @@ const pathname = Astro.url.pathname;
 const isHome = pathname === '/' || pathname === '';
 ---
 
-<header class="fixed top-4 left-0 right-0 z-50 px-4">
-  <div class="max-w-[1100px] mx-auto relative">
-    <nav class="flex items-center justify-between h-14 rounded-full bg-card/80 border border-border/60 backdrop-blur-xl px-3 sm:px-4">
+<header class="sticky top-0 z-50 pt-3">
+  <div class="shell-wrap relative">
+    <nav class="flex min-h-[63px] items-center gap-3 border border-border/80 bg-background px-3 py-3 sm:px-4">
       <div class="flex items-center gap-3 min-w-0">
         {!isHome && (
           <a 
             href="/" 
-            class="w-8 h-8 flex items-center justify-center rounded-full bg-muted/50 hover:bg-muted text-foreground/70 hover:text-foreground transition-colors"
+            class="inline-flex h-9 w-9 items-center justify-center border border-border/80 bg-secondary/40 text-muted-foreground transition-colors hover:text-foreground"
             aria-label="Back to Home"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -34,18 +34,19 @@ const isHome = pathname === '/' || pathname === '';
         )}
         <a 
           href="/" 
-          class="flex items-center hover:opacity-80 transition-opacity"
+          class="flex items-center transition-opacity hover:opacity-80"
         >
           <img 
             src="/images/ns26/logo26w-gradient.svg" 
             alt="Nasif Salaam" 
-            class="h-7 sm:h-8 w-auto"
+            class="h-6 w-auto sm:h-7"
           />
         </a>
       </div>
       
-      <!-- Desktop Navigation (visible on md+) -->
-      <nav class="hidden md:flex items-center gap-1">
+      <div class="hidden flex-1 md:block"></div>
+
+      <div class="hidden items-center gap-1 md:flex">
         {navItems.slice(0, -1).map((item) => {
           const isActive = item.href === '/?view=chat'
             ? pathname === '/' && Astro.url.searchParams.get('view') === 'chat'
@@ -54,10 +55,10 @@ const isHome = pathname === '/' || pathname === '';
             <a 
               href={item.href}
               class:list={[
-                'px-3 py-2 rounded-full text-sm font-medium transition-colors',
+                'px-3 py-2 font-mono text-[11px] uppercase tracking-[0.1em] transition-colors',
                 isActive 
-                  ? 'text-foreground bg-muted/40' 
-                  : 'text-foreground/75 hover:text-foreground hover:bg-muted/30'
+                  ? 'text-foreground' 
+                  : 'text-muted-foreground hover:text-foreground'
               ]}
               aria-current={isActive ? 'page' : undefined}
             >
@@ -65,18 +66,27 @@ const isHome = pathname === '/' || pathname === '';
             </a>
           );
         })}
+        <a
+          href="/?view=chat"
+          aria-label="Open AI chat"
+          class="inline-flex h-9 w-9 items-center justify-center px-0 text-foreground transition-opacity hover:opacity-70 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m20 20-3.5-3.5"></path>
+          </svg>
+        </a>
         <a 
           href="/contact" 
-          class="ml-2 inline-flex h-9 items-center justify-center rounded-full bg-primary px-4 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+          class="btn-stripe ml-1 min-h-[42px] px-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
         >
           Contact
         </a>
-      </nav>
+      </div>
       
-      <!-- Burger (mobile only) -->
       <button
         id="menuButton"
-        class="md:hidden w-10 h-10 flex items-center justify-center rounded-full bg-muted/30 border border-border/60 text-foreground/80 hover:bg-muted/45 transition-colors duration-200"
+        class="ml-auto flex h-10 w-10 items-center justify-center text-foreground transition-opacity duration-200 hover:opacity-70 md:hidden"
         aria-label="Toggle menu"
         aria-expanded="false"
         aria-controls="site-menu"
@@ -234,7 +244,6 @@ const isHome = pathname === '/' || pathname === '';
   document.addEventListener('astro:page-load', initNavMenu);
 </script>
 
-<!-- Menu Flyout (Twingate-style) -->
 <div
   id="site-menu"
   data-open="false"
@@ -242,20 +251,20 @@ const isHome = pathname === '/' || pathname === '';
   aria-modal="true"
   class="fixed inset-0 z-[60] transition-opacity duration-200 opacity-0 pointer-events-none"
 >
-  <div data-menu-backdrop class="absolute inset-0 bg-black/45 backdrop-blur-[2px]"></div>
-  <div class="absolute top-4 left-0 right-0 px-4">
-    <div class="max-w-[1100px] mx-auto flex justify-end">
+  <div data-menu-backdrop class="absolute inset-0 bg-black/55"></div>
+  <div class="absolute left-0 right-0 top-3">
+    <div class="shell-wrap flex justify-end">
       <div
-        class="origin-top-right rounded-2xl border border-border/60 bg-popover/92 backdrop-blur-xl shadow-2xl w-full max-w-[560px] overflow-hidden transition-all duration-300 ease-out opacity-0 -translate-y-2 scale-[0.98]"
+        class="origin-top-right w-full max-w-[560px] overflow-hidden border border-border/80 bg-background transition-all duration-300 ease-out opacity-0 -translate-y-2 scale-[0.98]"
         data-menu-panel
       >
-        <div class="px-4 py-3 border-b border-border/60 flex items-center justify-between">
-          <div class="text-xs tracking-wide uppercase text-foreground/60">Menu</div>
+        <div class="flex items-center justify-between border-b border-border/80 px-4 py-3">
+          <div class="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">Navigation</div>
           <button
             id="site-menu-close"
             type="button"
             aria-label="Close menu"
-            class="w-9 h-9 rounded-full bg-muted/30 border border-border/60 text-foreground/80 flex items-center justify-center hover:bg-muted/45 transition-colors"
+            class="flex h-9 w-9 items-center justify-center border border-border/80 text-foreground transition-colors hover:border-primary/25"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M18 6 6 18"></path>
@@ -264,23 +273,23 @@ const isHome = pathname === '/' || pathname === '';
           </button>
         </div>
 
-        <div class="p-3 md:p-4 max-h-[calc(100vh-7rem)] overflow-auto">
-          <div class="grid grid-cols-1 gap-2">
+        <div class="max-h-[calc(100vh-7rem)] overflow-auto p-4">
+          <div class="grid grid-cols-1 gap-0">
             {navItems.map((item) => (
               <a
                 href={item.href}
                 target={item.external ? '_blank' : undefined}
                 rel={item.external ? 'noopener noreferrer' : undefined}
-                class="group flex items-start justify-between gap-4 rounded-xl p-3 hover:bg-muted/30 transition-colors"
+                class="group flex items-start justify-between gap-4 border-t border-border/80 py-4 transition-colors hover:border-primary/40"
               >
                 <div class="flex items-start gap-3">
-                  <div class="mt-2 w-2 h-2 rounded-full bg-primary opacity-70 group-hover:opacity-100 transition-opacity"></div>
+                  <div class="mt-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-primary">+</div>
                   <div class="text-left">
-                    <div class="text-foreground/92 font-medium leading-tight">{item.label}</div>
-                    <div class="text-foreground/60 text-sm leading-snug">{item.description}</div>
+                    <div class="font-mono text-[11px] uppercase tracking-[0.14em] text-foreground">{item.label}</div>
+                    <div class="mt-1 text-sm leading-snug text-muted-foreground">{item.description}</div>
                   </div>
                 </div>
-                <div class="shrink-0 text-foreground/40 group-hover:text-foreground/70 transition-colors">↘</div>
+                <div class="shrink-0 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground transition-colors group-hover:text-foreground">↗</div>
               </a>
             ))}
           </div>

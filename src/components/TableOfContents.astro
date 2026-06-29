@@ -39,14 +39,14 @@ const headings = extractHeadings(content);
 ---
 
 {headings.length > 0 && (
-  <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-    <h2 class="text-xs tracking-wide uppercase text-white/60 mb-4">On this page</h2>
+  <div class="border-t border-border/80 pt-4">
+    <h2 class="mb-4 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">On this page</h2>
     <ul class="space-y-2">
       {headings.map((heading) => (
         <li>
           <a
             href={`#${heading.slug}`}
-            class="toc-link block rounded-lg px-2 py-1.5 text-sm text-white/70 hover:text-white/90 hover:bg-white/5 transition-colors"
+            class="toc-link block py-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
             style={`margin-left: ${(heading.depth - 2) * 1}rem`}
           >
             {heading.title}
@@ -59,8 +59,7 @@ const headings = extractHeadings(content);
 
 <style>
   .toc-link.active {
-    background-color: rgba(255, 255, 255, 0.06);
-    color: rgba(255, 255, 255, 0.92);
+    color: hsl(var(--foreground));
     font-weight: 500;
   }
 </style>

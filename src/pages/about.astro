@@ -1,7 +1,6 @@
 ---
 export const prerender = true;
 import Layout from '../layouts/Layout.astro';
-import Button from '../components/Button.astro';
 
 const heroHighlights = [
   '15+ years across brand, UX, UI, and frontend delivery',
@@ -13,17 +12,14 @@ const expertise = [
   {
     title: 'AI Products, MVPs, and AI-Accelerated Build Work',
     description: `I take product ideas from framing to working software, combining product design, system thinking, and implementation. When a product is AI-powered, that means designing how the agents receive context, use their tools, and respond, in service of the person using it. Recent examples include Kota AI, a multi-agent SME platform, and RideNote, a solo-built iOS app live on the App Store.`,
-    icon: 'M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5',
   },
   {
     title: 'Product Systems and Cross-Platform UX',
     description: `I have spent 15+ years designing digital products across banking, retail, property, and tech. I am strongest where structure matters: product systems, scalable UI, complex journeys, and work that has to earn user trust.`,
-    icon: 'M13 2L3 14h9l-1 8 10-12h-9l1-8z',
   },
   {
     title: 'High-Trust Digital Presence',
     description: `I also design and build brand-led websites for businesses that need to look credible fast. That includes identity work, web design, and implementation for service businesses, founders, and small teams.`,
-    icon: 'M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75',
   },
 ];
 
@@ -82,6 +78,13 @@ const industry = [
     title: 'Small Business',
     items: ['Travel', 'Hospitality', 'Events', 'FMCG', 'Services'],
   },
+];
+
+const certifications = [
+  { name: 'ISO/IEC 42001:2023 Lead Auditor', issuer: 'Mastermind Assurance', year: '2026' },
+  { name: 'AI Security & Governance', issuer: 'Securiti', year: '2025' },
+  { name: 'AI Fluency', issuer: 'Anthropic', year: '2025' },
+  { name: 'Introduction to Generative AI', issuer: 'Google Cloud', year: '2024' },
 ];
 
 const experience = [
@@ -154,88 +157,80 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
   agentMarkdown={agentMarkdown}
   agentPathLabel="~/nasifsalaam / about.md"
 >
-  <!-- Hero (wider / near full-width) -->
   <section class="py-10 sm:py-14">
-    <!-- Match gutters with the main page container -->
-    <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8 sm:gap-10 items-center relative">
-        <div class="max-w-[68ch]">
-          <h1 class="text-4xl sm:text-5xl md:text-[54px] font-medium tracking-[-0.03em] leading-[1.05] text-white/95">
-            Product Designer / AI Builder
-          </h1>
-          <div class="mt-4 text-xs tracking-[0.22em] uppercase text-white/55">
+    <div class="container max-w-[1180px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1.1fr)_320px] lg:gap-16">
+        <div>
+          <div class="shell-rule">
+            <div class="section-kicker">About</div>
+            <h1 class="type-h1 mt-4">
+              Product Designer / AI Builder
+            </h1>
+          </div>
+          <div class="mt-5 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
             AI products • Product systems • High-trust digital experiences
           </div>
-      <p class="mt-5 type-lead text-white/80">
+          <p class="mt-6 max-w-[64ch] text-base leading-[1.8] text-muted-foreground sm:text-lg">
             I help teams and founders turn complexity into clear digital products. My background spans enterprise design systems, banking transformation, client websites, and solo-built AI products, which means I can move between strategy, interface, and implementation without losing the thread. And when a product is powered by AI, building it well for people means designing how the agents receive context, use their tools, and respond, not just the human interface.
           </p>
 
-          <p class="mt-5 inline-flex items-center gap-2 rounded-full border border-primary/25 bg-primary/8 px-4 py-1.5 text-sm text-white/80">
-            <span class="w-2 h-2 rounded-full bg-primary"></span>
+          <p class="mt-6 inline-flex items-center gap-2 border-t border-border/80 pt-4 font-mono text-[11px] uppercase tracking-[0.14em] text-foreground">
+            <span class="h-2 w-2 bg-primary"></span>
             Open to product design / AI build roles and to project work.
           </p>
 
-          <div class="mt-7 grid gap-3 sm:grid-cols-3">
-            {heroHighlights.map((item) => (
-              <div class="border-l border-primary/45 pl-4 text-sm leading-[1.6] text-white/68">
-                {item}
+          <div class="mt-10 grid gap-4 sm:grid-cols-3">
+            {heroHighlights.map((item, index) => (
+              <div class="border-t border-border/80 pt-4">
+                <div class="mb-2 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                  0{index + 1}
+                </div>
+                <p class="text-sm leading-6 text-muted-foreground">
+                  {item}
+                </p>
               </div>
             ))}
           </div>
-
         </div>
 
-        <!-- Right-side visual (desktop) -->
-        <div class="hidden lg:flex justify-end self-center">
-          <div class="relative overflow-hidden rounded-[30px] border border-white/12 bg-white/[0.03] p-3 shadow-[0_18px_60px_rgba(0,0,0,0.28)] backdrop-blur-xl">
-            <div class="pointer-events-none absolute inset-x-5 top-0 h-20 rounded-full bg-white/[0.06] blur-2xl"></div>
-            <img
-              src="/images/NS-profile-2.png"
-              alt="Nasif Salaam"
-              class="relative w-full max-w-[240px] aspect-square object-cover rounded-[24px]"
-              loading="lazy"
-              decoding="async"
-            />
+        <aside class="grid gap-4 lg:pt-10">
+          <div class="grid gap-4">
+            <div class="border-t border-border/80 pt-4">
+              <div class="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Based</div>
+              <div class="mt-2 text-sm text-foreground">Cape Town, South Africa</div>
+            </div>
+            <div class="border-t border-border/80 pt-4">
+              <div class="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Best Fit</div>
+              <div class="mt-2 text-sm leading-6 text-muted-foreground">AI product builds, product design systems, high-trust digital presence, and MVP delivery.</div>
+            </div>
+            <div class="border-t border-border/80 pt-4">
+              <div class="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Working Style</div>
+              <div class="mt-2 text-sm leading-6 text-muted-foreground">Strategy, interface, and implementation held together in one line of thinking.</div>
+            </div>
           </div>
-        </div>
+        </aside>
       </div>
     </div>
   </section>
 
-  <div class="h-px bg-white/10"></div>
-
-  <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
-
-    <!-- What I do -->
+  <div class="container max-w-[1180px] mx-auto px-4 sm:px-6 lg:px-8">
     <section id="now" class="py-12 sm:py-14 scroll-mt-28">
-      <div class="flex items-end justify-between gap-6 mb-8">
-        <div>
-          <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-3">Where I’m strongest</div>
-          <h2 class="type-h2 text-white/90">The work I’m best suited for</h2>
-          <p class="mt-3 max-w-[58ch] text-sm sm:text-base leading-[1.7] text-white/62">
-            Three lanes, one underlying strength: translating complexity into something people can understand, trust, and use.
-          </p>
-        </div>
+      <div class="max-w-[62ch] shell-rule">
+        <div class="section-kicker">Where I’m strongest</div>
+        <h2 class="type-h2 mt-4">The work I’m best suited for</h2>
+        <p class="mt-4 text-sm sm:text-base leading-[1.75] text-muted-foreground">
+          Three lanes, one underlying strength: translating complexity into something people can understand, trust, and use.
+        </p>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10 stagger-children">
-        {expertise.map((item) => (
-          <div class="max-w-[56ch] border-t border-white/10 pt-6">
-            <div class="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="w-5 h-5 text-primary"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <path d={item.icon} />
-              </svg>
+
+      <div class="mt-10 grid gap-8 stagger-children">
+        {expertise.map((item, index) => (
+          <div class="grid gap-4 border-t border-border/80 pt-5 lg:grid-cols-[72px_minmax(0,280px)_minmax(0,1fr)] lg:gap-8">
+            <div class="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
+              0{index + 1}
             </div>
-            <h3 class="mt-4 text-lg sm:text-xl font-semibold text-white/92">{item.title}</h3>
-            <p class="mt-2 text-sm sm:text-base leading-[1.65] text-white/80">
+            <h3 class="text-lg font-semibold text-foreground sm:text-xl">{item.title}</h3>
+            <p class="text-sm sm:text-base leading-[1.75] text-muted-foreground">
               {item.description}
             </p>
           </div>
@@ -243,21 +238,20 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
       </div>
     </section>
 
-    <div class="h-px bg-white/10"></div>
-
-    <!-- Skills -->
     <section id="capabilities" class="py-12 sm:py-14 scroll-mt-28">
-      <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-3">Capabilities</div>
-      <h2 class="type-h2 text-white/90">Skills</h2>
-      <p class="mt-3 max-w-[60ch] text-sm sm:text-base leading-[1.7] text-white/62">
-        Three views of the same work: what I can do, what I work with, and how I work.
-      </p>
+      <div class="max-w-[56ch] shell-rule">
+        <div class="section-kicker">Capabilities</div>
+        <h2 class="type-h2 mt-4">How the work shows up</h2>
+        <p class="mt-4 text-sm sm:text-base leading-[1.75] text-muted-foreground">
+          Three views of the same practice: what I can do, what I work with, and how I work.
+        </p>
+      </div>
 
-      <div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-8 stagger-children">
+      <div class="mt-10 grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 stagger-children">
         {skills.map((group) => (
-          <div class="max-w-[34ch]">
-            <div class="text-sm font-semibold text-white/85 mb-3">{group.title}</div>
-            <p class="text-sm text-white/70 leading-[1.75]">
+          <div class="border-t border-border/80 pt-4">
+            <div class="mb-3 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">{group.title}</div>
+            <p class="text-sm leading-[1.85] text-muted-foreground">
               {group.items.join(' • ')}
             </p>
           </div>
@@ -265,127 +259,96 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
       </div>
     </section>
 
-    <div class="h-px bg-white/10"></div>
+    <section class="py-12 sm:py-14">
+      <div class="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)] lg:gap-16">
+        <div id="industry" class="scroll-mt-28">
+          <div class="section-kicker mb-3">Selected contexts</div>
+          <h2 class="type-h2">Industry range</h2>
+          <p class="mt-4 max-w-[56ch] text-sm sm:text-base leading-[1.75] text-muted-foreground">
+            Different sectors, same job underneath: reduce complexity, earn trust, and make the interface carry its weight.
+          </p>
 
-    <!-- Certifications -->
-    <section id="certifications" class="py-12 sm:py-14 scroll-mt-28">
-      <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-3">Certifications</div>
-      <h2 class="type-h2 text-white/90">Credentials</h2>
-
-      <div class="mt-8 space-y-4 stagger-children">
-        {[
-          { name: 'ISO/IEC 42001:2023 Lead Auditor', issuer: 'Mastermind Assurance', year: '2026' },
-          { name: 'AI Security & Governance', issuer: 'Securiti', year: '2025' },
-          { name: 'AI Fluency', issuer: 'Anthropic', year: '2025' },
-          { name: 'Introduction to Generative AI', issuer: 'Google Cloud', year: '2024' },
-        ].map((cert) => (
-          <div class="flex items-start justify-between gap-4 border-b border-white/8 pb-4 last:border-b-0 last:pb-0">
-            <div>
-              <div class="text-sm font-semibold text-white/85">{cert.name}</div>
-              <div class="text-xs text-white/50 mt-0.5">{cert.issuer}</div>
-            </div>
-            <div class="text-xs text-white/45 shrink-0 pt-0.5">
-              {cert.year}
-            </div>
+          <div class="mt-8 grid gap-6 sm:grid-cols-2 stagger-children">
+            {industry.map((group) => (
+              <div class="border-t border-border/80 pt-4">
+                <div class="mb-3 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">{group.title}</div>
+                <p class="text-sm leading-[1.85] text-muted-foreground">
+                  {group.items.join(', ')}
+                </p>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-    </section>
+        </div>
 
-    <div class="h-px bg-white/10"></div>
+        <div id="certifications" class="scroll-mt-28">
+          <div class="section-kicker mb-3">Credentials</div>
+          <h2 class="type-h2">Certifications</h2>
 
-    <!-- Industry experience -->
-    <section id="industry" class="py-12 sm:py-14 scroll-mt-28">
-      <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-3">Selected contexts</div>
-      <h2 class="type-h2 text-white/90">Industry range</h2>
-      <p class="mt-3 max-w-[58ch] text-sm sm:text-base leading-[1.7] text-white/62">
-        Different sectors, same job underneath: reduce complexity, earn trust, and make the interface carry its weight.
-      </p>
-
-      <div class="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-x-10 gap-y-8 stagger-children">
-        {industry.map((group) => (
-          <div class="max-w-[34ch]">
-            <div class="text-sm font-semibold text-white/85 mb-3">{group.title}</div>
-            <p class="text-sm text-white/70 leading-[1.75]">
-              {group.items.join(', ')}
-            </p>
-          </div>
-        ))}
-      </div>
-    </section>
-
-    <div class="h-px bg-white/10"></div>
-
-    <!-- Experience -->
-    <section id="career" class="py-12 sm:py-14 scroll-mt-28">
-      <div class="text-xs tracking-[0.22em] uppercase text-white/50 mb-3">Proof</div>
-      <h2 class="type-h2 text-white/90">Professional journey</h2>
-      <p class="mt-3 max-w-[62ch] text-sm sm:text-base leading-[1.7] text-white/62">
-        The titles changed over time, but the through-line stayed the same: design that can survive contact with real constraints.
-      </p>
-
-      <div class="mt-8 space-y-3 stagger-children">
-        {experience.map((item) => (
-          <details class="group border-b border-white/10 py-5 transition-colors">
-            <summary class="cursor-pointer select-none list-none focus:outline-none">
-              <div class="flex items-start justify-between gap-4">
+          <div class="mt-8 space-y-4 stagger-children">
+            {certifications.map((cert) => (
+              <div class="grid gap-2 border-t border-border/80 pt-4 sm:grid-cols-[1fr_auto] sm:items-start">
                 <div>
-                  <h3 class="text-lg font-semibold text-white/92">{item.role}</h3>
-                  {item.company && <p class="text-sm text-white/65 mt-1">{item.company}</p>}
+                  <div class="text-sm font-semibold text-foreground">{cert.name}</div>
+                  <div class="mt-1 text-xs text-muted-foreground">{cert.issuer}</div>
                 </div>
-                <div class="flex items-center gap-3 shrink-0">
-                  <div class="text-xs text-white/50">
-                    {item.period}
-                  </div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    class="w-4 h-4 text-white/60 transition-transform duration-200 group-open:rotate-90"
-                    aria-hidden="true"
-                  >
-                    <path d="M9 18l6-6-6-6"></path>
-                  </svg>
+                <div class="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                  {cert.year}
                 </div>
               </div>
-            </summary>
-            <div class="pt-4">
-              <p class="text-sm sm:text-base leading-[1.65] text-white/70 max-w-[72ch]">{item.description}</p>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="career" class="py-12 sm:py-14 scroll-mt-28">
+      <div class="max-w-[62ch] shell-rule">
+        <div class="section-kicker">Proof</div>
+        <h2 class="type-h2 mt-4">Professional journey</h2>
+        <p class="mt-4 text-sm sm:text-base leading-[1.75] text-muted-foreground">
+          The titles changed over time, but the through-line stayed the same: design that can survive contact with real constraints.
+        </p>
+      </div>
+
+      <div class="mt-10 grid gap-2 stagger-children">
+        {experience.map((item) => (
+          <div class="grid gap-4 border-t border-border/80 py-5 lg:grid-cols-[200px_220px_minmax(0,1fr)] lg:gap-8">
+            <div class="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+              {item.period}
             </div>
-          </details>
+            <div>
+              <h3 class="text-lg font-semibold text-foreground">{item.role}</h3>
+              {item.company && <p class="mt-1 text-sm text-muted-foreground">{item.company}</p>}
+            </div>
+            <div>
+              <p class="max-w-[72ch] text-sm sm:text-base leading-[1.75] text-muted-foreground">{item.description}</p>
+            </div>
+          </div>
         ))}
       </div>
     </section>
 
-    <!-- CTA -->
-    <section class="pb-14 sm:pb-20">
-      <div class="pt-10">
-        <div class="max-w-[72ch]">
-          <h2 class="type-h2 text-white/92">
-            Let’s build something useful.
-          </h2>
-          <p class="mt-3 text-base sm:text-lg leading-[1.65] text-white/80">
-            If you need someone who can move between product design, systems, and implementation without losing clarity, let’s connect.
-          </p>
-          <div class="mt-6 flex flex-wrap gap-3">
-            <Button href="/contact" text="Let's Connect" variant="primary" />
-            <a 
-              href="/Nasif-Salaam-Resume.pdf" 
-              download
-              class="inline-flex h-12 items-center justify-center rounded-full border border-white/15 bg-white/5 px-6 text-sm font-semibold text-white/85 transition-colors hover:bg-white/10 hover:text-white focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                <polyline points="7 10 12 15 17 10"/>
-                <line x1="12" y1="15" x2="12" y2="3"/>
-              </svg>
-              Download Resume
-            </a>
-          </div>
+    <section class="pb-14 pt-6 sm:pb-20 sm:pt-10">
+      <div class="max-w-[68ch] shell-rule">
+        <div class="section-kicker">Next step</div>
+        <h2 class="type-h2 mt-4">
+          Let’s build something useful.
+        </h2>
+        <p class="mt-4 text-base sm:text-lg leading-[1.75] text-muted-foreground">
+          If you need someone who can move between product design, systems, and implementation without losing clarity, let’s connect.
+        </p>
+        <div class="mt-7 flex flex-wrap gap-3">
+          <a href="/contact" class="btn-stripe">
+            Let’s Connect
+          </a>
+          <a href="/Nasif-Salaam-Resume.pdf" download class="btn-stripe">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Download Resume
+          </a>
         </div>
       </div>
     </section>

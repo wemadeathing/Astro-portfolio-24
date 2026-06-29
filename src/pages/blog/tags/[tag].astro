@@ -52,9 +52,11 @@ const filteredPosts = sortedPosts.filter((p) => (p.data.tags ?? []).includes(act
   <section class="py-10 sm:py-14">
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
       <div class="max-w-[68ch]">
-        <div class="text-xs tracking-[0.22em] uppercase text-white/50">Topic</div>
-        <h1 class="mt-3 type-h1 text-white/95">{activeTag}</h1>
-        <p class="mt-4 type-lead text-white/70">
+        <div class="shell-rule">
+          <div class="section-kicker">Topic</div>
+          <h1 class="type-h1 mt-4">{activeTag}</h1>
+        </div>
+        <p class="mt-4 type-lead text-muted-foreground">
           Posts tagged “{activeTag}”.
         </p>
       </div>
@@ -64,7 +66,7 @@ const filteredPosts = sortedPosts.filter((p) => (p.data.tags ?? []).includes(act
           <div class="insights-chip-row flex items-center gap-2 overflow-x-auto pb-1 whitespace-nowrap px-4 sm:px-0">
             <a
               href="/blog"
-              class="shrink-0 inline-flex items-center rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors bg-white/[0.03] text-white/70 border-white/10 hover:bg-white/[0.06] hover:text-white"
+              class="shrink-0 inline-flex items-center border border-border/80 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:border-primary/25 hover:text-foreground"
             >
               All
             </a>
@@ -74,10 +76,10 @@ const filteredPosts = sortedPosts.filter((p) => (p.data.tags ?? []).includes(act
                 <a
                   href={`/blog/tags/${tagToSlug(tag)}`}
                   class:list={[
-                    'shrink-0 inline-flex items-center rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors',
+                    'shrink-0 inline-flex items-center border px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] transition-colors',
                     isActive
-                      ? 'bg-primary/15 text-white/90 border-primary/30'
-                      : 'bg-white/[0.03] text-white/70 border-white/10 hover:bg-white/[0.06] hover:text-white',
+                      ? 'border-primary/35 bg-primary/12 text-primary'
+                      : 'border-border/80 text-muted-foreground hover:border-primary/25 hover:text-foreground',
                   ]}
                   aria-current={isActive ? 'true' : undefined}
                 >

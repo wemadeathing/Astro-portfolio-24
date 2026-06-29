@@ -11,17 +11,13 @@ const { items } = Astro.props;
 
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-8 my-12 not-prose">
   {items.map((group) => (
-    <div>
-      <h4 class="text-sm font-semibold text-white/80 mb-3 uppercase tracking-wide">
+    <div class="border-t border-border/80 pt-4">
+      <h4 class="mb-3 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
         {group.category}
       </h4>
-      <div class="flex flex-wrap gap-2">
-        {group.tools.map((tool) => (
-          <span class="px-3 py-1.5 bg-primary/15 text-white/85 rounded-full text-sm font-semibold border border-primary/30">
-            {tool}
-          </span>
-        ))}
-      </div>
+      <p class="text-sm leading-7 text-foreground/90">
+        {group.tools.join(' / ')}
+      </p>
     </div>
   ))}
 </div>
