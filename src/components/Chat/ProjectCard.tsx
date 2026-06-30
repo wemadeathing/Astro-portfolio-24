@@ -40,13 +40,13 @@ export default function ProjectCard({ title, description, image, tags, slug }: P
           {visibleTags.map((tag) => (
             <span
               key={tag}
-              className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground"
+              className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground"
             >
               {tag}
             </span>
           ))}
           {tags.length > 2 && (
-            <span className="font-mono text-[10px] text-muted-foreground">+{tags.length - 2}</span>
+            <span className="font-mono text-xs text-muted-foreground">+{tags.length - 2}</span>
           )}
           <svg
             className="ml-auto h-3 w-3 -translate-x-1 text-primary opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100"

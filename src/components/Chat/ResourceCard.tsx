@@ -51,7 +51,7 @@ export default function ResourceCard({ title, description, url, type, image, sit
             <ExternalLink className="w-6 h-6 text-muted-foreground/30" />
           </div>
         )}
-        <div className="absolute left-2.5 top-2.5 inline-flex items-center border border-border/80 bg-background/88 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+        <div className="absolute left-2.5 top-2.5 inline-flex items-center border border-border/80 bg-background/88 px-2 py-0.5 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">
           {typeLabel(type)}
         </div>
       </div>
@@ -65,7 +65,7 @@ export default function ResourceCard({ title, description, url, type, image, sit
             <p className="mt-1.5 text-xs text-muted-foreground line-clamp-2 leading-relaxed">{description}</p>
           )}
         </div>
-        <div className="mt-3 flex items-center gap-2 border-t border-border/60 pt-3 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+        <div className="mt-3 flex items-center gap-2 border-t border-border/60 pt-3 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
           <span className="truncate">{siteName || hostname}</span>
           <ExternalLink className="w-3 h-3 ml-auto opacity-0 group-hover:opacity-100 transition-opacity text-primary" />
         </div>

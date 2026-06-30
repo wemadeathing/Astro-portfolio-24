@@ -66,7 +66,7 @@ const filteredPosts = sortedPosts.filter((p) => (p.data.tags ?? []).includes(act
           <div class="insights-chip-row flex items-center gap-2 overflow-x-auto pb-1 whitespace-nowrap px-4 sm:px-0">
             <a
               href="/blog"
-              class="shrink-0 inline-flex items-center border border-border/80 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:border-primary/25 hover:text-foreground"
+              class="shrink-0 inline-flex items-center border border-border/80 px-3 py-1.5 font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:border-primary/25 hover:text-foreground"
             >
               All
             </a>
@@ -76,7 +76,7 @@ const filteredPosts = sortedPosts.filter((p) => (p.data.tags ?? []).includes(act
                 <a
                   href={`/blog/tags/${tagToSlug(tag)}`}
                   class:list={[
-                    'shrink-0 inline-flex items-center border px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] transition-colors',
+                    'shrink-0 inline-flex items-center border px-3 py-1.5 font-mono text-xs uppercase tracking-[0.16em] transition-colors',
                     isActive
                       ? 'border-primary/35 bg-primary/12 text-primary'
                       : 'border-border/80 text-muted-foreground hover:border-primary/25 hover:text-foreground',

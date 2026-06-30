@@ -39,15 +39,15 @@ export default function BlogCard({ title, description, slug, pubDate, tags }: Bl
           {visibleTags.map((tag) => (
             <span
               key={tag}
-              className="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground"
+              className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground"
             >
               {tag}
             </span>
           ))}
           {tags.length > 2 && (
-            <span className="font-mono text-[10px] text-muted-foreground">+{tags.length - 2}</span>
+            <span className="font-mono text-xs text-muted-foreground">+{tags.length - 2}</span>
           )}
-          <span className="ml-auto font-mono text-[10px] text-muted-foreground">
+          <span className="ml-auto font-mono text-xs text-muted-foreground">
             {formatDate(pubDate)}
           </span>
         </div>

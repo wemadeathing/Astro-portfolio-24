@@ -141,7 +141,7 @@ const agentMarkdown = [
               data-category={cat.value}
               aria-pressed={idx === 0 ? "true" : "false"}
               class:list={[
-                "filter-chip shrink-0 border border-border/80 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50",
+                "filter-chip shrink-0 border border-border/80 px-3 py-1.5 font-mono text-xs uppercase tracking-[0.16em] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50",
                 idx === 0 
                   ? "border-primary/40 bg-primary/12 text-primary" 
                   : "text-muted-foreground hover:border-primary/25 hover:text-foreground"
@@ -161,7 +161,7 @@ const agentMarkdown = [
         <button
           type="button"
           id="clear-filters"
-          class="hidden items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-foreground"
+          class="hidden items-center gap-1.5 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-foreground"
         >
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -276,9 +276,9 @@ const agentMarkdown = [
               const isActive = chip.getAttribute('data-category') === currentCategory;
               chip.setAttribute('aria-pressed', isActive ? 'true' : 'false');
               if (isActive) {
-                chip.className = 'filter-chip shrink-0 border border-border/80 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 border-primary/40 bg-primary/12 text-primary';
+                chip.className = 'filter-chip shrink-0 border border-border/80 px-3 py-1.5 font-mono text-xs uppercase tracking-[0.16em] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 border-primary/40 bg-primary/12 text-primary';
               } else {
-                chip.className = 'filter-chip shrink-0 border border-border/80 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 text-muted-foreground hover:border-primary/25 hover:text-foreground';
+                chip.className = 'filter-chip shrink-0 border border-border/80 px-3 py-1.5 font-mono text-xs uppercase tracking-[0.16em] transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 text-muted-foreground hover:border-primary/25 hover:text-foreground';
               }
             });
           };

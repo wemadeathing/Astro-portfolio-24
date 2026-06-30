@@ -162,7 +162,7 @@ const relatedPosts = sortedPosts
       <div class="mb-4 sm:mb-6 lg:hidden">
         <a
           href="/blog"
-          class="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+          class="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -196,7 +196,7 @@ const relatedPosts = sortedPosts
 
           <div class="mb-10">
             {post.data.series && (
-              <div class="mb-4 inline-flex items-center gap-2 border-t border-primary/30 px-0 py-2 font-mono text-[11px] uppercase tracking-[0.14em] text-foreground">
+              <div class="mb-4 inline-flex items-center gap-2 border-t border-primary/30 px-0 py-2 font-mono text-xs uppercase tracking-[0.14em] text-foreground">
                 <span class="font-bold">Series</span>
                 <span class="text-primary/40">|</span>
                 <span>{post.data.series} <span class="opacity-75">· Part {post.data.seriesOrder}</span></span>
@@ -206,7 +206,7 @@ const relatedPosts = sortedPosts
               <div class="section-kicker">Writing</div>
               <h1 class="type-h1 mb-4 mt-4">{post.data.title}</h1>
             </div>
-            <p class="mb-3 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+            <p class="mb-3 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">
               {formattedDate} • {rt.label}
               {formattedUpdated ? ` • Updated ${formattedUpdated}` : ''}
             </p>
@@ -216,7 +216,7 @@ const relatedPosts = sortedPosts
                 {(post.data.tags ?? []).map((t) => (
                   <a
                     href={`/blog/tags/${tagToSlug(String(t))}`}
-                    class="inline-flex items-center font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-foreground"
+                    class="inline-flex items-center font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-foreground"
                   >
                     {t}
                   </a>

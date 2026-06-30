@@ -66,7 +66,7 @@ const agentMarkdown = `# Contact: Nasif Salaam
         <div class="mt-8 grid gap-4 sm:grid-cols-3">
           {contactTracks.map((track, index) => (
             <div class="border border-border/80 p-4">
-              <div class="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-primary">0{index + 1}</div>
+              <div class="mb-2 font-mono text-xs uppercase tracking-[0.18em] text-primary">0{index + 1}</div>
               <div class="text-sm font-semibold text-foreground leading-snug">{track.label}</div>
               <p class="mt-1.5 text-xs leading-[1.7] text-muted-foreground">{track.description}</p>
             </div>
@@ -79,7 +79,7 @@ const agentMarkdown = `# Contact: Nasif Salaam
 
         {/* Form */}
         <div class="scroll-reveal scroll-reveal-d1">
-          <div class="mb-6 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Send a note</div>
+          <div class="mb-6 font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">Send a note</div>
 
           <form
             id="contact-form"
@@ -94,7 +94,7 @@ const agentMarkdown = `# Contact: Nasif Salaam
 
             <div class="grid gap-5 sm:grid-cols-2">
               <div>
-                <label for="name" class="mb-2 block font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                <label for="name" class="mb-2 block font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground">
                   Name
                 </label>
                 <input
@@ -109,7 +109,7 @@ const agentMarkdown = `# Contact: Nasif Salaam
               </div>
 
               <div>
-                <label for="email" class="mb-2 block font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                <label for="email" class="mb-2 block font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground">
                   Email
                 </label>
                 <input
@@ -126,7 +126,7 @@ const agentMarkdown = `# Contact: Nasif Salaam
             </div>
 
             <div>
-              <label for="message" class="mb-2 block font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+              <label for="message" class="mb-2 block font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground">
                 Message
               </label>
               <textarea
@@ -180,7 +180,7 @@ const agentMarkdown = `# Contact: Nasif Salaam
 
         {/* Sidebar */}
         <aside class="scroll-reveal scroll-reveal-d2 flex flex-col gap-0 border-t border-border/60 pt-8 lg:border-t-0 lg:border-l lg:border-border/60 lg:pl-10 lg:pt-0">
-          <div class="mb-6 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Direct channels</div>
+          <div class="mb-6 font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">Direct channels</div>
 
           {quickChannels.map((channel) => (
             <a
@@ -190,7 +190,7 @@ const agentMarkdown = `# Contact: Nasif Salaam
               class="group flex items-center justify-between border-t border-border/60 py-4 transition-colors hover:border-primary/35"
             >
               <div>
-                <div class="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground mb-1">{channel.label}</div>
+                <div class="font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground mb-1">{channel.label}</div>
                 <div class="text-sm text-foreground">{channel.value}</div>
               </div>
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary opacity-0 transition-all group-hover:opacity-100 -translate-x-1 group-hover:translate-x-0">
@@ -200,12 +200,12 @@ const agentMarkdown = `# Contact: Nasif Salaam
           ))}
 
           <div class="mt-6 border-t border-border/60 pt-6">
-            <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground mb-2">Response time</div>
+            <div class="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground mb-2">Response time</div>
             <div class="text-sm text-foreground">Usually within {responseTime}</div>
           </div>
 
           <div class="mt-6 border-t border-border/60 pt-6">
-            <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground mb-2">Based</div>
+            <div class="font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground mb-2">Based</div>
             <div class="text-sm text-foreground">Cape Town, South Africa</div>
             <div class="mt-1 text-xs text-muted-foreground">Available for remote projects worldwide</div>
           </div>

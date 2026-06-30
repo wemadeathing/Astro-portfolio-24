@@ -12,7 +12,7 @@ const { items } = Astro.props;
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-8 my-12 not-prose">
   {items.map((group) => (
     <div class="border-t border-border/80 pt-4">
-      <h4 class="mb-3 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+      <h4 class="mb-3 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
         {group.category}
       </h4>
       <p class="text-sm leading-7 text-foreground/90">

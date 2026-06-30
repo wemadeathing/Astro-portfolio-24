@@ -112,7 +112,7 @@ ${project.body}`;
             </p>
             <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
               {project.data.tags?.map((tag, index) => (
-                <span class="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+                <span class="font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground">
                   {index > 0 && <span class="mr-3 text-border/80">/</span>}
                   {tag}
                 </span>
@@ -142,7 +142,7 @@ ${project.body}`;
         {showSidebar && (
           <aside class="hidden lg:block">
             <div class="sticky top-32 border-t border-border/80 pt-4">
-              <div class="mb-4 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">On this page</div>
+              <div class="mb-4 font-mono text-xs uppercase tracking-[0.18em] text-muted-foreground">On this page</div>
               <ul class="space-y-1 text-sm">
                 {headings.map((heading) => (
                   <li>

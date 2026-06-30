@@ -13,7 +13,7 @@ const { stats } = Astro.props;
 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 my-8 not-prose">
   {stats.map((stat) => (
     <div class="flex flex-col border-t border-border/80 px-0 py-3">
-      <span class="mb-1 font-mono text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">{stat.label}</span>
+      <span class="mb-1 font-mono text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">{stat.label}</span>
       <span class="text-lg font-semibold leading-tight text-foreground">{stat.value}</span>
     </div>
   ))}
