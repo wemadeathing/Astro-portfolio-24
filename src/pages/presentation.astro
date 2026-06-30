@@ -80,9 +80,8 @@ const caseStudyDecks = [
   hideNav={true}
   hideFooter={true}
 >
-  <div class="fixed inset-0 bg-background overflow-hidden">
-    <div class="reveal h-full w-full">
-      <div class="slides">
+  <div id="presentation-deck" class="reveal" style="position:fixed;top:0;left:0;width:100%;height:100%;overflow:hidden;">
+    <div class="slides">
       
       <!-- SECTION 1: OPENING -->
       <!-- Slide 1: Hero -->
@@ -355,7 +354,6 @@ const caseStudyDecks = [
 
       </div>
     </div>
-  </div>
 
   <NavigationDock client:load />
 
@@ -408,7 +406,9 @@ const caseStudyDecks = [
     import Reveal from 'reveal.js';
 
     const initPresentation = () => {
-      const deck = new Reveal({
+      const deckEl = document.getElementById('presentation-deck');
+      if (!deckEl) return;
+      const deck = new Reveal(deckEl, {
         width: 1440,
         height: 810,
         margin: 0.012,

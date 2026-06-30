@@ -743,7 +743,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                     >
                       <div className="flex flex-wrap justify-center gap-2">
                         {[
-                          'What projects have you shipped?',
+                          'What have you built recently?',
                           'How do you approach AI product builds?',
                           'Are you available right now?',
                         ].map((suggestion) => (
@@ -793,7 +793,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                       variants={heroItem}
                       className="mt-5 text-3xl md:text-5xl font-medium leading-[1.02] tracking-[-0.04em] text-foreground/95"
                     >
-                      I design &amp; build products with AI, for humans.
+                      I design &amp; build products with AI, for humans. And AI.
                     </motion.h1>
                     <motion.p
                       variants={heroItem}

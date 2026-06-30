@@ -136,11 +136,11 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
   <section class="py-10 sm:py-16">
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
       <div class="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1.2fr)_280px] lg:gap-20">
-        <div class="reveal">
+        <div class="scroll-reveal">
           <div class="section-kicker">About</div>
           <h1 class="type-h1 mt-4">Product Designer<br />/ AI Builder</h1>
           <p class="mt-6 max-w-[60ch] text-sm leading-[1.8] text-muted-foreground/88">
-            I help teams and founders turn complexity into clear digital products. My background spans enterprise design systems, banking transformation, client websites, and solo-built AI products — which means I can move between strategy, interface, and implementation without losing the thread.
+            I help teams and founders turn complexity into clear digital products. My background spans enterprise design systems, banking transformation, client websites, and solo-built AI products, which means I can move between strategy, interface, and implementation without losing the thread. And when a product is powered by AI, building it well for people means designing how the agents receive context, use their tools, and respond, not just the human interface.
           </p>
           <p class="mt-5 inline-flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.14em] text-foreground">
             <span class="h-1.5 w-1.5 bg-primary"></span>
@@ -148,7 +148,7 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
           </p>
         </div>
 
-        <aside class="reveal reveal-d2 flex flex-col gap-0 lg:pt-2 border-t border-border/60 lg:border-t-0 lg:border-l lg:border-border/60 lg:pl-10">
+        <aside class="scroll-reveal scroll-scroll-scroll-reveal-d2 flex flex-col gap-0 lg:pt-2 border-t border-border/60 lg:border-t-0 lg:border-l lg:border-border/60 lg:pl-10">
           <div class="border-b border-border/60 py-5 first:pt-0 lg:first:pt-5">
             <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70 mb-1.5">Based</div>
             <div class="text-sm text-foreground">Cape Town, South Africa</div>
@@ -169,14 +169,14 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
   {/* ── Expertise ── */}
   <section class="border-t border-border/60 py-14 sm:py-20">
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-12 reveal">
+      <div class="mb-12 scroll-reveal">
         <div class="section-kicker">Where I'm strongest</div>
         <h2 class="type-h2 mt-4 max-w-[28ch]">The work I'm best suited for</h2>
       </div>
 
       <div class="grid gap-0">
         {expertise.map((item, index) => (
-          <div class={`reveal reveal-d${index + 1} grid border-t border-border/60 py-8 gap-6 lg:grid-cols-[64px_minmax(0,1fr)_minmax(0,1.4fr)] lg:gap-12 lg:py-10 items-start`}>
+          <div class={`scroll-reveal scroll-reveal-d${index + 1} grid border-t border-border/60 py-8 gap-6 lg:grid-cols-[64px_minmax(0,1fr)_minmax(0,1.4fr)] lg:gap-12 lg:py-10 items-start`}>
             <div class="font-mono text-3xl font-bold text-primary/40 leading-none tabular-nums">
               0{index + 1}
             </div>
@@ -195,14 +195,14 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
   {/* ── Capabilities ── */}
   <section class="border-t border-border/60 bg-muted/[0.035] py-14 sm:py-20">
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-12 reveal">
+      <div class="mb-12 scroll-reveal">
         <div class="section-kicker">Capabilities</div>
         <h2 class="type-h2 mt-4 max-w-[24ch]">How the work shows up</h2>
       </div>
 
       <div class="grid gap-5 sm:grid-cols-3">
         {skills.map((group, index) => (
-          <div class={`reveal reveal-d${index + 1} flex flex-col border border-border/80 p-5`}>
+          <div class={`scroll-reveal scroll-reveal-d${index + 1} flex flex-col border border-border/80 p-5`}>
             <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-primary mb-4">{group.title}</div>
             <ul class="flex flex-col gap-2">
               {group.items.map((item) => (
@@ -221,7 +221,7 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
   {/* ── Industry ── */}
   <section class="border-t border-border/60 py-14 sm:py-20">
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mb-10 reveal">
+      <div class="mb-10 scroll-reveal">
         <div class="section-kicker">Selected contexts</div>
         <h2 class="type-h2 mt-4 max-w-[24ch]">Industry range</h2>
         <p class="mt-4 max-w-[52ch] text-sm leading-[1.8] text-muted-foreground/88">
@@ -229,7 +229,7 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
         </p>
       </div>
 
-      <div class="reveal reveal-d1 flex flex-wrap gap-2">
+      <div class="scroll-reveal scroll-scroll-scroll-reveal-d1 flex flex-wrap gap-2">
         {allSectors.map((sector) => (
           <span class="border border-border/70 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.1em] text-muted-foreground">
             {sector}
@@ -242,13 +242,13 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
   {/* ── Certifications carousel ── */}
   <section class="border-t border-border/60 bg-muted/[0.035] py-14 sm:py-20 overflow-hidden">
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8 mb-10">
-      <div class="reveal">
+      <div class="scroll-reveal">
         <div class="section-kicker">Credentials</div>
         <h2 class="type-h2 mt-4">Certifications</h2>
       </div>
     </div>
 
-    <div class="cert-track-outer reveal reveal-d1">
+    <div class="cert-track-outer scroll-reveal scroll-scroll-scroll-reveal-d1">
       <div class="cert-track">
         {[...certifications, ...certifications].map((cert, i) => (
           <div class="cert-card border border-border/80 bg-background p-6 shrink-0">
@@ -264,7 +264,7 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
   {/* ── Proof (career) ── */}
   <section id="career" class="border-t border-border/60 py-14 sm:py-20 scroll-mt-28">
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-[62ch] mb-10 reveal">
+      <div class="max-w-[62ch] mb-10 scroll-reveal">
         <div class="section-kicker">Proof</div>
         <h2 class="type-h2 mt-4">Professional journey</h2>
         <p class="mt-4 text-sm leading-[1.8] text-muted-foreground/88">
@@ -274,7 +274,7 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
 
       <div class="grid gap-2">
         {experience.map((item, index) => (
-          <div class={`reveal reveal-d${Math.min(index + 1, 5)} grid gap-4 border-t border-border/60 py-6 lg:grid-cols-[200px_220px_minmax(0,1fr)] lg:gap-8`}>
+          <div class={`scroll-reveal scroll-reveal-d${Math.min(index + 1, 5)} grid gap-4 border-t border-border/60 py-6 lg:grid-cols-[200px_220px_minmax(0,1fr)] lg:gap-8`}>
             <div class="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
               {item.period}
             </div>
@@ -292,7 +292,7 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
   {/* ── Next step ── */}
   <section class="border-t border-border/60 pb-16 pt-12 sm:pb-24 sm:pt-16">
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="max-w-[68ch] reveal">
+      <div class="max-w-[68ch] scroll-reveal">
         <div class="section-kicker">Next step</div>
         <h2 class="type-h2 mt-4">Let's build something useful.</h2>
         <p class="mt-4 text-sm leading-[1.8] text-muted-foreground/88">

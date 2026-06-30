@@ -267,7 +267,7 @@ const structuredData = {
 
   // Scroll-triggered reveal animations
   const initReveal = () => {
-    const els = document.querySelectorAll<HTMLElement>('.reveal');
+    const els = document.querySelectorAll<HTMLElement>('.scroll-reveal');
     if (!els.length) return;
     const obs = new IntersectionObserver(
       (entries) => {
