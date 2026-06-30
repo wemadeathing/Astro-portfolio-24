@@ -92,13 +92,13 @@
 
 @layer components {
   .type-h1 {
-    @apply text-3xl sm:text-4xl md:text-5xl font-semibold leading-[0.96];
+    @apply text-3xl sm:text-4xl md:text-5xl font-semibold leading-[0.96] font-heading;
   }
   .type-h2 {
-    @apply text-3xl sm:text-4xl font-semibold leading-[0.98];
+    @apply text-3xl sm:text-4xl font-semibold leading-[0.98] font-heading;
   }
   .type-h3 {
-    @apply text-xl sm:text-2xl font-semibold leading-tight;
+    @apply text-xl sm:text-2xl font-semibold leading-tight font-heading;
   }
   .type-lead {
     @apply text-sm leading-[1.8] text-muted-foreground;

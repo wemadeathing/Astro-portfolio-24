@@ -17,9 +17,9 @@ const pathname = Astro.url.pathname;
 const isHome = pathname === '/' || pathname === '';
 ---
 
-<header class="sticky top-0 z-50 pt-3">
-  <div class="shell-wrap relative">
-    <nav class="flex min-h-[63px] items-center gap-3 border border-border/80 bg-background px-3 py-3 sm:px-4">
+<header id="site-header" class="sticky top-0 z-50 border-b border-border/40 bg-background transition-colors duration-300">
+  <div class="relative">
+    <nav class="mx-auto flex min-h-[63px] max-w-[1100px] items-center gap-3 px-4 py-3 sm:px-6 lg:px-8">
       <div class="flex items-center gap-3 min-w-0">
         <a
           href="/"
@@ -221,6 +221,18 @@ const isHome = pathname === '/' || pathname === '';
 
   initNavMenu();
   document.addEventListener('astro:page-load', initNavMenu);
+
+  const initScrolledHeader = () => {
+    const header = document.getElementById('site-header');
+    if (!header) return;
+    const onScroll = () => {
+      header.classList.toggle('is-scrolled', window.scrollY > 40);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  };
+  initScrolledHeader();
+  document.addEventListener('astro:page-load', initScrolledHeader);
 </script>
 
 <div
@@ -279,6 +291,12 @@ const isHome = pathname === '/' || pathname === '';
 </div>
 
 <style>
+  #site-header.is-scrolled {
+    background-color: hsl(var(--background) / 0.6);
+    backdrop-filter: blur(12px);
+    border-bottom-color: hsl(var(--border) / 0.25);
+  }
+
   /* Toggle menu open state via data attribute */
   #site-menu[data-open="true"] {
     opacity: 1;

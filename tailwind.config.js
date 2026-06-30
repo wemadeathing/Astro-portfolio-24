@@ -58,6 +58,7 @@ module.exports = {
       },
       fontFamily: {
         sans: ['"TASA Orbiter"', '"Inter"', '"DM Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        heading: ['"IBM Plex Sans"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         mono: ['"Geist Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Consolas', 'monospace'],
       },
       keyframes: {

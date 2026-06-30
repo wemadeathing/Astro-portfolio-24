@@ -19,6 +19,7 @@
     "@astrojs/rss": "^4.0.14",
     "@astrojs/tailwind": "^5.1.2",
     "@fontsource-variable/geist-mono": "^5.2.7",
+    "@fontsource-variable/ibm-plex-sans": "^5.2.8",
     "@fontsource/dm-sans": "^5.2.8",
     "@google/generative-ai": "^0.24.1",
     "@types/node": "^20.11.5",
