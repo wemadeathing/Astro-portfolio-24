@@ -25,10 +25,18 @@ const isHome = pathname === '/' || pathname === '';
           href="/"
           class="flex items-center transition-opacity hover:opacity-80"
         >
+          <!-- Dark mode logo (white/gradient) -->
           <img
             src="/images/ns26/logo26w-gradient.svg"
             alt="Nasif Salaam"
-            class="h-6 w-auto sm:h-7"
+            class="logo-dark h-6 w-auto sm:h-7"
+            aria-hidden="true"
+          />
+          <!-- Light mode logo (dark) -->
+          <img
+            src="/images/ns26/logo26.svg"
+            alt="Nasif Salaam"
+            class="logo-light h-6 w-auto sm:h-7"
           />
         </a>
       </div>
@@ -291,6 +299,13 @@ const isHome = pathname === '/' || pathname === '';
 </div>
 
 <style>
+  /* Logo switching — CSS only, no flash */
+  .logo-dark  { display: block; }
+  .logo-light { display: none;  }
+
+  :global(html:not(.dark)) .logo-dark  { display: none;  }
+  :global(html:not(.dark)) .logo-light { display: block; }
+
   #site-header.is-scrolled {
     background-color: hsl(var(--background) / 0.6);
     backdrop-filter: blur(12px);

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, Copy, Menu, Send, StopCircle, User, X } from 'lucide-react';
+import { ArrowUp, Check, Copy, Menu, StopCircle, User, X } from 'lucide-react';
 import ProjectCard from './ProjectCard';
 import ResourceCard from './ResourceCard';
 import BlogCard from './BlogCard';
@@ -651,15 +651,16 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
               useDocumentScrollIntro
                 ? 'px-4 pt-4 sm:pt-6 pb-16 relative z-20'
                 : introMode === 'chat'
-                ? 'flex-1 flex flex-col px-4 pb-4 relative z-20 overflow-hidden'
+                ? 'min-h-[calc(100dvh-5rem)] flex flex-col px-4 pb-4 relative z-20'
                 : 'flex-1 overflow-y-auto px-4 pb-6 relative z-20 pt-24 sm:pt-28'
             }
           >
-            <div className={introMode === 'chat' ? 'flex-1 flex flex-col w-full max-w-[1100px] mx-auto items-center text-center' : 'w-full max-w-[1100px] mx-auto flex flex-col items-center text-center'}>
+            <div className={introMode === 'chat' ? 'flex-1 flex flex-col w-full max-w-[1100px] mx-auto items-center text-center min-h-0' : 'w-full max-w-[1100px] mx-auto flex flex-col items-center text-center'}>
 
               {/* ── Chat View ── */}
               {introMode === 'chat' && (
-                <div className="flex-1 w-full flex flex-col items-center justify-center text-center py-8">
+                <div className="flex-1 w-full flex flex-col items-center text-center min-h-0">
+                  <div className="flex-1 flex flex-col items-center justify-center py-8 w-full min-h-0">
                   <motion.div
                     className="w-full max-w-[700px] px-2 py-2 md:px-4 md:py-3"
                     variants={heroContainer}
@@ -725,7 +726,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                             className="border border-border/80 bg-primary p-2 text-primary-foreground transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
                             aria-label="Send"
                           >
-                            <Send size={20} />
+                            <ArrowUp size={20} />
                           </button>
                         )}
                       </div>
@@ -741,7 +742,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                           : 'max-h-0 opacity-0 -translate-y-1 pointer-events-none',
                       ].join(' ')}
                     >
-                      <div className="flex flex-wrap justify-center gap-2">
+                      <div className="flex flex-col sm:flex-row flex-wrap justify-center gap-2">
                         {[
                           'What have you built recently?',
                           'How do you approach AI product builds?',
@@ -772,6 +773,17 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                       </div>
                     </motion.div>
                   </motion.div>
+                  </div>
+                  <footer className="w-full border-t border-border/30 py-4 px-4">
+                    <div className="max-w-[680px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground/50">
+                      <span>© 2026 Nasif Salaam · Cape Town</span>
+                      <div className="flex items-center gap-5">
+                        <a href="https://www.linkedin.com/in/nasifsalaam/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">LinkedIn</a>
+                        <a href="https://github.com/wemadeathing" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">GitHub</a>
+                        <a href="/contact" className="hover:text-foreground transition-colors">Contact</a>
+                      </div>
+                    </div>
+                  </footer>
                 </div>
               )}
 
@@ -1078,7 +1090,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                     {msg.role === 'assistant' && msg.followUps && msg.followUps.length > 0 && (
                       <div className="w-full pl-12 pr-2 mt-3">
                         <div className="text-xs text-muted-foreground mb-2">You might also want to ask:</div>
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-col gap-1.5">
                           {msg.followUps.map((followUp, idx) => (
                             <button
                               key={`followup-${idx}`}
@@ -1144,7 +1156,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                       className="border border-border/80 bg-primary p-2 text-primary-foreground transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
                       aria-label="Send"
                     >
-                      <Send size={20} />
+                      <ArrowUp size={20} />
                     </button>
                   )}
                 </div>

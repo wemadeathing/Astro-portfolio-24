@@ -80,15 +80,15 @@
       </div>
 
       <!-- Bottom bar -->
-      <div class="pt-5 border-t border-black/10 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <div class="text-[11px] text-black/50 text-center sm:text-left leading-relaxed">
-          <span class="text-black/65">© {new Date().getFullYear()} Nasif Salaam.</span>
+      <div class="pt-5 border-t border-border/30 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div class="text-[11px] text-muted-foreground text-center sm:text-left leading-relaxed">
+          <span class="text-foreground/70">© {new Date().getFullYear()} Nasif Salaam.</span>
           <span class="block sm:inline sm:ml-1">
             Product designer and AI builder making thoughtful, AI-powered products for people.
           </span>
         </div>
         <div class="flex items-center gap-3">
-          <a href="/contact" class="font-mono text-[10px] uppercase tracking-[0.14em] text-black/50 hover:text-black transition-colors">Start a conversation</a>
+          <a href="/contact" class="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground transition-colors">Start a conversation</a>
         </div>
       </div>
     </div>
@@ -115,14 +115,14 @@
     width: 100%;
     background-image: repeating-linear-gradient(
       119deg,
-      rgba(0, 0, 0, 0.3) 0 1px,
+      color-mix(in srgb, hsl(var(--foreground)) 20%, transparent) 0 1px,
       transparent 1px 5px
     );
-    background-color: #ebebea;
+    background-color: hsl(var(--muted));
   }
 
   .footer-body {
-    background-color: #ebebea;
+    background-color: hsl(var(--muted));
   }
 
   .footer-label {
@@ -130,25 +130,25 @@
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 0.18em;
-    color: rgba(0, 0, 0, 0.45);
+    color: hsl(var(--muted-foreground) / 0.7);
     margin-bottom: 0.75rem;
   }
 
   .footer-body-text {
     font-size: 0.875rem;
-    color: rgba(0, 0, 0, 0.62);
+    color: hsl(var(--muted-foreground));
     line-height: 1.65;
   }
 
   .footer-link {
     font-size: 0.875rem;
-    color: rgba(0, 0, 0, 0.62);
+    color: hsl(var(--muted-foreground));
     text-decoration: none;
     transition: color 150ms ease;
   }
 
   .footer-link:hover {
-    color: rgba(0, 0, 0, 0.92);
+    color: hsl(var(--foreground));
   }
 
   /* Hide the floating agent-view toggle, footer link replaces it */

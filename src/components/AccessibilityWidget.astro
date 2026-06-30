@@ -1,0 +1,340 @@
+---
+---
+
+<div id="a11y-widget" class="a11y-widget" role="region" aria-label="Accessibility options">
+
+  {/* Trigger button */}
+  <button
+    id="a11y-trigger"
+    class="a11y-trigger"
+    aria-expanded="false"
+    aria-controls="a11y-panel"
+    aria-label="Accessibility options"
+    title="Accessibility options"
+  >
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="4" r="1.5"/>
+      <path d="M6 8h12M10 20v-7l-2 3M14 20v-7l2 3M9 11l3-3 3 3"/>
+    </svg>
+  </button>
+
+  {/* Panel */}
+  <div
+    id="a11y-panel"
+    class="a11y-panel"
+    role="dialog"
+    aria-label="Accessibility settings"
+    hidden
+  >
+    <div class="a11y-panel-header">
+      <span class="a11y-panel-title">Accessibility</span>
+      <button id="a11y-close" class="a11y-close" aria-label="Close accessibility panel">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    {/* Appearance */}
+    <div class="a11y-section">
+      <div class="a11y-label">Appearance</div>
+      <div class="a11y-btn-group" role="group" aria-label="Color theme">
+        <button class="a11y-opt-btn" id="theme-dark" aria-pressed="false" data-theme="dark">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+          Dark
+        </button>
+        <button class="a11y-opt-btn" id="theme-light" aria-pressed="false" data-theme="light">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+          Light
+        </button>
+      </div>
+    </div>
+
+    {/* Text size */}
+    <div class="a11y-section">
+      <div class="a11y-label">Text size</div>
+      <div class="a11y-btn-group" role="group" aria-label="Text size">
+        <button class="a11y-opt-btn" id="font-normal" aria-pressed="false" data-scale="1" aria-label="Normal text size">
+          <span style="font-size:11px;line-height:1;font-weight:600;">A</span>
+        </button>
+        <button class="a11y-opt-btn" id="font-large" aria-pressed="false" data-scale="1.125" aria-label="Large text size">
+          <span style="font-size:13px;line-height:1;font-weight:600;">A</span>
+        </button>
+        <button class="a11y-opt-btn" id="font-larger" aria-pressed="false" data-scale="1.25" aria-label="Larger text size">
+          <span style="font-size:15px;line-height:1;font-weight:600;">A</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .a11y-widget {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+  }
+
+  /* ── Trigger ── */
+  .a11y-trigger {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: hsl(var(--background));
+    color: hsl(var(--muted-foreground));
+    border: 1px solid hsl(var(--border) / 0.8);
+    cursor: pointer;
+    transition: color 150ms ease, border-color 150ms ease, box-shadow 150ms ease;
+    box-shadow: 0 2px 8px hsl(var(--foreground) / 0.06);
+  }
+
+  .a11y-trigger:hover,
+  .a11y-trigger[aria-expanded="true"] {
+    color: hsl(var(--foreground));
+    border-color: hsl(var(--foreground) / 0.3);
+    box-shadow: 0 4px 16px hsl(var(--foreground) / 0.1);
+  }
+
+  .a11y-trigger:focus-visible {
+    outline: 2px solid hsl(var(--primary));
+    outline-offset: 2px;
+  }
+
+  /* ── Panel ── */
+  .a11y-panel {
+    background: hsl(var(--background));
+    border: 1px solid hsl(var(--border) / 0.8);
+    box-shadow: 0 8px 32px hsl(var(--foreground) / 0.1);
+    min-width: 220px;
+    overflow: hidden;
+    animation: panelIn 150ms cubic-bezier(0.25, 0, 0, 1) both;
+  }
+
+  .a11y-panel[hidden] {
+    display: none;
+  }
+
+  @keyframes panelIn {
+    from { opacity: 0; transform: translateY(6px) scale(0.98); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .a11y-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 0.75rem 0.6rem 0.875rem;
+    border-bottom: 1px solid hsl(var(--border) / 0.6);
+    background-image: repeating-linear-gradient(
+      119deg,
+      color-mix(in srgb, hsl(var(--foreground)) 10%, transparent) 0 1px,
+      transparent 1px 5px
+    );
+    background-color: hsl(var(--muted) / 0.3);
+  }
+
+  .a11y-panel-title {
+    font-family: "Geist Mono", ui-monospace, monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: hsl(var(--muted-foreground));
+  }
+
+  .a11y-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: hsl(var(--muted-foreground));
+    transition: color 150ms ease;
+    padding: 0;
+  }
+
+  .a11y-close:hover { color: hsl(var(--foreground)); }
+  .a11y-close:focus-visible { outline: 2px solid hsl(var(--primary)); outline-offset: 2px; }
+
+  /* ── Sections ── */
+  .a11y-section {
+    padding: 0.75rem 0.875rem;
+    border-bottom: 1px solid hsl(var(--border) / 0.5);
+  }
+
+  .a11y-section:last-child { border-bottom: none; }
+
+  .a11y-label {
+    font-family: "Geist Mono", ui-monospace, monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: hsl(var(--muted-foreground));
+    margin-bottom: 0.5rem;
+  }
+
+  /* ── Option buttons ── */
+  .a11y-btn-group {
+    display: flex;
+    gap: 0.375rem;
+  }
+
+  .a11y-opt-btn {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 0.45rem 0.5rem;
+    font-family: "Geist Mono", ui-monospace, monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: hsl(var(--muted-foreground));
+    background: transparent;
+    border: 1px solid hsl(var(--border) / 0.7);
+    cursor: pointer;
+    transition: color 150ms ease, border-color 150ms ease, background 150ms ease;
+    white-space: nowrap;
+  }
+
+  .a11y-opt-btn:hover {
+    color: hsl(var(--foreground));
+    border-color: hsl(var(--foreground) / 0.3);
+  }
+
+  .a11y-opt-btn[aria-pressed="true"] {
+    color: hsl(var(--foreground));
+    border-color: hsl(var(--foreground) / 0.6);
+    background: hsl(var(--foreground) / 0.06);
+  }
+
+  .a11y-opt-btn:focus-visible {
+    outline: 2px solid hsl(var(--primary));
+    outline-offset: 2px;
+  }
+</style>
+
+<script is:inline>
+  (function () {
+    var THEME_KEY = 'nasifsalaam-theme';
+    var SCALE_KEY = 'nasifsalaam-font-scale';
+
+    function getTheme() {
+      try { return localStorage.getItem(THEME_KEY) || 'dark'; } catch(e) { return 'dark'; }
+    }
+
+    function getScale() {
+      try { return localStorage.getItem(SCALE_KEY) || '1'; } catch(e) { return '1'; }
+    }
+
+    function applyTheme(theme) {
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      try { localStorage.setItem(THEME_KEY, theme); } catch(e) {}
+    }
+
+    function applyScale(scale) {
+      document.documentElement.style.setProperty('--font-scale', scale);
+      try { localStorage.setItem(SCALE_KEY, scale); } catch(e) {}
+    }
+
+    function syncUI() {
+      var theme = getTheme();
+      var scale = getScale();
+
+      // Theme buttons
+      var darkBtn = document.getElementById('theme-dark');
+      var lightBtn = document.getElementById('theme-light');
+      if (darkBtn) darkBtn.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+      if (lightBtn) lightBtn.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
+
+      // Font scale buttons
+      ['1', '1.125', '1.25'].forEach(function(s) {
+        var id = s === '1' ? 'font-normal' : s === '1.125' ? 'font-large' : 'font-larger';
+        var btn = document.getElementById(id);
+        if (btn) btn.setAttribute('aria-pressed', scale === s ? 'true' : 'false');
+      });
+    }
+
+    function initWidget() {
+      var trigger = document.getElementById('a11y-trigger');
+      var panel = document.getElementById('a11y-panel');
+      var closeBtn = document.getElementById('a11y-close');
+
+      if (!trigger || !panel) return;
+
+      function openPanel() {
+        panel.hidden = false;
+        trigger.setAttribute('aria-expanded', 'true');
+        syncUI();
+        // Focus first focusable element in panel
+        var first = panel.querySelector('button');
+        if (first) setTimeout(function() { first.focus(); }, 50);
+      }
+
+      function closePanel() {
+        panel.hidden = true;
+        trigger.setAttribute('aria-expanded', 'false');
+        trigger.focus();
+      }
+
+      trigger.addEventListener('click', function() {
+        if (panel.hidden) {
+          openPanel();
+        } else {
+          closePanel();
+        }
+      });
+
+      if (closeBtn) {
+        closeBtn.addEventListener('click', closePanel);
+      }
+
+      // Theme buttons
+      var darkBtn = document.getElementById('theme-dark');
+      var lightBtn = document.getElementById('theme-light');
+      if (darkBtn) darkBtn.addEventListener('click', function() { applyTheme('dark'); syncUI(); });
+      if (lightBtn) lightBtn.addEventListener('click', function() { applyTheme('light'); syncUI(); });
+
+      // Font scale buttons
+      [
+        { id: 'font-normal', scale: '1' },
+        { id: 'font-large', scale: '1.125' },
+        { id: 'font-larger', scale: '1.25' },
+      ].forEach(function(item) {
+        var btn = document.getElementById(item.id);
+        if (btn) btn.addEventListener('click', function() { applyScale(item.scale); syncUI(); });
+      });
+
+      // Close on Escape
+      panel.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closePanel();
+      });
+
+      // Close on click outside
+      document.addEventListener('click', function(e) {
+        var widget = document.getElementById('a11y-widget');
+        if (widget && !widget.contains(e.target)) {
+          if (!panel.hidden) closePanel();
+        }
+      });
+    }
+
+    // Init on load and after Astro view transitions
+    initWidget();
+    document.addEventListener('astro:page-load', initWidget);
+  })();
+</script>

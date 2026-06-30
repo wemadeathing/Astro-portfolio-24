@@ -6,6 +6,7 @@
  
 @layer base {
   :root {
+    --font-scale: 1;
     --background: 210 20% 97%;
     --foreground: 206 16% 10%;
     --card: 0 0% 100%;
@@ -61,6 +62,7 @@
   }
   html {
     @apply bg-background;
+    font-size: calc(16px * var(--font-scale, 1));
   }
   body {
     @apply bg-background text-foreground text-sm leading-6;
@@ -585,3 +587,16 @@ body.chat-landing-mode .site-footer {
   transition-duration: 0.01ms !important;
   scroll-behavior: auto !important;
 }
+
+/* Heading counterscale: html font-size scales all rem values, but headings
+   divide back by --font-scale so they stay visually fixed at their normal sizes.
+   calc(Xrem / var(--font-scale)) × (16px × scale) = X × 16px — always fixed. */
+.type-h1 { font-size: calc(1.875rem / var(--font-scale, 1)); }
+@media (min-width: 640px)  { .type-h1 { font-size: calc(2.25rem / var(--font-scale, 1)); } }
+@media (min-width: 768px)  { .type-h1 { font-size: calc(3rem    / var(--font-scale, 1)); } }
+
+.type-h2 { font-size: calc(1.875rem / var(--font-scale, 1)); }
+@media (min-width: 640px)  { .type-h2 { font-size: calc(2.25rem / var(--font-scale, 1)); } }
+
+.type-h3 { font-size: calc(1.25rem  / var(--font-scale, 1)); }
+@media (min-width: 640px)  { .type-h3 { font-size: calc(1.5rem  / var(--font-scale, 1)); } }

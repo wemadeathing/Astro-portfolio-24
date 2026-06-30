@@ -6,6 +6,7 @@ import '../styles/globals.css';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
 import AgentView from '../components/AgentView.astro';
+import AccessibilityWidget from '../components/AccessibilityWidget.astro';
 import { ViewTransitions } from 'astro:transitions';
 
 interface Props {
@@ -100,7 +101,7 @@ const structuredData = {
 ---
 
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -108,6 +109,19 @@ const structuredData = {
     {/* Agent View: restore mode BEFORE paint to prevent FOUC. Mirrors Speakeasy's pattern. */}
     <script is:inline>
       (function () {
+        function applyTheme() {
+          try {
+            var theme = localStorage.getItem('nasifsalaam-theme') || 'dark';
+            if (theme === 'dark') {
+              document.documentElement.classList.add('dark');
+            } else {
+              document.documentElement.classList.remove('dark');
+            }
+            var scale = localStorage.getItem('nasifsalaam-font-scale') || '1';
+            document.documentElement.style.setProperty('--font-scale', scale);
+          } catch (e) {}
+        }
+
         function applyAgentMode() {
           try {
             if (localStorage.getItem('nasifsalaam-view-mode') === 'agent') {
@@ -117,8 +131,13 @@ const structuredData = {
             }
           } catch (e) {}
         }
+
+        // Run immediately before first paint
+        applyTheme();
         applyAgentMode();
-        // Re-apply after Astro View Transition swaps so the class isn't lost on navigation.
+
+        // Re-apply after every View Transition swap (Astro resets <html> attributes)
+        document.addEventListener('astro:after-swap', applyTheme);
         document.addEventListener('astro:after-swap', applyAgentMode);
       })();
     </script>
@@ -239,6 +258,7 @@ const structuredData = {
     </main>
     {!hideFooter && <Footer />}
     <AgentView markdown={agentMarkdown} pathLabel={agentPathLabel} />
+    <AccessibilityWidget />
   </body>
 </html>
 
