@@ -5,7 +5,7 @@ import Layout from '../layouts/Layout.astro';
 const services = [
   {
     number: '01',
-    label: 'AI Products, MVPs & Product Design',
+    label: 'AI Products & MVPs',
     heading: 'From concept to working product, without the handoff gaps.',
     body: "I work across product framing, UX, interface design, and implementation to get products moving fast. When the product is AI-powered, that includes designing how the agents receive context, use their tools, and respond, so it works for the person using it.",
     includes: ['Web and mobile MVPs', 'AI-powered product builds', 'Full stack: design to deployment'],
@@ -45,57 +45,6 @@ const steps = [
     number: '4',
     title: 'Something real',
     description: "A product, a website, a brand. You walk away with something that works.",
-  },
-];
-
-const works = [
-  {
-    label: 'Kota AI',
-    category: 'AI Product',
-    image: '/images/work/kota/kota-dash.png',
-    href: '/projects/kota-ai',
-  },
-  {
-    label: 'RideNote',
-    category: 'iOS App',
-    image: '/images/work/ridenote-hero.png',
-    href: '/projects/ridenote-ios-app',
-  },
-  {
-    label: 'Flows',
-    category: 'AI Builder Tool',
-    image: '/images/work/flows/flows-main-app.jpeg',
-    href: '/projects/ai-powered-whatsapp-flow-builder',
-  },
-  {
-    label: 'Everprompt',
-    category: 'AI Product',
-    image: '/images/work/everprompt-app1.png',
-    href: '/projects/prompt-management-app',
-  },
-  {
-    label: 'Banking Platform',
-    category: 'Enterprise Product',
-    image: '/images/fintech-ui-design.png',
-    href: '/projects/financial-institution-digital-transformation',
-  },
-  {
-    label: 'ECOS Consulting',
-    category: 'Digital Presence',
-    image: '/images/work/ecos-consulting-website-1.png',
-    href: '/projects/consulting-website',
-  },
-  {
-    label: 'Brand Marks',
-    category: 'Brand Identity',
-    image: '/images/work/lumina7-arabica-1.jpg',
-    href: '/projects/brand-marks',
-  },
-  {
-    label: 'Find Me a Coffee',
-    category: 'AI Product',
-    image: '/images/work/findmeacoffee/findmeacoffee-home.png',
-    href: '/projects/ai-accelerated-coffee-directory',
   },
 ];
 
@@ -154,7 +103,7 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
             Product design and AI builds, without the gaps.
           </h1>
           <p class="mt-5 text-sm leading-[1.8] text-muted-foreground/88 max-w-[46ch]">
-            One person across product framing, interface design, and build. 15+ years. Open to project work and full-time roles.
+            15+ years across brand, digital products, and systems. One person from brief to working product. Open to project work and full-time roles.
           </p>
           <div class="mt-8">
             <a href={calLink} target="_blank" rel="noopener noreferrer" class="btn-stripe min-h-[48px] px-8">
@@ -163,7 +112,7 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
           </div>
         </div>
 
-        {/* Right: framed image box */}
+        {/* Right: framed image box — desktop only */}
         <div class="scroll-reveal scroll-reveal-d2 hidden lg:block">
           <div class="image-frame">
             <div class="frame-stripe" aria-hidden="true"></div>
@@ -191,60 +140,40 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
   {/* ── Proof strip ── */}
   <section class="border-b border-border/60">
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-2 divide-x divide-border/60 sm:grid-cols-4">
-        <div class="py-7 pr-6 sm:pr-8">
-          <div class="font-mono text-xl font-bold tabular-nums text-foreground">15+</div>
-          <div class="mt-1 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground leading-snug">Years experience</div>
+      <div class="grid grid-cols-2 sm:grid-cols-4">
+
+        <div class="proof-cell">
+          <div class="proof-value">15+</div>
+          <div class="proof-label">Years experience</div>
         </div>
-        <div class="py-7 px-6 sm:px-8">
-          <div class="font-mono text-xl font-bold tabular-nums text-foreground">2</div>
-          <div class="mt-1 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground leading-snug">Disciplines</div>
+
+        <div class="proof-cell proof-cell--bl">
+          <div class="proof-value">5+</div>
+          <div class="proof-label">Industries served</div>
         </div>
-        <div class="py-7 px-6 sm:px-8 border-t border-border/60 sm:border-t-0">
-          <div class="font-mono text-xl font-bold tabular-nums text-foreground flex items-center gap-2">
+
+        <div class="proof-cell proof-cell--bt sm:proof-cell--bt-0 proof-cell--bl-sm">
+          <div class="proof-value flex items-center gap-2">
             <span class="status-dot" aria-hidden="true"></span>Open
           </div>
-          <div class="mt-1 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground leading-snug">Projects + roles</div>
+          <div class="proof-label">Projects + roles</div>
         </div>
-        <div class="py-7 pl-6 sm:pl-8 border-t border-border/60 sm:border-t-0">
-          <div class="font-mono text-xl font-bold tabular-nums text-foreground">Remote</div>
-          <div class="mt-1 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground leading-snug">Cape Town based</div>
+
+        <div class="proof-cell proof-cell--bt sm:proof-cell--bt-0 proof-cell--bl">
+          <div class="proof-value">Remote</div>
+          <div class="proof-label">Cape Town based</div>
         </div>
+
       </div>
     </div>
   </section>
 
-  {/* ── Work strip ── */}
+  {/* ── Work carousel — hidden for now ── */}
+  {/* Uncomment to restore the project strip:
   <section class="py-12 sm:py-16 border-b border-border/60">
-    <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8 mb-6 flex items-center justify-between">
-      <div class="section-kicker">Selected Work</div>
-      <a href="/projects" class="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-foreground">
-        View all →
-      </a>
-    </div>
-    <div class="work-strip-outer">
-      <div class="work-strip" id="workStrip">
-        {works.map((work) => (
-          <a href={work.href} class="work-card">
-            <div class="frame-stripe" aria-hidden="true"></div>
-            <div class="work-card-img-wrap">
-              <img
-                src={work.image}
-                alt={work.label}
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-            <div class="work-card-footer">
-              <span class="work-card-label">{work.label}</span>
-              <span class="work-card-cat">{work.category}</span>
-            </div>
-          </a>
-        ))}
-      </div>
-      <div class="work-strip-fade" aria-hidden="true"></div>
-    </div>
+    ...
   </section>
+  */}
 
   <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
 
@@ -254,7 +183,7 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
         <div class="section-kicker">Services</div>
         <h2 class="type-h2 mt-4">Two tracks, one thread.</h2>
         <p class="mt-3 text-sm leading-[1.8] text-muted-foreground/88 max-w-[50ch]">
-          Product thinking, interface craft, and implementation kept together end to end.
+          Product thinking, interface craft, and implementation in one person, end to end.
         </p>
       </div>
 
@@ -262,15 +191,15 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
         {services.map((service, i) => (
           <div class={`scroll-reveal scroll-reveal-d${i + 1} service-card`}>
             <div class="frame-stripe" aria-hidden="true"></div>
-            <div class="p-6 flex flex-col h-full">
+            <div class="p-5 sm:p-6 flex flex-col h-full">
               <div class="flex items-start justify-between gap-4 mb-5">
-                <span class="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">{service.label}</span>
+                <span class="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground leading-snug">{service.label}</span>
                 <span class="font-mono text-2xl font-bold text-primary/25 leading-none tabular-nums shrink-0">{service.number}</span>
               </div>
               <h3 class="text-base font-semibold text-foreground leading-snug">{service.heading}</h3>
               <p class="mt-3 text-sm leading-[1.8] text-muted-foreground/88 flex-1">{service.body}</p>
-              <div class="mt-5 border-t border-border/60 pt-5">
-                <p class="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground leading-[2]">
+              <div class="mt-5 border-t border-border/60 pt-4">
+                <p class="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground leading-[2.2]">
                   {service.includes.join(' · ')}
                 </p>
               </div>
@@ -284,7 +213,7 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
                 />
               </div>
               <p class="mt-4 text-xs leading-[1.7] text-muted-foreground/70">
-                <span class="text-foreground/70">Best fit: </span>{service.audience}
+                <span class="text-foreground/60">Best fit:</span> {service.audience}
               </p>
             </div>
           </div>
@@ -297,11 +226,14 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
       <div class="mb-10 scroll-reveal">
         <div class="section-kicker">Process</div>
         <h2 class="type-h2 mt-4">How the work moves</h2>
+        <p class="mt-3 text-sm leading-[1.8] text-muted-foreground/88 max-w-[46ch]">
+          Clear scope, honest timeline, and a bias toward momentum over meetings.
+        </p>
       </div>
 
       <div class="grid gap-px bg-border/40 border border-border/40 sm:grid-cols-2 lg:grid-cols-4">
         {steps.map((step, i) => (
-          <div class={`scroll-reveal scroll-reveal-d${i + 1} bg-background p-6`}>
+          <div class={`scroll-reveal scroll-reveal-d${i + 1} bg-background p-5 sm:p-6`}>
             <div class="mb-4 font-mono text-[10px] uppercase tracking-[0.18em] text-primary/60">
               0{step.number}
             </div>
@@ -316,19 +248,19 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
     <section class="pb-16 pt-4 sm:pb-24">
       <div class="scroll-reveal cta-box">
         <div class="frame-stripe" aria-hidden="true"></div>
-        <div class="p-8 sm:p-10 grid gap-6 sm:grid-cols-[1fr_auto] sm:items-center">
+        <div class="p-7 sm:p-10 grid gap-8 sm:grid-cols-[1fr_auto] sm:items-center">
           <div>
             <div class="section-kicker mb-3">Next step</div>
             <h2 class="type-h2">Have a project or a role in mind?</h2>
             <p class="mt-3 text-sm leading-[1.8] text-muted-foreground/88 max-w-[46ch]">
-              Reach out. Whether you have a brief or just an idea, I'll tell you honestly if it's a good fit.
+              Reach out with what you're building and your timeline. I'll tell you honestly if it's a good fit.
             </p>
           </div>
-          <div class="flex flex-col gap-3 sm:items-end">
+          <div class="flex flex-row sm:flex-col gap-3 sm:items-end flex-wrap">
             <a href={calLink} target="_blank" rel="noopener noreferrer" class="btn-stripe min-h-[48px] px-8 whitespace-nowrap">
               Book a free call
             </a>
-            <a href={`mailto:${emailAddress}`} class="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-foreground text-center sm:text-right">
+            <a href={`mailto:${emailAddress}`} class="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-foreground sm:text-right">
               {emailAddress}
             </a>
           </div>
@@ -383,93 +315,58 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
     color: hsl(var(--muted-foreground));
   }
 
-  /* ── Work strip ── */
-  .work-strip-outer {
-    position: relative;
+  /* ── Proof strip cells ── */
+  .proof-cell {
+    padding: 1.625rem 1.25rem;
   }
 
-  .work-strip {
-    display: flex;
-    gap: 10px;
-    overflow-x: auto;
-    scrollbar-width: none;
-    padding: 0 1rem 0.5rem;
-    cursor: grab;
-    user-select: none;
-  }
-
-  .work-strip::-webkit-scrollbar {
-    display: none;
-  }
-
-  .work-strip.dragging {
-    cursor: grabbing;
-  }
-
-  .work-strip-fade {
-    position: absolute;
-    right: 0;
-    top: 0;
-    bottom: 0.5rem;
-    width: 100px;
-    background: linear-gradient(to right, transparent, hsl(var(--background)));
-    pointer-events: none;
-  }
-
-  .work-card {
-    flex-shrink: 0;
-    width: 220px;
-    border: 1px solid hsl(var(--border) / 0.7);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    text-decoration: none;
-    transition: border-color 200ms ease;
-  }
-
-  .work-card:hover {
-    border-color: hsl(var(--foreground) / 0.4);
-  }
-
-  .work-card-img-wrap {
-    overflow: hidden;
-    background: hsl(var(--muted) / 0.3);
-  }
-
-  .work-card-img-wrap img {
-    width: 100%;
-    height: 240px;
-    object-fit: cover;
-    object-position: top;
-    display: block;
-    transition: transform 400ms ease;
-  }
-
-  .work-card:hover .work-card-img-wrap img {
-    transform: scale(1.03);
-  }
-
-  .work-card-footer {
-    padding: 0.625rem 0.75rem;
-    border-top: 1px solid hsl(var(--border) / 0.6);
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-  }
-
-  .work-card-label {
-    font-size: 0.8125rem;
-    font-weight: 500;
-    color: hsl(var(--foreground));
-    line-height: 1.3;
-  }
-
-  .work-card-cat {
+  .proof-value {
     font-family: "Geist Mono", ui-monospace, monospace;
-    font-size: 9px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1;
+    color: hsl(var(--foreground));
+  }
+
+  .proof-label {
+    margin-top: 0.25rem;
+    font-family: "Geist Mono", ui-monospace, monospace;
+    font-size: 10px;
     text-transform: uppercase;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.16em;
     color: hsl(var(--muted-foreground));
+    line-height: 1.4;
+  }
+
+  /* Border helpers — avoids divide-x wrapping bug in 2-col grid */
+  .proof-cell--bl {
+    border-left: 1px solid hsl(var(--border) / 0.6);
+  }
+
+  /* Left border only at sm and above (for the 3rd cell) */
+  .proof-cell--bl-sm {
+    border-top: 1px solid hsl(var(--border) / 0.6);
+  }
+
+  @media (min-width: 640px) {
+    .proof-cell--bl-sm {
+      border-top: none;
+      border-left: 1px solid hsl(var(--border) / 0.6);
+    }
+  }
+
+  /* Top border on rows 2+ in the 2-col mobile layout, cleared at sm */
+  .proof-cell--bt {
+    border-top: 1px solid hsl(var(--border) / 0.6);
+  }
+
+  @media (min-width: 640px) {
+    .proof-cell--bt {
+      border-top: none;
+    }
+    .proof-cell {
+      padding: 1.75rem 2rem;
+    }
   }
 
   /* ── Service cards ── */
@@ -486,37 +383,3 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
     overflow: hidden;
   }
 </style>
-
-<script is:inline>
-  const strip = document.getElementById('workStrip');
-  if (strip) {
-    let isDown = false;
-    let startX = 0;
-    let scrollLeft = 0;
-
-    strip.addEventListener('mousedown', (e) => {
-      isDown = true;
-      strip.classList.add('dragging');
-      startX = e.pageX - strip.offsetLeft;
-      scrollLeft = strip.scrollLeft;
-    });
-
-    strip.addEventListener('mouseleave', () => {
-      isDown = false;
-      strip.classList.remove('dragging');
-    });
-
-    strip.addEventListener('mouseup', () => {
-      isDown = false;
-      strip.classList.remove('dragging');
-    });
-
-    strip.addEventListener('mousemove', (e) => {
-      if (!isDown) return;
-      e.preventDefault();
-      const x = e.pageX - strip.offsetLeft;
-      const walk = (x - startX) * 1.5;
-      strip.scrollLeft = scrollLeft - walk;
-    });
-  }
-</script>
