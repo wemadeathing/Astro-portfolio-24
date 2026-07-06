@@ -1,10 +1,10 @@
 ---
-title: "Kota AI - Multi-Agent Operations Platform"
-description: "Designed and built a multi-agent AI operations platform for South African SMEs, from architecture to pre-launch product."
-ai_summary: "End-to-end design and build of a multi-agent operations platform for SA small businesses. Covers system architecture decisions, LangGraph orchestration, RAG knowledge base design, Generative UI response contract, multi-tenant data isolation, and the folder-as-architecture pattern. Demonstrates full ownership of a production AI system from concept through pre-launch testing."
-image: "/images/work/kota/kota.png"
-tags: ["Builds", "AI Systems", "Multi-Agent", "LangGraph", "Architecture", "Solo Founder"]
-use_for_questions: ["Multi-agent systems", "AI architecture", "LangGraph", "RAG", "Knowledge base design", "Generative UI", "Agentic AI", "FastAPI", "Supabase", "SA SME", "Solo building"]
+title: "Kota AI - Designing an Operational AI Workspace"
+description: "A product-led case study on designing and building an AI-powered operations platform for South African SMEs."
+ai_summary: "A product design and AI systems case study about Kota, an operational workspace for South African SMEs. Covers the problem framing, build-in-code design process, generative UI strategy, multi-agent architecture, and the UX journey for turning plain-language intent into usable business outputs."
+image: "/images/work/kota/kota-feature.png"
+tags: ["Product Design", "AI Systems", "Operational UX", "Generative UI", "Solo Build"]
+use_for_questions: ["Product design", "AI product design", "Generative UI", "Operational UX", "Multi-agent architecture", "Designing in code", "South African SME software", "Solo building with AI tools"]
 featured: true
 published: true
 order: 2
@@ -13,15 +13,16 @@ import ClickableImage from '../../components/ClickableImage.astro';
 import FeatureCard from '../../components/FeatureCard.astro';
 import ProjectStats from '../../components/ProjectStats.astro';
 import TechStack from '../../components/TechStack.astro';
-import KotaAgentFlowDiagram from '../../components/KotaAgentFlowDiagram';
-import KotaKnowledgeBaseDiagram from '../../components/KotaKnowledgeBaseDiagram';
+import KotaAgentFlowDiagram from '../../components/KotaAgentFlowDiagram.astro';
+import KotaInvoiceJourneyDiagram from '../../components/KotaInvoiceJourneyDiagram.astro';
+import KotaBetaBanner from '../../components/KotaBetaBanner';
 
 <ProjectStats
   stats={[
-    { label: "Timeline", value: "In Progress" },
-    { label: "Role", value: "Architect & Solo Builder" },
-    { label: "Type", value: "Multi-Agent Web App" },
-    { label: "Status", value: "Pre-Launch Testing" }
+    { label: "Role", value: "Product designer, architect, solo builder" },
+    { label: "Approach", value: "Designed in code with AI" },
+    { label: "Type", value: "Operational AI product" },
+    { label: "Focus", value: "Product thinking first" }
   ]}
 />
 
@@ -29,208 +30,177 @@ import KotaKnowledgeBaseDiagram from '../../components/KotaKnowledgeBaseDiagram'
 
 ## Project Overview
 
-**Problem:** South African small business owners do not need another blank AI chat box. They need a system that understands their business context and turns work into usable output.
+Kota started from a problem I understood first-hand: small business owners do not need another tool that gives them one more place to type, configure, or manage work. They need help getting operational tasks out of their heads and into finished outputs.
 
-**Role:** architect, product designer, and solo builder.
+For many South African service businesses, the drag is not the core work. It is everything around it. Quotes go out late. Invoices sit unsent. Follow-ups slip. Proposals get rewritten from scratch. Context lives across memory, WhatsApp threads, notes, and half-finished documents. Most tools treat these as separate workflows. In reality, they are all part of the same operational burden.
 
-**What shipped:** a multi-agent operations platform built on LangGraph, FastAPI, and Supabase, with a RAG knowledge base and a typed generative UI contract.
-
-**Why it mattered:** the goal was to design AI around real operational constraints, not around novelty.
-
-**Proof:** the platform is in pre-launch testing with core architecture, multi-tenant data design, and operational surfaces already in place.
-
-<ClickableImage
-  src="/images/work/kota/kota-dash.png"
-  alt="Kota AI dashboard interface"
-  caption="The Kota AI dashboard, six operational surfaces, one agent layer underneath."
-/>
+Kota was my attempt to design a system around that burden. The goal was to create a workspace that understands the business context, then turns intent into usable output, whether that output is an invoice, a proposal, a follow-up draft, or the next best action.
 
 ## Tools & Technologies
 
 <TechStack
   items={[
-    { category: "Orchestration", tools: ["LangGraph", "Python"] },
-    { category: "Backend", tools: ["FastAPI", "SSE streaming"] },
-    { category: "Database", tools: ["Supabase", "PostgreSQL", "pgvector", "RLS"] },
-    { category: "LLM", tools: ["OpenRouter", "Claude API", "Tavily"] },
+    { category: "Build Workflow", tools: ["OpenAI Codex", "Cursor", "Claude Code"] },
+    { category: "Backend", tools: ["Python", "FastAPI", "LangGraph", "SSE streaming"] },
+    { category: "Data", tools: ["Supabase", "PostgreSQL", "RLS"] },
     { category: "Frontend", tools: ["Astro", "React Islands", "TypeScript"] },
-    { category: "Observability", tools: ["LangSmith", "PostHog"] },
-    { category: "Deploy", tools: ["Railway", "Netlify"] }
+    { category: "Design", tools: ["Affinity Designer", "Design in code"] },
+    { category: "Testing & Review", tools: ["Playwright", "Refactoring passes", "Security review"] }
   ]}
 />
 
-## The Problem Worth Solving
+## The Problem
 
-Three specific failures define what SA SME owners deal with every day.
+Three recurring failures shaped the product.
 
-Admin kills momentum. Invoices go out late because nothing prompts them. Proposals get forgotten because there is no follow-up tracker. Documents look unprofessional because starting from scratch every time is the only option.
+**Admin breaks momentum.** In many small service businesses, the same person doing the work is also writing the quote, sending the invoice, chasing payment, and following up on leads. Important tasks do not fail because they are hard. They fail because they arrive at the wrong time, with too much friction.
 
-Leads go cold. Without a system to surface follow-ups, warm leads disappear between conversations. Most small business owners do not lose work because they are bad at selling. They lose it because they are too busy to follow up.
+**Operational context does not compound.** A proposal does not know your service pricing. A draft message does not know your tone. A quote does not know your VAT status. The business has to keep re-explaining itself.
 
-Every task starts from zero. A blank page for every proposal. Recalling context from memory for every follow-up. The tools do not know the business, so nothing compounds.
+**AI often adds another layer instead of removing one.** A generic assistant can answer questions, but that is not the same as helping a business move work forward. In this category, a paragraph is rarely enough. The output needs to become a usable artifact.
 
-The design question was: what does an AI tool look like when it actually knows the business context, and responds in a format that does not require the owner to do extra work to use the output?
+That became the central design question for the product:
 
-## The Architecture Decision: Two Agents, Not Six
+> What does an AI product look like when it is designed around operational follow-through rather than conversational novelty?
 
-The first instinct was to build one agent per surface: a Finance Agent, a Clients Agent, a Comms Agent. It sounds organised. It would have been a mistake.
+## The Solution
 
-The actual intelligence difference between "show me my overdue invoices" and "show me Acme's contact history" is minimal. Both hit the same database. Both return structured data. Both are single-turn tasks. Building separate agents for each surface would have meant six parallel systems to maintain, with most of the complexity in the routing layer that decides which one to call.
+Kota is an AI-powered operations workspace built for South African SMEs, especially service businesses where the owner is both the operator and the back office.
 
-The better model: one General Agent that handles single-turn tasks across all surfaces, and one Workflow Agent that handles multi-step tasks requiring a reasoning loop. Surface-specific behaviour comes from context injection, not separate agents. When the user is on the Finance surface, the system prompt includes Finance-specific instructions and tools. Same agent, different context window.
+The product combines client context, financial documents, follow-up drafting, tasks, business memory, and compliance-aware assistance into one system. Instead of returning text by default, it returns the right working format for the job: a document, a table, an action state, or a structured draft.
 
-A new agent earns its existence when the task genuinely requires a fundamentally different reasoning loop, not when it requires different data.
+The interaction model is intentionally simple:
 
-<KotaAgentFlowDiagram client:load />
+- ask in plain language
+- get a usable output back
+- review before anything important happens
 
-## The Knowledge Base: Silent, Not Configurable
+That principle shaped both the UX and the architecture. From a product perspective, Kota is not meant to feel like an AI novelty layer on top of business software. It is meant to feel like operational support that already knows the business and can help complete work with less setup, less repetition, and less context switching.
 
-The knowledge base is the memory layer. It is not a settings screen. It is not something the user manages. It builds through use.
+## My Approach
 
-When a user confirms a new service price in chat, that price is stored. When they describe their brand voice during onboarding, that description is stored. When they use payment terms on an invoice for the first time, those terms are stored. Agents query this layer silently before generating any output. The user does not set it up. The system learns it.
+I did not design this in Figma first.
 
-The underlying architecture is a `business_context` table in Supabase with pgvector embeddings through OpenRouter. When an agent needs to generate a proposal, it does a semantic search across the knowledge base before writing a word. The result is an invoice that already knows the payment terms, a follow-up draft that already knows the brand voice, a proposal that already knows the service pricing.
+The product was developed almost entirely through AI-assisted coding workflows using **OpenAI Codex**, **Cursor**, and **Claude Code**. Branding and visual design assets were created in **Affinity**, but the actual product design process happened inside the build.
 
-This is a RAG pattern, but the retrieval trigger is not a user search query. It is the agent deciding what it needs before it can produce a useful output.
+The working method was closer to product discovery through making than traditional handoff design.
 
-<KotaKnowledgeBaseDiagram client:load />
+I would identify a problem, define the feature set that might solve it, turn that into user stories, and then build directly against those stories. From there, the loop was always the same:
 
-## Generative UI: The Agent Picks the Frame
+**build, test, reduce, iterate**
 
-Most chat interfaces return text. Kota AI returns typed responses that the frontend renders as components.
+I went wide early. I explored a larger feature surface than the final product needed. Then I kept cutting. If a flow introduced too much friction, it was simplified. If a feature felt impressive but did not meaningfully improve the task, it was reduced or removed. If performance or complexity became a bottleneck, I changed the technical approach.
 
-Every agent response follows a contract:
+This gave the project a double-diamond rhythm in practice:
 
-```json
-{
-  "type": "table",
-  "message": "You have 3 open proposals. The oldest is 14 days old.",
-  "title": "Open Proposals",
-  "data": {
-    "columns": ["Client", "Value", "Status", "Days Open"],
-    "rows": [...]
-  }
-}
-```
+- identify the operational problem
+- expand into possible solutions
+- reduce toward the most useful interaction
+- rebuild with less friction
 
-The agent never generates UI code. It decides what kind of response fits the request and returns structured data. The React frontend reads `type` and renders the matching component. Six types: text, list, table, document, chart, and action.
+AI also shaped how the product was made. I used different tools, plugins, and skills for different phases of the loop. Design exploration, refactoring, security review, and browser testing each had their own passes. That let me move unusually fast, but it also meant the real discipline was not generation. It was reduction.
 
-The action type is the human-in-the-loop mechanism. When the agent needs confirmation before proceeding, sending a document, saving a service price, creating a client record, it renders an inline action component and waits. The agent never sends, publishes, or transmits anything without explicit user confirmation.
+## Product Design Thinking
 
-This distinction between "the agent picks the frame" and "the frontend fills it" keeps the system predictable. New response types can be added without touching agent logic. Agent improvements do not require frontend changes.
+The strongest product decision in Kota was not technical. It was deciding that the product should be designed around **finished operational outcomes** rather than assistance alone.
 
-<ClickableImage
-  src="/images/work/kota/kota-gen-ui.png"
-  alt="Generative UI response types rendered in the chat interface"
-  caption="Six response types. The agent classifies, the frontend renders."
-/>
+That led to a few core choices:
 
-## The Folder-as-Architecture Pattern
+**The system should return work, not just answers.** If a user asks for an invoice, the useful result is not a paragraph about invoicing. It is an invoice draft they can review and send.
 
-Agent logic lives in files, not in application code.
+**Business context should compound quietly.** The system should remember the business name, tone, pricing, payment terms, services, and compliance posture so the user does not have to restate them.
 
-Every agent is a folder. `prompt.md` contains the system prompt. `config.yaml` defines the model, temperature, and token limits. `tools/` contains tool definitions. `surfaces/` contains context files per surface. `tasks/` contains self-contained workflow definitions for the Workflow Agent.
+**Human review should stay visible.** Anything sensitive or mutating should remain explicit. The product should feel active, but never reckless.
 
-```
-agents/
-├── router/
-│   ├── prompt.md
-│   ├── config.yaml
-│   └── examples.json
-├── general/
-│   ├── prompt.md
-│   ├── config.yaml
-│   ├── tools/
-│   └── surfaces/
-│       ├── home.md
-│       ├── finance.md
-│       └── comms.md
-└── workflow/
-    ├── prompt.md
-    ├── config.yaml
-    ├── tools/
-    └── tasks/
-        ├── research-and-outreach/
-        └── proposal-generation/
-```
+**Surface context matters.** A follow-up request inside communications is not the same as one inside finance. The system should feel aware of the room the user is in.
 
-Adding a new surface means adding a markdown file, not refactoring a router. Adding a new workflow means adding a folder. The orchestration layer, LangGraph, is the disposable part. The agent knowledge survives any framework change intact.
+**Reliability matters more than theatrics.** Where a deterministic system is better than an agentic one, the deterministic system should win.
 
-This matters for governance as much as it matters for maintainability. Every agent prompt is readable, versionable, and auditable. You can see exactly what the system is instructed to do without reading application code.
+Those decisions gave the app its shape. The UX is chat-led, but not chat-only. The AI is central, but not unbounded. The product aims to reduce operational drag without turning the experience into a black box.
 
-## Multi-Tenancy from Day One
+## AI Architecture
 
-Every table in Supabase has a Row Level Security policy scoped to `organisation_id`. This is enforced at the database level, not in application code. A user can only ever see their own data, even if there is a query mistake in the application layer.
+Under the interface, Kota uses a small multi-agent system rather than one general assistant.
 
-This was a deliberate decision to build at day one rather than retrofit later. Multi-tenancy retrofitted into a single-tenant system is one of the most painful rewrites in software. Getting the RLS policies right at the start means every agent tool that reads or writes Supabase is automatically scoped, without any additional code.
+The architecture is intentionally narrow. Instead of creating many agents for every surface, I kept the system to a few specialized roles:
 
-The onboarding flow creates an organisation record. Everything else is downstream of that.
+- a router to classify intent
+- a general agent for single-step operational tasks
+- a workflow agent for more complex multi-step outputs
+- a South African compliance specialist for regulatory questions
 
-## The Streaming Contract
+This was a product decision as much as a systems decision. Separate agents only make sense when the reasoning pattern is meaningfully different. Otherwise, complexity grows faster than usefulness.
 
-Streaming Generative UI requires a specific approach. You cannot render a typed component until you know the `type` field. If you stream the entire JSON response token-by-token, the frontend has to wait for the full payload before rendering anything.
+The other important architectural decision was the **Generative UI contract**. The agent does not generate arbitrary interface code. It returns typed structured responses, and the frontend renders the appropriate component. That allowed the UX to feel purposeful rather than chat-shaped by default.
 
-The solution is two-phase streaming. Phase one: the conversational `message` field streams token-by-token as a standard chat message. The user sees "Searching for solar energy companies..." in real time. Phase two: once the agent has completed its work, the full structured `data` payload is sent as a single JSON block. The frontend reads `type` and renders the component.
+<KotaAgentFlowDiagram />
 
-The `/chat` endpoint uses Server-Sent Events with two event types: `message_delta` for streaming text tokens and `component` for the complete JSON payload.
+The architecture supports the product in three ways:
 
-This means the user always gets immediate feedback, they are never staring at a blank screen waiting for something to happen, and the component renders cleanly once the data is ready.
+- it keeps simpler requests fast
+- it allows richer outputs when deeper workflows are needed
+- it keeps behavior more predictable and debuggable
 
+The system design became a way to protect the interaction quality.
 
+## UX Journey: Creating an Invoice
 
-## SA-Specific Design Decisions
+This is one of the clearest examples of how the product is meant to work.
 
-Building for the SA market shaped several decisions that would not appear in a generic product.
+The user does not begin by navigating a complex finance flow and filling out a blank form. They begin with intent.
 
-VAT at 15% is applied globally to VAT-registered businesses, shown as a line item, and toggled during onboarding. Not a per-invoice setting. Not optional on individual documents. A business is either VAT-registered or not, and the system handles it accordingly.
+<KotaInvoiceJourneyDiagram />
 
-Payment terms default to 30 days EFT. Banking details are stored in the knowledge base and printed on every invoice automatically. The user enters them once; the system remembers.
+The UX goal here was to collapse friction, not hide process. The user still remains in control, but the blank-page problem is removed.
 
-The app does not send messages. It drafts them. The user copies into WhatsApp, email, LinkedIn, or SMS. WhatsApp is the primary B2B communication channel for SA SMEs, so drafts are formatted accordingly: no HTML, conversational tone, short paragraphs.
+## Core Features
 
-Compliance documents, BEE certificates, CIPC registration, tax clearance, are stored in the knowledge base. Enterprise clients regularly request these. The agent surfaces them on demand. Expiry dates are stored where relevant and the Advisor flags upcoming expiries.
+I deliberately kept the case study focused on a few behaviors rather than trying to document every feature in the product.
+
+**Operational document creation**  
+Users can generate invoices, quotes, estimates, and proposals from natural language, with business context already applied.
+
+**Business-aware drafting**  
+Messages, follow-ups, and document language are shaped by saved services, tone, pricing, and other business context.
+
+**Structured AI output**  
+Responses are rendered as usable UI states rather than generic text whenever the task calls for it.
+
+**South African context built in**  
+The product is designed around ZAR, VAT, EFT workflows, local compliance language, and South African SME realities from the start.
+
+**Review-first actions**  
+The system supports action, but not hidden action. Important changes remain visible and user-controlled.
 
 <ClickableImage
-  src="/images/work/kota/kota-dash.png"
-  alt="Two-phase streaming: message delta then component payload"
-  caption=""
+  src="/images/work/kota/kota-dashboard.png"
+  alt="Kota dashboard showing the latest operational workspace interface"
+  caption="The current dashboard brings guidance, operational signals, and next actions into one calmer workspace view."
 />
 
-## The Advisor: Not an Agent Call
+## Outcome To Date
 
-The Home surface shows a daily briefing: overdue invoices, stale proposals, uninvoiced jobs. It looks like an AI-generated summary. It is not.
+Kota has advanced from an architecture-led concept into a much more resolved product system.
 
-The Advisor on Home is a deterministic database query, not an agent call. Overdue invoices are a SQL query with a date filter. Stale proposals are a query on documents with no status change in 7 days. The results are fed into a lightweight prompt for a summary sentence, but the data is already known before the LLM is called.
-
-This was a deliberate decision to keep the critical path reliable. If the agent fails, the home screen still shows accurate data. The failure surface is the summary sentence, not the data that informs every morning's priorities.
-
-## Results So Far
+The most valuable part of the project for me is not just that I built a multi-agent product solo. It is that the product thinking held up through implementation. The more I built and tested, the more the same conclusion kept proving true: small business users do not want more software to manage. They want less friction between intention and completed work.
 
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 my-8">
-  <FeatureCard title="Pre-Launch Testing">
-    System is in pre-launch with initial testers. Architectural concerns reviewed and resolved before onboarding non-technical users.
+  <FeatureCard title="Product Thinking Led">
+    The case study is centered on reducing admin friction and turning user intent into usable output rather than showcasing AI novelty for its own sake.
   </FeatureCard>
-  <FeatureCard title="Full System Architecture">
-    Router, General Agent, Workflow Agent, RAG knowledge base, Generative UI contract, multi-tenant RLS, all designed and built solo.
+  <FeatureCard title="Designed In Code">
+    The product was shaped through direct building, testing, trimming, and iterating with AI-assisted tools instead of a traditional Figma-first process.
   </FeatureCard>
-  <FeatureCard title="SA-First Design">
-    VAT, EFT, WhatsApp formatting, BEE compliance, CIPC, every SA-specific constraint is built into the system, not bolted on.
+  <FeatureCard title="System Design In Service Of UX">
+    The multi-agent architecture, structured responses, and deterministic rules all exist to support clearer workflows and more trustworthy interactions.
   </FeatureCard>
-  <FeatureCard title="Production-Grade from Day One">
-    No prototype shortcuts. Multi-tenancy, observability, streaming, error handling, designed in at the start.
+  <FeatureCard title="Market-Specific Execution">
+    South African business realities like VAT, EFT, compliance language, and operational habits were designed in from the start rather than added later.
   </FeatureCard>
 </div>
 
+Kota became a strong proof point for how I work: product thinking first, system design second, and implementation close enough to the problem that the design can keep evolving as the product proves itself.
 
-
-
-
-## What's Next
-
-Kota AI is targeting a pilot launch with five SA small businesses. The goal is to observe usage patterns before building tier infrastructure, payment integration, or additional surfaces. The pilot will answer the question that architecture cannot: what do people actually use it for?
-
-Phase 2 items are scoped but deliberately deferred: OAuth-based Gmail integration, WhatsApp AI integration where users can communicate with agents directly. None of those ship until the pilot tells us what matters.
-
-While users are testing the system, I am building a governance framework as well as the branding and marketing materials.
+<KotaBetaBanner />
 
 </div>
