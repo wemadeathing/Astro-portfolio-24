@@ -29,6 +29,15 @@ const projects = defineCollection({
     featured: z.boolean().default(false),
     published: z.boolean().default(true),
     order: z.number().optional(),
+    // Outbound links to the live work (site, App Store, etc.)
+    links: z
+      .array(
+        z.object({
+          url: z.string().url(),
+          label: z.string(),
+        })
+      )
+      .optional(),
     // AI-facing metadata (optional)
     ai_summary: z.string().optional(),
     use_for_questions: z.array(z.string()).optional().default([]),

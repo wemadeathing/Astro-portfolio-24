@@ -68,12 +68,15 @@ const projectSchema = {
 };
 
 const agentDivider = '---';
+const liveLinksLine = project.data.links?.length
+  ? `\n**Live:** ${project.data.links.map((l) => `[${l.label}](${l.url})`).join(' · ')}`
+  : '';
 const agentMarkdown = `# ${project.data.title}
 
 > ${project.data.description}
 
 **Tags:** ${(project.data.tags ?? []).join(', ')}
-**URL:** ${shareUrl}
+**URL:** ${shareUrl}${liveLinksLine}
 
 ${agentDivider}
 
@@ -110,6 +113,22 @@ ${project.body}`;
             <p class="type-lead mb-10 max-w-[62ch]">
               {project.data.description}
             </p>
+            {project.data.links && project.data.links.length > 0 && (
+              <div class="mb-10 flex flex-wrap items-center gap-3">
+                {project.data.links.map((link, index) => (
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="btn-stripe min-h-[44px] px-6"
+                    data-tone={index > 0 ? 'muted' : undefined}
+                  >
+                    {link.label}
+                    <span aria-hidden="true" class="ml-2">&#8599;</span>
+                  </a>
+                ))}
+              </div>
+            )}
             <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
               {project.data.tags?.map((tag, index) => (
                 <span class="font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground">

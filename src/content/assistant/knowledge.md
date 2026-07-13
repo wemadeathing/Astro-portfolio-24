@@ -101,29 +101,26 @@ Nasif brings 15+ years across brand, product, and engineering. He works across b
 - Values open communication channels (Figma comments, Slack, etc.) over synchronous meetings
 
 ### Engagement types
-- **Full-time roles**: Currently seeking senior-level positions, preferably remote with US-based companies
-- **Contract/Fractional work**: Available for the right fit
-- **Project-based**: Short-term engagements for specific deliverables
+- **Project-based**: The primary engagement type. Websites, brand identity, AI products, MVPs, and chatbot or automation builds, any size
+- **Contract/Fractional work**: Available for ongoing or part-time arrangements with agencies and product teams
+- **Agency overflow**: Available as delivery capacity for design and dev agencies that need builds handled end to end
 - **Workshops**: Design systems workshops and practical product-design sessions (when scoped to design outcomes)
 
-Note: Nasif is selective about engagements. The right fit means organizations that value innovation, embrace change, allow him to leverage his broad skill set beyond a single discipline, and provide opportunities to teach and impart knowledge.
+Note: projects can start immediately. The first step is a free 30-minute call (https://calendly.com/salaam-nasif/30min) or a message through the contact page.
 
 ### Constraints & preferences
 - **Location**: Based in Cape Town, South Africa
-- **Work mode**: Strongly prefers remote work, highly adaptable to different time zones
+- **Work mode**: Remote-first, works well with distributed teams and clients
 - **Time zones**: Has successfully worked with teams across 5-hour differences; structures communication around convenient overlap times with daily catch-ups
-- **Industry preference**: Startup space suits his broad skill set best; avoids rigid corporate environments that require narrow specialization
-- **Role level**: Senior to principal level roles; needs opportunity to innovate and teach, not just execute
-- **What he avoids**: One-dimensional roles, organizations resistant to change, meeting-heavy cultures, unnecessary process for process sake
+- **Project size**: Takes on both small, fast projects (a website in weeks) and larger product builds
 
 ## Proof points (credible evidence)
 
 ### Professional Journey (detailed for recruiters)
 
 **Current Status (Dec 2024 - Present)**
-- Independent design engineer focused on project-based client work across brand identity, web design, and frontend development, while building Kota AI and RideNote. Seeking senior roles in design engineering, product design, and frontend-forward product teams.
-- Open to remote positions with US-based companies or startups that value execution-focused designers
-- No notice period required; can start immediately for the right opportunity
+- Independent product designer and AI builder focused on project-based client work across brand identity, web design, AI products, and frontend development, while building Kota AI and RideNote.
+- Currently taking on new client projects and can start immediately.
 
 **Design Engineer** (Independent)
 *2025 - Present*
@@ -275,7 +272,7 @@ Yes, and I use that combination deliberately. I work across brand, UX, UI, and f
 Projects where I can leverage multiple skills: design that need technical understanding, complex product UX that requires developer collaboration, rapid prototyping where I can build functional solutions quickly, or AI integration where I can help teams adopt new capabilities responsibly. I thrive in environments that value innovation and let me learn while building. Startup environments suit me well because few designers can handle branding, UI/UX, and technical implementation.
 
 ### "What's your availability / how do we start?"
-I'm currently open to the right opportunities, both full-time roles and select contract work. "Right fit" means organizations that embrace innovation, value my broad skill set beyond one discipline, and provide opportunities to teach and contribute strategically. The best way to start a conversation is through the contact page where we can discuss your needs and see if there's a match. I don't discuss pricing until we've had a discovery conversation to understand the scope and fit.
+I'm currently taking on new projects and can start right away. Websites, brand identity, AI products, MVPs, chatbots, small or large. The best way to start is a free 30-minute call (https://calendly.com/salaam-nasif/30min) or a message through the contact page. After that call you get a clear scope, timeline, and price, no vague proposals.
 
 ### "Can you build my app/product?"
 It depends on the scope and fit. I can build production applications using modern frameworks (React, AstroJS, Supabase, etc.) and AI-accelerated development tools. This portfolio you're looking at is a real example - I built it with Astro, React, and Tailwind, including the AI chat assistant you're using right now. For the right projects, I can take you from concept through design to a working product. For larger or more complex builds, I'm better suited to own the product UI/UX and collaborate closely with your development team. Let's talk about what you're trying to accomplish.
@@ -301,7 +298,7 @@ I close the gap between design and development through technical understanding, 
 ### "Are you more execution or research focused?"
 Definitely execution-focused. Most designers spend their time in discovery, research, and testing. I spend mine shipping, understanding constraints, collaborating with developers, building systems that scale, and implementing solutions.
 
-## Recruitment-Specific FAQ
+## Background FAQ
 
 ### "How many years of UI design experience do you have?"
 I have 15+ years of UI design experience spanning my entire career. I started with web and digital design in 2009 and have evolved through visual design, digital design, and now execution-focused product design. My UI work ranges from early promotional websites and digital assets to modern design systems and applications.
@@ -315,14 +312,14 @@ I am currently independent, focused on project-based client work across brand id
 ### "Have you managed teams? How many people?"
 Yes. As Lead UI Designer at Immersion Group (2022-2024), I had 3 direct reports and mentored them from junior to intermediate levels. I also led a rotating innovation team of 6-7 designers over a 12-month period. My management style focuses on building initiative and curiosity rather than micromanaging execution.
 
-### "What's your notice period / when can you start?"
-I'm currently independent and have no notice period. I can start immediately for the right opportunity. I'm selective about fit. I need organizations that value innovation, let me leverage multiple skills, and provide opportunities to teach while building.
+### "When can you start?"
+I'm currently independent with capacity for new projects, so I can usually start right away. First step is a short call to scope the work.
 
-### "What are your salary expectations?"
-I don't discuss specific numbers until we've had a discovery conversation about scope, responsibilities, and fit. For senior design engineer roles at US-based companies, I'm targeting market rates for remote positions. Let's discuss what you're offering and whether there's alignment first.
+### "What do you charge?"
+Pricing depends on scope, so I don't quote blind. After a free 30-minute discovery call you get a clear scope, timeline, and fixed price, no vague proposals and no surprise costs. Websites and brand projects typically move in weeks, not months.
 
-### "Why are you looking for work?"
-I have been independent since the end of 2024, doing project-based client work across brand identity, web design, and frontend development while building Kota AI and RideNote. I am now looking for a senior design engineering or product-design-forward role where I can apply that range, brand to UI to shipped code, in a team that values execution and craft.
+### "Why are you available?"
+I have been independent since the end of 2024, doing project-based client work across brand identity, web design, AI products, and frontend development while building Kota AI and RideNote. Project work is the focus: it is where my range, brand to UI to production code, delivers the most value for clients.
 
 ### "Can you do graphic design?"
 Yes, absolutely. I started my career in graphic design (2009-2012) working on print materials, promotional assets, and internal marketing for major retail brands like Musica and Clicks. That foundation in typography, layout, and visual communication still applies to all my digital and product work today.
@@ -358,8 +355,8 @@ When building personally, Nasif merges design and development into iterative cyc
 ### On mentoring and teaching
 Nasif focuses on developing initiative and curiosity over teaching specific tools. He uses a "skill tree" approach, helping designers understand the fundamentals they need (typography, spacing, research, etc.) while encouraging self-directed exploration. The goal is to guide designers to discover solutions themselves rather than providing all the answers. Confidence comes from taking initiative, not from memorizing patterns.
 
-### On the startup vs corporate fit
-Nasif's broad skill set (brand, UI, UX, technical implementation, AI integration, teaching) is underutilized in rigid corporate roles that demand narrow specialization. Startups value his ability to wear multiple hats and move quickly. He needs environments that embrace change, allow innovation, and let him teach while building. He's not interested in being a "one-trick pony."
+### On why one person with range beats a small team for many projects
+Nasif's broad skill set (brand, UI, UX, technical implementation, AI integration) means a client gets strategy, design, and build from one person, with no handoff gaps and no coordination overhead. For startups, SMEs, and agencies, that translates to faster delivery and a result where the brand, interface, and code all tell the same story.
 
 ### On responsible AI adoption
 Most teams make three mistakes with AI: they only use it for basic tasks (summarization, data analysis), they don't think systematically about workflows, and they ignore data privacy. Nasif helps teams move beyond basic usage by pairing clear workflow design with careful judgment about what should be automated and what should stay human-led, especially when customer trust is on the line.

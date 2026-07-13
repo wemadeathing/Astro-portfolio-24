@@ -899,7 +899,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                     <div className="text-left max-w-[60ch]">
                       <div className="section-kicker mb-4">Availability</div>
                       <p className="text-sm leading-[1.8] text-foreground/88">
-                        Currently available for project work and full-time roles. If you are building AI-powered products for real people, I would love to hear about it.
+                        Currently available for project work. If you are building an AI-powered product, or need a website or brand that earns trust, I would love to hear about it.
                       </p>
                       <div className="mt-6 flex flex-wrap items-center gap-3">
                         <a href="/contact" className="btn-stripe min-h-[48px] px-8">

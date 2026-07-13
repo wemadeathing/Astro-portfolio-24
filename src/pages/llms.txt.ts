@@ -29,7 +29,7 @@ export const GET: APIRoute = async () => {
 > Design Engineer with 15+ years across brand, product, frontend development, and AI. Based in Cape Town, South Africa.
 
 - Contact: hello@nasifsalaam.com
-- Available for: Web and product design, frontend development, MVP builds, design engineering roles
+- Available for: Web and product design, frontend development, MVP builds, AI product builds
 - LinkedIn: https://www.linkedin.com/in/nasifsalaam/
 - GitHub: https://github.com/wemadeathing
 

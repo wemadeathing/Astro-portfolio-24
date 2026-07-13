@@ -44,7 +44,7 @@ export async function buildHomeAgentMarkdown(): Promise<AgentPage> {
     '> Product designer and AI builder with 15+ years across brand, digital products, systems, and implementation. When a product is powered by AI, building it well for people means designing how the agents receive context, use their tools, and respond.',
     '',
     '**Location:** Cape Town, South Africa',
-    '**Available for:** AI product builds, MVPs, product design, and high-trust digital presence work. Open to project work and full-time roles.',
+    '**Available for:** AI product builds, MVPs, product design, and high-trust digital presence work. Currently taking on new client projects.',
     '**Contact:** hello@nasifsalaam.com',
     '',
     '## Core Expertise',
@@ -274,7 +274,7 @@ const ABOUT_MD = `# About: Nasif Salaam
 
 ## Current Focus
 
-Project-based client work across brand identity, web design, and frontend development. Building **Kota AI** (multi-agent business operations platform, designed and built end-to-end) and **RideNote** (iOS App Store live, Android in testing). Open to product design / AI build roles and to project work.
+Project-based client work across brand identity, web design, and frontend development. Building **Kota AI** (multi-agent business operations platform, designed and built end-to-end) and **RideNote** (iOS App Store live, Android in testing). Currently taking on new client projects.
 
 ## Expertise
 
@@ -332,7 +332,7 @@ In-house design for retail marketing materials, promotional campaigns, and brand
 
 const WORK_WITH_ME_MD = `# Work With Me: Nasif Salaam
 
-> Product designer and AI builder with 15+ years across brand, product, frontend, and AI. No handoffs and no gaps between design and build. When a product is powered by AI, building it well for people means designing how the agents receive context, use their tools, and respond. Open to project work and full-time roles.
+> Product designer and AI builder with 15+ years across brand, product, frontend, and AI. No handoffs and no gaps between design and build. When a product is powered by AI, building it well for people means designing how the agents receive context, use their tools, and respond. Currently taking on new projects.
 
 ## Services
 
@@ -362,7 +362,7 @@ From concept to working product without the usual handoff gaps. Product framing,
 
 const CONTACT_MD = `# Contact: Nasif Salaam
 
-> Looking to hire, collaborate, or start a project. Open to project work and full-time roles. Send a note and I will reply with next steps. Usually within 24 hours.
+> Looking to start a project or collaborate. Send a note and I will reply with next steps. Usually within 24 hours.
 
 ## Channels
 

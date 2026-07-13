@@ -9,6 +9,7 @@ const services = [
     heading: 'From concept to working product, without the handoff gaps.',
     body: "I work across product framing, UX, interface design, and implementation to get products moving fast. When the product is AI-powered, that includes designing how the agents receive context, use their tools, and respond, so it works for the person using it.",
     includes: ['Web and mobile MVPs', 'AI-powered product builds', 'Full stack: design to deployment'],
+    proof: 'Recent: an iOS app from concept to App Store release in 30 days.',
     audience: 'Founders, product teams, and innovation leads who need a design-minded builder to move from idea to working software.',
     image: '/images/work-with-me-02.png',
     imageAlt: 'Product and MVP development by Nasif Salaam',
@@ -19,6 +20,7 @@ const services = [
     heading: 'Brand-led websites that make a business feel credible fast.',
     body: "I design and build websites and brand systems for businesses that need to look established and trustworthy. This is the right fit when the offer is strong but the current digital presence makes the business feel smaller than it is.",
     includes: ['New websites from scratch', 'Brand identity: logo, colour, type', 'Redesigns and refreshes'],
+    proof: 'Recent: full brand and website live in 3 weeks, with a 40% lift in leads.',
     audience: 'Service businesses, founders, and small teams that need a sharper digital presence to support outreach, trust, and lead generation.',
     image: '/images/work-with-me-01.png',
     imageAlt: 'Website and brand identity design by Nasif Salaam',
@@ -68,6 +70,8 @@ ${s.body}
 **Includes:**
 ${s.includes.map((i) => `- ${i}`).join('\n')}
 
+**Proof:** ${s.proof}
+
 **Best for:** ${s.audience}`
   )
   .join('\n\n')}
@@ -103,7 +107,7 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
             Product design and AI builds, without the gaps.
           </h1>
           <p class="mt-5 text-sm leading-[1.8] text-muted-foreground/88 max-w-[46ch]">
-            15+ years across brand, digital products, and systems. One person from brief to working product. Open to project work and full-time roles.
+            15+ years across brand, digital products, and systems. One person from brief to working product. Currently taking on new projects.
           </p>
           <div class="mt-8">
             <a href={calLink} target="_blank" rel="noopener noreferrer" class="btn-stripe min-h-[48px] px-8">
@@ -156,7 +160,7 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
           <div class="proof-value flex items-center gap-2">
             <span class="status-dot" aria-hidden="true"></span>Open
           </div>
-          <div class="proof-label">Projects + roles</div>
+          <div class="proof-label">For new projects</div>
         </div>
 
         <div class="proof-cell proof-cell--bt sm:proof-cell--bt-0 proof-cell--bl">
@@ -203,6 +207,11 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
                   {service.includes.join(' · ')}
                 </p>
               </div>
+              {service.proof && (
+                <p class="mt-4 text-sm leading-[1.7] text-foreground/80">
+                  {service.proof}
+                </p>
+              )}
               <div class="mt-4 overflow-hidden border border-border/60">
                 <img
                   src={service.image}
@@ -251,7 +260,7 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
         <div class="p-7 sm:p-10 grid gap-8 sm:grid-cols-[1fr_auto] sm:items-center">
           <div>
             <div class="section-kicker mb-3">Next step</div>
-            <h2 class="type-h2">Have a project or a role in mind?</h2>
+            <h2 class="type-h2">Have a project in mind?</h2>
             <p class="mt-3 text-sm leading-[1.8] text-muted-foreground/88 max-w-[46ch]">
               Reach out with what you're building and your timeline. I'll tell you honestly if it's a good fit.
             </p>
