@@ -25,6 +25,16 @@ const services = [
     image: '/images/work-with-me-01.png',
     imageAlt: 'Website and brand identity design by Nasif Salaam',
   },
+  {
+    number: '03',
+    label: 'AI Training & Advisory',
+    heading: 'Team training that builds judgment, not just tool skills.',
+    body: "Most teams are using AI. Very few are using it well. I run tailored sessions for organisations that cover prompting patterns, responsible use, and real workplace scenarios, so the capability sticks after the workshop ends.",
+    includes: ['Tailored team training sessions', 'Training blocks and retainers', 'Responsible use and governance'],
+    proof: 'Backed by ISO/IEC 42001 Lead Auditor and Anthropic AI Fluency certifications.',
+    audience: 'Teams and organisations that want shared AI habits and less risk, in healthcare, financial services, legal, research, and beyond.',
+    link: { url: 'https://ai.nasifsalaam.com', label: 'Explore AI training' },
+  },
 ];
 
 const steps = [
@@ -72,7 +82,7 @@ ${s.includes.map((i) => `- ${i}`).join('\n')}
 
 **Proof:** ${s.proof}
 
-**Best for:** ${s.audience}`
+**Best for:** ${s.audience}${s.link ? `\n\n**More:** [${s.link.label}](${s.link.url})` : ''}`
   )
   .join('\n\n')}
 
@@ -185,14 +195,14 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
     <section id="services" class="py-14 sm:py-20 scroll-mt-28">
       <div class="mb-10">
         <div class="section-kicker">Services</div>
-        <h2 class="type-h2 mt-4">Two tracks, one thread.</h2>
+        <h2 class="type-h2 mt-4">Three tracks, one thread.</h2>
         <p class="mt-3 text-sm leading-[1.8] text-muted-foreground/88 max-w-[50ch]">
           Product thinking, interface craft, and implementation in one person, end to end.
         </p>
       </div>
 
       <div class="grid gap-6 lg:grid-cols-2">
-        {services.map((service, i) => (
+        {services.slice(0, 2).map((service, i) => (
           <div class={`scroll-reveal scroll-reveal-d${i + 1} service-card`}>
             <div class="frame-stripe" aria-hidden="true"></div>
             <div class="p-5 sm:p-6 flex flex-col h-full">
@@ -212,22 +222,72 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
                   {service.proof}
                 </p>
               )}
-              <div class="mt-4 overflow-hidden border border-border/60">
-                <img
-                  src={service.image}
-                  alt={service.imageAlt}
-                  class="aspect-[16/9] w-full object-cover object-top"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </div>
+              {service.image && (
+                <div class="mt-4 overflow-hidden border border-border/60">
+                  <img
+                    src={service.image}
+                    alt={service.imageAlt}
+                    class="aspect-[16/9] w-full object-cover object-top"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </div>
+              )}
               <p class="mt-4 text-xs leading-[1.7] text-muted-foreground/70">
                 <span class="text-foreground/60">Best fit:</span> {service.audience}
               </p>
+              {service.link && (
+                <a
+                  href={service.link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="mt-5 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-primary transition-colors hover:text-foreground"
+                >
+                  {service.link.label}
+                  <span aria-hidden="true">&#8599;</span>
+                </a>
+              )}
             </div>
           </div>
         ))}
       </div>
+
+      {/* Training banner: full width */}
+      {services[2] && (
+        <div class="scroll-reveal scroll-reveal-d3 service-card mt-6">
+          <div class="frame-stripe" aria-hidden="true"></div>
+          <div class="grid gap-8 p-5 sm:p-6 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14">
+            <div>
+              <div class="flex items-start justify-between gap-4 mb-5">
+                <span class="font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground leading-snug">{services[2].label}</span>
+                <span class="font-mono text-2xl font-bold text-primary/25 leading-none tabular-nums shrink-0">{services[2].number}</span>
+              </div>
+              <h3 class="text-base font-semibold text-foreground leading-snug">{services[2].heading}</h3>
+              <p class="mt-3 text-sm leading-[1.8] text-muted-foreground/88">{services[2].body}</p>
+              <a
+                href={services[2].link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="mt-6 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-primary transition-colors hover:text-foreground"
+              >
+                {services[2].link.label}
+                <span aria-hidden="true">&#8599;</span>
+              </a>
+            </div>
+            <div class="border-t border-border/60 pt-5 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-10">
+              <p class="font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground leading-[2.2]">
+                {services[2].includes.join(' · ')}
+              </p>
+              <p class="mt-4 text-sm leading-[1.7] text-foreground/80">
+                {services[2].proof}
+              </p>
+              <p class="mt-4 text-xs leading-[1.7] text-muted-foreground/70">
+                <span class="text-foreground/60">Best fit:</span> {services[2].audience}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
 
     {/* ── Process ── */}

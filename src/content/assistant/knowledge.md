@@ -104,6 +104,7 @@ Nasif brings 15+ years across brand, product, and engineering. He works across b
 - **Project-based**: The primary engagement type. Websites, brand identity, AI products, MVPs, and chatbot or automation builds, any size
 - **Contract/Fractional work**: Available for ongoing or part-time arrangements with agencies and product teams
 - **Agency overflow**: Available as delivery capacity for design and dev agencies that need builds handled end to end
+- **AI training for organisations**: Tailored team sessions on prompting patterns, responsible use, and workplace scenarios, plus training blocks and retainers. Dedicated site: https://ai.nasifsalaam.com
 - **Workshops**: Design systems workshops and practical product-design sessions (when scoped to design outcomes)
 
 Note: projects can start immediately. The first step is a free 30-minute call (https://calendly.com/salaam-nasif/30min) or a message through the contact page.

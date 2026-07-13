@@ -346,6 +346,9 @@ From concept to working product without the usual handoff gaps. Product framing,
 
 **Includes:** web and mobile MVPs, AI-powered product builds, full stack (design to deployment).
 
+### 3. AI Training & Advisory
+Tailored team training for organisations: prompting patterns, responsible use, and real workplace scenarios. Training blocks and retainers available. Backed by ISO/IEC 42001 Lead Auditor and Anthropic AI Fluency certifications. More at https://ai.nasifsalaam.com
+
 ## Process
 
 1. **We talk**: book a free 30-minute call.
