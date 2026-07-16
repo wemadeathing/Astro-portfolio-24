@@ -2,7 +2,7 @@
 title: "AI-Powered WhatsApp Flow Builder"
 description: "Built an AI-powered visual builder that transforms natural language into production-ready FlowJSON, bridging the designer-developer workflow."
 ai_summary: "Built an AI-powered tool that turns natural language into WhatsApp FlowJSON, speeding up flow creation and aligning designers and engineers."
-image: "/images/work/flows/flows-feature.jpeg"
+image: "/images/work/flows/flows-feature.webp"
 tags: ["Builds", "SaaS Platform", "AI Integration", "React", "Product Design", "Full Stack"]
 use_for_questions: ["AI integration", "SaaS product", "Designer–developer workflow", "Automation", "Rapid prototyping", "React"]
 published: false
@@ -55,7 +55,7 @@ This project wasn't built in one sprint. It evolved through distinct phases as I
 I started by setting up a Claude Project with Meta's FlowJSON documentation. The process involved writing user stories describing desired flows, having Claude generate FlowJSON based on documentation, copying JSON into Meta's playground to test, debugging errors manually, and repeating until it worked. This approach functioned but was slow and error-prone. FlowJSON errors are cryptic and debugging took significant time. I needed a better way to visualize and validate.
 
 <ClickableImage 
-  src="/images/work/flows/flows-manual.png"
+  src="/images/work/flows/flows-manual.webp"
   alt="Manual Workflow Process"
   caption="The initial manual process using Claude for generation and Meta's playground for testing"
 />
@@ -69,13 +69,13 @@ I built a basic visualization tool in Replit that ingests FlowJSON, parses and r
 I added Claude and OpenAI API integration with a natural language prompt interface. I built a Monaco code editor for JSON with syntax highlighting and real-time preview updates. The split-screen view showed code on the left and preview on the right. This created a feedback loop: prompt, generate, preview, edit, preview. Iteration cycles went from minutes to seconds.
 
 <ClickableImage 
-  src="/images/work/flows/flows-generator.jpeg"
+  src="/images/work/flows/flows-generator.webp"
   alt="AI Generation Interface"
   caption="Generative AI interface for creating flows from natural language prompts"
 />
 
 <ClickableImage 
-  src="/images/work/flows/flows-main-app.jpeg"
+  src="/images/work/flows/flows-main-app.webp"
   alt="AI-Powered Flow Editor"
   caption="The full editor interface with AI prompting, code editing, and real-time preview"
 />
@@ -85,7 +85,7 @@ I added Claude and OpenAI API integration with a natural language prompt interfa
 In typical workflows, designers create static mockups in Figma showing what a flow should look like. Developers then manually rebuild everything as code. This creates translation errors, slows delivery, and requires constant back and forth.
 
 <ClickableImage 
-  src="/images/work/flows/flows-figma-plugin.png"
+  src="/images/work/flows/flows-figma-plugin.webp"
   alt="Figma Export Workflow"
   caption="Exporting production-ready flow code directly to Figma"
 />
@@ -93,7 +93,7 @@ In typical workflows, designers create static mockups in Figma showing what a fl
 I built an export mechanism that converts live, coded flows into Figma-compatible JSON. Users can generate a flow with AI, refine it in the builder, then instantly import it into Figma. Figma layers are editable and maintain design system consistency. Designers can use the tool for rapid prototyping, brainstorming, and collaboration.
 
 <ClickableImage 
-  src="/images/work/flows/flows-figma-generated-ui.png"
+  src="/images/work/flows/flows-figma-generated-ui.webp"
   alt="Generated UI in Figma"
   caption="Pixel-perfect UI generated in Figma from the flow builder code"
 />
@@ -111,7 +111,7 @@ Additional features include an endpoint simulator for testing data-driven flows 
 The current state is a 90% production-ready SaaS platform. UI and UX refinements include a flyout properties panel with glass-morphism design, micro-interactions like toasts and loading states and transitions, visual fidelity that matches the native WhatsApp interface one to one, responsive layout optimized for different screen sizes, keyboard shortcuts for power users, and dark mode support.
 
 <ClickableImage 
-  src="/images/work/flows/flows-visual-editor.jpeg"
+  src="/images/work/flows/flows-visual-editor.webp"
   alt="Visual Flow Editor"
   caption="Drag-and-drop visual editor with real-time properties panel"
 />

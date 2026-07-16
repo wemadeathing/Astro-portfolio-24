@@ -2,7 +2,7 @@
 title: "RideNote - Mountain Bike Settings Tracker"
 description: "Solo-designed and built an iOS app for mountain bikers in 30 days, from product definition to App Store release."
 ai_summary: "End-to-end solo build of a production iOS app for mountain bikers to track bike settings. Covers product planning, PRD-driven development, offline-first SQLite architecture, AI-assisted coding with Cursor, App Store submission, and beta testing. Demonstrates full product ownership from concept to launch."
-image: "/images/work/ridenote-hero.png"
+image: "/images/work/ridenote-hero.webp"
 tags: ["Builds", "Mobile App", "Solo Founder", "React Native", "AI-Assisted Development"]
 use_for_questions: ["Mobile app development", "Solo building", "AI-assisted development", "Product ownership", "App Store submission", "React Native", "Offline-first architecture"]
 featured: true
@@ -77,7 +77,7 @@ The PRD defined success metrics, user personas, and most importantly, what I wou
 The primary persona was clear: "Weekend Warrior Matt," someone who rides 2-4 times per month on a trail bike, uses Strava comfortably, but doesn't want to become a suspension engineer. He just wants to remember if 26 or 28 PSI felt better last month.
 
 <ClickableImage
-  src="/images/work/ridenote-prd.png"
+  src="/images/work/ridenote-prd.webp"
   alt="Claude project instructions that formed the foundation of RideNote"
   caption="Detailed project instructions created in Claude that informed the PRD, scope, and every build decision from day one"
 />
@@ -90,7 +90,7 @@ I didn't wireframe in Figma. The approach was PRD-driven direct implementation u
 Cursor handled boilerplate code, feature generation from clear prompts, and build debugging. But it couldn't make UX flow decisions, design polish choices, or scope prioritization calls. Those required human judgment at every step.
 
 <ClickableImage
-  src="/images/work/ridenote-code-design.png"
+  src="/images/work/ridenote-code-design.webp"
   alt="Building directly in Cursor AI"
   caption="Designing and building simultaneously in Cursor, no handoff, no waiting"
 />
@@ -117,7 +117,7 @@ Early versions mixed two concepts that confused users: bike configuration (hardw
 I separated these into distinct concepts. Your baseline is your typical starting settings, stored once per bike. Ride notes are deviations from that baseline, with performance feedback attached. Users understand they're tracking experiments, not documenting a spec sheet. The mental model became clearer immediately.
 
 <ClickableImage
-  src="/images/work/ridenote-baseline-model.png"
+  src="/images/work/ridenote-baseline-model.webp"
   alt="Baseline vs ride note concept"
   caption="Baseline settings vs. ride notes, two distinct concepts that made the app click"
 />
@@ -132,7 +132,7 @@ Tire pressure affects grip differently than suspension affects comfort. A single
 Beta testers said this was the feature that made RideNote feel purpose-built rather than generic. A small detail that signals the app understands mountain biking.
 
 <ClickableImage
-  src="/images/work/ridenote-feedback-sliders.png"
+  src="/images/work/ridenote-feedback-sliders.webp"
   alt="Three-dimensional feedback sliders"
   caption="Grip, Feel, Control. Purpose-built feedback that a generic notes app can't offer"
 />
@@ -147,7 +147,7 @@ The slider required React Native Reanimated v5, but Expo's cloud builds used v3.
 Small fix in retrospect, but it saved hours. AI can help debug once you know what's broken, but recognizing the constraint requires experience.
 
 <ClickableImage
-  src="/images/work/ridenote-slider-debug.png"
+  src="/images/work/ridenote-slider-debug.webp"
   alt="Debugging the slider build issue"
   caption="The slider that worked in dev but broke every production build"
 />
@@ -158,7 +158,7 @@ Small fix in retrospect, but it saved hours. AI can help debug once you know wha
 First submission was rejected. Two issues: config file had `iPad: true` for a non-iPad app, and iPad screenshots were accidentally included. Straightforward fix, config change, screenshot removal, resubmit. Approved in two days.
 
 <ClickableImage
-  src="/images/work/ridenote-app-store.png"
+  src="/images/work/ridenote-app-store.webp"
   alt="App Store Connect showing rejection and resolution"
   caption="First submission: rejected. Second submission: approved. The real process of releasing software."
 />
@@ -166,7 +166,7 @@ First submission was rejected. Two issues: config file had `iPad: true` for a no
 While waiting for approval, I added three features users had mentioned: a pre-ride checklist, free-form notes, and custom checklists. These made the app more flexible without adding complexity to core ride tracking.
 
 <ClickableImage
-  src="/images/ridenote-live-in-appstore.png"
+  src="/images/ridenote-live-in-appstore.webp"
   alt="RideNote in the App Store"
   caption="Live in the App Store, from concept to production in 30 days"
 />

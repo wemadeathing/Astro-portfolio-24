@@ -3,7 +3,7 @@ title: "Building RideNote: Choosing the Tech Stack"
 description: "How I chose the tech stack for RideNote, set up an AI-assisted development workflow, and why every tool decision matters when you're building solo."
 ai_summary: "Third post in the RideNote series covering tech stack decisions for solo AI-assisted mobile app development. Discusses choosing React Native with Expo, TypeScript strict mode, and SQLite for local-first architecture. Covers using Cursor as the primary development environment, skipping Figma for direct-in-code design, testing workflows, version control strategy, and the 70/30 rule for balancing architecture decisions with implementation flexibility."
 pubDate: 2026-01-17
-image: "/images/insights/ridenote-tech-stack.png"
+image: "/images/insights/ridenote-tech-stack.webp"
 tags: ["Product Development", "Mountain Biking", "Solo Founder", "Tech Stack"]
 topics: ["Tech stack decisions", "AI-assisted development", "React Native", "Expo", "TypeScript", "Cursor IDE", "Local-first architecture", "Solo building"]
 recommended_for: ["Developers", "Solo founders", "Product builders", "Mobile developers", "AI-assisted development"]
@@ -29,7 +29,7 @@ These weren't arbitrary choices. Each decision came down to a specific constrain
 
 The trade-off is obvious: users can't sync across devices or back up their data. But that's a Phase 2 problem. Ship first, add complexity later.
 
-![The core tech stack: React Native, Expo, TypeScript, and SQLite working together](/images/insights/ridenote-tech-stack.png)
+![The core tech stack: React Native, Expo, TypeScript, and SQLite working together](/images/insights/ridenote-tech-stack.webp)
 
 ## Why Cursor
 
@@ -41,7 +41,7 @@ But the real value is how Cursor handles context. I set up `.cursorrules` at the
 
 Cursor doesn't just generate code. It explains trade-offs, flags scope decisions, and teaches as it builds. This matters when you're learning while shipping.
 
-![Cursor IDE in action with the RideNote project](/images/insights/ridenote-cursor-workflow.png)
+![Cursor IDE in action with the RideNote project](/images/insights/ridenote-cursor-workflow.webp)
 
 ## The Design Workflow
 
@@ -57,7 +57,7 @@ For branding and assets, I used Affinity Designer and Photo. The logo, any stati
 
 Image assets came from Unsplash and personal photos. Icons came from a React icon set, though I'll design custom icons for the next version.
 
-![Designing directly in code instead of Figma](/images/insights/ridenote-design-in-code.png)
+![Designing directly in code instead of Figma](/images/insights/ridenote-design-in-code.webp)
 
 ## The Testing Loop
 
@@ -69,7 +69,7 @@ For example, I ran into problems with a slider component. It worked fine in dev,
 
 Catching that early saved me from discovering it during App Store submission.
 
-![Testing in the iOS Simulator and on device](/images/insights/ridenote-testing-loop.png)
+![Testing in the iOS Simulator and on device](/images/insights/ridenote-testing-loop.webp)
 
 ## Version Control and Chat Management
 
@@ -84,7 +84,7 @@ This separation kept context clean. When I needed to work on copy, I'd use the U
 
 For implementing documentation, I used Claude's browser control feature to actually create and update files directly.
 
-![Organized AI chat workflow with separate contexts](/images/insights/ridenote-chat-management.png)
+![Organized AI chat workflow with separate contexts](/images/insights/ridenote-chat-management.webp)
 
 ## Operations Setup
 

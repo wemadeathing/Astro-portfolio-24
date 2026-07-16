@@ -1,7 +1,7 @@
 /**
  * Archive projects: older client work shown as image galleries at /archive.
  *
- * Images live in public/images/archive/<slug>/ as <slug>-NN.jpg.
+ * Images live in public/images/archive/<slug>/ as <slug>-NN.webp.
  * Every image in a project shares the same native ratio (width x height),
  * so grids can render exact aspect ratios with no cropping.
  *
@@ -20,7 +20,7 @@ export interface ArchiveProject {
 const imagePaths = (slug: string, count: number): string[] =>
   Array.from(
     { length: count },
-    (_, i) => `/images/archive/${slug}/${slug}-${String(i + 1).padStart(2, '0')}.jpg`
+    (_, i) => `/images/archive/${slug}/${slug}-${String(i + 1).padStart(2, '0')}.webp`
   );
 
 export const archiveProjects: ArchiveProject[] = [

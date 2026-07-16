@@ -12,7 +12,7 @@ export const presentationData = {
         "AI-accelerated workflows",
         "Execution-focused"
       ],
-      image: "/images/NS-profile-2.png"
+      image: "/images/NS-profile-2.webp"
     },
     superpower: {
       statement: "I bridge design & development",
@@ -21,19 +21,19 @@ export const presentationData = {
         {
           title: "Design",
           description: "Clarify the problem, map the flows, and create high-signal UI that respects constraints.",
-          image: "/images/abstract/Frame 120823.png",
+          image: "/images/abstract/Frame 120823.webp",
           icon: "design"
         },
         {
           title: "Build",
           description: "Prototype with real data and real edges so decisions are made on reality, not assumptions.",
-          image: "/images/abstract/Frame 120824.png",
+          image: "/images/abstract/Frame 120824.webp",
           icon: "build"
         },
         {
           title: "Ship",
           description: "Deliver production-ready work and help teams keep momentum through clean handoffs and systems.",
-          image: "/images/abstract/Frame 120825.png",
+          image: "/images/abstract/Frame 120825.webp",
           icon: "ship"
         }
       ]
@@ -134,9 +134,9 @@ export const presentationData = {
               "Led creative direction, updating brand identity and designing high-fidelity UI across mobile, web, and dashboard.",
             deliverables: ["Concept designs", "Illustrations + icons", "Hi-fi prototypes"],
             images: [
-              "/images/presentation/banking-suite/banking-suite-delivery-1.png",
-              "/images/presentation/banking-suite/banking-suite-design-1.png",
-              "/images/presentation/banking-suite/banking-suite-refine-1.png"
+              "/images/presentation/banking-suite/banking-suite-delivery-1.webp",
+              "/images/presentation/banking-suite/banking-suite-design-1.webp",
+              "/images/presentation/banking-suite/banking-suite-refine-1.webp"
             ]
           },
           {
@@ -145,9 +145,9 @@ export const presentationData = {
               "Collaborated with UX designers and engineers through agile sprints to ship designs within technical constraints.",
             deliverables: ["Dev handoff", "Design QA", "Iteration cycles"],
             images: [
-              "/images/presentation/banking-suite/banking-suite-design-1.png",
-              "/images/presentation/banking-suite/banking-suite-delivery-1.png",
-              "/images/presentation/banking-suite/banking-suite-solution-1.png"
+              "/images/presentation/banking-suite/banking-suite-design-1.webp",
+              "/images/presentation/banking-suite/banking-suite-delivery-1.webp",
+              "/images/presentation/banking-suite/banking-suite-solution-1.webp"
             ]
           },
           {
@@ -197,13 +197,13 @@ export const presentationData = {
         ]
       },
       images: [
-        "/images/presentation/banking-suite/banking-suite-discovery-1.png",
-        "/images/presentation/banking-suite/banking-suite-design-1.png",
-        "/images/presentation/banking-suite/banking-suite-delivery-1.png",
-        "/images/presentation/banking-suite/banking-suite-refine-1.png",
-        "/images/presentation/banking-suite/banking-suite-solution-1.png"
+        "/images/presentation/banking-suite/banking-suite-discovery-1.webp",
+        "/images/presentation/banking-suite/banking-suite-design-1.webp",
+        "/images/presentation/banking-suite/banking-suite-delivery-1.webp",
+        "/images/presentation/banking-suite/banking-suite-refine-1.webp",
+        "/images/presentation/banking-suite/banking-suite-solution-1.webp"
       ],
-      solutionImage: "/images/presentation/banking-suite/banking-suite-solution-1.png"
+      solutionImage: "/images/presentation/banking-suite/banking-suite-solution-1.webp"
     },
 
     designSystem: {
@@ -227,25 +227,25 @@ export const presentationData = {
             phase: "Research",
             description: "Defined the token layer and system architecture to support scale and theming.",
             deliverables: ["Design tokens", "Naming conventions", "System architecture"],
-            images: ["/images/presentation/banking-suite-competitor.png"]
+            images: ["/images/presentation/banking-suite-competitor.webp"]
           },
           {
             phase: "Components",
             description: "Built a reusable component library with patterns for complex workflows and scale.",
             deliverables: ["Component library", "Atomic Structure", "States and variants"],
-            images: ["/images/presentation/components.png"]
+            images: ["/images/presentation/components.webp"]
           },
           {
             phase: "Documentation",
             description: "Created usage guidance so teams could implement consistently without heavy oversight.",
             deliverables: ["Usage guidelines", "Examples", "Handoff notes"],
-            images: ["/images/presentation/documentation.png"]
+            images: ["/images/presentation/documentation.webp"]
           },
           {
             phase: "Adoption",
             description: "Aligned with engineering on implementation and kept refining with regular feedback.",
             deliverables: ["Dev alignment", "Design QA", "Continuous feedback"],
-            images: ["/images/presentation/design-system-components.png"]
+            images: ["/images/presentation/design-system-components.webp"]
           }
         ]
       },
@@ -288,12 +288,12 @@ export const presentationData = {
         ]
       },
       images: [
-        "/images/presentation/design-system-components.png",
-        "/images/card 01 - design.jpg",
-        "/images/card 02 - structure.jpg",
-        "/images/card 03 - base components.jpg",
-        "/images/fintech-components.png",
-        "/images/fintech-ui-design.png"
+        "/images/presentation/design-system-components.webp",
+        "/images/card 01 - design.webp",
+        "/images/card 02 - structure.webp",
+        "/images/card 03 - base components.webp",
+        "/images/fintech-components.webp",
+        "/images/fintech-ui-design.webp"
       ]
     },
 
@@ -318,25 +318,25 @@ export const presentationData = {
             phase: "Research",
             description: "Distributed research across team based on strengths",
             deliverables: ["Competitor analysis", "User interviews", "Information architecture"],
-            images: ["/images/ri-ideation.png", "/images/ri-information-architecture.png"]
+            images: ["/images/ri-ideation.webp", "/images/ri-information-architecture.webp"]
           },
           {
             phase: "Design",
             description: "Adapted Google Design Sprint methodology to consulting context",
             deliverables: ["Wireframes", "UI designs", "User flows"],
-            images: ["/images/ri-wireframes.png", "/images/ri-ui-design.png"]
+            images: ["/images/ri-wireframes.webp", "/images/ri-ui-design.webp"]
           },
           {
             phase: "Build",
             description: "Built functional MVPs using FlutterFlow, Supabase, and AI integration",
             deliverables: ["Working prototypes", "Database schema", "API integrations"],
-            images: ["/images/ri-flutterflow.png", "/images/ri-feature.png"]
+            images: ["/images/ri-flutterflow.webp", "/images/ri-feature.webp"]
           },
           {
             phase: "Test",
             description: "User tested with real users, discovered key insights",
             deliverables: ["Testing insights", "Product pivots", "Feature validation"],
-            images: ["/images/ri-testing.png", "/images/ri-feature-new.png"]
+            images: ["/images/ri-testing.webp", "/images/ri-feature-new.webp"]
           }
         ]
       },
@@ -379,14 +379,14 @@ export const presentationData = {
         ]
       },
       images: [
-        "/images/ri-feature-new.png",
-        "/images/ri-feature.png",
-        "/images/ri-ideation.png",
-        "/images/ri-information-architecture.png",
-        "/images/ri-wireframes.png",
-        "/images/ri-ui-design.png",
-        "/images/ri-flutterflow.png",
-        "/images/ri-testing.png"
+        "/images/ri-feature-new.webp",
+        "/images/ri-feature.webp",
+        "/images/ri-ideation.webp",
+        "/images/ri-information-architecture.webp",
+        "/images/ri-wireframes.webp",
+        "/images/ri-ui-design.webp",
+        "/images/ri-flutterflow.webp",
+        "/images/ri-testing.webp"
       ]
     }
   },
@@ -397,56 +397,56 @@ export const presentationData = {
       title: "AI-Accelerated Coffee Directory",
       description: "AI-accelerated coffee shop directory with custom scraping",
       tech: ["Astro", "Supabase", "Web Scraping"],
-      image: "/images/work/findmeacoffee/findmeacoffee-thumbnail.jpeg",
+      image: "/images/work/findmeacoffee/findmeacoffee-thumbnail.webp",
       images: [
-        "/images/work/findmeacoffee/findmeacoffee-thumbnail.jpeg",
-        "/images/work/findmeacoffee/findmeacoffee-home.png",
-        "/images/work/findmeacoffee/findmeacoffee-listing.png",
-        "/images/work/findmeacoffee/findmeacoffee-filter.png",
-        "/images/work/findmeacoffee/findmeacoffee-supabase-table.png",
-        "/images/work/findmeacoffee/findmeacoffee-apify-action.png",
-        "/images/work/findmeacoffee/findmeacoffee-extractor.jpeg",
-        "/images/work/findmeacoffee/findmeacoffee-extractor-build.png"
+        "/images/work/findmeacoffee/findmeacoffee-thumbnail.webp",
+        "/images/work/findmeacoffee/findmeacoffee-home.webp",
+        "/images/work/findmeacoffee/findmeacoffee-listing.webp",
+        "/images/work/findmeacoffee/findmeacoffee-filter.webp",
+        "/images/work/findmeacoffee/findmeacoffee-supabase-table.webp",
+        "/images/work/findmeacoffee/findmeacoffee-apify-action.webp",
+        "/images/work/findmeacoffee/findmeacoffee-extractor.webp",
+        "/images/work/findmeacoffee/findmeacoffee-extractor-build.webp"
       ]
     },
     {
       title: "EverPrompt",
       description: "Prompt management platform for AI workflows",
       tech: ["React", "Supabase", "AI Integration"],
-      image: "/images/work/Everprompt - AI Prompt Management Made Simple.jpeg",
+      image: "/images/work/Everprompt - AI Prompt Management Made Simple.webp",
       images: [
-        "/images/work/Everprompt - AI Prompt Management Made Simple.jpeg",
-        "/images/work/everprompt-app1.png",
-        "/images/work/everprompt-app2.png",
-        "/images/work/everprompt-app3.png"
+        "/images/work/Everprompt - AI Prompt Management Made Simple.webp",
+        "/images/work/everprompt-app1.webp",
+        "/images/work/everprompt-app2.webp",
+        "/images/work/everprompt-app3.webp"
       ]
     },
     {
       title: "WhatsApp Flow Builder",
       description: "AI-powered FlowJSON builder with Figma export",
       tech: ["React", "TypeScript", "Supabase", "AI"],
-      image: "/images/work/flows/flows-feature.jpeg",
+      image: "/images/work/flows/flows-feature.webp",
       images: [
-        "/images/work/flows/flows-feature.jpeg",
-        "/images/work/flows/flows-preview.png",
-        "/images/work/flows/flows-manual.png",
-        "/images/work/flows/flows-main-app.jpeg",
-        "/images/work/flows/flows-visual-editor.jpeg",
-        "/images/work/flows/flows-generator.jpeg",
-        "/images/work/flows/flows-figma-plugin.png",
-        "/images/work/flows/flows-figma-generated-ui.png"
+        "/images/work/flows/flows-feature.webp",
+        "/images/work/flows/flows-preview.webp",
+        "/images/work/flows/flows-manual.webp",
+        "/images/work/flows/flows-main-app.webp",
+        "/images/work/flows/flows-visual-editor.webp",
+        "/images/work/flows/flows-generator.webp",
+        "/images/work/flows/flows-figma-plugin.webp",
+        "/images/work/flows/flows-figma-generated-ui.webp"
       ]
     },
     {
       title: "Ripple",
       description: "Personal productivity and habit tracking app",
       tech: ["React", "Supabase", "Tailwind"],
-      image: "/images/work/Ripple.jpeg",
+      image: "/images/work/Ripple.webp",
       images: [
-        "/images/work/Ripple.jpeg",
-        "/images/work/ripple-app-1.png",
-        "/images/work/ripple-app-2.png",
-        "/images/work/ripple-app-3.png"
+        "/images/work/Ripple.webp",
+        "/images/work/ripple-app-1.webp",
+        "/images/work/ripple-app-2.webp",
+        "/images/work/ripple-app-3.webp"
       ]
     }
   ],

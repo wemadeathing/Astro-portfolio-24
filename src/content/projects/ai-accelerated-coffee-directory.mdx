@@ -2,7 +2,7 @@
 title: "AI-Accelerated Coffee Directory"
 description: "Built a complete coffee shop directory for Cape Town from concept to production in two weeks, using AI across the entire workflow."
 ai_summary: "Built and shipped a coffee directory in 2 weeks using AI-assisted research, data collection automation, and design-in-code for speed."
-image: "/images/work/findmeacoffee/findmeacoffee-thumbnail.jpeg"
+image: "/images/work/findmeacoffee/findmeacoffee-thumbnail.webp"
 tags: ["Builds", "Full Stack", "AI Development", "AstroJS", "Supabase", "Automation"]
 use_for_questions: ["AI workflow", "Rapid prototyping", "Full-stack build", "Automation", "Astro", "Supabase", "Data pipeline"]
 published: false
@@ -67,13 +67,13 @@ This is where the project got interesting. I needed hundreds of coffee shops wit
 First, I used Apify to scrape Cape Town coffee shops and extract Google Place IDs for each business. Then I built a custom tool in Replit that ingests the Place ID JSON and queries the Google Places API for detailed business information: name, address, coordinates, hours, phone, website, and reviews. The tool outputs a CSV formatted exactly to match my Supabase schema.
 
 <ClickableImage 
-  src="/images/work/findmeacoffee/findmeacoffee-apify-action.png"
+  src="/images/work/findmeacoffee/findmeacoffee-apify-action.webp"
   alt="Apify Web Scraper Setup"
   caption="Apify scraper configuration for extracting coffee shop data"
 />
 
 <ClickableImage 
-  src="/images/work/findmeacoffee/findmeacoffee-extractor.jpeg"
+  src="/images/work/findmeacoffee/findmeacoffee-extractor.webp"
   alt="Custom Data Extractor Tool"
   caption="Custom Replit tool for processing Google Places API data"
 />
@@ -81,7 +81,7 @@ First, I used Apify to scrape Cape Town coffee shops and extract Google Place ID
 Once I had the CSV, I imported it directly to Supabase, cleaned up the data, and added metadata with boolean flags for featured listings and premium listings. For premium listings, I used AI to generate descriptions as a value add. The entire process from scrape to live listing became automated. I could add new businesses in minutes instead of hours of manual entry.
 
 <ClickableImage 
-  src="/images/work/findmeacoffee/findmeacoffee-supabase-table.png"
+  src="/images/work/findmeacoffee/findmeacoffee-supabase-table.webp"
   alt="Supabase Database Structure"
   caption="Database schema with imported coffee shop listings"
 />
@@ -114,19 +114,19 @@ Built and deployed using Cursor for development and Netlify for hosting. I confi
 Deployed at findmeacoffee.co.za with full functionality including search, filtering, and detailed business pages. Everything works as intended. After being live for a few weeks I noticed that I was getting good placement on Google as well as impressions, but not enough clicks to be considered successful. The next step is to improve the SEO and get more clicks.
 
 <ClickableImage 
-  src="/images/work/findmeacoffee/findmeacoffee-home.png"
+  src="/images/work/findmeacoffee/findmeacoffee-home.webp"
   alt="Coffee Directory Homepage"
   caption="Live site homepage with search and featured listings"
 />
 
 <ClickableImage 
-  src="/images/work/findmeacoffee/findmeacoffee-listing.png"
+  src="/images/work/findmeacoffee/findmeacoffee-listing.webp"
   alt="Coffee Shop Listings"
   caption="Directory listing page with coffee shop details"
 />
 
 <ClickableImage 
-  src="/images/work/findmeacoffee/findmeacoffee-filter.png"
+  src="/images/work/findmeacoffee/findmeacoffee-filter.webp"
   alt="Search and Filter Interface"
   caption="Advanced filtering for coffee shop discovery"
 />
