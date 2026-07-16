@@ -39,11 +39,22 @@ const imageSrc = src.startsWith('/') ? src : `/${src}`;
       modal.id = 'imageModal';
       modal.className = 'fixed inset-0 bg-black/90 backdrop-blur-sm z-[100] hidden items-center justify-center transition-opacity duration-300 p-4';
       modal.innerHTML = `
+        <div class="absolute left-4 top-4 hidden bg-black/50 px-2.5 py-1.5 font-mono text-xs uppercase tracking-[0.18em] text-white/70 backdrop-blur-sm" id="modalCounter" aria-live="polite"></div>
         <div class="relative max-w-7xl w-full max-h-[90vh] flex items-center justify-center outline-none" tabindex="-1">
           <img src="" alt="" class="max-h-[90vh] w-auto object-contain border border-border/80 shadow-2xl" />
           <button class="absolute -top-12 right-0 text-white/70 hover:text-white transition-colors p-2" id="closeModalBtn" aria-label="Close modal">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+            </svg>
+          </button>
+          <button class="absolute left-2 top-1/2 -translate-y-1/2 hidden bg-black/50 p-2.5 text-white/70 backdrop-blur-sm transition-colors hover:text-white" id="modalPrevBtn" aria-label="Previous image">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m15 18-6-6 6-6"/>
+            </svg>
+          </button>
+          <button class="absolute right-2 top-1/2 -translate-y-1/2 hidden bg-black/50 p-2.5 text-white/70 backdrop-blur-sm transition-colors hover:text-white" id="modalNextBtn" aria-label="Next image">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m9 18 6-6-6-6"/>
             </svg>
           </button>
         </div>
@@ -52,6 +63,36 @@ const imageSrc = src.startsWith('/') ? src : `/${src}`;
 
       const modalImg = modal.querySelector('img')!;
       const closeBtn = document.getElementById('closeModalBtn')!;
+      const counter = document.getElementById('modalCounter')!;
+      const prevBtn = document.getElementById('modalPrevBtn')!;
+      const nextBtn = document.getElementById('modalNextBtn')!;
+
+      // Carousel state: populated on open from elements sharing a data-gallery group
+      let galleryItems: { src: string; alt: string }[] = [];
+      let galleryIndex = 0;
+
+      function showImage(i: number) {
+        if (!galleryItems.length) return;
+        galleryIndex = (i + galleryItems.length) % galleryItems.length;
+        const item = galleryItems[galleryIndex];
+        modalImg.src = item.src;
+        modalImg.alt = item.alt;
+        const multi = galleryItems.length > 1;
+        counter.textContent = `${galleryIndex + 1} / ${galleryItems.length}`;
+        counter.classList.toggle('hidden', !multi);
+        prevBtn.classList.toggle('hidden', !multi);
+        nextBtn.classList.toggle('hidden', !multi);
+        if (multi) {
+          // Preload neighbours so arrowing through feels instant
+          [galleryIndex + 1, galleryIndex - 1].forEach((n) => {
+            const neighbour = galleryItems[(n + galleryItems.length) % galleryItems.length];
+            new Image().src = neighbour.src;
+          });
+        }
+      }
+
+      prevBtn.addEventListener('click', () => showImage(galleryIndex - 1));
+      nextBtn.addEventListener('click', () => showImage(galleryIndex + 1));
 
       function setBodyScrollLock(lock: boolean) {
         const w = window as Window & { __scrollLockCount?: number; __scrollLockPrevOverflow?: string; __scrollLockPrevPaddingRight?: string };
@@ -92,12 +133,45 @@ const imageSrc = src.startsWith('/') ? src : `/${src}`;
         }
       });
 
-      // Close on escape key
+      // Keyboard: escape closes, arrows move through the gallery
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
           closeModal();
+          return;
         }
+        if (modal.classList.contains('hidden') || galleryItems.length < 2) return;
+        if (e.key === 'ArrowRight') showImage(galleryIndex + 1);
+        if (e.key === 'ArrowLeft') showImage(galleryIndex - 1);
       });
+
+      // Scroll wheel / trackpad moves through the gallery (body scroll is locked anyway)
+      let wheelLockUntil = 0;
+      modal.addEventListener(
+        'wheel',
+        (e) => {
+          if (galleryItems.length < 2) return;
+          e.preventDefault();
+          const delta = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+          const now = Date.now();
+          if (now < wheelLockUntil || Math.abs(delta) < 8) return;
+          wheelLockUntil = now + 350;
+          showImage(galleryIndex + (delta > 0 ? 1 : -1));
+        },
+        { passive: false }
+      );
+
+      // Touch swipe
+      let touchStartX: number | null = null;
+      modal.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+      }, { passive: true });
+      modal.addEventListener('touchend', (e) => {
+        if (touchStartX === null) return;
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        touchStartX = null;
+        if (galleryItems.length < 2 || Math.abs(dx) < 40) return;
+        showImage(galleryIndex + (dx < 0 ? 1 : -1));
+      }, { passive: true });
 
       // Handle image clicks
       document.addEventListener('click', (e) => {
@@ -105,10 +179,23 @@ const imageSrc = src.startsWith('/') ? src : `/${src}`;
         const container = target.closest('[data-image-src]');
         if (container) {
           const src = container.getAttribute('data-image-src');
-          const alt = container.getAttribute('data-image-alt');
+          const alt = container.getAttribute('data-image-alt') || '';
           if (src) {
-            modalImg.src = src;
-            modalImg.alt = alt || '';
+            const gallery = container.getAttribute('data-gallery');
+            if (gallery) {
+              const nodes = Array.from(
+                document.querySelectorAll(`[data-image-src][data-gallery="${CSS.escape(gallery)}"]`)
+              );
+              galleryItems = nodes.map((n) => ({
+                src: n.getAttribute('data-image-src') || '',
+                alt: n.getAttribute('data-image-alt') || '',
+              }));
+              galleryIndex = Math.max(0, nodes.indexOf(container));
+            } else {
+              galleryItems = [{ src, alt }];
+              galleryIndex = 0;
+            }
+            showImage(galleryIndex);
             modal.classList.remove('hidden');
             modal.classList.add('flex');
             setBodyScrollLock(true);

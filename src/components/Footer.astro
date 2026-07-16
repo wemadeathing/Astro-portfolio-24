@@ -46,6 +46,7 @@
           <nav class="flex flex-wrap gap-x-4 gap-y-2 text-sm">
             <a href="/blog" class="footer-link">Insights</a>
             <a href="/resources" class="footer-link">Resources</a>
+            <a href="/archive" class="footer-link">Archive</a>
             <button type="button" id="footer-agent-toggle" class="footer-link cursor-pointer bg-transparent border-0 p-0 text-left">Agent View</button>
           </nav>
         </div>
@@ -89,6 +90,7 @@
           <nav class="space-y-2">
             <a href="/blog" class="footer-link block">Insights</a>
             <a href="/resources" class="footer-link block">Resources</a>
+            <a href="/archive" class="footer-link block">Archive</a>
             <button type="button" id="footer-agent-toggle-desktop" class="footer-link block cursor-pointer bg-transparent border-0 p-0 text-left">Agent View</button>
           </nav>
         </div>
@@ -166,8 +168,10 @@
     color: hsl(var(--foreground));
   }
 
-  /* Hide the floating agent-view toggle, footer link replaces it */
-  :global(#agent-view-toggle) {
+  /* Hide the floating agent-view toggle in human view, the footer link
+     replaces it there. In agent mode the footer is hidden, so the pill
+     must stay visible as the way back to human view. */
+  :global(html:not(.agent-mode) #agent-view-toggle) {
     display: none !important;
   }
 </style>

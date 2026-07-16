@@ -8,6 +8,22 @@ use_for_questions: ["Mobile app development", "Solo building", "AI-assisted deve
 featured: true
 published: true
 order: 2
+accent: "#B9E42B"
+accentForeground: "#141807"
+outcome: "From concept to a live App Store release in 30 days: a local-first iOS app that beta riders call smooth and premium."
+tldr:
+  problem: "Mountain bikers forget which bike setup actually worked, and the existing tools are either too technical or too generic."
+  built: "RideNote, a local-first iOS app for logging settings and rating every ride on Grip, Feel, and Control. No accounts, no spinners, everything instant."
+  result: "Live on the App Store 30 days after the first line of the PRD, with beta riders calling it smooth and premium."
+stats:
+  - label: "Timeline"
+    value: "30 Days"
+  - label: "Role"
+    value: "Solo Designer & Dev"
+  - label: "Type"
+    value: "iOS App"
+  - label: "Status"
+    value: "Live in App Store"
 links:
   - url: "https://apps.apple.com/us/app/ridenote/id6758023683"
     label: "View on App Store"
@@ -16,33 +32,13 @@ links:
 ---
 import ClickableImage from '../../components/ClickableImage.astro';
 import FeatureCard from '../../components/FeatureCard.astro';
-import ProjectStats from '../../components/ProjectStats.astro';
 import TechStack from '../../components/TechStack.astro';
-
-<ProjectStats
-  stats={[
-    { label: "Timeline", value: "30 Days" },
-    { label: "Role", value: "Solo Designer & Dev" },
-    { label: "Type", value: "iOS App" },
-    { label: "Status", value: "Live in App Store" }
-  ]}
-/>
 
 <div class="prose prose-lg max-w-none">
 
 ## Project Overview
 
-**Problem:** mountain bikers forget which setup actually worked, and the existing tools are either too technical or too generic.
-
-**Role:** product designer, brand designer, and solo builder.
-
-**What shipped:** a local-first iOS app that lets riders log bike settings quickly, review what worked, and use a focused feedback model built around Grip, Feel, and Control.
-
-**Why it mattered:** I wanted to prove full product ownership in a real shipping context, not just a prototype.
-
-**Proof:** RideNote went from concept to App Store release in 30 days.
-
-**Note:** This case study focuses on product and development decisions. A separate design case study will go deeper on branding, iconography, and interface craft.
+RideNote exists to answer one question in a parking lot: was it 26 or 28 PSI that felt better last month? I designed, branded, and built it solo, end to end, to prove full product ownership in a real release context, not a prototype. This case study covers the product and development decisions; a separate design case study will go deeper on branding, iconography, and interface craft.
 
 ## Tools & Technologies
 
@@ -68,7 +64,7 @@ import TechStack from '../../components/TechStack.astro';
     Ship in 30 days while making it feel premium. Beta testers needed to say "smooth," not "rough prototype."
   </FeatureCard>
   <FeatureCard title="First App Store Submission">
-    Never shipped an iOS app before. App Store Connect, TestFlight, review guidelines, all new territory.
+    Never released an iOS app before. App Store Connect, TestFlight, review guidelines, all new territory.
   </FeatureCard>
 </div>
 
@@ -164,7 +160,7 @@ First submission was rejected. Two issues: config file had `iPad: true` for a no
 <ClickableImage
   src="/images/work/ridenote-app-store.png"
   alt="App Store Connect showing rejection and resolution"
-  caption="First submission: rejected. Second submission: approved. The real process of shipping."
+  caption="First submission: rejected. Second submission: approved. The real process of releasing software."
 />
 
 While waiting for approval, I added three features users had mentioned: a pre-ride checklist, free-form notes, and custom checklists. These made the app more flexible without adding complexity to core ride tracking.
@@ -187,7 +183,7 @@ Testing also caught language inconsistencies. Early versions used "ride logging"
 ## Results & Impact
 
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 my-8">
-  <FeatureCard title="Shipped to App Store">
+  <FeatureCard title="Live in the App Store">
     Production iOS app, live and downloadable. Not a prototype, not a web app. Real software.
   </FeatureCard>
   <FeatureCard title="30-Day Build">

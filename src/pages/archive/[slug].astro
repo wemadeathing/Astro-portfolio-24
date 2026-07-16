@@ -1,0 +1,123 @@
+---
+export const prerender = true;
+import Layout from '../../layouts/Layout.astro';
+import ClickableImage from '../../components/ClickableImage.astro';
+import { archiveProjects, getArchiveProject, type ArchiveProject } from '../../data/archive';
+import { buildArchiveProjectAgentMarkdown } from '../../lib/agent-content';
+
+export function getStaticPaths() {
+  return archiveProjects.map((project) => ({
+    params: { slug: project.slug },
+    props: { project },
+  }));
+}
+
+// Static generation uses props; SSR fallback resolves by slug
+let project: ArchiveProject;
+if (Astro.props?.project) {
+  project = Astro.props.project;
+} else {
+  const found = getArchiveProject(Astro.params.slug!);
+  if (!found) {
+    return Astro.redirect('/404');
+  }
+  project = found;
+}
+
+const currentIndex = archiveProjects.findIndex((p) => p.slug === project.slug);
+const nextProject = archiveProjects[(currentIndex + 1) % archiveProjects.length];
+
+const agent = buildArchiveProjectAgentMarkdown(project.slug)!;
+---
+
+<Layout
+  title={`${project.name} | Archive`}
+  description={project.description}
+  image={project.images[0]}
+  agentMarkdown={agent.markdown}
+  agentPathLabel={agent.pathLabel}
+>
+  <section class="py-10 sm:py-14">
+    <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-[68ch] scroll-reveal">
+        <a
+          href="/archive"
+          class="font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-foreground"
+        >
+          &#8592; Archive
+        </a>
+        <div class="mt-8 font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+          Archive / {project.images.length} {project.images.length === 1 ? 'image' : 'images'}
+        </div>
+        <h1 class="type-h1 mt-4">{project.name}</h1>
+        <p class="mt-4 type-lead">{project.description}</p>
+      </div>
+
+      {/* Hidden ClickableImage bootstraps the global lightbox script */}
+      <div class="hidden" aria-hidden="true">
+        <ClickableImage src={project.images[0]} alt="" />
+      </div>
+
+      <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 stagger-children">
+        {project.images.map((img, i) => {
+          const alt = `${project.name}, image ${i + 1} of ${project.images.length}`;
+          return (
+            <button
+              type="button"
+              data-image-src={img}
+              data-image-alt={alt}
+              data-gallery={project.slug}
+              aria-label={`View ${alt}`}
+              class="group relative block w-full cursor-zoom-in overflow-hidden border border-border/80 bg-muted/20 transition-colors hover:border-primary/35 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+              style={`aspect-ratio: ${project.width} / ${project.height}`}
+            >
+              <div class="absolute inset-0 skeleton-image" aria-hidden="true"></div>
+              <img
+                src={img}
+                alt={alt}
+                width={project.width}
+                height={project.height}
+                class="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                loading={i < 3 ? 'eager' : 'lazy'}
+                decoding="async"
+                onload="this.parentElement.querySelector('.skeleton-image').style.display='none'"
+              />
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Next archive */}
+      {nextProject.slug !== project.slug && (
+        <div class="mt-16 border-t border-border/70">
+          <a
+            href={`/archive/${nextProject.slug}`}
+            class="group grid items-center gap-6 py-8 sm:grid-cols-[1fr_260px]"
+          >
+            <div>
+              <div class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">
+                Next in archive
+              </div>
+              <div class="mt-3 text-xl sm:text-2xl font-semibold text-foreground transition-colors group-hover:text-primary">
+                {nextProject.name}
+                <span aria-hidden="true" class="ml-2 inline-block transition-transform group-hover:translate-x-1">&#8594;</span>
+              </div>
+              <p class="mt-2 max-w-[52ch] text-sm leading-relaxed text-muted-foreground line-clamp-2">
+                {nextProject.description}
+              </p>
+            </div>
+            <div class="hidden overflow-hidden border border-border/70 sm:block">
+              <img
+                src={nextProject.images[0]}
+                alt={nextProject.name}
+                class="aspect-[16/10] w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          </a>
+        </div>
+      )}
+    </div>
+  </section>
+</Layout>

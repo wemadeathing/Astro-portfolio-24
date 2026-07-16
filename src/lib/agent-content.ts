@@ -8,6 +8,7 @@
  */
 
 import { getCollection, getEntry } from 'astro:content';
+import { archiveProjects, getArchiveProject } from '../data/archive';
 
 export type AgentPage = {
   markdown: string;
@@ -177,9 +178,59 @@ export async function buildProjectsIndexAgentMarkdown(): Promise<AgentPage> {
     '## All Projects',
     '',
     lines,
+    '',
+    '## Archive',
+    '',
+    'Older client work from the print and brand years lives at [/archive](/archive/).',
   ].join('\n');
 
   return { markdown, pathLabel: '~/nasifsalaam / projects / index.md' };
+}
+
+/* ---------------------------- ARCHIVE INDEX ---------------------------- */
+export function buildArchiveIndexAgentMarkdown(): AgentPage {
+  const lines = archiveProjects
+    .map(
+      (p) =>
+        `### ${p.name}\n${p.description}\n- URL: /archive/${p.slug}/\n- Images: ${p.images.length}`
+    )
+    .join('\n\n');
+
+  const markdown = [
+    '# Archive: Nasif Salaam',
+    '',
+    '> Older client work from the print and brand years. Everything here was created from scratch: concept and illustration through print production.',
+    '',
+    '## Archived Projects',
+    '',
+    lines,
+  ].join('\n');
+
+  return { markdown, pathLabel: '~/nasifsalaam / archive / index.md' };
+}
+
+/* --------------------------- ARCHIVE PROJECT --------------------------- */
+export function buildArchiveProjectAgentMarkdown(slug: string): AgentPage | null {
+  const project = getArchiveProject(slug);
+  if (!project) return null;
+
+  const markdown = [
+    `# ${project.name}`,
+    '',
+    `> ${project.description}`,
+    '',
+    `**URL:** https://nasifsalaam.com/archive/${slug}/`,
+    `**Images:** ${project.images.length}`,
+    '',
+    '---',
+    '',
+    project.images.map((img, i) => `- [${project.name} image ${i + 1}](${img})`).join('\n'),
+  ].join('\n');
+
+  return {
+    markdown,
+    pathLabel: `~/nasifsalaam / archive / ${slug}.md`,
+  };
 }
 
 /* ------------------------------ PROJECT -------------------------------- */

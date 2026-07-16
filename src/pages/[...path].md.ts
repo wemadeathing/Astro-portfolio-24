@@ -25,7 +25,10 @@ import {
   buildProjectsIndexAgentMarkdown,
   buildProjectAgentMarkdown,
   buildResourcesAgentMarkdown,
+  buildArchiveIndexAgentMarkdown,
+  buildArchiveProjectAgentMarkdown,
 } from '../lib/agent-content';
+import { archiveProjects } from '../data/archive';
 
 export const prerender = true;
 
@@ -41,7 +44,12 @@ export async function getStaticPaths() {
     { params: { path: 'blog' } },
     { params: { path: 'projects' } },
     { params: { path: 'resources' } },
+    { params: { path: 'archive' } },
   ];
+
+  for (const project of archiveProjects) {
+    paths.push({ params: { path: `archive/${project.slug}` } });
+  }
 
   for (const post of blogPosts) {
     paths.push({ params: { path: `blog/${post.slug}` } });
@@ -95,6 +103,19 @@ export const GET: APIRoute = async ({ params }) => {
   if (normalized === '/resources') {
     const { markdown } = await buildResourcesAgentMarkdown();
     return respond(markdown);
+  }
+
+  // Archive index
+  if (normalized === '/archive') {
+    const { markdown } = buildArchiveIndexAgentMarkdown();
+    return respond(markdown);
+  }
+
+  // Archive project
+  const archiveMatch = normalized.match(/^\/archive\/(.+)$/);
+  if (archiveMatch) {
+    const result = buildArchiveProjectAgentMarkdown(archiveMatch[1]);
+    if (result) return respond(result.markdown);
   }
 
   // Blog post

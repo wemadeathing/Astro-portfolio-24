@@ -7,23 +7,29 @@ tags: ["Client Work", "Websites", "B2B", "Astro"]
 use_for_questions: ["Astro", "Performance", "SEO", "Client work", "B2B website", "Design-to-build", "Websites"]
 published: true
 order: 6
+accent: "#2E7FAF"
+accentForeground: "#F2F8FB"
+outcome: "A fast, credible B2B web presence for an environmental consulting firm, live at ecos-consulting.co.za and maintained by the client."
+tldr:
+  problem: "A safety, health, and environmental consultancy needed a web presence that carries the trust its industry demands, without ongoing developer costs."
+  built: "A full Astro website with a Keystatic CMS: fast, SEO-strong, and easy for the team to update themselves."
+  result: "Live at ecos-consulting.co.za, outperforming typical WordPress builds on speed and search, updated by the client without a developer."
+stats:
+  - label: "Timeline"
+    value: "1 Month"
+  - label: "Role"
+    value: "Design & Build"
+  - label: "Client"
+    value: "Ecos Consulting"
+  - label: "Status"
+    value: "Live Site"
 links:
   - url: "https://ecos-consulting.co.za"
     label: "View live site"
 ---
 import ClickableImage from '../../components/ClickableImage.astro';
 import FeatureCard from '../../components/FeatureCard.astro';
-import ProjectStats from '../../components/ProjectStats.astro';
 import TechStack from '../../components/TechStack.astro';
-
-<ProjectStats
-  stats={[
-    { label: "Timeline", value: "1 Month" },
-    { label: "Role", value: "Full-stack Dev" },
-    { label: "Client", value: "Ecos Consulting" },
-    { label: "Status", value: "Live Site" }
-  ]}
-/>
 
 <div class="prose prose-lg max-w-none">
 
@@ -62,9 +68,6 @@ Client needed easy content updates for team information, projects, and industry 
 
 ## Key Features
 
-### Professional B2B Website
-A modern, trustworthy website built with performance and maintainability in mind:
-
 - **Clean Professional Design**: Establishes trust and credibility in the environmental consulting industry
 - **Performance Optimized**: Built with Astro for exceptional loading speeds and Core Web Vitals scores
 - **SEO Foundation**: Structured for excellent search engine performance with industry-specific optimization
@@ -83,10 +86,16 @@ Astro delivered superior loading speeds and SEO performance compared to typical 
 **Easy Maintenance**
 Client updates content through Keystatic without needing developer assistance, so the site stays current without ongoing costs.
 
-<ClickableImage 
+<ClickableImage
   src="/images/work/ecos-consulting-website-1.png"
-  alt="Ecos Consulting Website Services"
-  caption="Services page view"
+  alt="Ecos Consulting website services page"
+  caption="Services presented for procurement: certifications, compliance positioning, and clear scopes, built to earn trust fast."
+/>
+
+<ClickableImage
+  src="/images/work/ecos-consulting-website-2.png"
+  alt="Ecos Consulting website content sections"
+  caption="Keystatic CMS behind every section: the team updates people, projects, and services without touching code."
 />
 
 </div>

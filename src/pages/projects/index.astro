@@ -56,7 +56,11 @@ ${p.data.description}
 - URL: /projects/${p.slug}/
 - Tags: ${(p.data.tags ?? []).join(', ')}`
   )
-  .join('\n\n')}`;
+  .join('\n\n')}
+
+## Archive
+
+Older client work from the print and brand years lives at [/archive](/archive/).`;
 ---
 
 <Layout 
@@ -169,6 +173,17 @@ ${p.data.description}
           </a>
         ))}
       </div>
+
+      <div class="mt-14 flex flex-col gap-3 border-t border-border/60 pt-8 sm:flex-row sm:items-center sm:justify-between scroll-reveal">
+        <p class="text-sm text-muted-foreground">Older work lives in the archive.</p>
+        <a
+          href="/archive"
+          class="group inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-foreground"
+        >
+          View archive
+          <span aria-hidden="true" class="transition-transform group-hover:translate-x-1">&#8594;</span>
+        </a>
+      </div>
     </div>
   </section>
-</Layout> 
+</Layout>

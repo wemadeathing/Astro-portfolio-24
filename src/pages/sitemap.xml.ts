@@ -1,6 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { tagToSlug } from '../lib/tag-utils';
+import { archiveProjects } from '../data/archive';
 
 export const prerender = true;
 
@@ -25,6 +26,7 @@ export const GET: APIRoute = async ({ site }) => {
     { url: '/resources/', lastmod: today, changefreq: 'weekly', priority: '0.7' },
     { url: '/work-with-me/', lastmod: today, changefreq: 'monthly', priority: '0.7' },
     { url: '/tools/', lastmod: today, changefreq: 'monthly', priority: '0.5' },
+    { url: '/archive/', lastmod: today, changefreq: 'yearly', priority: '0.4' },
   ];
 
   // Blog post pages, real lastmod from frontmatter
@@ -66,8 +68,16 @@ export const GET: APIRoute = async ({ site }) => {
       priority: '0.6',
     }));
 
+  // Archive gallery pages
+  const archivePages = archiveProjects.map((project) => ({
+    url: `/archive/${project.slug}/`,
+    lastmod: today,
+    changefreq: 'yearly',
+    priority: '0.3',
+  }));
+
   // Combine all pages
-  const allPages = [...staticPages, ...blogPages, ...blogTagPages, ...projectPages];
+  const allPages = [...staticPages, ...blogPages, ...blogTagPages, ...projectPages, ...archivePages];
 
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">

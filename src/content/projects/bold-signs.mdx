@@ -7,32 +7,38 @@ tags: ["Client Work", "Websites", "Astro", "B2B"]
 use_for_questions: ["Websites", "Client work", "Astro", "Small business website", "Signage", "Web design"]
 published: true
 order: 4
+accent: "#E9E7E2"
+accentForeground: "#161616"
+outcome: "A gallery-driven website for a Cape Town signage studio, as considered as the work it sells. Live at boldsigns.co.za."
+tldr:
+  problem: "A studio producing premium physical brand work had no web presence to match. Most signage websites look like directories; this one had to look like a design studio."
+  built: "A fast, gallery-driven Astro site with a bold typographic voice, real installation photography, and WhatsApp-first enquiries."
+  result: "Live at boldsigns.co.za: a site that does the persuasion before a conversation starts."
+stats:
+  - label: "Role"
+    value: "Design & Build"
+  - label: "Client"
+    value: "Bold Signs"
+  - label: "Platform"
+    value: "Astro"
+  - label: "Status"
+    value: "Live Site"
 links:
   - url: "https://boldsigns.co.za/"
     label: "View live site"
 ---
 import ClickableImage from '../../components/ClickableImage.astro';
-import ProjectStats from '../../components/ProjectStats.astro';
 import TechStack from '../../components/TechStack.astro';
-
-<ProjectStats
-  stats={[
-    { label: "Role", value: "Design & Build" },
-    { label: "Client", value: "Bold Signs" },
-    { label: "Platform", value: "Astro" },
-    { label: "Status", value: "Live Site" }
-  ]}
-/>
 
 <div class="prose prose-lg max-w-none">
 
-## Project Overview
+## The Work
 
-**Problem:** a signage studio that produces premium physical brand work needed a web presence with the same level of craft. Most signage company websites look like directories; this one had to look like a design studio.
-
-**Role:** website designer and builder.
-
-**The result:** a fast, gallery-driven Astro site with a bold typographic voice, live at [boldsigns.co.za](https://boldsigns.co.za/).
+<ClickableImage
+  src="/images/work/bold-signs-work.jpeg"
+  alt="Bold Signs portfolio section showing selected signage projects"
+  caption="The portfolio leads with real installations: vehicle wraps, retail signage, and wayfinding, in the order a buyer actually evaluates a studio."
+/>
 
 ## The Challenge
 
@@ -51,12 +57,6 @@ Signage buyers move fast and often start on a phone. The site needed WhatsApp-fi
 - **Gallery-driven structure**: hero, client logos, service cards, selected projects, a three-step process, and testimonials, in the order a buyer actually evaluates a studio.
 - **Astro over WordPress** for speed and clean output. The site loads fast on mobile, where most enquiries start.
 - **WhatsApp integration** as the primary contact channel, matching how the client's customers already communicate.
-
-<ClickableImage
-  src="/images/work/bold-signs-work.jpeg"
-  alt="Bold Signs portfolio section showing selected signage projects"
-  caption="The portfolio section leads with real installations: vehicle wraps, retail signage, and wayfinding."
-/>
 
 ## Technical Stack
 

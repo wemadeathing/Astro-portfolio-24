@@ -38,6 +38,25 @@ const projects = defineCollection({
         })
       )
       .optional(),
+    // Case study showcase fields
+    accent: z.string().optional(), // the client's brand color, drenches the hero
+    accentForeground: z.string().optional(), // text color on the accent
+    outcome: z.string().optional(), // one-line result shown in the hero
+    tldr: z
+      .object({
+        problem: z.string(),
+        built: z.string(),
+        result: z.string(),
+      })
+      .optional(),
+    stats: z
+      .array(
+        z.object({
+          label: z.string(),
+          value: z.string(),
+        })
+      )
+      .optional(),
     // AI-facing metadata (optional)
     ai_summary: z.string().optional(),
     use_for_questions: z.array(z.string()).optional().default([]),

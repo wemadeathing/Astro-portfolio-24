@@ -9,23 +9,29 @@ published: true
 order: 5
 sidebar: false
 show_featured_image: false
+accent: "#DDD5C6"
+accentForeground: "#2B261D"
+outcome: "Sixteen brand marks from fifteen years of identity work, across hospitality, healthcare, technology, retail, and more."
+tldr:
+  problem: "Every business needs a mark that works everywhere: an app icon, a shopfront, a cart wrap, a letterhead."
+  built: "Identity systems for solo practitioners, hospitality startups, healthcare conferences, and technology companies over fifteen years."
+  result: "A body of marks that still hold up, several still in daily use, each part of a larger brand system."
+stats:
+  - label: "Logos"
+    value: "16+"
+  - label: "Industries"
+    value: "8+"
+  - label: "Role"
+    value: "Brand & Identity"
+  - label: "Span"
+    value: "15 Years"
 ---
 import ClickableImage from '../../components/ClickableImage.astro';
-import ProjectStats from '../../components/ProjectStats.astro';
 
 {/* Hidden: renders ClickableImage once so its global modal script is loaded on this page */}
 <div class="hidden" aria-hidden="true">
   <ClickableImage src="/images/client-logos/kota-logo.jpg" alt="" />
 </div>
-
-<ProjectStats
-  stats={[
-    { label: "Logos", value: "16+" },
-    { label: "Industries", value: "8+" },
-    { label: "Role", value: "Brand & Identity" },
-    { label: "Span", value: "15 Years" }
-  ]}
-/>
 
 <div class="prose prose-lg max-w-none mb-10">
 

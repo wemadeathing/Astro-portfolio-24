@@ -8,23 +8,29 @@ use_for_questions: ["Product design", "AI product design", "Generative UI", "Ope
 featured: true
 published: true
 order: 1
+accent: "#EDE6D8"
+accentForeground: "#16382E"
+outcome: "An AI operations workspace for South African SMEs, designed and built end to end, solo, now in pre-launch beta."
+tldr:
+  problem: "SME owners lose momentum to admin. Quotes go out late, invoices sit unsent, and every tool needs the business explained to it again."
+  built: "An AI workspace that already knows the business and turns plain language into usable output: invoices, proposals, follow-ups, next actions."
+  result: "A working multi-agent product in pre-launch beta, designed in code and built solo, with reliability favoured over AI theatrics."
+stats:
+  - label: "Role"
+    value: "Designer & solo builder"
+  - label: "Approach"
+    value: "Designed in code"
+  - label: "Type"
+    value: "Multi-agent AI product"
+  - label: "Status"
+    value: "Pre-launch beta"
 ---
 import ClickableImage from '../../components/ClickableImage.astro';
 import FeatureCard from '../../components/FeatureCard.astro';
-import ProjectStats from '../../components/ProjectStats.astro';
 import TechStack from '../../components/TechStack.astro';
 import KotaAgentFlowDiagram from '../../components/KotaAgentFlowDiagram.astro';
 import KotaInvoiceJourneyDiagram from '../../components/KotaInvoiceJourneyDiagram.astro';
 import KotaBetaBanner from '../../components/KotaBetaBanner';
-
-<ProjectStats
-  stats={[
-    { label: "Role", value: "Product designer, architect, solo builder" },
-    { label: "Approach", value: "Designed in code with AI" },
-    { label: "Type", value: "Operational AI product" },
-    { label: "Focus", value: "Product thinking first" }
-  ]}
-/>
 
 <div class="prose prose-lg max-w-none">
 
@@ -76,6 +82,12 @@ The interaction model is intentionally simple:
 - review before anything important happens
 
 That principle shaped both the UX and the architecture. From a product perspective, Kota is not meant to feel like an AI novelty layer on top of business software. It is meant to feel like operational support that already knows the business and can help complete work with less setup, less repetition, and less context switching.
+
+<ClickableImage
+  src="/images/work/kota/kota-dashboard.png"
+  alt="Kota dashboard showing the operational workspace interface"
+  caption="The dashboard brings guidance, operational signals, and next actions into one calm workspace view."
+/>
 
 ## My Approach
 
@@ -171,12 +183,6 @@ The product is designed around ZAR, VAT, EFT workflows, local compliance languag
 
 **Review-first actions**  
 The system supports action, but not hidden action. Important changes remain visible and user-controlled.
-
-<ClickableImage
-  src="/images/work/kota/kota-dashboard.png"
-  alt="Kota dashboard showing the latest operational workspace interface"
-  caption="The current dashboard brings guidance, operational signals, and next actions into one calmer workspace view."
-/>
 
 ## Outcome To Date
 
