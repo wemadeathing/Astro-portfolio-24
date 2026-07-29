@@ -8,13 +8,12 @@ type NavItem = {
 };
 
 // Order is deliberate: work and background first (what a hiring manager needs),
-// freelance services after. Contact must stay last — the desktop nav renders it
+// freelance services after. Contact must stay last: the desktop nav renders it
 // separately as the CTA button via slice(0, -1).
 const navItems: NavItem[] = [
   { href: '/projects', label: 'Work', description: 'Browse featured case studies' },
   { href: '/about', label: 'About', description: 'Background, experience, and what I am looking for' },
   { href: '/work-with-me', label: 'Services', description: 'Freelance and project work' },
-  { href: '/Nasif-Salaam-Resume.pdf', label: 'CV', description: 'Download my CV (PDF)', download: true },
   { href: '/contact', label: 'Contact', description: 'Send a message or start a conversation' },
 ];
 
@@ -304,7 +303,7 @@ const isHome = pathname === '/' || pathname === '';
 </div>
 
 <style>
-  /* Logo switching — CSS only, no flash */
+  /* Logo switching: CSS only, no flash */
   .logo-dark  { display: block; }
   .logo-light { display: none;  }
 

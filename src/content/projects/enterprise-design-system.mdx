@@ -9,7 +9,7 @@ published: true
 order: 2
 accent: "#1898B5"
 accentForeground: "#F1FAFC"
-outcome: "A production design system — components, tokens, and governance — that distributed teams built on across web and mobile."
+outcome: "A production design system: components, tokens, and governance, that distributed teams built on across web and mobile."
 tldr:
   problem: "Distributed teams were rebuilding the same UI differently on every project, with no shared foundation and no way to agree on what 'correct' looked like."
   built: "An atomic component library, a design token model that survived both React and Flutter, and the documentation and governance to make teams actually adopt it."
@@ -31,15 +31,13 @@ import TechStack from '../../components/TechStack.astro';
 
 <div class="prose prose-lg max-w-none">
 
-> **Companion case study:** this piece covers the system itself — architecture, tokens, documentation, and adoption.
-> The creative direction and product UI it supported are covered in
-> [Banking Platform: Creative Direction](/projects/financial-institution-digital-transformation).
-
-> **NDA note:** This is an NDA-protected project. The process described is real; visuals are representative.
+> **Companion case study:** this piece covers the system itself: architecture, tokens, documentation, and adoption. The creative direction and product UI it supported are covered in [Banking Platform: Creative Direction](/projects/financial-institution-digital-transformation).
+>
+> **NDA note:** this is an NDA-protected project. The process described is real; visuals are representative.
 
 ## Context
 
-Inside a financial institution running several digital products, every new project started by rebuilding the same things: buttons, form fields, error states, navigation. Each team solved them slightly differently. The cost showed up twice — once in duplicated effort, and again in a customer experience that felt assembled rather than designed.
+Inside a financial institution running several digital products, every new project started by rebuilding the same things: buttons, form fields, error states, navigation. Each team solved them slightly differently. The cost showed up twice: once in duplicated effort, and again in a customer experience that felt assembled rather than designed.
 
 The brief was a design system. The actual problem was that teams had no agreed definition of correct, and no cheap way to find one.
 
@@ -69,7 +67,7 @@ I owned system architecture. I designed the component library and token model, w
 
 I started with design tokens rather than components, because tokens are what make a system survive two platforms. Colour, typography, spacing, and elevation were defined as named values with no platform assumptions baked in, then mapped separately into React and Flutter.
 
-Components came second, structured on atomic design — atoms, molecules, organisms — so teams could compose rather than request.
+Components came second, structured on atomic design: atoms, molecules, organisms, so teams could compose rather than request.
 
 <ClickableImage
   src="/images/card 03 - base components.webp"
@@ -79,7 +77,7 @@ Components came second, structured on atomic design — atoms, molecules, organi
 
 <PlaceholderImage
   title="The token architecture"
-  why="Show the actual token layers — primitives, semantic aliases, component-level tokens — and how one value resolves down through them. This is the most senior-signalling artifact in the case study and there's currently nothing visual proving you did it."
+  why="Show the actual token layers: primitives, semantic aliases, component-level tokens, and how one value resolves down through them. This is the most senior-signalling artifact in the case study and there's currently nothing visual proving you did it."
   caption="Token architecture: primitives feed semantic aliases, which resolve into component tokens per platform."
 />
 
@@ -97,11 +95,11 @@ Naming was the highest-leverage decision in the project. A distributed team can'
 
 For mobile I reworked components against Flutter's constraints rather than forcing web patterns onto it. Where a pattern couldn't survive translation, I designed the platform-appropriate equivalent and documented the mapping, so a designer and a Flutter engineer would still agree they were looking at the same component.
 
-I also built a notification framework covering how the products communicate state and errors — a repeated decision turned into a rule.
+I also built a notification framework covering how the products communicate state and errors, a repeated decision turned into a rule.
 
 <PlaceholderImage
   title="One component, both platforms"
-  why="Take a single non-trivial component — a form field with validation states, or a date picker — and show the React version beside the Flutter version, with the divergences annotated. This proves you understand implementation, which is exactly what separates a senior systems designer from a component librarian."
+  why="Take a single non-trivial component, a form field with validation states, or a date picker, and show the React version beside the Flutter version, with the divergences annotated. This proves you understand implementation, which is exactly what separates a senior systems designer from a component librarian."
   ratio="16/9"
   caption="The same component in React and Flutter. Annotated where the platforms had to diverge, and why."
 />
@@ -112,7 +110,7 @@ A system nobody adopts is a folder. I wrote usage guidelines, do/don't examples,
 
 <PlaceholderImage
   title="A documentation page as teams actually saw it"
-  why="Screenshot one real component's documentation — anatomy, states, usage rules, code reference. Documentation is claimed here but never shown, and it's a large part of what the role actually was."
+  why="Screenshot one real component's documentation: anatomy, states, usage rules, code reference. Documentation is claimed here but never shown, and it's a large part of what the role actually was."
   caption="A component's documentation page: anatomy, states, usage rules, and platform notes."
 />
 
@@ -160,6 +158,6 @@ A system nobody adopts is a folder. I wrote usage guidelines, do/don't examples,
 
 **What I'd do differently.** I treated documentation as a phase rather than a product. It should have shipped alongside each component from day one, because undocumented components get used incorrectly and then get blamed.
 
-**What I learned about governance.** The hard part of a design system isn't the components — it's holding the line between flexible enough to solve real problems and consistent enough to be worth having. That balance is a standing negotiation, not a decision you make once.
+**What I learned about governance.** The hard part of a design system isn't the components. It's holding the line between flexible enough to solve real problems and consistent enough to be worth having. That balance is a standing negotiation, not a decision you make once.
 
 </div>

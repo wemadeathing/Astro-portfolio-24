@@ -43,7 +43,7 @@ RideNote exists to answer one question in a parking lot: was it 26 or 28 PSI tha
 
 Mountain bikers adjust tyre pressure and suspension constantly, and then forget what worked. The existing options are either suspension-engineer spreadsheets or generic notes apps. Neither fits someone who just wants to remember a setting.
 
-I designed, branded, and built it solo, end to end, to prove full product ownership in a real release context — not a prototype.
+I designed, branded, and built it solo, end to end, to prove full product ownership in a real release context. Not a prototype.
 
 ## The Problem
 
@@ -52,13 +52,13 @@ I designed, branded, and built it solo, end to end, to prove full product owners
     Product design, development, brand, App Store prep. Every hat, every decision, no team to delegate to.
   </FeatureCard>
   <FeatureCard title="Scope Discipline">
-    A long feature list that needed ruthless cutting. Social features, AI recommendations, maintenance tracking — all cut.
+    A long feature list that needed ruthless cutting. Social features, AI recommendations, maintenance tracking. All cut.
   </FeatureCard>
   <FeatureCard title="Speed vs. Polish">
     Ship in 30 days while making it feel premium. Beta testers needed to say "smooth," not "rough prototype."
   </FeatureCard>
   <FeatureCard title="First App Store Submission">
-    Never released an iOS app before. App Store Connect, TestFlight, review guidelines — all new territory.
+    Never released an iOS app before. App Store Connect, TestFlight, review guidelines. All new territory.
   </FeatureCard>
 </div>
 
@@ -70,7 +70,7 @@ Solo designer and developer. Product definition, UX, visual design, brand and ic
 
 ### Planning: the PRD as a self-contract
 
-I started with a Product Requirements Document — not as a formality, but as a contract with myself to prevent feature creep.
+I started with a Product Requirements Document. Not a formality, a contract with myself to prevent feature creep.
 
 The PRD defined success metrics, the user persona, and most importantly what I would **not** build. Every time I wanted to add something mid-build, I had to justify it against the document. Usually I couldn't. Social sharing, AI recommendations, and Strava integration all went to Phase 2.
 
@@ -84,25 +84,25 @@ The persona was narrow on purpose: "Weekend Warrior Matt" rides 2-4 times a mont
 
 ### Design and development in one loop
 
-I didn't wireframe in Figma. The approach was PRD-driven direct implementation in Cursor. Unconventional, but it works for a solo project with clear scope and well-understood flows. It wouldn't scale to a team that needs shared artifacts — here it meant I could iterate without handoff.
+I didn't wireframe in Figma. The approach was PRD-driven direct implementation in Cursor. Unconventional, but it works for a solo project with clear scope and well-understood flows. It wouldn't scale to a team that needs shared artifacts, but here it meant I could iterate without handoff.
 
 Cursor handled boilerplate, feature scaffolding, and build debugging. It couldn't make UX flow decisions, design polish calls, or scope prioritisation judgements. Those needed a human at every step.
 
 <ClickableImage
   src="/images/work/ridenote-code-design.webp"
   alt="Building directly in Cursor AI"
-  caption="Designing and building simultaneously in Cursor — no handoff, no waiting."
+  caption="Designing and building simultaneously in Cursor. No handoff, no waiting."
 />
 
 <PlaceholderImage
-  title="Brand and interface craft — identity, icon, type, colour"
-  why="This case study previously promised a separate design case study that was never written. Rather than promise again, show the craft here: logo and app icon exploration, the type and colour system, and the iconography. For a design role this is the evidence that you can actually execute visually — currently the site's only proof of that is Arabica."
+  title="Brand and interface craft: identity, icon, type, colour"
+  why="This case study previously promised a separate design case study that was never written. Rather than promise again, show the craft here: logo and app icon exploration, the type and colour system, and the iconography. For a design role this is the evidence that you can actually execute visually. Right now the site's only proof of that is Arabica."
   ratio="4/3"
   caption="The RideNote identity: mark, app icon, palette, and type system."
 />
 
 <PlaceholderImage
-  title="Interface screens — the real app"
+  title="Interface screens: the real app"
   why="There are process shots here but no clean product screens. Export 4-6 device frames of the actual app: home, baseline setup, ride note entry with the sliders, and history. Someone assessing you as a designer needs to see the finished interface."
   ratio="16/9"
   caption="RideNote in use: baseline, ride entry, feedback sliders, and history."
@@ -112,7 +112,7 @@ Cursor handled boilerplate, feature scaffolding, and build debugging. It couldn'
 
 Solo building means constantly switching between brand, UI, UX, development, and go-to-market. AI helps with execution speed, but the cognitive load of wearing every hat is real and under-discussed in "I built X in a weekend" posts.
 
-I batched similar work — one day for brand, one for UI implementation, one for App Store prep. It reduced thrashing without eliminating the overhead.
+I batched similar work: one day for brand, one for UI implementation, one for App Store prep. It reduced thrashing without eliminating the overhead.
 
 ## Key Decisions
 
@@ -120,7 +120,7 @@ I batched similar work — one day for brand, one for UI implementation, one for
 
 The most impactful technical decision was making RideNote completely local: no accounts, no cloud sync, pure SQLite on device.
 
-Partly pragmatic (no backend to build), partly philosophical (instant saves, works with no signal on a trail, privacy by default). The trade-off — no cross-device sync — was acceptable for v1.
+Partly pragmatic (no backend to build), partly philosophical (instant saves, works with no signal on a trail, privacy by default). The trade-off, no cross-device sync, was acceptable for v1.
 
 The payoff was immediate. Beta testers specifically called out how smooth it felt. No spinners, no network errors, no sign-up friction. When you're in a parking lot logging settings before you forget, that speed is the product.
 
@@ -133,21 +133,21 @@ I split them. Your baseline is your typical starting setup, stored once per bike
 <ClickableImage
   src="/images/work/ridenote-baseline-model.webp"
   alt="Baseline vs ride note concept"
-  caption="Baseline settings vs. ride notes — two distinct concepts that made the app click."
+  caption="Baseline settings vs. ride notes: two distinct concepts that made the app click."
 />
 
 ### Three-dimensional feedback
 
 Instead of one "how was the ride?" star rating, I used three sliders: Grip, Feel, and Control, each 1-5.
 
-Tyre pressure affects grip differently than suspension affects comfort. A single rating loses that. Three sliders take about ten seconds — fast enough not to feel like work, detailed enough to be useful months later.
+Tyre pressure affects grip differently than suspension affects comfort. A single rating loses that. Three sliders take about ten seconds. Fast enough not to feel like work, detailed enough to be useful months later.
 
 Beta testers said this was the feature that made RideNote feel purpose-built rather than generic.
 
 <ClickableImage
   src="/images/work/ridenote-feedback-sliders.webp"
   alt="Three-dimensional feedback sliders"
-  caption="Grip, Feel, Control — purpose-built feedback a generic notes app can't offer."
+  caption="Grip, Feel, Control. Purpose-built feedback a generic notes app can't offer."
 />
 
 ## Shipping
@@ -168,7 +168,7 @@ Small fix in retrospect, but AI can only help debug once you know what's broken.
 
 ### App Store submission
 
-First submission was rejected: the config had `iPad: true` for a non-iPad app, and iPad screenshots were included by mistake. Config change, screenshot removal, resubmit — approved in two days.
+First submission was rejected: the config had `iPad: true` for a non-iPad app, and iPad screenshots were included by mistake. Config change, screenshot removal, resubmit. Approved in two days.
 
 <ClickableImage
   src="/images/work/ridenote-app-store.webp"
@@ -181,14 +181,14 @@ While waiting for approval I added three things users had asked for: a pre-ride 
 <ClickableImage
   src="/images/ridenote-live-in-appstore.webp"
   alt="RideNote in the App Store"
-  caption="Live in the App Store — concept to production in 30 days."
+  caption="Live in the App Store: concept to production in 30 days."
 />
 
 ### Beta testing
 
 I tested with mountain biking friends: informal conversations after rides, handing them my phone and watching.
 
-Feedback was consistent — "works smooth," "looks premium." Testing also caught a language problem. Early versions used Strava-style "ride logging" language, but users weren't logging rides, they were tracking setups. That framing shift made the app's purpose clearer.
+Feedback was consistent: "works smooth," "looks premium." Testing also caught a language problem. Early versions used Strava-style "ride logging" language, but users weren't logging rides, they were tracking setups. That framing shift made the app's purpose clearer.
 
 {/* TODO(nasif): the validation here is honest but thin, and an interviewer will
     notice it's all friends and all qualitative. Strengthen with whatever exists:
@@ -197,7 +197,7 @@ Feedback was consistent — "works smooth," "looks premium." Testing also caught
       - App Store rating / any written review
       - retention: is anyone still logging rides a month later?
       - anything a user did that surprised you
-    Even small numbers are fine — "40 downloads, 6 people still using it at 30
+    Even small numbers are fine. "40 downloads, 6 people still using it at 30
     days" is a real product signal and reads as confident, not apologetic. */}
 
 ## Outcome
@@ -213,7 +213,7 @@ Feedback was consistent — "works smooth," "looks premium." Testing also caught
     "Smooth" and "premium" feedback. The baseline + experimentation model made sense to real riders.
   </FeatureCard>
   <FeatureCard title="Zero Backend">
-    Offline-first meant no DevOps, no server costs, no auth headaches — and better UX.
+    Offline-first meant no DevOps, no server costs, no auth headaches, and better UX.
   </FeatureCard>
 </div>
 
@@ -232,7 +232,7 @@ Feedback was consistent — "works smooth," "looks premium." Testing also caught
 
 **What worked.** The PRD as a self-contract. Writing down what I would *not* build mattered as much as defining what I would. The offline-first decision compounded: faster development, better UX, simpler privacy story. Good architecture makes later decisions easier.
 
-**What I'd do differently.** I waited until the app was "done" to get beta feedback. I should have shared rough builds far sooner — early feedback would have caught the "ride logging" vs. "setup tracking" language problem weeks earlier. I also didn't keep a decision log, which meant reconstructing context afterwards. And I mixed App Store prep with bug fixing; screenshots and copy need a different headspace than debugging.
+**What I'd do differently.** I waited until the app was "done" to get beta feedback. I should have shared rough builds far sooner. Early feedback would have caught the "ride logging" vs. "setup tracking" language problem weeks earlier. I also didn't keep a decision log, which meant reconstructing context afterwards. And I mixed App Store prep with bug fixing; screenshots and copy need a different headspace than debugging.
 
 **What's next.** Recruiting beta testers from Reddit and Pinkbike to test whether the baseline + ride note model actually helps riders remember settings over time. Longer term, a freemium model with cloud sync and voice notes as premium features.
 

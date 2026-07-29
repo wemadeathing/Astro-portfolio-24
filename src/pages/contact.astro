@@ -8,6 +8,10 @@ const responseTime = '24 hours';
 
 const contactTracks = [
   {
+    label: 'Hiring for a role',
+    description: 'Senior or lead product design roles. Happy to jump on a call or answer questions by email first.',
+  },
+  {
     label: 'AI product or MVP',
     description: 'New builds, internal tools, rapid prototyping, or solo-to-team product work.',
   },
@@ -29,7 +33,7 @@ const quickChannels = [
 
 const agentMarkdown = `# Contact: Nasif Salaam
 
-> Looking to hire, collaborate, or book a workshop. Send a note and I will reply with next steps. Usually within ${responseTime}.
+> Hiring for a product design role, or have a project in mind. Send a note and I will reply with next steps. Usually within ${responseTime}.
 
 ## Channels
 
@@ -40,15 +44,13 @@ const agentMarkdown = `# Contact: Nasif Salaam
 
 ## What to include
 
-- What you are trying to build / solve
-- Timeline and any hard deadlines
-- Budget range (helps me reply with a useful answer)
-- Whether you need design, build, training, or all of the above`;
+If reaching out about a role: the role, seniority, and remote/location expectations.
+If reaching out about a project: what you are trying to build or solve, timeline, and budget range if you have one.`;
 ---
 
 <Layout
   title="Contact | Nasif Salaam"
-  description="Get in touch about AI products, MVPs, product design, or high-trust digital presence work."
+  description="Get in touch about a product design role, AI products, MVPs, or high-trust digital presence work."
   agentMarkdown={agentMarkdown}
   agentPathLabel="~/nasifsalaam / contact.md"
 >
@@ -60,10 +62,10 @@ const agentMarkdown = `# Contact: Nasif Salaam
         <div class="section-kicker">Contact</div>
         <h1 class="type-h1 mt-4 max-w-[14ch]">Get in touch</h1>
         <p class="mt-5 max-w-[52ch] text-sm leading-[1.8] text-muted-foreground/88">
-          Best fit: AI products, MVPs, product design, and high-trust digital presence. Currently taking on new projects.
+          Hiring for a product design role, or have a project in mind? Either way, send a note.
         </p>
 
-        <div class="mt-8 grid gap-4 sm:grid-cols-3">
+        <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {contactTracks.map((track, index) => (
             <div class="border border-border/80 p-4">
               <div class="mb-2 font-mono text-xs uppercase tracking-[0.18em] text-primary">0{index + 1}</div>
@@ -133,7 +135,7 @@ const agentMarkdown = `# Contact: Nasif Salaam
                 id="message"
                 name="message"
                 rows="7"
-                placeholder="Tell me what you're building, your timeline, and a budget range if helpful."
+                placeholder="Tell me about the role or the project, and any timeline that matters."
                 class="w-full resize-y border border-border/80 bg-background px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 focus:border-primary/60 focus:outline-none focus:ring-4 focus:ring-primary/12 transition-colors"
                 required
               ></textarea>

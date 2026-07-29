@@ -9,10 +9,10 @@ interface Props {
 const { items } = Astro.props;
 ---
 
-<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-8 my-12 not-prose">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-12 gap-y-6 my-10 not-prose">
   {items.map((group) => (
-    <div class="border-t border-border/80 pt-4">
-      <h4 class="mb-3 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+    <div>
+      <h4 class="mb-2 font-mono text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground/70">
         {group.category}
       </h4>
       <p class="text-sm leading-7 text-foreground/90">

@@ -68,6 +68,57 @@ export const archiveProjects: ArchiveProject[] = [
     height: 1000,
     images: imagePaths('uct', 3),
   },
+  {
+    slug: 'bold-signs',
+    name: 'Bold Signs',
+    description:
+      'Website for a Cape Town signage studio: a bold, gallery-driven site that matches the craft of the work it sells.',
+    width: 1440,
+    height: 900,
+    images: [
+      '/images/work/bold-signs-hero.webp',
+      '/images/work/bold-signs-work.webp',
+    ],
+  },
+  {
+    slug: 'ecos-consulting',
+    name: 'Ecos Consulting',
+    description:
+      'Web presence for a Cape Town environmental consulting firm: a fast, credible B2B site the client updates themselves.',
+    width: 1280,
+    height: 720,
+    images: [
+      '/images/work/ecos-consulting-website-1.webp',
+      '/images/work/ecos-consulting-website-2.webp',
+    ],
+  },
+  {
+    slug: 'brand-marks',
+    name: 'Brand Marks',
+    description:
+      'A selection of brand marks from fifteen years of identity work, across hospitality, healthcare, technology, retail, and more.',
+    width: 1440,
+    height: 1020,
+    images: [
+      '/images/client-logos/amra-logo.webp',
+      '/images/client-logos/arabica-logo.webp',
+      '/images/client-logos/clicks-hc-conf-logo.webp',
+      '/images/client-logos/cloud-logo.webp',
+      '/images/client-logos/dr-logo.webp',
+      '/images/client-logos/ecos-logo.webp',
+      '/images/client-logos/edge-logo.webp',
+      '/images/client-logos/expo-logo.webp',
+      '/images/client-logos/kota-logo.webp',
+      '/images/client-logos/mizan-logo.webp',
+      '/images/client-logos/passiflora-logo.webp',
+      '/images/client-logos/pastelle-logo.webp',
+      '/images/client-logos/qamar-logo.webp',
+      '/images/client-logos/ridenote-logo.webp',
+      '/images/client-logos/ses-logo.webp',
+      '/images/client-logos/straptec-logo.webp',
+      '/images/client-logos/zahra-logo.webp',
+    ],
+  },
 ];
 
 export const getArchiveProject = (slug: string): ArchiveProject | undefined =>

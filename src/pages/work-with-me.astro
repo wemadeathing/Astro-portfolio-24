@@ -126,7 +126,7 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
           </div>
         </div>
 
-        {/* Right: framed image box — desktop only */}
+        {/* Right: framed image box, desktop only */}
         <div class="scroll-reveal scroll-reveal-d2 hidden lg:block">
           <div class="image-frame">
             <div class="frame-stripe" aria-hidden="true"></div>
@@ -182,7 +182,7 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
     </div>
   </section>
 
-  {/* ── Work carousel — hidden for now ── */}
+  {/* ── Work carousel, hidden for now ── */}
   {/* Uncomment to restore the project strip:
   <section class="py-12 sm:py-16 border-b border-border/60">
     ...
@@ -407,7 +407,7 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
     line-height: 1.4;
   }
 
-  /* Border helpers — avoids divide-x wrapping bug in 2-col grid */
+  /* Border helpers: avoids divide-x wrapping bug in 2-col grid */
   .proof-cell--bl {
     border-left: 1px solid hsl(var(--border) / 0.6);
   }

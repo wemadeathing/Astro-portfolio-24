@@ -37,7 +37,7 @@ import KotaBetaBanner from '../../components/KotaBetaBanner';
 
 ## Context
 
-For many South African service businesses, the drag isn't the work — it's everything around it. Quotes go out late. Invoices sit unsent. Follow-ups slip. Proposals get rewritten from scratch. Context lives across memory, WhatsApp threads, notes, and half-finished documents.
+For many South African service businesses, the drag isn't the work. It's everything around it. Quotes go out late. Invoices sit unsent. Follow-ups slip. Proposals get rewritten from scratch. Context lives across memory, WhatsApp threads, notes, and half-finished documents.
 
 Most tools treat these as separate workflows. In practice they're one problem: the same person doing the work is also the back office, and the admin arrives at the worst possible moment.
 
@@ -50,7 +50,7 @@ Kota is my attempt to design around that.
       - one verbatim quote from a real owner would carry this whole section
       - any survey, WhatsApp poll, or informal interview notes you can cite?
     If it genuinely came only from your own experience, say that explicitly and
-    own it — "I built this for a problem I had" is honest and defensible.
+    own it. "I built this for a problem I had" is honest and defensible.
     Unsourced claims about a market are not. */}
 
 ## The Problem
@@ -59,7 +59,7 @@ Kota is my attempt to design around that.
 
 **Operational context doesn't compound.** A proposal doesn't know your pricing. A draft message doesn't know your tone. A quote doesn't know your VAT status. The business re-explains itself to every tool, every time.
 
-**AI usually adds a layer instead of removing one.** A generic assistant answers questions. That isn't the same as moving work forward. In this category, a paragraph is rarely enough — the output has to become a usable artifact.
+**AI usually adds a layer instead of removing one.** A generic assistant answers questions. That isn't the same as moving work forward. In this category, a paragraph is rarely enough. The output has to become a usable artifact.
 
 That produced the central design question:
 
@@ -73,14 +73,14 @@ Everything: problem framing, product definition, UX, interface design, brand, sy
 
 ### Designing in code, not Figma
 
-I didn't design this in Figma first. The product was built through AI-assisted coding workflows — Codex, Cursor, Claude Code — with brand and visual assets made in Affinity. The design process happened inside the build.
+I didn't design this in Figma first. The product was built through AI-assisted coding workflows (Codex, Cursor, Claude Code) with brand and visual assets made in Affinity. The design process happened inside the build.
 
 The loop was consistent: **build, test, reduce, iterate.** I went deliberately wide early, exploring a much larger feature surface than the final product needed, then cut. If a flow introduced friction, it got simplified. If a feature was impressive but didn't improve the task, it got removed.
 
 The real discipline wasn't generation. It was reduction.
 
 <PlaceholderImage
-  title="What got cut — the feature surface, before and after"
+  title="What got cut: the feature surface, before and after"
   why="You describe going wide then cutting hard, but there's no evidence of it. Show the original feature map with the removed items struck through, or three screenshots of flows you killed. This is the clearest proof of design judgement in the whole case study, and right now it's only claimed."
   caption="The original feature surface against what shipped. Most of the work was deciding what to remove."
 />
@@ -92,7 +92,7 @@ The real discipline wasn't generation. It was reduction.
 />
 
 <PlaceholderImage
-  title="Core product screens — 4 to 6 of them"
+  title="Core product screens: 4 to 6 of them"
   why="This is a product design case study with one screenshot in it. Reviewers need to see the actual interface: the chat surface, a generated invoice, the client context view, the finance section. Without screens, the case study reads as an essay about AI rather than evidence you can design."
   ratio="16/9"
   caption="Core surfaces: conversation, generated documents, client context, and finance."
@@ -104,7 +104,7 @@ The strongest product decision wasn't technical. It was that the product should 
 
 That led to a small set of rules:
 
-**Return work, not answers.** Ask for an invoice and you get an invoice draft to review and send — not a paragraph about invoicing.
+**Return work, not answers.** Ask for an invoice and you get an invoice draft to review and send, not a paragraph about invoicing.
 
 **Let context compound quietly.** The system remembers business name, tone, pricing, payment terms, services, and compliance posture, so the user never restates them.
 
@@ -118,7 +118,7 @@ That led to a small set of rules:
 
 Under the interface, Kota runs a small multi-agent system rather than one general assistant: a router to classify intent, a general agent for single-step tasks, a workflow agent for multi-step outputs, and a South African compliance specialist.
 
-The architecture is deliberately narrow. Separate agents only earn their place when the reasoning pattern is genuinely different — otherwise complexity grows faster than usefulness.
+The architecture is deliberately narrow. Separate agents only earn their place when the reasoning pattern is genuinely different. Otherwise complexity grows faster than usefulness.
 
 The other key decision was the **Generative UI contract**: the agent never generates interface code. It returns typed structured responses, and the frontend renders the matching component. That's what keeps the UX purposeful instead of chat-shaped by default.
 
@@ -132,7 +132,7 @@ The goal was to collapse friction without hiding process. The user stays in cont
 
 <PlaceholderImage
   title="The invoice flow as real screens"
-  why="The diagram explains the flow abstractly. Put the actual UI beside it — the request typed in, the structured draft returned, the review state, the sent confirmation. Diagrams show you can think; screens show you can design."
+  why="The diagram explains the flow abstractly. Put the actual UI beside it: the request typed in, the structured draft returned, the review state, the sent confirmation. Diagrams show you can think; screens show you can design."
   ratio="16/9"
   caption="Plain-language request through to reviewable invoice draft, in the real interface."
 />
@@ -169,7 +169,7 @@ Kota has advanced from an architecture-led concept to a resolved product system,
       - how many beta users are in it? even 3 counts, if you say 3
       - one quote from someone who isn't you
       - anything you changed because a real user hit a problem
-      - a date: "in beta since X" — an undated pre-launch reads as stalled
+      - a date, e.g. "in beta since X." An undated pre-launch reads as stalled
     If there genuinely are no users yet, reframe the outcome honestly as a
     build-and-architecture case study. That's a legitimate story. Implying
     validation you don't have is the thing that costs you the interview. */}
@@ -178,7 +178,7 @@ Kota has advanced from an architecture-led concept to a resolved product system,
 
 **What worked.** Deciding the output format before the interaction model. Once "return a usable artifact" was fixed, most UX questions answered themselves.
 
-**What I'd do differently.** I built the architecture before I'd tested the core interaction with anyone. It held up, but that was partly luck — I'd now put a rough version in front of three business owners before committing to a multi-agent structure.
+**What I'd do differently.** I built the architecture before I'd tested the core interaction with anyone. It held up, but that was partly luck. I'd now put a rough version in front of three business owners before committing to a multi-agent structure.
 
 **What I'm still unsure about.** Whether the chat-led entry point is right. It's the fastest way in for someone who knows what they want, and the worst way in for someone who doesn't. That's an open question I'd want real usage data to settle.
 

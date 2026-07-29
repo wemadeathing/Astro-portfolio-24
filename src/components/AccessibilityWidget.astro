@@ -54,13 +54,13 @@
     <div class="a11y-section">
       <div class="a11y-label">Text size</div>
       <div class="a11y-btn-group" role="group" aria-label="Text size">
-        <button class="a11y-opt-btn" id="font-normal" aria-pressed="false" data-scale="1" aria-label="Normal text size">
+        <button class="a11y-opt-btn" id="font-normal" aria-pressed="false" data-scale="1" aria-label="Small text size">
           <span style="font-size:11px;line-height:1;font-weight:600;">A</span>
         </button>
-        <button class="a11y-opt-btn" id="font-large" aria-pressed="false" data-scale="1.125" aria-label="Large text size">
+        <button class="a11y-opt-btn" id="font-large" aria-pressed="false" data-scale="1.125" aria-label="Medium text size">
           <span style="font-size:13px;line-height:1;font-weight:600;">A</span>
         </button>
-        <button class="a11y-opt-btn" id="font-larger" aria-pressed="false" data-scale="1.25" aria-label="Larger text size">
+        <button class="a11y-opt-btn" id="font-larger" aria-pressed="false" data-scale="1.25" aria-label="Large text size">
           <span style="font-size:15px;line-height:1;font-weight:600;">A</span>
         </button>
       </div>
@@ -234,7 +234,7 @@
     }
 
     function getScale() {
-      try { return localStorage.getItem(SCALE_KEY) || '1'; } catch(e) { return '1'; }
+      try { return localStorage.getItem(SCALE_KEY) || '1.125'; } catch(e) { return '1.125'; }
     }
 
     function applyTheme(theme) {

@@ -10,7 +10,7 @@ published: true
 order: 1
 accent: "#383C96"
 accentForeground: "#EFEFFA"
-outcome: "Creative direction across a bank's public site, secure platform, and mobile app — shipped in 2023 and still live today."
+outcome: "Creative direction across a bank's public site, secure platform, and mobile app, shipped in 2023 and still live today."
 tldr:
   problem: "A smaller South African bank looked dated next to FNB and Capitec, and an offshore team's experimental direction didn't fit how local customers judge a bank."
   built: "A competing creative direction grounded in local market research, then UI delivery across public web, secure platform, and mobile with an external dev team."
@@ -32,11 +32,9 @@ import TechStack from '../../components/TechStack.astro';
 
 <div class="prose prose-lg max-w-none">
 
-> **Companion case study:** this piece covers creative direction and cross-platform delivery.
-> The underlying component architecture, tokens, and governance model are covered separately in
-> [Enterprise Design System](/projects/enterprise-design-system).
-
-> **NDA note:** This is an NDA-protected project. The process described is real; visuals are representative and specific figures are generalised.
+> **Companion case study:** this piece covers creative direction and cross-platform delivery. The underlying component architecture, tokens, and governance model are covered separately in [Enterprise Design System](/projects/enterprise-design-system).
+>
+> **NDA note:** this is an NDA-protected project. The process described is real; visuals are representative and specific figures are generalised.
 
 ## Context
 
@@ -51,7 +49,7 @@ I joined mid-2022 as lead UI designer. An offshore design team was already three
     Login, onboarding, forms, and dashboards each used different UI patterns. Customers crossing from the public site into the secure platform hit a visible seam.
   </FeatureCard>
   <FeatureCard title="A Direction That Didn't Fit">
-    The offshore team's concepts leaned experimental. In retail banking, novelty reads as risk — especially for a challenger brand that still has to prove it is safe to hold your money.
+    The offshore team's concepts leaned experimental. In retail banking, novelty reads as risk, especially for a challenger brand that still has to prove it is safe to hold your money.
   </FeatureCard>
   <FeatureCard title="Competitive Pressure">
     The bank had to close the gap with FNB, ABSA, and Capitec locally, while meeting the expectations set internationally by Wells Fargo, Citibank, and Amex.
@@ -71,7 +69,7 @@ I owned creative direction and UI design across all three surfaces. Specifically
 - worked directly with the external dev team, project managers, and the Flutter developer through build
 - presented a token-based handoff model to engineering before Figma shipped variables
 
-{/* TODO(nasif): if you have a defensible number here, add it — screens designed,
+{/* TODO(nasif): if you have a defensible number here, add it. Screens designed,
     flows covered, months on the project, % of the platform you owned. One real
     number makes the whole section land harder. */}
 
@@ -89,7 +87,7 @@ The pattern was consistent. South African users read restraint as credibility. T
   caption="Structured teardown of local and international banks, focused on how each signals trust."
 />
 
-That research is why my direction was selected. Not because it was prettier — because it was argued.
+That research is why my direction was selected. It won on the strength of the argument, not the visuals alone.
 
 <PlaceholderImage
   title="Side-by-side: offshore direction vs. my direction"
@@ -99,7 +97,7 @@ That research is why my direction was selected. Not because it was prettier — 
 
 ### 2. Designing across three surfaces
 
-I built the UI on Material Design 2 for web and adapted Material 3 principles for mobile — M2 for the robustness and maturity a bank needs, M3 for the mobile patterns users now expect. The work was keeping these coherent without maintaining two disconnected systems.
+I built the UI on Material Design 2 for web and adapted Material 3 principles for mobile: M2 for the robustness and maturity a bank needs, M3 for the mobile patterns users now expect. The work was keeping these coherent without maintaining two disconnected systems.
 
 <ClickableImage
   src="/images/fintech-components.webp"
@@ -115,19 +113,19 @@ I built the UI on Material Design 2 for web and adapted Material 3 principles fo
 
 <PlaceholderImage
   title="Before / after: one high-traffic journey"
-  why="Pick the journey you changed most — login, onboarding, or payments. Old screens on top, new below. This is the clearest proof that the redesign solved something, and there is currently no before/after anywhere on the site."
+  why="Pick the journey you changed most: login, onboarding, or payments. Old screens on top, new below. This is the clearest proof that the redesign solved something, and there is currently no before/after anywhere on the site."
   caption="Onboarding, before and after. The redesign cut the flow from X steps to Y and moved verification earlier."
 />
 
 ### 3. Making the handoff survivable
 
-With an external team building everything, I treated handoff as a design problem. I presented a token-based system to engineering before Figma had variables, which proved too early for the team to adopt wholesale — so I adapted it into a naming and spec convention they could actually execute against.
+With an external team building everything, I treated handoff as a design problem. I presented a token-based system to engineering before Figma had variables, which proved too early for the team to adopt wholesale, so I adapted it into a naming and spec convention they could actually execute against.
 
 I also built a notification framework: a single set of rules for how the bank communicates state, errors, and confirmations, so those decisions stopped being remade per screen.
 
 <PlaceholderImage
   title="The notification framework"
-  why="Show the actual matrix or decision tree — state types down one axis, surfaces across the other. Systems thinking is your differentiator for senior roles, and this is concrete evidence of it."
+  why="Show the actual matrix or decision tree: state types down one axis, surfaces across the other. Systems thinking is your differentiator for senior roles, and this is concrete evidence of it."
   caption="The notification framework: one set of rules covering every state, across all three platforms."
 />
 
@@ -157,12 +155,12 @@ I also built a notification framework: a single set of rules for how the bank co
 </div>
 
 {/* TODO(nasif): the outcome section is still qualitative. Anything you can defend
-    helps enormously — even rough, even caveated:
+    helps enormously, even rough, even caveated:
       - support tickets / call volume before vs. after
       - mobile app rating movement, or download change post-launch
       - onboarding completion or drop-off change
       - number of screens or flows delivered
-    If you genuinely can't get numbers under the NDA, say so explicitly — a stated
+    If you genuinely can't get numbers under the NDA, say so explicitly. A stated
     constraint reads far better than vague adjectives. */}
 
 ## Technical Implementation
@@ -182,6 +180,6 @@ I also built a notification framework: a single set of rules for how the bank co
 
 **What I'd do differently.** I presented the token system at the level I wanted it to exist, not the level the team could adopt. I'd now pitch the version people can use on Monday, and keep the ambitious one as the roadmap.
 
-**What I'd want to measure.** I shipped without instrumentation for design outcomes. If I ran this again I'd agree success metrics with the bank up front — onboarding completion, support contact rate, task success — so the work could be defended in numbers rather than adjectives.
+**What I'd want to measure.** I shipped without instrumentation for design outcomes. If I ran this again I'd agree success metrics with the bank up front: onboarding completion, support contact rate, task success, so the work could be defended in numbers rather than adjectives.
 
 </div>
