@@ -17,6 +17,28 @@ const expertise = [
   },
 ];
 
+/* What I'm looking for — the block that tells a hiring manager whether to bother.
+   TODO(nasif): edit these to match what you actually want. Being specific here
+   filters out bad-fit approaches and makes good-fit ones far more likely. */
+const lookingFor = [
+  {
+    label: 'Role',
+    value: 'Senior or Lead Product Designer. Titles matter less than scope — I want ownership of a product area, not a queue of tickets.',
+  },
+  {
+    label: 'Team',
+    value: 'A team that ships and measures. I work best close to engineering, with designers who argue about the work.',
+  },
+  {
+    label: 'Location',
+    value: 'Remote (any timezone with reasonable overlap), or on-site in Cape Town.',
+  },
+  {
+    label: 'Problems',
+    value: 'Complex products where structure matters: design systems, multi-platform journeys, AI-powered tools, anything that has to earn user trust.',
+  },
+];
+
 const skills = [
   {
     title: 'What I can do',
@@ -100,11 +122,17 @@ const experience = [
 
 const agentMarkdown = `# About: Nasif Salaam
 
-> Product designer and AI builder focused on AI products, product systems, and high-trust digital experiences. Fifteen plus years across design and implementation.
+> Senior product designer with 15+ years across enterprise design systems, banking platforms, brand, and AI product builds.
+
+## Availability
+
+**Open to senior or lead product design roles** — remote, or on-site in Cape Town. Also taking on select client projects.
+
+${lookingFor.map((l) => `- **${l.label}:** ${l.value}`).join('\n')}
 
 ## Current Focus
 
-Project-based client work across brand identity, web design, and frontend development. Building **Kota AI** (multi-agent business operations platform, designed and built end-to-end) and **RideNote** (iOS App Store live, Android in testing). Currently taking on new client projects.
+Building **Kota AI** (multi-agent business operations platform, designed and built end-to-end) and **RideNote** (live on the iOS App Store, Android in testing), alongside project-based client work across brand identity, web design, and frontend development.
 
 ## Expertise
 
@@ -126,8 +154,8 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
 ---
 
 <Layout
-  title="About | Product Designer and AI Builder"
-  description="Product designer and AI builder focused on AI products, product systems, and high-trust digital experiences, with 15+ years across design and implementation."
+  title="About | Senior Product Designer — Open to Work"
+  description="Senior product designer with 15+ years across enterprise design systems, banking platforms, and AI product builds. Open to senior product design roles, remote or Cape Town."
   agentMarkdown={agentMarkdown}
   agentPathLabel="~/nasifsalaam / about.md"
 >
@@ -142,10 +170,21 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
           <p class="mt-6 max-w-[60ch] text-sm leading-[1.8] text-muted-foreground/88">
             I help teams and founders turn complexity into clear digital products. My background spans enterprise design systems, banking transformation, client websites, and solo-built AI products, which means I can move between strategy, interface, and implementation without losing the thread. And when a product is powered by AI, building it well for people means designing how the agents receive context, use their tools, and respond, not just the human interface.
           </p>
-          <p class="mt-5 inline-flex items-center gap-2.5 font-mono text-xs uppercase tracking-[0.14em] text-foreground">
-            <span class="h-1.5 w-1.5 bg-primary"></span>
-            Currently taking on new projects.
-          </p>
+          {/* Availability — leads with employment, keeps the freelance door open */}
+          <div class="mt-7 border border-border/80 p-5 max-w-[60ch]">
+            <p class="inline-flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-[0.14em] text-foreground">
+              <span class="h-1.5 w-1.5 bg-primary"></span>
+              Open to work
+            </p>
+            <p class="mt-3 text-sm leading-[1.8] text-muted-foreground/88">
+              Looking for a <strong class="text-foreground font-semibold">senior or lead product design role</strong>
+              &mdash; remote, or on-site in Cape Town. Also taking on select client projects.
+            </p>
+            <div class="mt-5 flex flex-wrap gap-3">
+              <a href="/contact" class="btn-stripe">Get in touch</a>
+              <a href="/Nasif-Salaam-Resume.pdf" download class="btn-stripe">Download CV</a>
+            </div>
+          </div>
         </div>
 
         <aside class="scroll-reveal scroll-reveal-d2 flex flex-col gap-0 lg:pt-2 border-t border-border/60 lg:border-t-0 lg:border-l lg:border-border/60 lg:pl-10">
@@ -154,14 +193,39 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
             <div class="text-sm text-foreground">Cape Town, South Africa</div>
           </div>
           <div class="border-b border-border/60 py-5">
+            <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70 mb-1.5">Seeking</div>
+            <div class="text-sm leading-[1.8] text-muted-foreground/88">Senior / lead product design roles. Remote, or Cape Town.</div>
+          </div>
+          <div class="border-b border-border/60 py-5">
             <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70 mb-1.5">Best Fit</div>
-            <div class="text-sm leading-[1.8] text-muted-foreground/88">AI product builds, design systems, high-trust digital presence, MVP delivery.</div>
+            <div class="text-sm leading-[1.8] text-muted-foreground/88">Design systems, complex multi-platform products, AI product design, MVP delivery.</div>
           </div>
           <div class="py-5">
             <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70 mb-1.5">Working Style</div>
             <div class="text-sm leading-[1.8] text-muted-foreground/88">Strategy, interface, and implementation held together in one line of thinking.</div>
           </div>
         </aside>
+      </div>
+    </div>
+  </section>
+
+  {/* ── What I'm looking for ── */}
+  <section class="border-t border-border/60 bg-muted/[0.035] py-14 sm:py-20">
+    <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mb-10 scroll-reveal">
+        <div class="section-kicker">Open to work</div>
+        <h2 class="type-h2 mt-4 max-w-[28ch]">What I'm looking for</h2>
+      </div>
+
+      <div class="grid gap-0 max-w-[80ch]">
+        {lookingFor.map((item, index) => (
+          <div class={`scroll-reveal scroll-reveal-d${index + 1} grid gap-2 border-t border-border/60 py-6 lg:grid-cols-[160px_minmax(0,1fr)] lg:gap-10`}>
+            <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-primary pt-1">
+              {item.label}
+            </div>
+            <p class="text-sm leading-[1.8] text-muted-foreground/88">{item.value}</p>
+          </div>
+        ))}
       </div>
     </div>
   </section>
@@ -293,9 +357,9 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
       <div class="max-w-[68ch] scroll-reveal">
         <div class="section-kicker">Next step</div>
-        <h2 class="type-h2 mt-4">Let's build something useful.</h2>
+        <h2 class="type-h2 mt-4">Let's talk.</h2>
         <p class="mt-4 text-sm leading-[1.8] text-muted-foreground/88">
-          If you need someone who can move between product design, systems, and implementation without losing clarity, let's connect.
+          If you're hiring for a senior product design role, or you need someone who can move between product design, systems, and implementation without losing clarity, I'd like to hear from you.
         </p>
         <div class="mt-7 flex flex-wrap gap-3">
           <a href="/contact" class="btn-stripe">Let's Connect</a>

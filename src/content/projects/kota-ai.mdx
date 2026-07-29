@@ -1,13 +1,13 @@
 ---
 title: "Kota AI - Designing an Operational AI Workspace"
-description: "A product-led case study on designing and building an AI-powered operations platform for South African SMEs."
-ai_summary: "A product design and AI systems case study about Kota, an operational workspace for South African SMEs. Covers the problem framing, build-in-code design process, generative UI strategy, multi-agent architecture, and the UX journey for turning plain-language intent into usable business outputs."
+description: "Designed and built a multi-agent AI operations platform for South African SMEs, solo, from problem framing to working product."
+ai_summary: "A product design and AI systems case study about Kota, an operational workspace for South African SMEs. Covers problem framing, build-in-code design process, generative UI strategy, multi-agent architecture, and the UX journey for turning plain-language intent into usable business outputs."
 image: "/images/work/kota/kota-feature.webp"
 tags: ["Product Design", "AI Systems", "Operational UX", "Generative UI", "Solo Build"]
 use_for_questions: ["Product design", "AI product design", "Generative UI", "Operational UX", "Multi-agent architecture", "Designing in code", "South African SME software", "Solo building with AI tools"]
 featured: true
 published: true
-order: 1
+order: 3
 accent: "#EDE6D8"
 accentForeground: "#16382E"
 outcome: "An AI operations workspace for South African SMEs, designed and built end to end, solo, now in pre-launch beta."
@@ -26,6 +26,7 @@ stats:
     value: "Pre-launch beta"
 ---
 import ClickableImage from '../../components/ClickableImage.astro';
+import PlaceholderImage from '../../components/PlaceholderImage.astro';
 import FeatureCard from '../../components/FeatureCard.astro';
 import TechStack from '../../components/TechStack.astro';
 import KotaAgentFlowDiagram from '../../components/KotaAgentFlowDiagram.astro';
@@ -34,54 +35,55 @@ import KotaBetaBanner from '../../components/KotaBetaBanner';
 
 <div class="prose prose-lg max-w-none">
 
-## Project Overview
+## Context
 
-Kota started from a problem I understood first-hand: small business owners do not need another tool that gives them one more place to type, configure, or manage work. They need help getting operational tasks out of their heads and into finished outputs.
+For many South African service businesses, the drag isn't the work — it's everything around it. Quotes go out late. Invoices sit unsent. Follow-ups slip. Proposals get rewritten from scratch. Context lives across memory, WhatsApp threads, notes, and half-finished documents.
 
-For many South African service businesses, the drag is not the core work. It is everything around it. Quotes go out late. Invoices sit unsent. Follow-ups slip. Proposals get rewritten from scratch. Context lives across memory, WhatsApp threads, notes, and half-finished documents. Most tools treat these as separate workflows. In reality, they are all part of the same operational burden.
+Most tools treat these as separate workflows. In practice they're one problem: the same person doing the work is also the back office, and the admin arrives at the worst possible moment.
 
-Kota was my attempt to design a system around that burden. The goal was to create a workspace that understands the business context, then turns intent into usable output, whether that output is an invoice, a proposal, a follow-up draft, or the next best action.
+Kota is my attempt to design around that.
 
-## Tools & Technologies
-
-<TechStack
-  items={[
-    { category: "Build Workflow", tools: ["OpenAI Codex", "Cursor", "Claude Code"] },
-    { category: "Backend", tools: ["Python", "FastAPI", "LangGraph", "SSE streaming"] },
-    { category: "Data", tools: ["Supabase", "PostgreSQL", "RLS"] },
-    { category: "Frontend", tools: ["Astro", "React Islands", "TypeScript"] },
-    { category: "Design", tools: ["Affinity Designer", "Design in code"] },
-    { category: "Testing & Review", tools: ["Playwright", "Refactoring passes", "Security review"] }
-  ]}
-/>
+{/* TODO(nasif): this is the biggest credibility gap in the case study. Right now
+    the problem is asserted from personal experience. Even lightweight evidence
+    changes the read completely:
+      - did you talk to any SME owners before building? how many, what did they say?
+      - one verbatim quote from a real owner would carry this whole section
+      - any survey, WhatsApp poll, or informal interview notes you can cite?
+    If it genuinely came only from your own experience, say that explicitly and
+    own it — "I built this for a problem I had" is honest and defensible.
+    Unsourced claims about a market are not. */}
 
 ## The Problem
 
-Three recurring failures shaped the product.
+**Admin breaks momentum.** Important tasks don't fail because they're hard. They fail because they arrive at the wrong time, with too much friction.
 
-**Admin breaks momentum.** In many small service businesses, the same person doing the work is also writing the quote, sending the invoice, chasing payment, and following up on leads. Important tasks do not fail because they are hard. They fail because they arrive at the wrong time, with too much friction.
+**Operational context doesn't compound.** A proposal doesn't know your pricing. A draft message doesn't know your tone. A quote doesn't know your VAT status. The business re-explains itself to every tool, every time.
 
-**Operational context does not compound.** A proposal does not know your service pricing. A draft message does not know your tone. A quote does not know your VAT status. The business has to keep re-explaining itself.
+**AI usually adds a layer instead of removing one.** A generic assistant answers questions. That isn't the same as moving work forward. In this category, a paragraph is rarely enough — the output has to become a usable artifact.
 
-**AI often adds another layer instead of removing one.** A generic assistant can answer questions, but that is not the same as helping a business move work forward. In this category, a paragraph is rarely enough. The output needs to become a usable artifact.
+That produced the central design question:
 
-That became the central design question for the product:
+> What does an AI product look like when it's designed around operational follow-through rather than conversational novelty?
 
-> What does an AI product look like when it is designed around operational follow-through rather than conversational novelty?
+## My Role
 
-## The Solution
+Everything: problem framing, product definition, UX, interface design, brand, system architecture, and implementation. Solo, end to end.
 
-Kota is an AI-powered operations workspace built for South African SMEs, especially service businesses where the owner is both the operator and the back office.
+## Process
 
-The product combines client context, financial documents, follow-up drafting, tasks, business memory, and compliance-aware assistance into one system. Instead of returning text by default, it returns the right working format for the job: a document, a table, an action state, or a structured draft.
+### Designing in code, not Figma
 
-The interaction model is intentionally simple:
+I didn't design this in Figma first. The product was built through AI-assisted coding workflows — Codex, Cursor, Claude Code — with brand and visual assets made in Affinity. The design process happened inside the build.
 
-- ask in plain language
-- get a usable output back
-- review before anything important happens
+The loop was consistent: **build, test, reduce, iterate.** I went deliberately wide early, exploring a much larger feature surface than the final product needed, then cut. If a flow introduced friction, it got simplified. If a feature was impressive but didn't improve the task, it got removed.
 
-That principle shaped both the UX and the architecture. From a product perspective, Kota is not meant to feel like an AI novelty layer on top of business software. It is meant to feel like operational support that already knows the business and can help complete work with less setup, less repetition, and less context switching.
+The real discipline wasn't generation. It was reduction.
+
+<PlaceholderImage
+  title="What got cut — the feature surface, before and after"
+  why="You describe going wide then cutting hard, but there's no evidence of it. Show the original feature map with the removed items struck through, or three screenshots of flows you killed. This is the clearest proof of design judgement in the whole case study, and right now it's only claimed."
+  caption="The original feature surface against what shipped. Most of the work was deciding what to remove."
+/>
 
 <ClickableImage
   src="/images/work/kota/kota-dashboard.webp"
@@ -89,123 +91,96 @@ That principle shaped both the UX and the architecture. From a product perspecti
   caption="The dashboard brings guidance, operational signals, and next actions into one calm workspace view."
 />
 
-## My Approach
+<PlaceholderImage
+  title="Core product screens — 4 to 6 of them"
+  why="This is a product design case study with one screenshot in it. Reviewers need to see the actual interface: the chat surface, a generated invoice, the client context view, the finance section. Without screens, the case study reads as an essay about AI rather than evidence you can design."
+  ratio="16/9"
+  caption="Core surfaces: conversation, generated documents, client context, and finance."
+/>
 
-I did not design this in Figma first.
+### Deciding what the system returns
 
-The product was developed almost entirely through AI-assisted coding workflows using **OpenAI Codex**, **Cursor**, and **Claude Code**. Branding and visual design assets were created in **Affinity**, but the actual product design process happened inside the build.
+The strongest product decision wasn't technical. It was that the product should return **finished operational outcomes** rather than assistance.
 
-The working method was closer to product discovery through making than traditional handoff design.
+That led to a small set of rules:
 
-I would identify a problem, define the feature set that might solve it, turn that into user stories, and then build directly against those stories. From there, the loop was always the same:
+**Return work, not answers.** Ask for an invoice and you get an invoice draft to review and send — not a paragraph about invoicing.
 
-**build, test, reduce, iterate**
+**Let context compound quietly.** The system remembers business name, tone, pricing, payment terms, services, and compliance posture, so the user never restates them.
 
-I went wide early. I explored a larger feature surface than the final product needed. Then I kept cutting. If a flow introduced too much friction, it was simplified. If a feature felt impressive but did not meaningfully improve the task, it was reduced or removed. If performance or complexity became a bottleneck, I changed the technical approach.
+**Keep human review visible.** Anything sensitive or mutating stays explicit. Active, never reckless.
 
-This gave the project a double-diamond rhythm in practice:
+**Respect the surface.** A follow-up request inside communications isn't the same as one inside finance. The system should know which room you're in.
 
-- identify the operational problem
-- expand into possible solutions
-- reduce toward the most useful interaction
-- rebuild with less friction
+**Prefer reliability to theatrics.** Where a deterministic system beats an agentic one, the deterministic system wins.
 
-AI also shaped how the product was made. I used different tools, plugins, and skills for different phases of the loop. Design exploration, refactoring, security review, and browser testing each had their own passes. That let me move unusually fast, but it also meant the real discipline was not generation. It was reduction.
+### Architecture in service of the interaction
 
-## Product Design Thinking
+Under the interface, Kota runs a small multi-agent system rather than one general assistant: a router to classify intent, a general agent for single-step tasks, a workflow agent for multi-step outputs, and a South African compliance specialist.
 
-The strongest product decision in Kota was not technical. It was deciding that the product should be designed around **finished operational outcomes** rather than assistance alone.
+The architecture is deliberately narrow. Separate agents only earn their place when the reasoning pattern is genuinely different — otherwise complexity grows faster than usefulness.
 
-That led to a few core choices:
-
-**The system should return work, not just answers.** If a user asks for an invoice, the useful result is not a paragraph about invoicing. It is an invoice draft they can review and send.
-
-**Business context should compound quietly.** The system should remember the business name, tone, pricing, payment terms, services, and compliance posture so the user does not have to restate them.
-
-**Human review should stay visible.** Anything sensitive or mutating should remain explicit. The product should feel active, but never reckless.
-
-**Surface context matters.** A follow-up request inside communications is not the same as one inside finance. The system should feel aware of the room the user is in.
-
-**Reliability matters more than theatrics.** Where a deterministic system is better than an agentic one, the deterministic system should win.
-
-Those decisions gave the app its shape. The UX is chat-led, but not chat-only. The AI is central, but not unbounded. The product aims to reduce operational drag without turning the experience into a black box.
-
-## AI Architecture
-
-Under the interface, Kota uses a small multi-agent system rather than one general assistant.
-
-The architecture is intentionally narrow. Instead of creating many agents for every surface, I kept the system to a few specialized roles:
-
-- a router to classify intent
-- a general agent for single-step operational tasks
-- a workflow agent for more complex multi-step outputs
-- a South African compliance specialist for regulatory questions
-
-This was a product decision as much as a systems decision. Separate agents only make sense when the reasoning pattern is meaningfully different. Otherwise, complexity grows faster than usefulness.
-
-The other important architectural decision was the **Generative UI contract**. The agent does not generate arbitrary interface code. It returns typed structured responses, and the frontend renders the appropriate component. That allowed the UX to feel purposeful rather than chat-shaped by default.
+The other key decision was the **Generative UI contract**: the agent never generates interface code. It returns typed structured responses, and the frontend renders the matching component. That's what keeps the UX purposeful instead of chat-shaped by default.
 
 <KotaAgentFlowDiagram />
 
-The architecture supports the product in three ways:
-
-- it keeps simpler requests fast
-- it allows richer outputs when deeper workflows are needed
-- it keeps behavior more predictable and debuggable
-
-The system design became a way to protect the interaction quality.
-
-## UX Journey: Creating an Invoice
-
-This is one of the clearest examples of how the product is meant to work.
-
-The user does not begin by navigating a complex finance flow and filling out a blank form. They begin with intent.
+### The invoice journey
 
 <KotaInvoiceJourneyDiagram />
 
-The UX goal here was to collapse friction, not hide process. The user still remains in control, but the blank-page problem is removed.
+The goal was to collapse friction without hiding process. The user stays in control; the blank page disappears.
 
-## Core Features
+<PlaceholderImage
+  title="The invoice flow as real screens"
+  why="The diagram explains the flow abstractly. Put the actual UI beside it — the request typed in, the structured draft returned, the review state, the sent confirmation. Diagrams show you can think; screens show you can design."
+  ratio="16/9"
+  caption="Plain-language request through to reviewable invoice draft, in the real interface."
+/>
 
-I deliberately kept the case study focused on a few behaviors rather than trying to document every feature in the product.
+## Key Decisions
 
-**Operational document creation**  
-Users can generate invoices, quotes, estimates, and proposals from natural language, with business context already applied.
+**Structured responses over free-form generation.** Typed contracts meant the UI stayed predictable and debuggable, at the cost of flexibility. For an operations tool handling money, that trade was obvious.
 
-**Business-aware drafting**  
-Messages, follow-ups, and document language are shaped by saved services, tone, pricing, and other business context.
+**Four agents, not twelve.** Every additional agent adds routing ambiguity and failure modes. I kept the roster to reasoning patterns that were actually distinct.
 
-**Structured AI output**  
-Responses are rendered as usable UI states rather than generic text whenever the task calls for it.
+**South African context designed in, not localised later.** ZAR, VAT, EFT workflows, and local compliance language shaped the data model from the start rather than being retrofitted.
 
-**South African context built in**  
-The product is designed around ZAR, VAT, EFT workflows, local compliance language, and South African SME realities from the start.
+## Outcome
 
-**Review-first actions**  
-The system supports action, but not hidden action. Important changes remain visible and user-controlled.
-
-## Outcome To Date
-
-Kota has advanced from an architecture-led concept into a much more resolved product system.
-
-The most valuable part of the project for me is not just that I built a multi-agent product solo. It is that the product thinking held up through implementation. The more I built and tested, the more the same conclusion kept proving true: small business users do not want more software to manage. They want less friction between intention and completed work.
+Kota has advanced from an architecture-led concept to a resolved product system, currently in pre-launch beta.
 
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 my-8">
   <FeatureCard title="Product Thinking Led">
-    The case study is centered on reducing admin friction and turning user intent into usable output rather than showcasing AI novelty for its own sake.
+    Built around reducing admin friction and turning intent into usable output, rather than showcasing AI for its own sake.
   </FeatureCard>
   <FeatureCard title="Designed In Code">
-    The product was shaped through direct building, testing, trimming, and iterating with AI-assisted tools instead of a traditional Figma-first process.
+    Shaped through building, testing, trimming, and iterating with AI-assisted tools instead of a Figma-first process.
   </FeatureCard>
   <FeatureCard title="System Design In Service Of UX">
-    The multi-agent architecture, structured responses, and deterministic rules all exist to support clearer workflows and more trustworthy interactions.
+    The multi-agent architecture, structured responses, and deterministic rules all exist to support clearer, more trustworthy workflows.
   </FeatureCard>
   <FeatureCard title="Market-Specific Execution">
-    South African business realities like VAT, EFT, compliance language, and operational habits were designed in from the start rather than added later.
+    VAT, EFT, compliance language, and South African operational habits were designed in from the start.
   </FeatureCard>
 </div>
 
-Kota became a strong proof point for how I work: product thinking first, system design second, and implementation close enough to the problem that the design can keep evolving as the product proves itself.
+{/* TODO(nasif): "pre-launch beta" is doing a lot of work here and it's the first
+    thing an interviewer will push on. Before this goes out, add whatever is true:
+      - how many beta users are in it? even 3 counts, if you say 3
+      - one quote from someone who isn't you
+      - anything you changed because a real user hit a problem
+      - a date: "in beta since X" — an undated pre-launch reads as stalled
+    If there genuinely are no users yet, reframe the outcome honestly as a
+    build-and-architecture case study. That's a legitimate story. Implying
+    validation you don't have is the thing that costs you the interview. */}
+
+## Reflection
+
+**What worked.** Deciding the output format before the interaction model. Once "return a usable artifact" was fixed, most UX questions answered themselves.
+
+**What I'd do differently.** I built the architecture before I'd tested the core interaction with anyone. It held up, but that was partly luck — I'd now put a rough version in front of three business owners before committing to a multi-agent structure.
+
+**What I'm still unsure about.** Whether the chat-led entry point is right. It's the fastest way in for someone who knows what they want, and the worst way in for someone who doesn't. That's an open question I'd want real usage data to settle.
 
 <KotaBetaBanner />
 

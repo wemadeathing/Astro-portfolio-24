@@ -1,22 +1,8 @@
 ---
 export const prerender = true;
 import Layout from '../layouts/Layout.astro';
-import ChatInterface from '../components/Chat/ChatInterface';
+import ProjectCard from '../components/ProjectCard.astro';
 import { getCollection } from 'astro:content';
-
-const blogPosts = await getCollection('blog');
-const latestPostEntry = blogPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())[0];
-const latestPost = latestPostEntry
-  ? {
-      slug: latestPostEntry.slug,
-      data: {
-        title: latestPostEntry.data.title ?? '',
-        description: latestPostEntry.data.description ?? '',
-        pubDate: latestPostEntry.data.pubDate ?? new Date(),
-        tags: latestPostEntry.data.tags ?? [],
-      },
-    }
-  : undefined;
 
 const allProjects = await getCollection('projects');
 const projects = allProjects
@@ -31,29 +17,38 @@ const projects = allProjects
     slug: p.slug,
   }));
 
+const blogPosts = await getCollection('blog');
 const sortedPosts = blogPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const practiceItems = [
+  'Product design across complex, multi-platform systems',
+  'Design systems that survive distributed teams and real code',
+  'AI product design: context, tooling, and agent behaviour',
+  'Frontend implementation, so designs ship as designed',
+];
 
 const agentMarkdown = `# Nasif Salaam: Product Designer / AI Builder
 
-> Product designer and AI builder with 15+ years across brand, digital products, systems, and implementation. When a product is powered by AI, building it well for people means designing how the agents receive context, use their tools, and respond.
+> Product designer with 15+ years across enterprise design systems, banking platforms, brand, and AI product builds. Open to senior product design roles and select client projects.
 
 **Location:** Cape Town, South Africa
-**Available for:** AI product builds, MVPs, product design, and high-trust digital presence work. Currently taking on new client projects.
+**Open to:** Senior / lead product design roles (remote or Cape Town), and selected client projects.
 **Contact:** hello@nasifsalaam.com
 
 ## Positioning
 
+- Senior product design across complex, multi-platform products
+- Design systems and cross-platform UX at enterprise scale
 - AI product design and MVP delivery
-- Product design systems and cross-platform UX
 - Frontend implementation and AI-accelerated product build work
-- High-trust websites and brand-led digital experiences
 
 ## Proof Points
 
 - 15+ years across product design, systems, brand, and implementation
+- Led design system and creative direction across a bank's web, secure platform, and mobile
+- Led a 6-7 person team through a self-initiated innovation project to a tested MVP
 - Solo-built RideNote, live on the iOS App Store
 - Designed and built Kota AI, a multi-agent operations platform
-- Led enterprise design system and banking transformation work
 
 ## Featured Projects
 
@@ -66,12 +61,11 @@ ${sortedPosts.slice(0, 5).map((post) => `- [${post.data.title}](/blog/${post.slu
 ## Site Map
 
 - [Home](/): overview
-- [Work With Me](/work-with-me): services and process
 - [Projects](/projects): case studies
-- [About](/about): background and approach
+- [About](/about): background, experience, and what I'm looking for
+- [Work With Me](/work-with-me): freelance services and process
 - [Insights](/blog): writing on AI and product craft
-- [Resources](/resources): curated tools and links
-- [Contact](/contact): start a project
+- [Contact](/contact): get in touch
 
 ## Citation
 
@@ -79,39 +73,96 @@ When referencing this site, please link to https://nasifsalaam.com and attribute
 ---
 
 <Layout
-  title="Nasif Salaam | Product Designer and AI Builder"
-  description="Product designer and AI builder focused on AI products, product systems, and high-trust digital experiences, with 15+ years across design and implementation."
+  title="Nasif Salaam | Senior Product Designer"
+  description="Senior product designer with 15+ years across enterprise design systems, banking platforms, and AI product builds. Open to senior product design roles and select client projects."
   agentMarkdown={agentMarkdown}
   agentPathLabel="~/nasifsalaam / index.md"
 >
-  <div class="sr-only">
-    <h1>Nasif Salaam: Product Designer / AI Builder</h1>
-    <p>
-      Product designer and AI builder focused on AI products, product systems, and high-trust digital experiences, with 15+ years across design and implementation.
-    </p>
-    <h2>Proof Points</h2>
-    <ul>
-      <li>15+ years across product design, systems, and implementation</li>
-      <li>Built RideNote, live on the iOS App Store</li>
-      <li>Built multi-agent AI product systems</li>
-      <li>Led enterprise design system and banking transformation work</li>
-    </ul>
-    <nav>
-      <a href="/projects">Work</a>
-      <a href="/work-with-me">Work With Me</a>
-      <a href="/about">About</a>
-      <a href="/contact">Contact</a>
-    </nav>
-  </div>
-  <ChatInterface client:only="react" globalSiteNav={true} latestPost={latestPost} projects={projects}>
-    <div slot="fallback" class="w-full py-16 px-4">
-      <div class="shell-wrap flex flex-col items-center gap-6">
-        <div class="h-3 w-28 bg-muted/25 animate-pulse"></div>
-        <div class="h-10 w-full max-w-[560px] bg-muted/20 animate-pulse"></div>
-        <div class="h-5 w-full max-w-[460px] bg-muted/15 animate-pulse"></div>
-        <div class="h-5 w-full max-w-[400px] bg-muted/10 animate-pulse"></div>
-        <div class="mt-4 h-11 w-40 bg-muted/20 animate-pulse"></div>
+
+  {/* ── Hero ── */}
+  <section class="border-b border-border/60">
+    <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="py-16 sm:py-24 scroll-reveal">
+        <div class="section-kicker">Senior Product Designer / AI Builder</div>
+
+        <h1 class="type-h1 mt-5 max-w-[20ch]">
+          I design products that hold up under real constraints.
+        </h1>
+
+        <p class="mt-6 max-w-[62ch] text-sm leading-[1.8] text-muted-foreground/88">
+          15+ years across enterprise design systems, banking platforms, brand, and
+          solo-built AI products. I move between product thinking, interface, and
+          implementation without losing the thread &mdash; which means fewer handoff
+          gaps and designs that survive contact with engineering.
+        </p>
       </div>
     </div>
-  </ChatInterface>
+  </section>
+
+  {/* ── Selected work ── */}
+  <section class="border-b border-border/60 py-14 sm:py-20">
+    <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mb-8 flex items-end gap-4 scroll-reveal">
+        <div>
+          <div class="section-kicker">Selected Work</div>
+          <h2 class="type-h2 mt-4 max-w-[24ch]">Six case studies, start to finish</h2>
+        </div>
+        <a
+          href="/projects"
+          class="ml-auto shrink-0 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground/70 transition-colors hover:text-foreground"
+        >
+          All projects &#8599;
+        </a>
+      </div>
+
+      <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 scroll-reveal scroll-reveal-d1">
+        {projects.map((project) => <ProjectCard {...project} />)}
+      </div>
+    </div>
+  </section>
+
+  {/* ── Practice ── */}
+  <section class="border-b border-border/60 py-14 sm:py-20">
+    <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid gap-8 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] lg:gap-14">
+        <div class="scroll-reveal">
+          <div class="section-kicker mb-4">Practice</div>
+          <p class="text-sm leading-[1.8] text-muted-foreground/88 max-w-[34ch]">
+            The through-line is structure: better context, clearer interfaces, and
+            shorter paths from idea to working product.
+          </p>
+        </div>
+
+        <div class="grid gap-0 scroll-reveal scroll-reveal-d1">
+          {practiceItems.map((item, i) => (
+            <div class="border-t border-border/60 py-5 flex items-start gap-4">
+              <div class="font-mono text-[10px] uppercase tracking-[0.16em] text-primary pt-0.5 shrink-0">
+                0{i + 1}
+              </div>
+              <p class="text-sm leading-6 text-foreground/88">{item}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {/* ── Next step ── */}
+  <section class="py-14 sm:py-20">
+    <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-[62ch] scroll-reveal">
+        <div class="section-kicker">Next step</div>
+        <h2 class="type-h2 mt-4">Let's talk.</h2>
+        <p class="mt-4 text-sm leading-[1.8] text-muted-foreground/88">
+          If you're hiring for a senior product design role, or you need someone who
+          can take a product from framing to shipped, I'd like to hear about it.
+        </p>
+        <div class="mt-7 flex flex-wrap gap-3">
+          <a href="/contact" class="btn-stripe min-h-[48px] px-8">Get in touch</a>
+          <a href="/about" class="btn-stripe min-h-[48px] px-6">Background &amp; experience</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
 </Layout>

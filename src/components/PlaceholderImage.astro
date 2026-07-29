@@ -1,0 +1,56 @@
+---
+/**
+ * PlaceholderImage
+ *
+ * A deliberate grey placeholder block for case studies, marking where a real
+ * visual still needs to go. Each one states WHAT to shoot/export and WHY it
+ * earns its place, so the slot can be filled without re-reading the brief.
+ *
+ * Replace with <ClickableImage src="..." alt="..." caption="..." /> when the
+ * real asset exists. Search the repo for "PlaceholderImage" to find what's left.
+ */
+interface Props {
+  /** Short name of the asset needed, e.g. "Before / after: login screen" */
+  title: string;
+  /** What this image has to prove to a hiring manager. */
+  why: string;
+  /** Aspect ratio for the block. Default 16/10. */
+  ratio?: string;
+  /** The caption to write once the real image is in. */
+  caption?: string;
+}
+
+const { title, why, ratio = '16/10', caption } = Astro.props;
+---
+
+<figure class="my-8">
+  <div
+    class="relative flex items-center justify-center border-2 border-dashed border-border/70 bg-muted/[0.06]"
+    style={`aspect-ratio: ${ratio};`}
+    role="img"
+    aria-label={`Placeholder: ${title}`}
+  >
+    <div class="pointer-events-none absolute inset-0 opacity-[0.35]" aria-hidden="true"
+      style="background-image: repeating-linear-gradient(45deg, hsl(var(--border) / 0.28) 0 1px, transparent 1px 11px);">
+    </div>
+
+    <div class="relative z-10 max-w-[46ch] px-6 py-8 text-center">
+      <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
+        Image needed
+      </div>
+      <div class="mt-3 text-sm font-semibold leading-snug text-foreground">
+        {title}
+      </div>
+      <p class="mt-2.5 text-xs leading-[1.7] text-muted-foreground">
+        {why}
+      </p>
+    </div>
+  </div>
+
+  {caption && (
+    <figcaption class="mt-3 text-xs leading-[1.7] text-muted-foreground/80">
+      <span class="font-mono uppercase tracking-[0.14em] text-muted-foreground/60">Draft caption — </span>
+      {caption}
+    </figcaption>
+  )}
+</figure>

@@ -1,124 +1,165 @@
 ---
-title: "Enterprise Design System"
-description: "Architected a reusable design system for a financial institution, giving distributed teams a shared UI foundation across web and mobile."
-ai_summary: "Architected a production design system for an enterprise financial institution, aligning teams on components, patterns, and documentation."
+title: "Enterprise Design System: Architecture & Adoption"
+description: "Architected the component library, token model, and governance that let distributed financial-services teams build on one foundation across web and Flutter."
+ai_summary: "Design system architecture for an enterprise financial institution: atomic component library, design token model, cross-platform adaptation for React and Flutter, documentation, and the governance model that drove adoption across distributed teams. Companion case study to the Banking Platform creative direction project."
 image: "/images/card 01 - design.webp"
-tags: ["Design Systems", "UI Design", "Documentation", "Financial Services"]
-use_for_questions: ["Design systems", "Enterprise UX", "Component libraries", "Documentation", "Governance", "Cross-team consistency"]
+tags: ["Design Systems", "Design Tokens", "Governance", "Documentation"]
+use_for_questions: ["Design systems", "Design tokens", "Component libraries", "Documentation", "Governance", "Cross-team adoption", "Atomic design"]
 published: true
-order: 7
+order: 2
 accent: "#1898B5"
 accentForeground: "#F1FAFC"
-outcome: "A production design system for a financial institution, giving distributed teams one shared UI foundation across web and mobile."
+outcome: "A production design system — components, tokens, and governance — that distributed teams built on across web and mobile."
 tldr:
-  problem: "Distributed teams at a financial institution were rebuilding the same UI differently on every project, with no shared foundation."
-  built: "A reusable design system: components, patterns, and documentation architected for both web and mobile delivery."
-  result: "A unified experience across platforms and faster implementation for every team that builds on it."
+  problem: "Distributed teams were rebuilding the same UI differently on every project, with no shared foundation and no way to agree on what 'correct' looked like."
+  built: "An atomic component library, a design token model that survived both React and Flutter, and the documentation and governance to make teams actually adopt it."
+  result: "One shared foundation across platforms, and a contribution model that kept the system alive after handover."
 stats:
   - label: "Role"
     value: "Senior UI Designer"
   - label: "Focus"
     value: "System Architecture"
   - label: "Output"
-    value: "Web & Mobile System"
-  - label: "Impact"
-    value: "Unified Experience"
+    value: "Web & Flutter System"
+  - label: "Scope"
+    value: "Distributed Teams"
 ---
 import ClickableImage from '../../components/ClickableImage.astro';
+import PlaceholderImage from '../../components/PlaceholderImage.astro';
 import FeatureCard from '../../components/FeatureCard.astro';
 import TechStack from '../../components/TechStack.astro';
 
 <div class="prose prose-lg max-w-none">
 
-## Project Overview
-**Problem:** a financial institution needed consistency across multiple digital products without slowing teams down.
+> **Companion case study:** this piece covers the system itself — architecture, tokens, documentation, and adoption.
+> The creative direction and product UI it supported are covered in
+> [Banking Platform: Creative Direction](/projects/financial-institution-digital-transformation).
 
-**Role:** senior UI designer focused on system architecture, components, and documentation.
+> **NDA note:** This is an NDA-protected project. The process described is real; visuals are representative.
 
-**What I delivered:** a reusable design system covering web and mobile patterns, documentation, and implementation guidance for distributed teams.
+## Context
 
-**Why it mattered:** the system had to support scale, speed, and consistency at the same time.
+Inside a financial institution running several digital products, every new project started by rebuilding the same things: buttons, form fields, error states, navigation. Each team solved them slightly differently. The cost showed up twice — once in duplicated effort, and again in a customer experience that felt assembled rather than designed.
 
-**Proof:** it gave teams a shared foundation for cross-platform product delivery in a high-trust context.
+The brief was a design system. The actual problem was that teams had no agreed definition of correct, and no cheap way to find one.
 
-> **NDA note:** This is an NDA-protected project. The processes described are real, but visuals are representative.
+## The Problem
 
-## The Challenge
+**No shared foundation.** Multiple products, each with its own interpretation of the brand. Nothing was reusable because nothing was authoritative.
 
-**Multiple Products**
-Different digital products with unique requirements needed a unified design language while maintaining flexibility for specific needs.
+**Two platforms, different physics.** The system had to serve React on web and Flutter on mobile. Flutter's widget model doesn't map cleanly onto web component conventions, so a naive shared library would break the moment it met real mobile code.
 
-**Platform Diversity**
-Web, mobile, and secure platforms each required specific adaptations while maintaining brand consistency and user experience.
+**Distributed teams.** Designers and engineers sat across departments and vendors. Anything requiring a meeting to interpret was going to fail.
 
-**Scale & Speed**
-Rapid development needs required efficient, scalable design solutions without compromising quality or consistency.
+**Speed pressure.** Delivery timelines assumed the system would accelerate teams immediately, not after a six-month adoption curve.
 
-**Team Distribution**
-Teams across different departments and functions needed a unified design system to ensure consistency and collaboration.
+## My Role
 
-## Role & Responsibilities
+I owned system architecture. I designed the component library and token model, wrote the documentation, defined the contribution and naming standards, and worked directly with engineers on both platforms to make sure the system held up in code rather than only in Figma.
 
-I led design system architecture and implementation, creating and maintaining component libraries while developing comprehensive documentation. I supported development teams throughout the process, collaborated with developers to ensure alignment, and established design standards and guidelines that would scale across the organization.
+{/* TODO(nasif): this section needs scale. Even approximate figures transform it:
+      - how many components in the library at handover?
+      - how many teams / products consumed it?
+      - how many tokens, or how many themes did it support?
+    "A design system" is a category. "62 components across 4 product teams" is a credential. */}
 
-## Process & Approach
+## Process
 
-### Foundation Building
+### 1. Foundation: tokens before components
 
-The foundation of our design system was built on proven methodologies and best practices. I implemented a scalable architecture using atomic design principles with atoms, molecules, and organisms to ensure modularity. I created a comprehensive set of design tokens for colors, typography, and spacing to enable theming across platforms. The base components I developed served as building blocks for more complex patterns. Throughout this phase, I established clear naming conventions, usage guidelines, and documentation requirements that would make the system accessible to teams across the organization.
+I started with design tokens rather than components, because tokens are what make a system survive two platforms. Colour, typography, spacing, and elevation were defined as named values with no platform assumptions baked in, then mapped separately into React and Flutter.
 
-<ClickableImage 
+Components came second, structured on atomic design — atoms, molecules, organisms — so teams could compose rather than request.
+
+<ClickableImage
   src="/images/card 03 - base components.webp"
-  alt="Design Process Phases"
-  caption="Key phases of the design process"
+  alt="Base component library showing atoms and molecules"
+  caption="The base layer: atoms and molecules built to compose, so teams could assemble patterns without new design work."
 />
 
-### Component Development
+<PlaceholderImage
+  title="The token architecture"
+  why="Show the actual token layers — primitives, semantic aliases, component-level tokens — and how one value resolves down through them. This is the most senior-signalling artifact in the case study and there's currently nothing visual proving you did it."
+  caption="Token architecture: primitives feed semantic aliases, which resolve into component tokens per platform."
+/>
 
-Our component development process focused on creating a versatile and maintainable library. I built an extensive library of reusable components that could be combined in countless ways. Each component was designed with responsive principles, creating flexible layouts that adapt seamlessly to different screen sizes. The system was built with scalability in mind, allowing it to be easily extended or modified as new requirements emerged without breaking existing implementations.
+### 2. Structure and naming
 
-<ClickableImage 
+Naming was the highest-leverage decision in the project. A distributed team can't ask clarifying questions at scale, so names had to be self-explanatory and predictable enough that engineers could guess correctly.
+
+<ClickableImage
   src="/images/card 02 - structure.webp"
-  alt="Design Process Phases"
-  caption="Key phases of the design process"
+  alt="Design system structure and hierarchy"
+  caption="System structure: how atoms compose into molecules and organisms, and where teams are expected to extend rather than fork."
 />
 
-### Platform Adaptation
+### 3. Platform adaptation
 
-We carefully adapted the system for different platforms while maintaining consistency. For mobile, I adapted designs to better suit the Flutter framework, accounting for its specific constraints and capabilities. I developed a notification framework to guide cross-functional teams in implementing consistent communication patterns across all touchpoints. Core aspects of the system were designed with flexibility in mind, allowing them to work effectively across different platforms while maintaining the essential brand characteristics.
+For mobile I reworked components against Flutter's constraints rather than forcing web patterns onto it. Where a pattern couldn't survive translation, I designed the platform-appropriate equivalent and documented the mapping, so a designer and a Flutter engineer would still agree they were looking at the same component.
 
-## Results & Impact
+I also built a notification framework covering how the products communicate state and errors — a repeated decision turned into a rule.
 
-**Unified Design**
-Achieved consistent brand experience across all digital platforms, resulting in improved brand recognition and trust.
+<PlaceholderImage
+  title="One component, both platforms"
+  why="Take a single non-trivial component — a form field with validation states, or a date picker — and show the React version beside the Flutter version, with the divergences annotated. This proves you understand implementation, which is exactly what separates a senior systems designer from a component librarian."
+  ratio="16/9"
+  caption="The same component in React and Flutter. Annotated where the platforms had to diverge, and why."
+/>
 
-**Development Speed**
-Faster implementation of new features through standardized components and clear documentation.
+### 4. Documentation and adoption
 
-**Quality Improvement**
-Reduction in design time through pre-built components and clear documentation.
+A system nobody adopts is a folder. I wrote usage guidelines, do/don't examples, and contribution rules, then ran feedback loops with the teams consuming it to find where the system was fighting them.
 
-**Team Efficiency**
-Significantly improved collaboration and reduced decision-making time across distributed teams.
+<PlaceholderImage
+  title="A documentation page as teams actually saw it"
+  why="Screenshot one real component's documentation — anatomy, states, usage rules, code reference. Documentation is claimed here but never shown, and it's a large part of what the role actually was."
+  caption="A component's documentation page: anatomy, states, usage rules, and platform notes."
+/>
+
+{/* TODO(nasif): adoption evidence is the weakest link. Anything here helps:
+      - how many teams adopted it, and over what period?
+      - did anyone contribute components back? (that's the strongest possible signal)
+      - any before/after on time-to-build a standard screen?
+      - did it outlive your involvement? */}
+
+## Key Decisions
+
+**Tokens first, components second.** Building components first would have hard-coded web assumptions that Flutter couldn't honour. Starting at the token layer meant one source of truth and two honest translations.
+
+**Documented divergence over forced parity.** Pretending React and Flutter can render identical components produces a system engineers quietly abandon. Naming the divergences kept the system trustworthy.
+
+**Guessable names over precise ones.** I optimised naming for what a distributed engineer would search for, not for taxonomic correctness.
+
+## Outcome
+
+**One foundation across platforms.** Web and mobile products built from the same token source and a shared component vocabulary, replacing per-project reinvention.
+
+**Faster standard work.** Teams composed common screens from existing components instead of designing and building them from scratch each time.
+
+**A system that could be extended.** Contribution rules and naming conventions meant teams could add to the system without forking it.
+
+{/* TODO(nasif): replace the three claims above with measured versions if you can
+    get anywhere near a number. As written they are still assertions, and a design
+    director will read them as unverifiable. Even "roughly halved the time to build
+    a standard form screen, per the front-end lead" is dramatically stronger. */}
 
 ## Technical Implementation
 
-<TechStack 
+<TechStack
   items={[
     { category: "Methodology", tools: ["Atomic Design", "Design Tokens"] },
     { category: "Tools", tools: ["Figma", "Documentation Platform"] },
     { category: "Frameworks", tools: ["React (Web)", "Flutter (Mobile)"] },
-    { category: "Deliverables", tools: ["Component Library", "Usage Guidelines"] }
+    { category: "Deliverables", tools: ["Component Library", "Usage Guidelines", "Contribution Model"] }
   ]}
 />
 
-## Key Learnings
+## Reflection
 
-- Early developer collaboration is crucial for successful implementation. I learned that involving engineers from the beginning prevents downstream issues and ensures the system actually works in code, not just in design files.
-- Systematic documentation proved as important as the design itself. Without clear guidelines and examples, even the best components won't be used correctly.
-- Regular feedback loops ensured system relevance and adoption. I maintained constant communication with teams using the system to understand pain points and opportunities for improvement.
-- The balance between flexibility and consistency is key. Too rigid and teams can't solve unique problems. Too flexible and consistency breaks down.
-- Insights into development frameworks are invaluable. Understanding React and Flutter constraints informed better design decisions from the start.
-- I also learned to leverage leading design systems and trends as a foundation, adapting proven patterns rather than reinventing everything from scratch.
+**What worked.** Involving engineers from the start. Every component I designed in isolation needed rework; every one I designed alongside the people implementing it shipped close to intact.
+
+**What I'd do differently.** I treated documentation as a phase rather than a product. It should have shipped alongside each component from day one, because undocumented components get used incorrectly and then get blamed.
+
+**What I learned about governance.** The hard part of a design system isn't the components — it's holding the line between flexible enough to solve real problems and consistent enough to be worth having. That balance is a standing negotiation, not a decision you make once.
 
 </div>
