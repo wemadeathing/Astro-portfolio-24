@@ -8,7 +8,7 @@
  */
 
 import { getCollection, getEntry } from 'astro:content';
-import { archiveProjects, getArchiveProject } from '../data/archive';
+import { getArchiveProject, visibleArchiveProjects } from '../data/archive';
 
 export type AgentPage = {
   markdown: string;
@@ -189,7 +189,7 @@ export async function buildProjectsIndexAgentMarkdown(): Promise<AgentPage> {
 
 /* ---------------------------- ARCHIVE INDEX ---------------------------- */
 export function buildArchiveIndexAgentMarkdown(): AgentPage {
-  const lines = archiveProjects
+  const lines = visibleArchiveProjects
     .map(
       (p) =>
         `### ${p.name}\n${p.description}\n- URL: /archive/${p.slug}/\n- Images: ${p.images.length}`

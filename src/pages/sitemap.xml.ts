@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import { getCollection } from 'astro:content';
 import { tagToSlug } from '../lib/tag-utils';
-import { archiveProjects } from '../data/archive';
+import { visibleArchiveProjects } from '../data/archive';
 
 export const prerender = true;
 
@@ -24,7 +24,6 @@ export const GET: APIRoute = async ({ site }) => {
     { url: '/contact/', lastmod: today, changefreq: 'monthly', priority: '0.7' },
     { url: '/blog/', lastmod: today, changefreq: 'weekly', priority: '0.8' },
     { url: '/resources/', lastmod: today, changefreq: 'weekly', priority: '0.7' },
-    { url: '/work-with-me/', lastmod: today, changefreq: 'monthly', priority: '0.7' },
     { url: '/tools/', lastmod: today, changefreq: 'monthly', priority: '0.5' },
     { url: '/archive/', lastmod: today, changefreq: 'yearly', priority: '0.4' },
   ];
@@ -69,7 +68,7 @@ export const GET: APIRoute = async ({ site }) => {
     }));
 
   // Archive gallery pages
-  const archivePages = archiveProjects.map((project) => ({
+  const archivePages = visibleArchiveProjects.map((project) => ({
     url: `/archive/${project.slug}/`,
     lastmod: today,
     changefreq: 'yearly',

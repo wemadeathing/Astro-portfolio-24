@@ -4,8 +4,8 @@ import Layout from '../layouts/Layout.astro';
 
 const expertise = [
   {
-    title: 'AI Products, MVPs, and AI-Accelerated Build Work',
-    description: `I take product ideas from framing to working software, combining product design, system thinking, and implementation. When a product is AI-powered, that means designing how the agents receive context, use their tools, and respond, in service of the person using it. Recent examples include Kota AI, a multi-agent SME platform, and RideNote, a solo-built iOS app live on the App Store.`,
+    title: 'AI Products, MVPs, and Agent Experience Design',
+    description: `I take product ideas from framing to working software, combining product design, systems thinking, and implementation. When a product is AI-powered, there's UX and there's AX: how the agents receive context, use their tools, and respond, in service of the person using it. Recent examples include Kota AI, a multi-agent SME platform, and RideNote, a solo-built iOS app live on the App Store.`,
   },
   {
     title: 'Product Systems and Cross-Platform UX',
@@ -13,7 +13,7 @@ const expertise = [
   },
   {
     title: 'High-Trust Digital Presence',
-    description: `I also design and build brand-led websites for businesses that need to look credible fast. That includes identity work, web design, and implementation for service businesses, founders, and small teams.`,
+    description: `I also design and build brand-led websites for businesses that need to look credible. That includes identity work, web design, and implementation for service businesses, founders, and small teams.`,
   },
 ];
 
@@ -23,11 +23,11 @@ const expertise = [
 const lookingFor = [
   {
     label: 'Role',
-    value: 'Senior or Lead Product Designer. Titles matter less than scope. I want ownership of a product area, not a queue of tickets.',
+    value: 'Senior or Lead Product Designer, though titles matter less to me than scope. I want ownership of a product area, and room to move across design, build, and AI, not a narrow lane.',
   },
   {
     label: 'Team',
-    value: 'A team that ships and measures. I work best close to engineering, with designers who argue about the work.',
+    value: 'A team that ships and measures, interested in innovation, that values progress and improving its systems.',
   },
   {
     label: 'Location',
@@ -35,7 +35,7 @@ const lookingFor = [
   },
   {
     label: 'Problems',
-    value: 'Complex products where structure matters: design systems, multi-platform journeys, AI-powered tools, anything that has to earn user trust.',
+    value: 'Products where structure and visual execution matter: design systems, multi-platform journeys, AI-powered tools, anything that has to earn user trust.',
   },
 ];
 
@@ -63,8 +63,7 @@ const skills = [
   {
     title: 'How I work',
     items: [
-      'End to end, no handoff gaps',
-      'AI-accelerated workflows',
+      'AI-native design and development workflows',
       'Close collaboration with devs',
       'Agile, Git-based delivery',
       'User research + usability testing',
@@ -93,7 +92,7 @@ const experience = [
     role: 'Product Designer / AI Builder',
     company: 'Independent',
     period: '2025 - Present',
-    description: `Project-based client work across brand identity, web design, and frontend development, managing projects end to end from brief through to delivery. Built custom websites and digital assets for clients across various industries. Also built Kota AI (a multi-agent business operations platform designed and built end-to-end) and RideNote (iOS App Store live, Android in testing), using AI-accelerated workflows to build complex products fast.`,
+    description: `Project-based client work across brand identity, web design, and frontend development, managing projects end to end from brief through to delivery. Built custom websites and digital assets for clients across various industries. Also built Kota AI (a multi-agent business operations platform designed and built end-to-end) and RideNote (iOS App Store live, Android in testing), designing for both the people using these products and the AI agents working inside them.`,
   },
   {
     role: 'Lead Designer',
@@ -123,7 +122,7 @@ const experience = [
 
 const agentMarkdown = `# About: Nasif Salaam
 
-> Senior product designer with 15+ years across enterprise design systems, banking platforms, brand, and AI product builds.
+> Multi-disciplinary designer and builder with 15+ years across brand, product design, systems, and AI product builds, not a narrow specialist. AI means designing for two experiences now, UX and AX, the human one and the agent one.
 
 ## Availability
 
@@ -155,8 +154,8 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
 ---
 
 <Layout
-  title="About | Senior Product Designer, Open to Work"
-  description="Senior product designer with 15+ years across enterprise design systems, banking platforms, and AI product builds. Open to senior product design roles, remote or Cape Town."
+  title="About | Multi-Disciplinary Designer, Open to Work"
+  description="Multi-disciplinary designer and builder with 15+ years across brand, product design, systems, and AI product builds. Designing for UX and AX, the human experience and the agent experience. Open to senior product design roles, remote or Cape Town."
   agentMarkdown={agentMarkdown}
   agentPathLabel="~/nasifsalaam / about.md"
 >
@@ -167,9 +166,9 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
       <div class="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1.2fr)_280px] lg:gap-20">
         <div class="scroll-reveal">
           <div class="section-kicker">About</div>
-          <h1 class="type-h1 mt-4">Product Designer<br />/ AI Builder</h1>
+          <h1 class="type-h1 mt-4">Multi-Disciplinary Designer<br />/ AI Builder</h1>
           <p class="mt-6 max-w-[60ch] text-sm leading-[1.8] text-muted-foreground/88">
-            I help teams and founders turn complexity into clear digital products. My background spans enterprise design systems, banking transformation, client websites, and solo-built AI products, which means I can move between strategy, interface, and implementation without losing the thread. And when a product is powered by AI, building it well for people means designing how the agents receive context, use their tools, and respond, not just the human interface.
+            I work across disciplines: brand, product design, systems, and code, rather than staying in one lane. That range spans enterprise design systems and banking transformation through to solo-built AI products. And when a product is powered by AI, there's no longer just UX to design for. There's AX too: how the agents receive context, use their tools, and respond. As more of what ships is AI-generated and starts to look the same, holding onto the human experience is the part that actually takes judgment.
           </p>
           {/* Availability: leads with employment, keeps the freelance door open */}
           <div class="mt-7 border border-border/80 p-5 max-w-[60ch]">
@@ -199,7 +198,7 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
           </div>
           <div class="border-b border-border/60 py-5">
             <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70 mb-1.5">Best Fit</div>
-            <div class="text-sm leading-[1.8] text-muted-foreground/88">Design systems, complex multi-platform products, AI product design, MVP delivery.</div>
+            <div class="text-sm leading-[1.8] text-muted-foreground/88">Teams that need one person across design, build, and AI, thinking about the human experience and the agent experience both. Design systems and MVP delivery both fit.</div>
           </div>
           <div class="py-5">
             <div class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70 mb-1.5">Working Style</div>
@@ -360,7 +359,9 @@ ${experience.map((e) => `### ${e.role}, ${e.company} (${e.period})\n${e.descript
         <div class="section-kicker">Next step</div>
         <h2 class="type-h2 mt-4">Let's talk.</h2>
         <p class="mt-4 text-sm leading-[1.8] text-muted-foreground/88">
-          If you're hiring for a senior product design role, or you need someone who can move between product design, systems, and implementation without losing clarity, I'd like to hear from you.
+          If you need someone who can move between product design, systems, and
+          implementation without losing clarity, or you're hiring for a senior
+          product design role, I'd like to hear from you.
         </p>
         <div class="mt-7 flex flex-wrap gap-3">
           <a href="/contact" class="btn-stripe">Let's Connect</a>

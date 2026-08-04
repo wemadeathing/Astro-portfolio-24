@@ -1,0 +1,189 @@
+---
+const screens = [
+  {
+    src: '/images/work/ridenote/ridenote-v2-insights.webp',
+    title: 'Insights',
+    caption: 'Average Grip, Feel, and Control, and the best-performing setup per bike, surfaced automatically.',
+  },
+  {
+    src: '/images/work/ridenote/ridenote-calc-entry.webp',
+    title: 'Pressure calculator',
+    caption: 'A starting point from rider weight, discipline, and bike type, one tap from the bike itself.',
+  },
+  {
+    src: '/images/work/ridenote/ridenote-v2-darkmode.webp',
+    title: 'Light and dark appearance',
+    caption: 'System, light, or dark, matched to the rest of iOS instead of one fixed theme.',
+  },
+];
+---
+
+<section class="not-prose rn-v2-screens my-12" aria-labelledby="rn-v2-screens-title">
+  <div class="rn-v2-screens__header">
+    <div>
+      <div class="rn-v2-screens__kicker">V2, shaped by real feedback</div>
+      <h3 id="rn-v2-screens-title">Three of the additions</h3>
+    </div>
+    <p>None of it storyboarded before real riders hit real friction.</p>
+  </div>
+
+  <div class="rn-v2-screens__grid">
+    {screens.map((screen, index) => (
+      <figure class="rn-v2-screens__panel">
+        <button
+          type="button"
+          class="rn-v2-screens__phone"
+          data-image-src={screen.src}
+          data-image-alt={`${screen.title}: ${screen.caption}`}
+          data-gallery="ridenote-v2-screens"
+          aria-label={`Open ${screen.title}`}
+        >
+          <img
+            src={screen.src}
+            alt={`${screen.title}: ${screen.caption}`}
+            width="1170"
+            height="2532"
+            loading={index === 0 ? 'eager' : 'lazy'}
+            decoding="async"
+          />
+        </button>
+        <figcaption>
+          <strong>{screen.title}</strong>
+          <em>{screen.caption}</em>
+        </figcaption>
+      </figure>
+    ))}
+  </div>
+</section>
+
+<style>
+  .rn-v2-screens {
+    margin-inline: 0;
+    border-block: 1px solid hsl(var(--border) / 0.72);
+    padding-block: clamp(1.5rem, 4vw, 2.75rem);
+  }
+
+  .rn-v2-screens__header {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(18rem, 0.8fr);
+    gap: clamp(1rem, 4vw, 3rem);
+    align-items: end;
+    margin-bottom: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .rn-v2-screens__kicker {
+    color: hsl(var(--muted-foreground));
+    font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .rn-v2-screens h3 {
+    margin: 0.35rem 0 0;
+    color: hsl(var(--foreground));
+    font-size: clamp(1.45rem, 2.5vw, 2rem);
+    font-weight: 600;
+    line-height: 1.12;
+  }
+
+  .rn-v2-screens__header p {
+    margin: 0;
+    max-width: 36rem;
+    color: hsl(var(--muted-foreground));
+    font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+    line-height: 1.65;
+  }
+
+  .rn-v2-screens__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .rn-v2-screens__panel {
+    margin: 0;
+  }
+
+  /* Phone frame: a lightweight bezel so raw screenshots read as a device,
+     not a bare rectangle floating in the layout. */
+  .rn-v2-screens__phone {
+    position: relative;
+    display: block;
+    width: 100%;
+    cursor: zoom-in;
+    border: 1px solid hsl(var(--border) / 0.75);
+    border-radius: 1.6rem;
+    background: linear-gradient(155deg, hsl(0 0% 15%), hsl(0 0% 6%));
+    padding: 0.4rem;
+  }
+
+  .rn-v2-screens__phone::after {
+    content: "";
+    position: absolute;
+    top: 0.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30%;
+    height: 0.85rem;
+    background: #000;
+    border-radius: 999px;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .rn-v2-screens__phone img {
+    display: block;
+    width: 100%;
+    height: auto;
+    /* Top corners round to match the bezel; bottom stays square. Screenshot
+       content sits flush with the bottom edge on some screens, so rounding
+       there risks clipping real UI instead of empty space. */
+    border-radius: 1.25rem 1.25rem 0.3rem 0.3rem;
+    transition: transform 220ms ease, filter 220ms ease;
+  }
+
+  .rn-v2-screens__phone:hover img {
+    filter: contrast(1.02);
+    transform: scale(1.01);
+  }
+
+  .rn-v2-screens figcaption {
+    margin-top: 0.75rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.88rem;
+    line-height: 1.5;
+    text-align: left;
+  }
+
+  .rn-v2-screens figcaption strong,
+  .rn-v2-screens figcaption em {
+    display: block;
+  }
+
+  .rn-v2-screens figcaption strong {
+    color: hsl(var(--foreground));
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  .rn-v2-screens figcaption em {
+    margin-top: 0.12rem;
+    font-style: normal;
+  }
+
+  @media (max-width: 800px) {
+    .rn-v2-screens__header {
+      grid-template-columns: 1fr;
+      gap: 0.8rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .rn-v2-screens__grid {
+      grid-template-columns: 1fr;
+      max-width: 20rem;
+      margin-inline: auto;
+    }
+  }
+</style>

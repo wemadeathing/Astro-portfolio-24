@@ -1,0 +1,15 @@
+flowchart TD
+    A[User types a plain request] --> B{Classify and route the request}
+    B -->|Quick action| C[Handle it right away]
+    B -->|Multi-step task| D[Plan and research the task]
+    B -->|Compliance or tax question| E[Check compliance knowledge]
+    C --> F[Pull real numbers from records]
+    D --> F
+    E --> F
+    F --> G[Prepare a reviewable draft]
+    G --> H{Does this touch real data?}
+    H -->|Yes, sensitive| I[Hold for your approval]
+    I -->|Needs changes| G
+    I -->|Approved| J[Complete the action]
+    H -->|No, just information| J
+    J --> K[Remember it for next time]

@@ -1,0 +1,258 @@
+---
+const screens = [
+  {
+    src: '/images/work/kota/kota-ask-kota-chat.png',
+    title: 'Chat',
+    caption: 'A focused surface for asking questions, uploading files, and assigning clear business tasks to Kota.',
+    height: 1608,
+  },
+  {
+    src: '/images/work/kota/kota-customer-list.png',
+    title: 'Customers',
+    caption: 'Clients, stage, deal count, and value stay readable at a glance so relationship work is easy to track.',
+    height: 1608,
+  },
+  {
+    src: '/images/work/kota/kota-finance-overview.png',
+    title: 'Finance overview',
+    caption: 'Cash position, overdue amounts, cash-flow trends, and finance tabs sit together so money movement is visible before the user creates documents.',
+    height: 1608,
+  },
+  {
+    src: '/images/work/kota/kota-products-services.png',
+    title: 'Products and services',
+    caption: 'Services, rates, descriptions, and pricing units are kept as reusable building blocks for invoices, quotes, estimates, and proposals.',
+    height: 1608,
+  },
+  {
+    src: '/images/work/kota/kota-tasks-surface.png',
+    title: 'Tasks',
+    caption: 'Priorities, due dates, and status are organised in one operational list for focused daily follow-through.',
+    height: 1726,
+  },
+  {
+    src: '/images/work/kota/kota-tips-panel.png',
+    title: 'Tips and ideas',
+    caption: 'A lightweight guidance panel can be opened at any time without taking the user away from their current work.',
+    height: 1726,
+  },
+  {
+    src: '/images/work/kota/kota-ai-create-service.png',
+    title: 'Generative service creation',
+    caption: 'Kota turns a plain-language request into an editable service form, leaving the final details and save action with the user.',
+    height: 1726,
+  },
+  {
+    src: '/images/work/kota/kota-settings-what-kota-knows.png',
+    title: 'What Kota knows',
+    caption: 'The settings surface makes the business context available to the agents visible, reviewable, and easy to complete.',
+    height: 1726,
+  },
+];
+
+const [featured, ...supportingScreens] = screens;
+---
+
+<section class="not-prose kota-core-showcase my-12" aria-labelledby="kota-core-showcase-title">
+  <div class="kota-core-showcase__inner">
+    <div class="kota-core-showcase__header">
+      <div>
+        <div class="kota-core-showcase__kicker">Core product surfaces</div>
+        <h3 id="kota-core-showcase-title">Interface surfaces</h3>
+      </div>
+      <p>
+        The places users return to: chat, customers, finance, services, tasks, practical guidance, and the business
+        context Kota uses to do useful work.
+      </p>
+    </div>
+
+    <figure class="kota-core-showcase__feature">
+      <button
+        type="button"
+        class="kota-core-showcase__image-button"
+        data-image-src={featured.src}
+        data-image-alt={`${featured.title}: ${featured.caption}`}
+        data-gallery="kota-core-product-screens"
+        aria-label={`Open ${featured.title}`}
+      >
+        <img
+          src={featured.src}
+          alt={`${featured.title}: ${featured.caption}`}
+          width="2318"
+          height={featured.height ?? 1628}
+          loading="eager"
+          decoding="async"
+        />
+      </button>
+      <figcaption>
+        <span>01</span>
+        <div>
+          <strong>{featured.title}</strong>
+          <em>{featured.caption}</em>
+        </div>
+      </figcaption>
+    </figure>
+
+    <div class="kota-core-showcase__grid">
+      {supportingScreens.map((screen, index) => (
+        <figure class="kota-core-showcase__panel">
+          <button
+            type="button"
+            class="kota-core-showcase__image-button"
+            data-image-src={screen.src}
+            data-image-alt={`${screen.title}: ${screen.caption}`}
+            data-gallery="kota-core-product-screens"
+            aria-label={`Open ${screen.title}`}
+          >
+            <img
+              src={screen.src}
+              alt={`${screen.title}: ${screen.caption}`}
+              width="2318"
+              height={screen.height ?? 1628}
+              loading="lazy"
+              decoding="async"
+            />
+          </button>
+          <figcaption>
+            <span>{String(index + 2).padStart(2, '0')}</span>
+            <div>
+              <strong>{screen.title}</strong>
+              <em>{screen.caption}</em>
+            </div>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .kota-core-showcase {
+    margin-inline: 0;
+    border-block: 1px solid hsl(var(--border) / 0.72);
+    padding-block: clamp(1.5rem, 4vw, 2.75rem);
+  }
+
+  .kota-core-showcase__inner {
+    width: 100%;
+  }
+
+  .kota-core-showcase__header {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(18rem, 0.8fr);
+    gap: clamp(1rem, 4vw, 3rem);
+    align-items: end;
+    margin-bottom: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .kota-core-showcase__kicker {
+    color: hsl(var(--muted-foreground));
+    font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .kota-core-showcase h3 {
+    margin: 0.35rem 0 0;
+    color: hsl(var(--foreground));
+    font-size: clamp(1.45rem, 2.5vw, 2rem);
+    font-weight: 600;
+    line-height: 1.12;
+  }
+
+  .kota-core-showcase__header p {
+    margin: 0;
+    max-width: 36rem;
+    color: hsl(var(--muted-foreground));
+    font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+    line-height: 1.65;
+  }
+
+  .kota-core-showcase__feature,
+  .kota-core-showcase__panel {
+    margin: 0;
+  }
+
+  .kota-core-showcase__feature {
+    margin-bottom: clamp(1rem, 3vw, 1.5rem);
+  }
+
+  .kota-core-showcase__grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1rem, 2.8vw, 1.5rem);
+  }
+
+  .kota-core-showcase__image-button {
+    display: block;
+    width: 100%;
+    cursor: zoom-in;
+    overflow: hidden;
+    border: 1px solid hsl(var(--border) / 0.82);
+    background: hsl(var(--card) / 0.5);
+    padding: 0;
+    text-align: left;
+  }
+
+  .kota-core-showcase__feature .kota-core-showcase__image-button {
+    box-shadow: 0 26px 80px hsl(200 15% 2% / 0.24);
+  }
+
+  .kota-core-showcase__image-button img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: transform 220ms ease, filter 220ms ease;
+  }
+
+  .kota-core-showcase__image-button:hover img {
+    filter: contrast(1.02);
+    transform: scale(1.01);
+  }
+
+  .kota-core-showcase figcaption {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.15rem 0.75rem;
+    margin-top: 0.75rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.92rem;
+    line-height: 1.55;
+    text-align: left;
+  }
+
+  .kota-core-showcase figcaption span {
+    color: hsl(var(--primary));
+    font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    line-height: 1.8;
+  }
+
+  .kota-core-showcase figcaption strong,
+  .kota-core-showcase figcaption em {
+    display: block;
+  }
+
+  .kota-core-showcase figcaption strong {
+    color: hsl(var(--foreground));
+    font-weight: 600;
+  }
+
+  .kota-core-showcase figcaption em {
+    margin-top: 0.12rem;
+    font-style: normal;
+  }
+
+  @media (max-width: 800px) {
+    .kota-core-showcase__header,
+    .kota-core-showcase__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .kota-core-showcase__header {
+      gap: 0.8rem;
+    }
+  }
+</style>

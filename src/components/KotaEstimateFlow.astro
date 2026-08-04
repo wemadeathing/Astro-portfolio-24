@@ -1,0 +1,193 @@
+---
+const steps = [
+  {
+    src: '/images/work/kota/kota-estimate-ai-prompt.png',
+    title: 'Plain-language request',
+    caption: 'The user asks Kota to create an estimate for John Do using an existing AstroJS website service.',
+  },
+  {
+    src: '/images/work/kota/kota-estimate-ai-response.png',
+    title: 'Structured response',
+    caption: 'Kota confirms what it understood and returns a clear next action to review the estimate draft.',
+  },
+  {
+    src: '/images/work/kota/kota-estimate-ai-draft.png',
+    title: 'Reviewable draft',
+    caption: 'The finance editor opens with the customer, estimate number, dates, and one catalog item prefilled.',
+  },
+  {
+    src: '/images/work/kota/kota-estimate-ai-preview.png',
+    title: 'Customer preview',
+    caption: 'The user can inspect the customer-facing estimate before downloading, saving, or marking it as sent.',
+  },
+];
+---
+
+<section class="not-prose kota-estimate-flow my-12" aria-labelledby="kota-estimate-flow-title">
+  <div class="kota-estimate-flow__header">
+    <div>
+      <div class="kota-estimate-flow__kicker">AI estimate flow</div>
+      <h3 id="kota-estimate-flow-title">Create an estimate with AI</h3>
+    </div>
+    <p>
+      This is the core interaction pattern: plain language becomes a finance document, but every money-moving step
+      still lands in a reviewable product surface.
+    </p>
+  </div>
+
+  <div class="kota-estimate-flow__steps">
+    {steps.map((step, index) => (
+      <figure class="kota-estimate-flow__step">
+        <figcaption>
+          <span>{String(index + 1).padStart(2, '0')}</span>
+          <div>
+            <strong>{step.title}</strong>
+            <em>{step.caption}</em>
+          </div>
+        </figcaption>
+        <button
+          type="button"
+          class="kota-estimate-flow__image-button"
+          data-image-src={step.src}
+          data-image-alt={`${step.title}: ${step.caption}`}
+          data-gallery="kota-estimate-ai-flow"
+          aria-label={`Open ${step.title}`}
+        >
+          <img
+            src={step.src}
+            alt={`${step.title}: ${step.caption}`}
+            width="2318"
+            height="1530"
+            loading={index === 0 ? 'eager' : 'lazy'}
+            decoding="async"
+          />
+        </button>
+      </figure>
+    ))}
+  </div>
+</section>
+
+<style>
+  .kota-estimate-flow {
+    border-block: 1px solid hsl(var(--border) / 0.72);
+    padding-block: clamp(1.5rem, 4vw, 2.75rem);
+  }
+
+  .kota-estimate-flow__header {
+    display: block;
+    margin-bottom: clamp(1.25rem, 3vw, 2rem);
+    max-width: 43rem;
+  }
+
+  .kota-estimate-flow__kicker {
+    color: hsl(var(--muted-foreground));
+    font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .kota-estimate-flow h3 {
+    margin: 0.35rem 0 0;
+    color: hsl(var(--foreground));
+    font-size: clamp(1.45rem, 2.5vw, 2rem);
+    font-weight: 600;
+    line-height: 1.12;
+  }
+
+  .kota-estimate-flow__header p {
+    margin: 0.85rem 0 0;
+    max-width: 40rem;
+    color: hsl(var(--muted-foreground));
+    font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+    line-height: 1.65;
+  }
+
+  .kota-estimate-flow__steps {
+    display: grid;
+    gap: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .kota-estimate-flow__step {
+    display: grid;
+    grid-template-columns: minmax(10rem, 0.34fr) minmax(0, 1fr);
+    gap: clamp(1rem, 3vw, 1.5rem);
+    align-items: start;
+    margin: 0;
+    padding-top: clamp(1rem, 2vw, 1.25rem);
+    border-top: 1px solid hsl(var(--border) / 0.58);
+  }
+
+  .kota-estimate-flow__step:first-child {
+    border-top: 0;
+    padding-top: 0;
+  }
+
+  .kota-estimate-flow figcaption {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.15rem 0.75rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.92rem;
+    line-height: 1.55;
+    text-align: left;
+    justify-items: start;
+  }
+
+  .kota-estimate-flow figcaption span {
+    color: hsl(var(--primary));
+    font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    line-height: 1.8;
+  }
+
+  .kota-estimate-flow figcaption strong,
+  .kota-estimate-flow figcaption em {
+    display: block;
+  }
+
+  .kota-estimate-flow figcaption strong {
+    color: hsl(var(--foreground));
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  .kota-estimate-flow figcaption em {
+    margin-top: 0.12rem;
+    font-style: normal;
+  }
+
+  .kota-estimate-flow__image-button {
+    display: block;
+    width: 100%;
+    cursor: zoom-in;
+    overflow: hidden;
+    border: 1px solid hsl(var(--border) / 0.82);
+    background: hsl(var(--card) / 0.5);
+    padding: 0;
+    text-align: left;
+  }
+
+  .kota-estimate-flow__image-button img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: transform 220ms ease, filter 220ms ease;
+  }
+
+  .kota-estimate-flow__image-button:hover img {
+    filter: contrast(1.02);
+    transform: scale(1.01);
+  }
+
+  @media (max-width: 800px) {
+    .kota-estimate-flow__step {
+      grid-template-columns: 1fr;
+    }
+
+    .kota-estimate-flow__step {
+      gap: 0.8rem;
+    }
+  }
+</style>

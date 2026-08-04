@@ -108,16 +108,17 @@ ${project.body}`;
 >
   <article class="min-h-screen bg-background" style={`--case-accent: ${accent}; --case-fg: ${accentFg};`}>
 
-    <!-- Hero: drenched in the client's color -->
-    <section class="case-hero">
+    <!-- Hero: drenched in the client's color. Negative margin cancels the
+         page's default top padding so the color block sits flush under the nav. -->
+    <section class="case-hero -mt-8 sm:-mt-10">
       <div class={`container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10 ${showFeaturedImage && project.data.image ? 'case-hero-pad' : 'pb-14 sm:pb-20'}`}>
-        <a href="/projects" class="case-back font-mono text-xs uppercase tracking-[0.16em]">
+        <a href="/projects" class="case-back font-mono text-xs uppercase tracking-[0.12em]">
           &#8592; All work
         </a>
-        <div class="case-kicker mt-10 font-mono text-xs uppercase tracking-[0.2em]">
+        <div class="case-kicker mt-10 font-mono text-xs uppercase tracking-[0.12em]">
           Case Study{project.data.tags?.[0] ? ` / ${project.data.tags[0]}` : ''}
         </div>
-        <h1 class="case-title mt-5 max-w-[16ch]">
+        <h1 class="case-title mt-5 max-w-[32ch]">
           {project.data.title.split(' - ')[0]}
         </h1>
         <p class="case-outcome mt-6 max-w-[48ch] text-base sm:text-lg leading-[1.7]">
@@ -161,7 +162,7 @@ ${project.body}`;
           {stats.slice(0, 4).map((stat, i) => (
             <div class={`py-5 sm:py-6 ${i > 0 ? 'sm:border-l sm:border-border/70 sm:pl-6' : ''} ${i % 2 === 1 ? 'border-l border-border/70 pl-5 sm:pl-6' : ''}`}>
               <div class="text-lg font-semibold text-foreground">{stat.value}</div>
-              <div class="mt-1 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">{stat.label}</div>
+              <div class="mt-1 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">{stat.label}</div>
             </div>
           ))}
         </div>
@@ -173,16 +174,16 @@ ${project.body}`;
       <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8 mt-12 sm:mt-16">
         <div class="grid gap-8 lg:grid-cols-3 lg:gap-10">
           <div>
-            <div class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">The problem</div>
-            <p class="mt-3 text-sm leading-[1.8] text-foreground/85">{tldr.problem}</p>
+            <div class="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">The problem</div>
+            <p class="mt-3 text-base leading-[1.75] text-foreground/85">{tldr.problem}</p>
           </div>
           <div class="border-t border-border/60 pt-6 lg:border-t-0 lg:border-l lg:pl-10 lg:pt-0">
-            <div class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">What I built</div>
-            <p class="mt-3 text-sm leading-[1.8] text-foreground/85">{tldr.built}</p>
+            <div class="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">What I built</div>
+            <p class="mt-3 text-base leading-[1.75] text-foreground/85">{tldr.built}</p>
           </div>
           <div class="border-t border-border/60 pt-6 lg:border-t-0 lg:border-l lg:pl-10 lg:pt-0">
-            <div class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">The result</div>
-            <p class="mt-3 text-sm leading-[1.8] text-foreground/85">{tldr.result}</p>
+            <div class="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">The result</div>
+            <p class="mt-3 text-base leading-[1.75] text-foreground/85">{tldr.result}</p>
           </div>
         </div>
       </div>
@@ -219,7 +220,7 @@ ${project.body}`;
       <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8 mt-4 pb-16 sm:pb-20">
         <a href={`/projects/${nextProject.slug}`} class="group grid items-center gap-6 py-8 sm:grid-cols-[1fr_260px]">
           <div>
-            <div class="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">Next project</div>
+            <div class="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">Next project</div>
             <div class="mt-3 text-xl sm:text-2xl font-semibold text-foreground transition-colors group-hover:text-primary">
               {nextProject.data.title.split(' - ')[0]}
               <span aria-hidden="true" class="ml-2 inline-block transition-transform group-hover:translate-x-1">&#8594;</span>
@@ -269,11 +270,23 @@ ${project.body}`;
 
   .case-title {
     color: var(--case-fg);
-    font-size: clamp(1.75rem, 3.6vw, 2.5rem);
+    font-size: 1.75rem;
     line-height: 1.15;
     font-weight: 650;
-    letter-spacing: -0.02em;
+    letter-spacing: 0;
     text-wrap: balance;
+  }
+
+  @media (min-width: 640px) {
+    .case-title {
+      font-size: 2.125rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .case-title {
+      font-size: 2.5rem;
+    }
   }
 
   .case-outcome {
@@ -290,7 +303,7 @@ ${project.body}`;
     font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
     font-size: 0.75rem;
     text-transform: uppercase;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.1em;
     transition: background-color 150ms ease, color 150ms ease, border-color 150ms ease;
   }
 
@@ -378,7 +391,37 @@ ${project.body}`;
   }
 
   .prose blockquote {
-    @apply my-10 border-y border-border/80 py-5 italic text-muted-foreground;
+    @apply my-10 py-3 pl-6 italic text-foreground/85;
+    border-left: 3px solid var(--case-accent);
+    background: color-mix(in srgb, var(--case-accent) 7%, transparent);
+  }
+
+  .prose blockquote p {
+    @apply mb-0;
+  }
+
+  .prose blockquote strong {
+    @apply not-italic text-foreground;
+  }
+
+  .prose table {
+    @apply my-10 block w-full overflow-x-auto border-collapse text-sm;
+  }
+
+  .prose th {
+    @apply border border-border/60 bg-muted/[0.04] px-4 py-3 text-left font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground whitespace-nowrap;
+  }
+
+  .prose td {
+    @apply border border-border/60 px-4 py-3 align-top text-muted-foreground;
+  }
+
+  .prose td:first-child {
+    @apply font-medium text-foreground whitespace-nowrap;
+  }
+
+  .prose table strong {
+    @apply text-foreground;
   }
 
   .prose pre {
@@ -436,4 +479,3 @@ ${project.body}`;
   }
 
 </style>
-

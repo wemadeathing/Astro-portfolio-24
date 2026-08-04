@@ -1,0 +1,68 @@
+---
+/**
+ * Inlines a pre-rendered diagram from src/diagrams/<name>.svg.
+ *
+ * The SVGs are generated once by `node scripts/generate-diagrams.mjs` from the
+ * matching .mmd source, so pages ship no Mermaid runtime and nothing renders
+ * client-side. Colours are CSS variables, so one file follows light and dark.
+ *
+ * Edit the .mmd file, re-run the script, commit both.
+ */
+interface Props {
+  /** Basename of the diagram in src/diagrams, without extension. */
+  name: string;
+  caption?: string;
+  /** Screen-reader description of what the diagram shows. */
+  label: string;
+}
+
+const { name, caption, label } = Astro.props;
+
+const diagrams = import.meta.glob<string>('../diagrams/*.svg', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+});
+
+const key = `../diagrams/${name}.svg`;
+const svg = diagrams[key];
+
+if (!svg) {
+  throw new Error(
+    `Diagram "${name}" not found. Expected src/diagrams/${name}.svg. ` +
+      `Available: ${Object.keys(diagrams).join(', ') || 'none'}. ` +
+      `Run: node scripts/generate-diagrams.mjs`
+  );
+}
+---
+
+<figure class="not-prose my-14">
+  <div class="diagram-frame border border-border/60 bg-muted/[0.04] px-4 py-8 sm:px-8">
+    <div class="diagram-scroll" role="img" aria-label={label} set:html={svg} />
+  </div>
+  {caption && (
+    <figcaption class="mt-4 text-center text-sm italic text-muted-foreground">
+      {caption}
+    </figcaption>
+  )}
+</figure>
+
+<style>
+  .diagram-scroll {
+    overflow-x: auto;
+  }
+
+  /* Every generated SVG carries its own true width/height (1 source unit = 1px,
+     see generate-diagrams.mjs), so diagrams of different shapes stay at the
+     same visual scale as each other: no per-diagram cap here, that would
+     shrink some diagrams more than others and reintroduce a scale mismatch.
+     Render at native size; only shrink below it when the viewport itself is
+     narrower than the diagram (handled uniformly by max-width: 100%). */
+  .diagram-scroll :global(svg) {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+</style>

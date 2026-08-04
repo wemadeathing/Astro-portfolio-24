@@ -12,6 +12,7 @@ export interface ArchiveProject {
   slug: string;
   name: string;
   description: string;
+  hidden?: boolean;
   width: number;
   height: number;
   images: string[];
@@ -71,6 +72,7 @@ export const archiveProjects: ArchiveProject[] = [
   {
     slug: 'bold-signs',
     name: 'Bold Signs',
+    hidden: true,
     description:
       'Website for a Cape Town signage studio: a bold, gallery-driven site that matches the craft of the work it sells.',
     width: 1440,
@@ -83,6 +85,7 @@ export const archiveProjects: ArchiveProject[] = [
   {
     slug: 'ecos-consulting',
     name: 'Ecos Consulting',
+    hidden: true,
     description:
       'Web presence for a Cape Town environmental consulting firm: a fast, credible B2B site the client updates themselves.',
     width: 1280,
@@ -95,8 +98,9 @@ export const archiveProjects: ArchiveProject[] = [
   {
     slug: 'brand-marks',
     name: 'Brand Marks',
+    hidden: true,
     description:
-      'A selection of brand marks from fifteen years of identity work, across hospitality, healthcare, technology, retail, and more.',
+      'A collection of brand marks from years of identity work, across hospitality, healthcare, technology, retail, and more.',
     width: 1440,
     height: 1020,
     images: [
@@ -120,6 +124,8 @@ export const archiveProjects: ArchiveProject[] = [
     ],
   },
 ];
+
+export const visibleArchiveProjects = archiveProjects.filter((p) => !p.hidden);
 
 export const getArchiveProject = (slug: string): ArchiveProject | undefined =>
   archiveProjects.find((p) => p.slug === slug);

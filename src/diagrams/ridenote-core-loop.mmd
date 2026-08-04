@@ -1,0 +1,7 @@
+flowchart TD
+    A[Set a baseline once, per bike] --> B[Adjust from baseline for a specific ride]
+    B --> C[Ride]
+    C --> D[Log a ride note: what changed, plus Grip, Feel, and Control ratings]
+    D --> E[Ride note saved as history against that baseline]
+    E --> F[Next time, check history before adjusting again]
+    F --> B

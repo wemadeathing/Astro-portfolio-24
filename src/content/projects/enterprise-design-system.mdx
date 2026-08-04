@@ -6,7 +6,7 @@ image: "/images/card 01 - design.webp"
 tags: ["Design Systems", "Design Tokens", "Governance", "Documentation"]
 use_for_questions: ["Design systems", "Design tokens", "Component libraries", "Documentation", "Governance", "Cross-team adoption", "Atomic design"]
 published: true
-order: 2
+order: 5
 accent: "#1898B5"
 accentForeground: "#F1FAFC"
 outcome: "A production design system: components, tokens, and governance, that distributed teams built on across web and mobile."
@@ -25,7 +25,6 @@ stats:
     value: "Distributed Teams"
 ---
 import ClickableImage from '../../components/ClickableImage.astro';
-import PlaceholderImage from '../../components/PlaceholderImage.astro';
 import FeatureCard from '../../components/FeatureCard.astro';
 import TechStack from '../../components/TechStack.astro';
 
@@ -55,12 +54,6 @@ The brief was a design system. The actual problem was that teams had no agreed d
 
 I owned system architecture. I designed the component library and token model, wrote the documentation, defined the contribution and naming standards, and worked directly with engineers on both platforms to make sure the system held up in code rather than only in Figma.
 
-{/* TODO(nasif): this section needs scale. Even approximate figures transform it:
-      - how many components in the library at handover?
-      - how many teams / products consumed it?
-      - how many tokens, or how many themes did it support?
-    "A design system" is a category. "62 components across 4 product teams" is a credential. */}
-
 ## Process
 
 ### 1. Foundation: tokens before components
@@ -73,12 +66,6 @@ Components came second, structured on atomic design: atoms, molecules, organisms
   src="/images/card 03 - base components.webp"
   alt="Base component library showing atoms and molecules"
   caption="The base layer: atoms and molecules built to compose, so teams could assemble patterns without new design work."
-/>
-
-<PlaceholderImage
-  title="The token architecture"
-  why="Show the actual token layers: primitives, semantic aliases, component-level tokens, and how one value resolves down through them. This is the most senior-signalling artifact in the case study and there's currently nothing visual proving you did it."
-  caption="Token architecture: primitives feed semantic aliases, which resolve into component tokens per platform."
 />
 
 ### 2. Structure and naming
@@ -97,28 +84,9 @@ For mobile I reworked components against Flutter's constraints rather than forci
 
 I also built a notification framework covering how the products communicate state and errors, a repeated decision turned into a rule.
 
-<PlaceholderImage
-  title="One component, both platforms"
-  why="Take a single non-trivial component, a form field with validation states, or a date picker, and show the React version beside the Flutter version, with the divergences annotated. This proves you understand implementation, which is exactly what separates a senior systems designer from a component librarian."
-  ratio="16/9"
-  caption="The same component in React and Flutter. Annotated where the platforms had to diverge, and why."
-/>
-
 ### 4. Documentation and adoption
 
 A system nobody adopts is a folder. I wrote usage guidelines, do/don't examples, and contribution rules, then ran feedback loops with the teams consuming it to find where the system was fighting them.
-
-<PlaceholderImage
-  title="A documentation page as teams actually saw it"
-  why="Screenshot one real component's documentation: anatomy, states, usage rules, code reference. Documentation is claimed here but never shown, and it's a large part of what the role actually was."
-  caption="A component's documentation page: anatomy, states, usage rules, and platform notes."
-/>
-
-{/* TODO(nasif): adoption evidence is the weakest link. Anything here helps:
-      - how many teams adopted it, and over what period?
-      - did anyone contribute components back? (that's the strongest possible signal)
-      - any before/after on time-to-build a standard screen?
-      - did it outlive your involvement? */}
 
 ## Key Decisions
 
@@ -135,11 +103,6 @@ A system nobody adopts is a folder. I wrote usage guidelines, do/don't examples,
 **Faster standard work.** Teams composed common screens from existing components instead of designing and building them from scratch each time.
 
 **A system that could be extended.** Contribution rules and naming conventions meant teams could add to the system without forking it.
-
-{/* TODO(nasif): replace the three claims above with measured versions if you can
-    get anywhere near a number. As written they are still assertions, and a design
-    director will read them as unverifiable. Even "roughly halved the time to build
-    a standard form screen, per the front-end lead" is dramatically stronger. */}
 
 ## Technical Implementation
 

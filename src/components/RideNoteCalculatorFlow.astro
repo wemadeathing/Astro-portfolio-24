@@ -1,0 +1,201 @@
+---
+const steps = [
+  {
+    src: '/images/work/ridenote/ridenote-calc-suggest.webp',
+    title: 'Suggested pressure, no tap needed',
+    caption: 'Weight and discipline feed a starting point instantly. Apply writes it straight to the baseline.',
+  },
+  {
+    src: '/images/work/ridenote/ridenote-calc-snapshot.webp',
+    title: 'A full snapshot, saved',
+    caption: 'Every pressure and sag value, with the delta from baseline shown inline.',
+  },
+];
+---
+
+<section class="not-prose rn-calc-flow my-12" aria-labelledby="rn-calc-flow-title">
+  <div class="rn-calc-flow__header">
+    <div>
+      <div class="rn-calc-flow__kicker">The calculator, in the shipped app</div>
+      <h3 id="rn-calc-flow-title">Suggested pressure, saved instantly</h3>
+    </div>
+    <p>The two claims above, as they actually render.</p>
+  </div>
+
+  <div class="rn-calc-flow__steps">
+    {steps.map((step, index) => (
+      <figure class="rn-calc-flow__step">
+        <figcaption>
+          <span>{String(index + 1).padStart(2, '0')}</span>
+          <div>
+            <strong>{step.title}</strong>
+            <em>{step.caption}</em>
+          </div>
+        </figcaption>
+        <button
+          type="button"
+          class="rn-calc-flow__phone"
+          data-image-src={step.src}
+          data-image-alt={`${step.title}: ${step.caption}`}
+          data-gallery="ridenote-calculator-flow"
+          aria-label={`Open ${step.title}`}
+        >
+          <img
+            src={step.src}
+            alt={`${step.title}: ${step.caption}`}
+            width="1170"
+            height="2532"
+            loading={index === 0 ? 'eager' : 'lazy'}
+            decoding="async"
+          />
+        </button>
+      </figure>
+    ))}
+  </div>
+</section>
+
+<style>
+  .rn-calc-flow {
+    border-block: 1px solid hsl(var(--border) / 0.72);
+    padding-block: clamp(1.5rem, 4vw, 2.75rem);
+  }
+
+  .rn-calc-flow__header {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(18rem, 0.8fr);
+    gap: clamp(1rem, 4vw, 3rem);
+    align-items: end;
+    margin-bottom: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .rn-calc-flow__kicker {
+    color: hsl(var(--muted-foreground));
+    font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .rn-calc-flow h3 {
+    margin: 0.35rem 0 0;
+    color: hsl(var(--foreground));
+    font-size: clamp(1.45rem, 2.5vw, 2rem);
+    font-weight: 600;
+    line-height: 1.12;
+  }
+
+  .rn-calc-flow__header p {
+    margin: 0;
+    max-width: 36rem;
+    color: hsl(var(--muted-foreground));
+    font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+    line-height: 1.65;
+  }
+
+  .rn-calc-flow__steps {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(1.5rem, 4vw, 3rem);
+    max-width: 40rem;
+    margin-inline: auto;
+  }
+
+  .rn-calc-flow__step {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 1rem;
+    margin: 0;
+  }
+
+  .rn-calc-flow figcaption {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.15rem 0.6rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.88rem;
+    line-height: 1.5;
+    text-align: left;
+    align-items: start;
+  }
+
+  .rn-calc-flow figcaption span {
+    color: var(--case-accent);
+    font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    line-height: 1.8;
+  }
+
+  .rn-calc-flow figcaption strong,
+  .rn-calc-flow figcaption em {
+    display: block;
+  }
+
+  .rn-calc-flow figcaption strong {
+    color: hsl(var(--foreground));
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  .rn-calc-flow figcaption em {
+    margin-top: 0.12rem;
+    font-style: normal;
+  }
+
+  /* Phone frame: a lightweight bezel so raw screenshots read as a device,
+     not a bare rectangle floating in the layout. */
+  .rn-calc-flow__phone {
+    position: relative;
+    display: block;
+    width: 100%;
+    cursor: zoom-in;
+    border: 1px solid hsl(var(--border) / 0.75);
+    border-radius: 1.6rem;
+    background: linear-gradient(155deg, hsl(0 0% 15%), hsl(0 0% 6%));
+    padding: 0.4rem;
+  }
+
+  .rn-calc-flow__phone::after {
+    content: "";
+    position: absolute;
+    top: 0.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30%;
+    height: 0.85rem;
+    background: #000;
+    border-radius: 999px;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .rn-calc-flow__phone img {
+    display: block;
+    width: 100%;
+    height: auto;
+    /* Top corners round to match the bezel; bottom stays square. Screenshot
+       content (action buttons) sits flush with the bottom edge, so rounding
+       there clips real UI instead of empty space. */
+    border-radius: 1.25rem 1.25rem 0.3rem 0.3rem;
+    transition: transform 220ms ease, filter 220ms ease;
+  }
+
+  .rn-calc-flow__phone:hover img {
+    filter: contrast(1.02);
+    transform: scale(1.01);
+  }
+
+  @media (max-width: 800px) {
+    .rn-calc-flow__header {
+      grid-template-columns: 1fr;
+      gap: 0.8rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .rn-calc-flow__steps {
+      grid-template-columns: 1fr;
+      max-width: 20rem;
+    }
+  }
+</style>

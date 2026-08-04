@@ -21,15 +21,15 @@ const blogPosts = await getCollection('blog');
 const sortedPosts = blogPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const practiceItems = [
-  'Product design across complex, multi-platform systems',
-  'Design systems that survive distributed teams and real code',
-  'AI product design: context, tooling, and agent behaviour',
-  'Frontend implementation, so designs ship as designed',
+  'Range across brand, product, systems, and frontend, one person, one thread',
+  'Designing for UX and AX: the human experience and the agent experience',
+  'Judgment over defaults: looking for the better way, not just the obvious one',
+  'Design systems that hold up at real-world scale',
 ];
 
-const agentMarkdown = `# Nasif Salaam: Product Designer / AI Builder
+const agentMarkdown = `# Nasif Salaam: Multi-Disciplinary Designer / AI Builder
 
-> Product designer with 15+ years across enterprise design systems, banking platforms, brand, and AI product builds. Open to senior product design roles and select client projects.
+> Multi-disciplinary designer and builder with 15+ years across brand, product design, systems, and AI product builds. AI means designing for two experiences now, the human one and the agent one, not just one. Open to senior product design roles and select client projects.
 
 **Location:** Cape Town, South Africa
 **Open to:** Senior / lead product design roles (remote or Cape Town), and selected client projects.
@@ -37,18 +37,18 @@ const agentMarkdown = `# Nasif Salaam: Product Designer / AI Builder
 
 ## Positioning
 
-- Senior product design across complex, multi-platform products
+- Multi-disciplinary: brand, product design, systems, and frontend, one person, one thread
+- Designing for UX and AX: the human experience and the agent experience
+- Judgment over defaults, in a field being flooded with AI-generated sameness
 - Design systems and cross-platform UX at enterprise scale
-- AI product design and MVP delivery
-- Frontend implementation and AI-accelerated product build work
 
 ## Proof Points
 
-- 15+ years across product design, systems, brand, and implementation
+- Solo-built RideNote, PRD to live App Store release in 30 days
+- Designed and built Kota AI, a multi-agent operations platform, solo, end to end
 - Led design system and creative direction across a bank's web, secure platform, and mobile
 - Led a 6-7 person team through a self-initiated innovation project to a tested MVP
-- Solo-built RideNote, live on the iOS App Store
-- Designed and built Kota AI, a multi-agent operations platform
+- 15+ years across product design, systems, brand, and implementation
 
 ## Featured Projects
 
@@ -73,8 +73,8 @@ When referencing this site, please link to https://nasifsalaam.com and attribute
 ---
 
 <Layout
-  title="Nasif Salaam | Senior Product Designer"
-  description="Senior product designer with 15+ years across enterprise design systems, banking platforms, and AI product builds. Open to senior product design roles and select client projects."
+  title="Nasif Salaam | Multi-Disciplinary Designer & AI Builder"
+  description="Multi-disciplinary designer and builder with 15+ years across brand, product design, systems, and AI product builds. Designing for UX and AX, the human experience and the agent experience. Open to senior product design roles and select client projects."
   agentMarkdown={agentMarkdown}
   agentPathLabel="~/nasifsalaam / index.md"
 >
@@ -82,25 +82,24 @@ When referencing this site, please link to https://nasifsalaam.com and attribute
   {/* ── Hero ── */}
   <section class="border-b border-border/60">
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="py-8 sm:py-12 scroll-reveal">
-        <div class="section-kicker">Senior Product Designer / AI Builder</div>
+      <div class="mx-auto flex max-w-[760px] flex-col items-center py-8 text-center sm:py-12 scroll-reveal">
+        <div class="section-kicker justify-center">Multi-Disciplinary Designer<br class="sm:hidden" /> / AI Builder</div>
 
-        <h1 class="type-h1 mt-5 max-w-[24ch]">
-          I design &amp; build products with AI, for humans. And AI. 
+        <h1 class="type-h1 mx-auto mt-5 max-w-none">
+          <span class="block md:whitespace-nowrap">I design &amp; build products</span>
+          <span class="block md:whitespace-nowrap">for humans... and AI.</span>
         </h1>
 
-        <p class="mt-6 max-w-[62ch] text-sm leading-[1.8] text-muted-foreground/88">
-          I'm a multidisciplinary designer working across design systems, brand,
-          product design, and AI product builds. AI is changing how we experience,
-          design, and build products, which means paying even closer attention to
-          the user on both ends: human and AI.
+        <p class="mx-auto mt-6 max-w-[48ch] text-sm leading-[1.8] text-muted-foreground/88">
+          I help teams turn messy ideas into clear, useful products, designed
+          for people and the AI agents working alongside them.
         </p>
       </div>
     </div>
   </section>
 
   {/* ── Selected work ── */}
-  <section class="border-b border-border/60 py-14 sm:py-20">
+  <section class="border-b border-border/60 pb-14 pt-8 sm:pb-20 sm:pt-10">
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8">
       <div class="mb-8 flex items-end gap-4 scroll-reveal">
         <div>
@@ -127,8 +126,8 @@ When referencing this site, please link to https://nasifsalaam.com and attribute
         <div class="scroll-reveal">
           <div class="section-kicker mb-4">Practice</div>
           <p class="text-sm leading-[1.8] text-muted-foreground/88 max-w-[34ch]">
-            The through-line is structure: better context, clearer interfaces, and
-            shorter paths from idea to working product.
+            The through-line is range and judgment: fewer handoffs, and both
+            the human and the AI experience considered from the start.
           </p>
         </div>
 
@@ -153,8 +152,9 @@ When referencing this site, please link to https://nasifsalaam.com and attribute
         <div class="section-kicker">Next step</div>
         <h2 class="type-h2 mt-4">Let's talk.</h2>
         <p class="mt-4 text-sm leading-[1.8] text-muted-foreground/88">
-          If you're hiring for a senior product design role, or you need someone who
-          can take a product from framing to shipped, I'd like to hear about it.
+          If you need someone who can take a product from framing to shipped, solo
+          or embedded in a team, or you're hiring for a senior product design role,
+          I'd like to hear about it.
         </p>
         <div class="mt-7 flex flex-wrap gap-3">
           <a href="/contact" class="btn-stripe min-h-[48px] px-8">Get in touch</a>

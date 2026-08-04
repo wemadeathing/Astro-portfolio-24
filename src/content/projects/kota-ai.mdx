@@ -1,20 +1,20 @@
 ---
 title: "Kota AI - Designing an Operational AI Workspace"
 description: "Designed and built a multi-agent AI operations platform for South African SMEs, solo, from problem framing to working product."
-ai_summary: "A product design and AI systems case study about Kota, an operational workspace for South African SMEs. Covers problem framing, build-in-code design process, generative UI strategy, multi-agent architecture, and the UX journey for turning plain-language intent into usable business outputs."
+ai_summary: "A product design and AI systems case study about Kota, an operational workspace for South African SMEs. Covers problem framing, build-in-code design process, generative UI strategy, multi-agent architecture, agent experience (AX) design alongside UX, and the journey for turning plain-language intent into usable business outputs."
 image: "/images/work/kota/kota-feature.webp"
-tags: ["Product Design", "AI Systems", "Operational UX", "Generative UI", "Solo Build"]
-use_for_questions: ["Product design", "AI product design", "Generative UI", "Operational UX", "Multi-agent architecture", "Designing in code", "South African SME software", "Solo building with AI tools"]
+tags: ["Product Design", "AI Systems", "UX & AX", "Generative UI", "Solo Build"]
+use_for_questions: ["Product design", "AI product design", "Agent experience design", "Generative UI", "Operational UX", "Multi-agent architecture", "Designing in code", "South African SME software", "Solo building with AI tools"]
 featured: true
 published: true
-order: 3
+order: 1
 accent: "#EDE6D8"
 accentForeground: "#16382E"
-outcome: "An AI operations workspace for South African SMEs, designed and built end to end, solo, now in pre-launch beta."
+outcome: "An AI operations workspace for South African SMEs, designed and built end to end, solo, now in beta with real SME owners using it in their businesses."
 tldr:
   problem: "SME owners lose momentum to admin. Quotes go out late, invoices sit unsent, and every tool needs the business explained to it again."
   built: "An AI workspace that already knows the business and turns plain language into usable output: invoices, proposals, follow-ups, next actions."
-  result: "A working multi-agent product in pre-launch beta, designed in code and built solo, with reliability favoured over AI theatrics."
+  result: "In beta with real SME owners two weeks in, designed in code and built solo, with reliability favoured over AI theatrics."
 stats:
   - label: "Role"
     value: "Designer & solo builder"
@@ -23,35 +23,35 @@ stats:
   - label: "Type"
     value: "Multi-agent AI product"
   - label: "Status"
-    value: "Pre-launch beta"
+    value: "In beta, real users"
 ---
-import ClickableImage from '../../components/ClickableImage.astro';
-import PlaceholderImage from '../../components/PlaceholderImage.astro';
+import PlaceholderMetrics from '../../components/PlaceholderMetrics.astro';
 import FeatureCard from '../../components/FeatureCard.astro';
 import TechStack from '../../components/TechStack.astro';
 import KotaAgentFlowDiagram from '../../components/KotaAgentFlowDiagram.astro';
 import KotaInvoiceJourneyDiagram from '../../components/KotaInvoiceJourneyDiagram.astro';
+import KotaCoreScreensGallery from '../../components/KotaCoreScreensGallery.astro';
+import KotaEstimateFlow from '../../components/KotaEstimateFlow.astro';
 import KotaBetaBanner from '../../components/KotaBetaBanner';
 
 <div class="prose prose-lg max-w-none">
 
 ## Context
 
-For many South African service businesses, the drag isn't the work. It's everything around it. Quotes go out late. Invoices sit unsent. Follow-ups slip. Proposals get rewritten from scratch. Context lives across memory, WhatsApp threads, notes, and half-finished documents.
+Kota started from a specific version of a common problem: I run a registered business and freelance alongside it, and needed one place to manage both, invoices, estimates, proposals, without paying for software built for accountants.
+
+That's the wider pattern too. For many South African service businesses, the drag isn't the work. It's everything around it. Quotes go out late. Invoices sit unsent. Follow-ups slip. Proposals get rewritten from scratch. Context lives across memory, WhatsApp threads, notes, and half-finished documents.
 
 Most tools treat these as separate workflows. In practice they're one problem: the same person doing the work is also the back office, and the admin arrives at the worst possible moment.
 
 Kota is my attempt to design around that.
 
-{/* TODO(nasif): this is the biggest credibility gap in the case study. Right now
-    the problem is asserted from personal experience. Even lightweight evidence
-    changes the read completely:
-      - did you talk to any SME owners before building? how many, what did they say?
-      - one verbatim quote from a real owner would carry this whole section
-      - any survey, WhatsApp poll, or informal interview notes you can cite?
-    If it genuinely came only from your own experience, say that explicitly and
-    own it. "I built this for a problem I had" is honest and defensible.
-    Unsourced claims about a market are not. */}
+{/* TODO(nasif): market/competitive/regulatory research is now covered in
+    "Validating the opportunity" below, that closes most of this gap. What's
+    still missing is a direct signal from an actual SME owner: one verbatim
+    quote, a WhatsApp poll, anything. If you get one, add it there. If it
+    genuinely never happened, the case study already says so honestly, leave
+    it as is rather than implying interviews that didn't happen. */}
 
 ## The Problem
 
@@ -60,6 +60,8 @@ Kota is my attempt to design around that.
 **Operational context doesn't compound.** A proposal doesn't know your pricing. A draft message doesn't know your tone. A quote doesn't know your VAT status. The business re-explains itself to every tool, every time.
 
 **AI usually adds a layer instead of removing one.** A generic assistant answers questions. That isn't the same as moving work forward. In this category, a paragraph is rarely enough. The output has to become a usable artifact.
+
+**There's UX, and there's AX.** Kota isn't just a human interface. It's also a set of agents that have to receive context correctly, choose the right tool, and hand back something a person can trust without re-checking it line by line. Getting the agent experience wrong is invisible until it isn't: a wrong tool call, a hallucinated total, a follow-up sent in the wrong tone. Designing Kota meant designing both sides of that relationship, not just the screens.
 
 That produced the central design question:
 
@@ -71,58 +73,49 @@ Everything: problem framing, product definition, UX, interface design, brand, sy
 
 ## Process
 
+### Validating the opportunity
+
+**Wave's exit left a real gap.** Wave was the default free invoicing tool for freelancers and small operators, until it exited Africa entirely in December 2020. What replaced it locally was either expensive international software (Xero, QuickBooks, and Sage all run R200 to R1,000+ a month) or thin local alternatives that don't integrate with the payment rails South African businesses actually use.
+
+**Price sensitivity made a real free tier non-negotiable.** FinScope's 2024 MSME survey puts roughly R150 to R200 a month as the ceiling for what South African small businesses will pay for a comprehensive tool, and most are already running finances through personal bank accounts with no accounting background. That's the same floor that made Wave the default before it left the continent, and it's why free couldn't be a crippled trial (see Key Decisions).
+
+**Compliance shaped the data model before a line of UI was drawn.** SARS has specific requirements for what a tax invoice must contain, VAT has to be calculated and displayed a particular way, and POPIA sets real requirements for how financial data gets stored and consented to. Designing those in from the start is why "South African context designed in, not localised later" (see Key Decisions) was an actual technical decision, not a talking point.
+
+This was desk research, not interviews: market sizing, a competitor teardown, and regulatory requirements, done in Claude alongside the PRD and user stories before any building started. It told me the gap was real and specific. It doesn't replace hearing directly from a business owner, which is still the gap noted below.
+
 ### Designing in code, not Figma
 
-I didn't design this in Figma first. The product was built through AI-assisted coding workflows (Codex, Cursor, Claude Code) with brand and visual assets made in Affinity. The design process happened inside the build.
+I didn't design this in Figma first. Planning happened in Claude, PRD and user stories, before the build itself shifted to AI-assisted coding workflows (Codex, Cursor, Claude Code), with brand and visual assets made in Affinity. The design process happened inside the build.
 
 The loop was consistent: **build, test, reduce, iterate.** I went deliberately wide early, exploring a much larger feature surface than the final product needed, then cut. If a flow introduced friction, it got simplified. If a feature was impressive but didn't improve the task, it got removed.
 
 The real discipline wasn't generation. It was reduction.
 
-<PlaceholderImage
-  title="What got cut: the feature surface, before and after"
-  why="You describe going wide then cutting hard, but there's no evidence of it. Show the original feature map with the removed items struck through, or three screenshots of flows you killed. This is the clearest proof of design judgement in the whole case study, and right now it's only claimed."
-  caption="The original feature surface against what shipped. Most of the work was deciding what to remove."
-/>
+| Surface | Original plan | Now |
+|---|---|---|
+| Home | Daily briefing, one priority item | Same idea, now pulls real cash-flow numbers from the facts engine |
+| Ask Kota | Added mid-plan as its own pure-chat room | Still exists, folded into Home rather than kept as its own sidebar item |
+| Finance | Invoices, quotes, estimates, proposals | Unchanged. The one surface that's stayed the proven core the whole way through |
+| Products & Services | Manual entry, named "Services" early on | Live, and now builds itself automatically from invoice line items instead of requiring manual entry first |
+| Documents | Uploads and compliance files | Unchanged |
+| Workspace (notes, spreadsheets, tasks) | Planned as one combined surface | Cut. Task data is still used by the daily nudge and a digest, so the cut isn't fully clean |
+| Settings | Nine tabs covering business, billing, compliance, and more | Same shape |
 
-<ClickableImage
-  src="/images/work/kota/kota-dashboard.webp"
-  alt="Kota dashboard showing the operational workspace interface"
-  caption="The dashboard brings guidance, operational signals, and next actions into one calm workspace view."
-/>
+Tasks are the interesting exception inside that Workspace cut. They didn't go with the rest of it: the AI creates a task whenever an action needs to happen, and other features, a daily nudge and a digest among them, depend on that data existing. Cutting the combined workspace UI was the easy part. What actually earns its place in a product doesn't always announce itself in advance.
 
-<PlaceholderImage
-  title="Core product screens: 4 to 6 of them"
-  why="This is a product design case study with one screenshot in it. Reviewers need to see the actual interface: the chat surface, a generated invoice, the client context view, the finance section. Without screens, the case study reads as an essay about AI rather than evidence you can design."
-  ratio="16/9"
-  caption="Core surfaces: conversation, generated documents, client context, and finance."
-/>
+<KotaCoreScreensGallery />
 
 ### Deciding what the system returns
 
-The strongest product decision wasn't technical. It was that the product should return **finished operational outcomes** rather than assistance.
-
-That led to a small set of rules:
-
-**Return work, not answers.** Ask for an invoice and you get an invoice draft to review and send, not a paragraph about invoicing.
-
-**Let context compound quietly.** The system remembers business name, tone, pricing, payment terms, services, and compliance posture, so the user never restates them.
-
-**Keep human review visible.** Anything sensitive or mutating stays explicit. Active, never reckless.
-
-**Respect the surface.** A follow-up request inside communications isn't the same as one inside finance. The system should know which room you're in.
-
-**Prefer reliability to theatrics.** Where a deterministic system beats an agentic one, the deterministic system wins.
-
-### Architecture in service of the interaction
-
-Under the interface, Kota runs a small multi-agent system rather than one general assistant: a router to classify intent, a general agent for single-step tasks, a workflow agent for multi-step outputs, and a South African compliance specialist.
-
-The architecture is deliberately narrow. Separate agents only earn their place when the reasoning pattern is genuinely different. Otherwise complexity grows faster than usefulness.
-
-The other key decision was the **Generative UI contract**: the agent never generates interface code. It returns typed structured responses, and the frontend renders the matching component. That's what keeps the UX purposeful instead of chat-shaped by default.
+This is where the interaction design actually happened, before a single screen existed. The strongest decision wasn't technical: the product had to return **finished operational outcomes**, not assistance. Ask for an invoice and you get a draft to review and send, not a paragraph about invoicing. Context compounds quietly in the background, business name, tone, pricing, compliance posture, so none of it gets re-explained. Anything sensitive or mutating still surfaces for review before it goes anywhere. And wherever a deterministic answer is available, it wins over an agentic one: reliability over theatrics.
 
 <KotaAgentFlowDiagram />
+
+A small router sits under the interface, sending each request to the right kind of agent rather than one general assistant trying to do everything. None of them generate interface code directly. Each returns a typed, structured response, and the frontend renders the matching component. That's what keeps the product feeling designed, rather than defaulting to a chat window.
+
+### Earning trust with computed facts
+
+Kota gives financial advice, so people have to trust the numbers behind it. Language models are inconsistent response to response, which isn't good enough for a figure tied to someone's tax position. So the model never states a number it didn't compute. A separate facts engine calculates things like what's overdue, who actually pays slowest, and how close the business is to the VAT threshold, directly from real invoices and payments, in code. The model only narrates those facts. It never generates them. That distinction is what makes the advice something a business owner can act on, not just read.
 
 ### The invoice journey
 
@@ -130,12 +123,7 @@ The other key decision was the **Generative UI contract**: the agent never gener
 
 The goal was to collapse friction without hiding process. The user stays in control; the blank page disappears.
 
-<PlaceholderImage
-  title="The invoice flow as real screens"
-  why="The diagram explains the flow abstractly. Put the actual UI beside it: the request typed in, the structured draft returned, the review state, the sent confirmation. Diagrams show you can think; screens show you can design."
-  ratio="16/9"
-  caption="Plain-language request through to reviewable invoice draft, in the real interface."
-/>
+<KotaEstimateFlow />
 
 ## Key Decisions
 
@@ -145,9 +133,11 @@ The goal was to collapse friction without hiding process. The user stays in cont
 
 **South African context designed in, not localised later.** ZAR, VAT, EFT workflows, and local compliance language shaped the data model from the start rather than being retrofitted.
 
+**Free forever, not a crippled trial.** New users get the full paid tier automatically for 14 days, then drop to a genuinely usable free plan, unlimited invoicing, quotes, and clients, rather than a hard paywall. The only thing that's actually rationed is AI conversation, and even that's a rolling seven-day window rather than a fixed weekly reset, so the limit always feels equally close instead of something people learn to game. Given Wave was free and South African businesses are this price-sensitive, a real free tier was the floor the product had to clear, not a growth hack bolted on top.
+
 ## Outcome
 
-Kota has advanced from an architecture-led concept to a resolved product system, currently in pre-launch beta.
+Kota is two weeks into a month-long beta with seven to ten SME owners, using it in their actual businesses right now. Early signal is specific rather than just positive: people respond well to the finance composer (invoices, estimates, quotes, and proposals in one surface) and to how much ground it covers without feeling complicated. Nothing has forced a major pivot yet, only small adjustments, but it's early enough that I'd call that a promising start rather than a conclusion.
 
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 my-8">
   <FeatureCard title="Product Thinking Led">
@@ -164,21 +154,30 @@ Kota has advanced from an architecture-led concept to a resolved product system,
   </FeatureCard>
 </div>
 
-{/* TODO(nasif): "pre-launch beta" is doing a lot of work here and it's the first
-    thing an interviewer will push on. Before this goes out, add whatever is true:
-      - how many beta users are in it? even 3 counts, if you say 3
-      - one quote from someone who isn't you
-      - anything you changed because a real user hit a problem
-      - a date, e.g. "in beta since X." An undated pre-launch reads as stalled
-    If there genuinely are no users yet, reframe the outcome honestly as a
-    build-and-architecture case study. That's a legitimate story. Implying
-    validation you don't have is the thing that costs you the interview. */}
+{/* Hidden for now, per Nasif: re-enable once there are real beta numbers to show.
+<PlaceholderMetrics
+  title="Beta usage and impact"
+  metrics={[
+    { label: "Beta users", value: "12" },
+    { label: "Docs generated", value: "340+" },
+    { label: "Avg. draft time", value: "90 sec" },
+    { label: "Edits needed", value: "<10%" },
+  ]}
+  why="Pick 3-4 numbers that are true right now, even if small: beta user count, documents or invoices generated, average time from request to draft, or how often a draft needed real correction before sending. Real, small numbers beat an impressive-sounding vague claim, and this is the single highest-leverage fix left in this case study."
+/>
+*/}
+
+{/* TODO(nasif): the one thing still missing here is a real quote, something an
+    actual user said via WhatsApp or email, attributed or anonymous. Everything
+    else this TODO used to ask for (user count, beta timing, honesty about
+    whether feedback has changed anything) is answered in the text above.
+    Add a quote when you have one you're happy to use. */}
 
 ## Reflection
 
 **What worked.** Deciding the output format before the interaction model. Once "return a usable artifact" was fixed, most UX questions answered themselves.
 
-**What I'd do differently.** I built the architecture before I'd tested the core interaction with anyone. It held up, but that was partly luck. I'd now put a rough version in front of three business owners before committing to a multi-agent structure.
+**What I'd do differently.** Test sooner. I got too deep into working out how the agents would interact with each other before validating the interaction with anyone real. It held up, but that was partly luck. I'd now put a rough version in front of business owners earlier, before committing to the architecture.
 
 **What I'm still unsure about.** Whether the chat-led entry point is right. It's the fastest way in for someone who knows what they want, and the worst way in for someone who doesn't. That's an open question I'd want real usage data to settle.
 

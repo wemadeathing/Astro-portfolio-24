@@ -2,7 +2,7 @@
 export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
 import ClickableImage from '../../components/ClickableImage.astro';
-import { archiveProjects, getArchiveProject, type ArchiveProject } from '../../data/archive';
+import { archiveProjects, getArchiveProject, visibleArchiveProjects, type ArchiveProject } from '../../data/archive';
 import { buildArchiveProjectAgentMarkdown } from '../../lib/agent-content';
 
 export function getStaticPaths() {
@@ -24,8 +24,11 @@ if (Astro.props?.project) {
   project = found;
 }
 
-const currentIndex = archiveProjects.findIndex((p) => p.slug === project.slug);
-const nextProject = archiveProjects[(currentIndex + 1) % archiveProjects.length];
+const currentIndex = visibleArchiveProjects.findIndex((p) => p.slug === project.slug);
+const nextProject =
+  currentIndex >= 0
+    ? visibleArchiveProjects[(currentIndex + 1) % visibleArchiveProjects.length]
+    : undefined;
 
 const agent = buildArchiveProjectAgentMarkdown(project.slug)!;
 ---
@@ -88,7 +91,7 @@ const agent = buildArchiveProjectAgentMarkdown(project.slug)!;
       </div>
 
       {/* Next archive */}
-      {nextProject.slug !== project.slug && (
+      {nextProject && nextProject.slug !== project.slug && (
         <div class="mt-16 border-t border-border/70">
           <a
             href={`/archive/${nextProject.slug}`}

@@ -1,0 +1,53 @@
+---
+/**
+ * PlaceholderMetrics
+ *
+ * A visibly-draft outcome/metrics block. Shows fictional example numbers in
+ * the correct shape so Nasif can see what a real version would look like,
+ * with a "why" note explaining what real number to go find and why it
+ * matters to a hiring manager (process + decisions is not enough on its
+ * own; reviewers want a quantified outcome too).
+ *
+ * Fictional values are visually marked (dashed tile, "example" tag) so this
+ * can never be mistaken for real data if it ships before being filled in.
+ * Replace with a plain stat grid (see the Outcome FeatureCard pattern) once
+ * real numbers exist. Search the repo for "PlaceholderMetrics" to find what's left.
+ */
+interface Props {
+  /** What this metrics block is meant to prove, e.g. "Adoption impact" */
+  title: string;
+  /** Fictional example metrics, in the shape the real ones should take. */
+  metrics: { label: string; value: string }[];
+  /** What real number to go find, where to find it, and why it matters. */
+  why: string;
+}
+
+const { title, metrics, why } = Astro.props;
+---
+
+<figure class="not-prose my-10 border-2 border-dashed border-border/70 bg-muted/[0.06] p-6 sm:p-8">
+  <div class="flex items-center gap-2.5">
+    <span class="h-1.5 w-1.5 shrink-0 bg-primary/70"></span>
+    <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
+      Metrics needed: {title}
+    </span>
+  </div>
+
+  <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+    {metrics.map((metric) => (
+      <div class="border border-dashed border-border/60 px-3 py-4 text-center">
+        <div class="text-lg font-semibold text-muted-foreground/60">{metric.value}</div>
+        <div class="mt-1.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted-foreground/50">
+          {metric.label}
+        </div>
+      </div>
+    ))}
+  </div>
+  <div class="mt-2 text-right font-mono text-[9px] uppercase tracking-[0.14em] text-muted-foreground/40">
+    example numbers, not real
+  </div>
+
+  <p class="mt-5 text-xs leading-[1.7] text-muted-foreground border-t border-border/50 pt-4">
+    {why}
+  </p>
+</figure>

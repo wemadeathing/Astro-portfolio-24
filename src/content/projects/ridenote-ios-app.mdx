@@ -1,13 +1,13 @@
 ---
 title: "RideNote - Mountain Bike Settings Tracker"
 description: "Solo-designed and built an iOS app for mountain bikers in 30 days, from product definition to App Store release."
-ai_summary: "End-to-end solo build of a production iOS app for mountain bikers to track bike settings. Covers product planning, PRD-driven development, offline-first SQLite architecture, AI-assisted coding with Cursor, App Store submission, and beta testing. Demonstrates full product ownership from concept to launch."
+ai_summary: "End-to-end solo build of a production iOS app for mountain bikers to track bike settings. Covers product planning, PRD-driven development, offline-first SQLite architecture, working with AI coding agents as a collaborator, and a v2 shaped entirely by real user feedback. Demonstrates full product ownership from concept to launch and beyond."
 image: "/images/work/ridenote-hero.webp"
 tags: ["Builds", "Mobile App", "Solo Founder", "React Native", "AI-Assisted Development"]
-use_for_questions: ["Mobile app development", "Solo building", "AI-assisted development", "Product ownership", "App Store submission", "React Native", "Offline-first architecture"]
+use_for_questions: ["Mobile app development", "Solo building", "AI-assisted development", "Working with AI agents", "Product ownership", "React Native", "Offline-first architecture"]
 featured: true
 published: true
-order: 4
+order: 2
 accent: "#B9E42B"
 accentForeground: "#141807"
 outcome: "From concept to a live App Store release in 30 days: a local-first iOS app that beta riders call smooth and premium."
@@ -31,7 +31,13 @@ links:
     label: "Visit RideNote site"
 ---
 import ClickableImage from '../../components/ClickableImage.astro';
-import PlaceholderImage from '../../components/PlaceholderImage.astro';
+import MermaidDiagram from '../../components/MermaidDiagram.astro';
+import RideNoteBrandGallery from '../../components/RideNoteBrandGallery.astro';
+import RideNoteCalculatorFlow from '../../components/RideNoteCalculatorFlow.astro';
+import RideNoteV2Screens from '../../components/RideNoteV2Screens.astro';
+import RideNoteBaselineFlow from '../../components/RideNoteBaselineFlow.astro';
+import RideNoteFeedbackRow from '../../components/RideNoteFeedbackRow.astro';
+import Metrics from '../../components/Metrics.astro';
 import FeatureCard from '../../components/FeatureCard.astro';
 import TechStack from '../../components/TechStack.astro';
 
@@ -54,7 +60,7 @@ I designed, branded, and built it solo, end to end, to prove full product owners
   <FeatureCard title="Scope Discipline">
     A long feature list that needed ruthless cutting. Social features, AI recommendations, maintenance tracking. All cut.
   </FeatureCard>
-  <FeatureCard title="Speed vs. Polish">
+  <FeatureCard title="Timeline vs. Craft">
     Ship in 30 days while making it feel premium. Beta testers needed to say "smooth," not "rough prototype."
   </FeatureCard>
   <FeatureCard title="First App Store Submission">
@@ -84,35 +90,35 @@ The persona was narrow on purpose: "Weekend Warrior Matt" rides 2-4 times a mont
 
 ### Design and development in one loop
 
-I didn't wireframe in Figma. The approach was PRD-driven direct implementation in Cursor. Unconventional, but it works for a solo project with clear scope and well-understood flows. It wouldn't scale to a team that needs shared artifacts, but here it meant I could iterate without handoff.
+**No wireframes, direct implementation.** PRD-driven, built straight in Cursor. Unconventional, and it wouldn't scale to a team that needs shared artifacts, but solo it meant I could iterate without handoff.
 
-Cursor handled boilerplate, feature scaffolding, and build debugging. It couldn't make UX flow decisions, design polish calls, or scope prioritisation judgements. Those needed a human at every step.
+**Boilerplate was easy. Judgement wasn't.** Cursor handled scaffolding and build debugging well. The harder part was collaboration: ask it to review a feature against the user story, or audit a flow, and you'd get a slightly different answer each time, even for the same kind of question. Rarely wrong outright, just inconsistent. The discipline was asking the right questions, then owning the final call myself regardless of what came back.
 
 <ClickableImage
   src="/images/work/ridenote-code-design.webp"
   alt="Building directly in Cursor AI"
-  caption="Designing and building simultaneously in Cursor. No handoff, no waiting."
+  caption="In the loop with Cursor: propose, generate, review, refine."
 />
 
-<PlaceholderImage
-  title="Brand and interface craft: identity, icon, type, colour"
-  why="This case study previously promised a separate design case study that was never written. Rather than promise again, show the craft here: logo and app icon exploration, the type and colour system, and the iconography. For a design role this is the evidence that you can actually execute visually. Right now the site's only proof of that is Arabica."
-  ratio="4/3"
-  caption="The RideNote identity: mark, app icon, palette, and type system."
+<RideNoteBrandGallery />
+
+### UX, UI, and build in one pass
+
+**The old process is sequential.** Research, user story, flow, wireframe, high-fidelity UI, annotate, hand off, review loop. Building solo with an agent collapses that. UX and UI don't happen on separate days, they happen in the same pass, because that's how the agent generates them.
+
+**The pressure calculator is the clearest example.** The brief was one line: give a rider a starting point from their weight, nothing else. The agent researched it, then built the flow, the UI, and the working feature together. My job was reviewing, testing, and feeding back on a loop until it was right. Three things came out of that loop I never designed as separate decisions: no tap needed to see a suggested value, an instant save, and a full snapshot of every setting at a glance. None of it was storyboarded in advance.
+
+**Edge cases surface on their own.** Once a feature is clearly defined, modern agents tend to catch edge cases without being asked, and they'll write and run their own tests if you ask them to. I log finished work in Linear and move on, one continuous cycle instead of a handoff chain.
+
+<MermaidDiagram
+  name="ridenote-pressure-calculator"
+  label="Flow diagram: enter your weight, a suggested pressure appears with no tap needed, save instantly, then see a full snapshot of every setting at a glance."
+  caption="The pressure calculator, the feature the loop above actually built."
 />
 
-<PlaceholderImage
-  title="Interface screens: the real app"
-  why="There are process shots here but no clean product screens. Export 4-6 device frames of the actual app: home, baseline setup, ride note entry with the sliders, and history. Someone assessing you as a designer needs to see the finished interface."
-  ratio="16/9"
-  caption="RideNote in use: baseline, ride entry, feedback sliders, and history."
-/>
+<RideNoteCalculatorFlow />
 
-### The context-switching reality
-
-Solo building means constantly switching between brand, UI, UX, development, and go-to-market. AI helps with execution speed, but the cognitive load of wearing every hat is real and under-discussed in "I built X in a weekend" posts.
-
-I batched similar work: one day for brand, one for UI implementation, one for App Store prep. It reduced thrashing without eliminating the overhead.
+**The trade-off is real.** This kills the old way of batching focus by discipline. You're not switching between a UX day and a UI day, you're wearing every hat inside a single feature cycle. That's most of the power of building this way, and most of the cost.
 
 ## Key Decisions
 
@@ -122,7 +128,7 @@ The most impactful technical decision was making RideNote completely local: no a
 
 Partly pragmatic (no backend to build), partly philosophical (instant saves, works with no signal on a trail, privacy by default). The trade-off, no cross-device sync, was acceptable for v1.
 
-The payoff was immediate. Beta testers specifically called out how smooth it felt. No spinners, no network errors, no sign-up friction. When you're in a parking lot logging settings before you forget, that speed is the product.
+The payoff was immediate. Riders specifically called out how smooth it felt. No spinners, no network errors, no sign-up friction. When you're in a parking lot logging settings before you forget, that speed is the product.
 
 ### Baseline vs. ride note
 
@@ -130,10 +136,12 @@ Early versions conflated two things and confused people: bike configuration (wha
 
 I split them. Your baseline is your typical starting setup, stored once per bike. Ride notes are deviations from that baseline with performance feedback attached. Users understood immediately that they were tracking experiments, not maintaining a spec sheet.
 
-<ClickableImage
-  src="/images/work/ridenote-baseline-model.webp"
-  alt="Baseline vs ride note concept"
-  caption="Baseline settings vs. ride notes: two distinct concepts that made the app click."
+<RideNoteBaselineFlow />
+
+<MermaidDiagram
+  name="ridenote-core-loop"
+  label="Flow diagram: set a baseline once per bike, adjust from that baseline for a specific ride, ride, then log a ride note capturing what changed plus Grip, Feel, and Control ratings. That note is saved as history against the baseline, and next time, history gets checked before adjusting again, feeding back into the same loop."
+  caption="The core loop: baseline once, then ride notes accumulate as history against it."
 />
 
 ### Three-dimensional feedback
@@ -142,65 +150,51 @@ Instead of one "how was the ride?" star rating, I used three sliders: Grip, Feel
 
 Tyre pressure affects grip differently than suspension affects comfort. A single rating loses that. Three sliders take about ten seconds. Fast enough not to feel like work, detailed enough to be useful months later.
 
-Beta testers said this was the feature that made RideNote feel purpose-built rather than generic.
-
-<ClickableImage
-  src="/images/work/ridenote-feedback-sliders.webp"
-  alt="Three-dimensional feedback sliders"
-  caption="Grip, Feel, Control. Purpose-built feedback a generic notes app can't offer."
-/>
+<RideNoteFeedbackRow />
 
 ## Shipping
 
-### The slider that kept breaking
-
-A React Native slider worked perfectly in development but failed every Expo cloud build. Each build took about an hour, so failures were expensive.
-
-The component needed Reanimated v5; Expo's cloud builds used v3. The fix was a preflight script checking critical dependencies before each build, catching the mismatch before burning an hour.
-
-Small fix in retrospect, but AI can only help debug once you know what's broken. Recognising the constraint took experience.
-
-<ClickableImage
-  src="/images/work/ridenote-slider-debug.webp"
-  alt="Debugging the slider build issue"
-  caption="The slider that worked in dev but broke every production build."
-/>
-
-### App Store submission
-
-First submission was rejected: the config had `iPad: true` for a non-iPad app, and iPad screenshots were included by mistake. Config change, screenshot removal, resubmit. Approved in two days.
-
-<ClickableImage
-  src="/images/work/ridenote-app-store.webp"
-  alt="App Store Connect showing rejection and resolution"
-  caption="First submission rejected, second approved. The real process of releasing software."
-/>
-
-While waiting for approval I added three things users had asked for: a pre-ride checklist, free-form notes, and custom checklists.
-
-<ClickableImage
-  src="/images/ridenote-live-in-appstore.webp"
-  alt="RideNote in the App Store"
-  caption="Live in the App Store: concept to production in 30 days."
-/>
-
 ### Beta testing
 
-I tested with mountain biking friends: informal conversations after rides, handing them my phone and watching.
+I tested with mountain biking friends first: informal conversations after rides, handing them my phone and watching. Early on I also added three things they asked for directly: a pre-ride checklist, free-form notes, and custom checklists.
 
 Feedback was consistent: "works smooth," "looks premium." Testing also caught a language problem. Early versions used Strava-style "ride logging" language, but users weren't logging rides, they were tracking setups. That framing shift made the app's purpose clearer.
 
-{/* TODO(nasif): the validation here is honest but thin, and an interviewer will
-    notice it's all friends and all qualitative. Strengthen with whatever exists:
-      - how many beta testers, exactly?
-      - downloads since launch, and over what period
-      - App Store rating / any written review
-      - retention: is anyone still logging rides a month later?
-      - anything a user did that surprised you
-    Even small numbers are fine. "40 downloads, 6 people still using it at 30
-    days" is a real product signal and reads as confident, not apologetic. */}
+One concrete example of feedback changing the product: my adjustment ranges were too narrow. I'd scoped values around my own bike and a "typical" setup, and riders with different bikes or more extreme setups kept hitting the ceiling. Easy to miss when you only test on your own hardware, obvious the moment someone else tries to use it.
+
+## Building v2: what riders actually asked for
+
+**A working baseline to react to, not a blank page.** I shipped v1 deliberately narrow, per the PRD-as-contract discipline above. Once real riders started using it, that discipline paid off differently.
+
+**Feedback came in directly, not through a formal process.** WhatsApp messages and emails from riders I'd shared the app with on mountain biking forums, real users. The narrow adjustment ranges came up first, and kept coming up as the same pattern: small, specific friction that only showed once someone other than me was using it.
+
+**That pattern is what drove v2.** Support for multiple bikes per rider. Wider, more complete adjustment fields (compression and rebound split into high-speed and low-speed, volume tokens, lockout modes). A pressure calculator suggesting a starting point from rider weight, discipline, and bike type. An insights view showing average Grip, Feel, and Control scores and the best-performing setup per bike. A proper pre-ride prep checklist. Full light and dark appearance support. Backup and CSV export.
+
+**None of it was in the original PRD.** All of it came from watching real use, mine and other riders', which is why the scope grew additively, in response to specific friction, not speculatively.
+
+**Craft debt got paid down too.** Information architecture that grouped things confusingly in v1, and a visual pass to match iOS's newer "liquid glass" slider styling, which meant an Expo SDK upgrade to get there. The app reads and feels considerably more premium than v1 did.
+
+<RideNoteV2Screens />
+
+v2 is submitted and in App Store review now. Once it's live, this is the first version I'll actually promote, everything before this has been dogfooding and a small group of real riders, not a formal test panel.
 
 ## Outcome
+
+<Metrics
+  title="App Store Connect, early days"
+  metrics={[
+    { label: "First-time downloads", value: "16" },
+    { label: "Impressions", value: "609" },
+    { label: "Product page views", value: "42" },
+    { label: "Conversion rate", value: "3.47%" },
+  ]}
+  note="A recent snapshot, not a lifetime total. RideNote hasn't been promoted yet, this is organic and beta-community traffic ahead of the v2 launch, which is when real promotion starts."
+/>
+
+{/* TODO(nasif): once v2 is live and you start promoting, swap this snapshot
+    for whatever's true then, downloads since launch, rating if you have
+    reviews yet, retention if you can see it. Keep the honest framing either
+    way, small real numbers with a clear note beat vague confidence. */}
 
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 my-8">
   <FeatureCard title="Live in the App Store">
@@ -234,6 +228,10 @@ Feedback was consistent: "works smooth," "looks premium." Testing also caught a 
 
 **What I'd do differently.** I waited until the app was "done" to get beta feedback. I should have shared rough builds far sooner. Early feedback would have caught the "ride logging" vs. "setup tracking" language problem weeks earlier. I also didn't keep a decision log, which meant reconstructing context afterwards. And I mixed App Store prep with bug fixing; screenshots and copy need a different headspace than debugging.
 
-**What's next.** Recruiting beta testers from Reddit and Pinkbike to test whether the baseline + ride note model actually helps riders remember settings over time. Longer term, a freemium model with cloud sync and voice notes as premium features.
+**What's next.** v2 is in App Store review now. Once it's live, this is the first version I'll actually promote, everything before this has been dogfooding and a small group of real riders, not a formal test panel. After that I want to give people time to live with the new version before I go looking for structured feedback again.
+
+Android has real demand behind it and is already in testing on the Play Store. That's overdue, and it's next in line.
+
+Beyond that, a few things are on the table and none of them are committed. Setup sharing between riders is the most requested, but I'm not convinced it fits the app's original point, so I'll test it small before building it out properly. Strava integration is the one I actually want, but it adds real complexity and possibly a cost I'd have to pass on somehow, which means thinking about monetisation, something I'm not eager to do for what's still a free, personal project. And there's a bigger, separate idea sitting behind all of it: bike fleet management, which could open into a web app for bike shops managing their riders' bikes. That one's further out, and it's the kind of thing I'd want real appetite for before committing to it.
 
 </div>

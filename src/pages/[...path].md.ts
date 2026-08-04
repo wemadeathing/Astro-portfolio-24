@@ -28,7 +28,7 @@ import {
   buildArchiveIndexAgentMarkdown,
   buildArchiveProjectAgentMarkdown,
 } from '../lib/agent-content';
-import { archiveProjects } from '../data/archive';
+import { visibleArchiveProjects } from '../data/archive';
 
 export const prerender = true;
 
@@ -47,7 +47,7 @@ export async function getStaticPaths() {
     { params: { path: 'archive' } },
   ];
 
-  for (const project of archiveProjects) {
+  for (const project of visibleArchiveProjects) {
     paths.push({ params: { path: `archive/${project.slug}` } });
   }
 

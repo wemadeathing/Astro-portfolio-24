@@ -1,11 +1,9 @@
 ---
-import ClickableImage from './ClickableImage.astro';
+import MermaidDiagram from './MermaidDiagram.astro';
 ---
 
-<div class="not-prose my-14">
-  <ClickableImage
-    src="/images/work/kota/kota-invoice-journey-generated.webp"
-    alt="Generated Kota invoice journey visual showing intent, context retrieval, structured drafting, and review before sending."
-    caption="A generated storyboard-style visual showing how Kota turns a plain-language invoice request into a reviewable draft."
-  />
-</div>
+<MermaidDiagram
+  name="kota-invoice-journey"
+  label="Flow diagram: asking for an invoice pulls that client's pricing, tone, and VAT status, calculates VAT and totals from real data, and prepares a structured draft. The draft is reviewed and either revised or sent, after which due date, payment status, and follow-ups are tracked automatically."
+  caption="A plain-language invoice request through to a reviewable, trackable draft."
+/>

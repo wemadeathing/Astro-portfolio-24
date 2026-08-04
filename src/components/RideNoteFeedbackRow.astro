@@ -1,0 +1,187 @@
+---
+const screens = [
+  {
+    src: '/images/work/ridenote/ridenote-feedback-rate.webp',
+    title: 'Rate the ride',
+    caption: 'Grip, Feel, and Control. Real language at both ends of each slider, not just a number.',
+  },
+  {
+    src: '/images/work/ridenote/ridenote-feedback-conditions.webp',
+    title: 'Tag the conditions',
+    caption: 'Weather and trail type, so patterns become visible over time.',
+  },
+  {
+    src: '/images/work/ridenote/ridenote-feedback-result.webp',
+    title: 'Saved, readable at a glance',
+    caption: 'Ten seconds of input becomes a result that is still useful months later.',
+  },
+];
+---
+
+<section class="not-prose rn-feedback-row my-12" aria-labelledby="rn-feedback-row-title">
+  <div class="rn-feedback-row__header">
+    <div>
+      <div class="rn-feedback-row__kicker">Three sliders, in the shipped app</div>
+      <h3 id="rn-feedback-row-title">Grip, Feel, Control</h3>
+    </div>
+    <p>Purpose-built feedback a generic notes app can't offer.</p>
+  </div>
+
+  <div class="rn-feedback-row__grid">
+    {screens.map((screen, index) => (
+      <figure class="rn-feedback-row__panel">
+        <button
+          type="button"
+          class="rn-feedback-row__phone"
+          data-image-src={screen.src}
+          data-image-alt={`${screen.title}: ${screen.caption}`}
+          data-gallery="ridenote-feedback-row"
+          aria-label={`Open ${screen.title}`}
+        >
+          <img
+            src={screen.src}
+            alt={`${screen.title}: ${screen.caption}`}
+            width="1170"
+            height="2532"
+            loading={index === 0 ? 'eager' : 'lazy'}
+            decoding="async"
+          />
+        </button>
+        <figcaption>
+          <strong>{screen.title}</strong>
+          <em>{screen.caption}</em>
+        </figcaption>
+      </figure>
+    ))}
+  </div>
+</section>
+
+<style>
+  .rn-feedback-row {
+    margin-inline: 0;
+    border-block: 1px solid hsl(var(--border) / 0.72);
+    padding-block: clamp(1.5rem, 4vw, 2.75rem);
+  }
+
+  .rn-feedback-row__header {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(18rem, 0.8fr);
+    gap: clamp(1rem, 4vw, 3rem);
+    align-items: end;
+    margin-bottom: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .rn-feedback-row__kicker {
+    color: hsl(var(--muted-foreground));
+    font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .rn-feedback-row h3 {
+    margin: 0.35rem 0 0;
+    color: hsl(var(--foreground));
+    font-size: clamp(1.45rem, 2.5vw, 2rem);
+    font-weight: 600;
+    line-height: 1.12;
+  }
+
+  .rn-feedback-row__header p {
+    margin: 0;
+    max-width: 36rem;
+    color: hsl(var(--muted-foreground));
+    font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+    line-height: 1.65;
+  }
+
+  .rn-feedback-row__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .rn-feedback-row__panel {
+    margin: 0;
+  }
+
+  /* Phone frame: matches the calculator flow, baseline flow, and v2 gallery
+     so every real screenshot in the case study reads as one consistent
+     device treatment. */
+  .rn-feedback-row__phone {
+    position: relative;
+    display: block;
+    width: 100%;
+    cursor: zoom-in;
+    border: 1px solid hsl(var(--border) / 0.75);
+    border-radius: 1.6rem;
+    background: linear-gradient(155deg, hsl(0 0% 15%), hsl(0 0% 6%));
+    padding: 0.4rem;
+  }
+
+  .rn-feedback-row__phone::after {
+    content: "";
+    position: absolute;
+    top: 0.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30%;
+    height: 0.85rem;
+    background: #000;
+    border-radius: 999px;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .rn-feedback-row__phone img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 1.25rem 1.25rem 0.3rem 0.3rem;
+    transition: transform 220ms ease, filter 220ms ease;
+  }
+
+  .rn-feedback-row__phone:hover img {
+    filter: contrast(1.02);
+    transform: scale(1.01);
+  }
+
+  .rn-feedback-row figcaption {
+    margin-top: 0.75rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.88rem;
+    line-height: 1.5;
+    text-align: left;
+  }
+
+  .rn-feedback-row figcaption strong,
+  .rn-feedback-row figcaption em {
+    display: block;
+  }
+
+  .rn-feedback-row figcaption strong {
+    color: hsl(var(--foreground));
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  .rn-feedback-row figcaption em {
+    margin-top: 0.12rem;
+    font-style: normal;
+  }
+
+  @media (max-width: 800px) {
+    .rn-feedback-row__header {
+      grid-template-columns: 1fr;
+      gap: 0.8rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .rn-feedback-row__grid {
+      grid-template-columns: 1fr;
+      max-width: 20rem;
+      margin-inline: auto;
+    }
+  }
+</style>

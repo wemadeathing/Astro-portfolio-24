@@ -1,0 +1,38 @@
+---
+/**
+ * Metrics
+ *
+ * Real quantified outcomes, styled to match PlaceholderMetrics but without
+ * the draft/dashed treatment, this is for numbers that are actually true.
+ * Use `note` for a source/date caveat rather than persuasion copy.
+ */
+interface Props {
+  title: string;
+  metrics: { label: string; value: string }[];
+  note?: string;
+}
+
+const { title, metrics, note } = Astro.props;
+---
+
+<figure class="not-prose my-10 border border-border/60 bg-muted/[0.04] p-6 sm:p-8">
+  <div class="flex items-center gap-2.5">
+    <span class="h-1.5 w-1.5 shrink-0 bg-primary"></span>
+    <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">{title}</span>
+  </div>
+
+  <div class="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
+    {metrics.map((metric) => (
+      <div class="border border-border/60 px-3 py-4 text-center">
+        <div class="text-lg font-semibold text-foreground">{metric.value}</div>
+        <div class="mt-1.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted-foreground/60">
+          {metric.label}
+        </div>
+      </div>
+    ))}
+  </div>
+
+  {note && (
+    <p class="mt-4 text-xs leading-[1.6] text-muted-foreground/70">{note}</p>
+  )}
+</figure>

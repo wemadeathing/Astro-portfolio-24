@@ -1,0 +1,218 @@
+---
+const pair = [
+  {
+    src: '/images/work/ridenote/ridenote-app-icon.webp',
+    title: 'App icon',
+    caption: 'The mark on a gradient field, plus the light and default variants shipped to the App Store.',
+    width: 1786,
+    height: 1786,
+  },
+  {
+    src: '/images/work/ridenote/ridenote-logo-construction.webp',
+    title: 'Mark construction',
+    caption: 'Built on a strict grid: an "N" folded into a single continuous ribbon, readable at icon size.',
+    width: 854,
+    height: 805,
+  },
+];
+
+const full = [
+  {
+    src: '/images/work/ridenote/ridenote-logo-lockup.webp',
+    title: 'Wordmark lockup',
+    caption: 'Mark and wordmark, set together for the App Store listing and marketing surfaces.',
+    width: 1050,
+    height: 300,
+  },
+  {
+    src: '/images/work/ridenote/ridenote-appstore-screenshots.webp',
+    title: 'App Store screenshots',
+    caption: 'The same colour and type system carried through to the listing itself: splash, then feature screens.',
+    width: 1140,
+    height: 580,
+  },
+];
+---
+
+<section class="not-prose rn-brand my-12" aria-labelledby="rn-brand-title">
+  <div class="rn-brand__header">
+    <div>
+      <div class="rn-brand__kicker">Brand and identity</div>
+      <h3 id="rn-brand-title">Mark, icon, type, and colour</h3>
+    </div>
+    <p>
+      Logo and app icon exploration, the type and colour system, and the iconography carried through to the App
+      Store listing.
+    </p>
+  </div>
+
+  <div class="rn-brand__pair">
+    {pair.map((item, index) => (
+      <figure class="rn-brand__panel">
+        <button
+          type="button"
+          class="rn-brand__image-button"
+          data-image-src={item.src}
+          data-image-alt={`${item.title}: ${item.caption}`}
+          data-gallery="ridenote-brand"
+          aria-label={`Open ${item.title}`}
+        >
+          <img
+            src={item.src}
+            alt={`${item.title}: ${item.caption}`}
+            width={item.width}
+            height={item.height}
+            loading={index === 0 ? 'eager' : 'lazy'}
+            decoding="async"
+          />
+        </button>
+        <figcaption>
+          <strong>{item.title}</strong>
+          <em>{item.caption}</em>
+        </figcaption>
+      </figure>
+    ))}
+  </div>
+
+  <div class="rn-brand__full">
+    {full.map((item) => (
+      <figure class="rn-brand__panel">
+        <button
+          type="button"
+          class="rn-brand__image-button"
+          data-image-src={item.src}
+          data-image-alt={`${item.title}: ${item.caption}`}
+          data-gallery="ridenote-brand"
+          aria-label={`Open ${item.title}`}
+        >
+          <img
+            src={item.src}
+            alt={`${item.title}: ${item.caption}`}
+            width={item.width}
+            height={item.height}
+            loading="lazy"
+            decoding="async"
+          />
+        </button>
+        <figcaption>
+          <strong>{item.title}</strong>
+          <em>{item.caption}</em>
+        </figcaption>
+      </figure>
+    ))}
+  </div>
+</section>
+
+<style>
+  .rn-brand {
+    margin-inline: 0;
+    border-block: 1px solid hsl(var(--border) / 0.72);
+    padding-block: clamp(1.5rem, 4vw, 2.75rem);
+  }
+
+  .rn-brand__header {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(18rem, 0.8fr);
+    gap: clamp(1rem, 4vw, 3rem);
+    align-items: end;
+    margin-bottom: clamp(1.25rem, 3vw, 2rem);
+  }
+
+  .rn-brand__kicker {
+    color: hsl(var(--muted-foreground));
+    font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .rn-brand h3 {
+    margin: 0.35rem 0 0;
+    color: hsl(var(--foreground));
+    font-size: clamp(1.45rem, 2.5vw, 2rem);
+    font-weight: 600;
+    line-height: 1.12;
+  }
+
+  .rn-brand__header p {
+    margin: 0;
+    max-width: 36rem;
+    color: hsl(var(--muted-foreground));
+    font-size: clamp(0.95rem, 1.2vw, 1.05rem);
+    line-height: 1.65;
+  }
+
+  .rn-brand__pair {
+    display: grid;
+    grid-template-columns: minmax(0, 0.62fr) minmax(0, 0.38fr);
+    gap: clamp(1rem, 2.8vw, 1.5rem);
+    margin-bottom: clamp(1rem, 2.8vw, 1.5rem);
+  }
+
+  .rn-brand__full {
+    display: grid;
+    gap: clamp(1rem, 2.8vw, 1.5rem);
+  }
+
+  .rn-brand__panel {
+    margin: 0;
+  }
+
+  .rn-brand__image-button {
+    display: block;
+    width: 100%;
+    cursor: zoom-in;
+    overflow: hidden;
+    border: 1px solid hsl(var(--border) / 0.82);
+    background: hsl(var(--card) / 0.5);
+    padding: 0;
+    text-align: left;
+  }
+
+  .rn-brand__image-button img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: transform 220ms ease, filter 220ms ease;
+  }
+
+  .rn-brand__image-button:hover img {
+    filter: contrast(1.02);
+    transform: scale(1.01);
+  }
+
+  .rn-brand figcaption {
+    margin-top: 0.75rem;
+    color: hsl(var(--muted-foreground));
+    font-size: 0.88rem;
+    line-height: 1.5;
+    text-align: left;
+  }
+
+  .rn-brand figcaption strong,
+  .rn-brand figcaption em {
+    display: block;
+  }
+
+  .rn-brand figcaption strong {
+    color: hsl(var(--foreground));
+    font-style: normal;
+    font-weight: 600;
+  }
+
+  .rn-brand figcaption em {
+    margin-top: 0.12rem;
+    font-style: normal;
+  }
+
+  @media (max-width: 800px) {
+    .rn-brand__header,
+    .rn-brand__pair {
+      grid-template-columns: 1fr;
+    }
+
+    .rn-brand__header {
+      gap: 0.8rem;
+    }
+  }
+</style>

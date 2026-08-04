@@ -47,3 +47,8 @@ src/drafts/
 
 # Netlify local state (should not be tracked)
 .netlify/state.json
+.playwright-mcp/
+
+# Temp files from scripts/generate-diagrams.mjs
+.diagram-harness.html
+.diagram-build/

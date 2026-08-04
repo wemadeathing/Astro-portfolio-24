@@ -1,11 +1,9 @@
 ---
-import ClickableImage from './ClickableImage.astro';
+import MermaidDiagram from './MermaidDiagram.astro';
 ---
 
-<div class="not-prose my-14">
-  <ClickableImage
-    src="/images/work/kota/kota-ai-architecture-generated.webp"
-    alt="Generated Kota AI architecture visual showing intent, routing, specialist lanes, and structured outputs."
-    caption="A generated case-study visual showing how intent, routing, specialist lanes, and structured outputs work together inside Kota."
-  />
-</div>
+<MermaidDiagram
+  name="kota-request-flow"
+  label="Flow diagram: a plain-language request is classified and routed to a quick action, a multi-step task, or a compliance question. Each path pulls real numbers from records, prepares a reviewable draft, then checks whether the action touches real data. Anything sensitive is held for approval before completing, and the result is remembered for next time."
+  caption="How any request moves through Kota: routed, backed by real numbers, drafted, reviewed if it touches real data, then remembered."
+/>

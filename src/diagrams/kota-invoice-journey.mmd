@@ -1,0 +1,8 @@
+flowchart TD
+    A[You ask for an invoice for a client] --> B[Kota pulls that client's context: pricing, tone, VAT status]
+    B --> C[VAT and totals calculated from real data, not guessed]
+    C --> D[Structured invoice draft prepared]
+    D --> E{Review the draft}
+    E -->|Needs changes| D
+    E -->|Looks right| F[Send it]
+    F --> G[Tracked automatically: due date, payment status, follow-ups]

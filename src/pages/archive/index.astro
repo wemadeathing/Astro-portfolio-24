@@ -1,7 +1,7 @@
 ---
 export const prerender = true;
 import Layout from '../../layouts/Layout.astro';
-import { archiveProjects } from '../../data/archive';
+import { visibleArchiveProjects } from '../../data/archive';
 import { buildArchiveIndexAgentMarkdown } from '../../lib/agent-content';
 
 const { markdown: agentMarkdown, pathLabel: agentPathLabel } = buildArchiveIndexAgentMarkdown();
@@ -36,7 +36,7 @@ const hatchStyle =
       </div>
 
       <div class="mt-12 grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-3 stagger-children">
-        {archiveProjects.map((project) => (
+        {visibleArchiveProjects.map((project) => (
           <a
             href={`/archive/${project.slug}`}
             class="group flex h-full flex-col border border-border/80 transition-colors hover:border-primary/35 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"

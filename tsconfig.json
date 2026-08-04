@@ -10,9 +10,8 @@
     "resolveJsonModule": true,
     "allowJs": true,
     "noImplicitAny": false,
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": [
