@@ -112,7 +112,7 @@ export const POST: APIRoute = async ({ request }) => {
     const { data, error } = await resend.emails.send({
       from,
       to: [toEmail],
-      replyTo: safeEmail,
+      reply_to: safeEmail,
       subject: `New Contact Form Submission from ${escapeHtml(safeName)}`,
       html: `
         <h2>New Contact Form Submission</h2>
