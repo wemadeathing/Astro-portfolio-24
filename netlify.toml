@@ -29,6 +29,16 @@
   status_code = 429
   custom_message = "Too many requests. Please wait a moment and try again."
 
+# Rate limiting for intake submission endpoint
+# Tighter than /api/chat since every allowed request sends a real email.
+[[rate_limit]]
+  path = "/api/submit-intake"
+  window_limit = 5
+  window_size = 60
+  aggregator = "ip"
+  status_code = 429
+  custom_message = "Too many submissions. Please wait a moment and try again."
+
 [[headers]]
   for = "/*"
   [headers.values]
@@ -38,4 +48,11 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
     Permissions-Policy = "camera=(), microphone=(), geolocation=()"
     Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://api.web3forms.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com https://api.web3forms.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://api.web3forms.com"
+    # connect-src includes api.nasifsalaam.com for the standalone chat
+    # backend (server/, deployed on Railway). IMPORTANT: this must match
+    # whatever custom domain actually gets attached to the Railway service —
+    # update this the moment that domain is finalized, or every browser
+    # request to it will be silently blocked (console-only error, no
+    # network request, easy to miss since it isn't a CORS error). See
+    # /Users/nasifsalaam/.claude/plans/fizzy-brewing-eagle.md §Frontend.
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://api.web3forms.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com https://api.web3forms.com https://api.nasifsalaam.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://api.web3forms.com"

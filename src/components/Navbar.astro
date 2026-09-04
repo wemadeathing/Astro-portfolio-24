@@ -9,10 +9,12 @@ type NavItem = {
 
 // Order is deliberate: work and background first (what a hiring manager needs),
 // freelance services after. Contact must stay last: the desktop nav renders it
-// separately as the CTA button via slice(0, -1).
+// separately as the CTA button via slice(0, -1) — the sole CTA, so it doesn't
+// compete with a second button-styled link.
 const navItems: NavItem[] = [
   { href: '/projects', label: 'Work', description: 'Browse featured case studies' },
   { href: '/about', label: 'About', description: 'Background, experience, and what I am looking for' },
+  { href: '/chat', label: 'Chat', description: 'Ask questions or start a project with the AI' },
   { href: '/contact', label: 'Contact', description: 'Send a message or start a conversation' },
 ];
 
@@ -55,8 +57,8 @@ const isHome = pathname === '/' || pathname === '';
               download={item.download ? '' : undefined}
               class:list={[
                 'px-3 py-2 font-mono text-[11px] uppercase tracking-[0.1em] transition-colors',
-                isActive 
-                  ? 'text-foreground' 
+                isActive
+                  ? 'text-foreground'
                   : 'text-muted-foreground hover:text-foreground'
               ]}
               aria-current={isActive ? 'page' : undefined}
@@ -66,7 +68,7 @@ const isHome = pathname === '/' || pathname === '';
           );
         })}
         <a
-          href="/contact" 
+          href="/contact"
           class="btn-stripe ml-1 min-h-[42px] px-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
         >
           Contact
@@ -152,6 +154,13 @@ const isHome = pathname === '/' || pathname === '';
 
     const setOpen = (open: boolean) => {
       menuRoot.dataset.open = open ? 'true' : 'false';
+      // Closed state is opacity-0 + pointer-events-none (for the fade
+      // transition), which hides it visually but does NOT remove it from
+      // the keyboard tab order — a screen reader or keyboard user could
+      // still Tab into "Close menu" and other panel controls while the
+      // panel is invisible. `inert` removes the whole subtree from both
+      // focus and the accessibility tree while closed.
+      menuRoot.inert = !open;
       menuButton.setAttribute('aria-expanded', open ? 'true' : 'false');
       setBodyScrollLock(open);
 

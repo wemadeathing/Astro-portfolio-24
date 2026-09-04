@@ -443,18 +443,58 @@ body.chat-landing-mode .site-footer {
 }
 
 @keyframes slideUp {
-  from { 
-    opacity: 0; 
-    transform: translateY(40px); 
+  from {
+    opacity: 0;
+    transform: translateY(40px);
   }
-  to { 
-    opacity: 1; 
-    transform: translateY(0); 
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
+}
+
+/* Streamed-line reveal (Chat) — paired with client-side reveal pacing
+   (ChatInterface.tsx) that drip-feeds a full line/sentence onto the DOM at
+   a time, on a steady clock decoupled from the network's own (uneven)
+   delivery rate. Individual words still get their own span so long lines
+   wrap normally, but every word in a just-revealed chunk mounts in the
+   same React update — so they animate as one coordinated line, not a
+   flurry of independent pops. A plain fade+rise (no blur) reads calmer
+   across a whole line at once than it did for single words. Already
+   covered by the prefers-reduced-motion override above (animation-duration
+   -> 0.01ms). */
+@keyframes streamWordIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-stream-word {
+  display: inline-block;
+  animation: streamWordIn 480ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .animate-float {
   animation: float 6s ease-in-out infinite;
+}
+
+/* Dictation "you're recording" affordance (Chat mic button) — a simple
+   audio-level-meter metaphor rather than a generic pulse, so it's
+   unambiguous at a glance that the mic is live. Bars are inert (no real
+   audio analysis), just staggered so they don't move in lockstep. */
+@keyframes recordingBar {
+  0%, 100% { transform: scaleY(0.35); }
+  50% { transform: scaleY(1); }
+}
+
+.recording-bar {
+  animation: recordingBar 0.9s ease-in-out infinite;
+  transform-origin: center;
 }
 
 

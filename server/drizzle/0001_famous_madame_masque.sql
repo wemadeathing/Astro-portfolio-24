@@ -1,0 +1,1 @@
+ALTER TABLE "conversations" ADD COLUMN "manual_edit_fields" jsonb DEFAULT '[]'::jsonb;

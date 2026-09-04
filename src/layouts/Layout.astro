@@ -27,6 +27,17 @@ interface Props {
   agentMarkdown?: string;
   /** Optional path label shown in the Agent View header bar. */
   agentPathLabel?: string;
+  /**
+   * Locks body/main to the viewport height (instead of the default
+   * min-h-screen/natural document flow) so a page's own content can run its
+   * own internal overflow-y-auto scroll region with a sticky footer that
+   * actually clips content behind it. Without this, `main`'s flex-1 has no
+   * bounded height to resolve against (min-h-screen allows the page to grow
+   * past 100vh), so a child's `h-full` + internal scroll container never
+   * gets a real boundary — the whole page scrolls instead, and anything
+   * "sticky" just floats over content instead of containing it.
+   */
+  appShell?: boolean;
 }
 
 const gaMeasurementId = import.meta.env.GA_MEASUREMENT_ID || '';
@@ -43,6 +54,7 @@ const {
   ogType = "website",
   agentMarkdown,
   agentPathLabel,
+  appShell = false,
 } = Astro.props;
 
 const siteUrl = "https://nasifsalaam.com"; // Your actual domain
@@ -228,7 +240,10 @@ const structuredData = {
       </>
     )}
   </head>
-  <body class="min-h-screen bg-background font-sans antialiased flex flex-col relative overflow-x-hidden text-sm leading-6">
+  <body class:list={[
+    'bg-background font-sans antialiased flex flex-col relative overflow-x-hidden text-sm leading-6',
+    appShell ? 'h-dvh overflow-hidden' : 'min-h-screen',
+  ]}>
     <!-- Skip to content link for keyboard accessibility -->
     <a 
       href="#main-content" 
@@ -252,7 +267,7 @@ const structuredData = {
     </div>
     {!hideNav && <div class="site-backdrop" aria-hidden="true"></div>}
     {!hideNav && <Navbar />}
-    <main id="main-content" class={`page-content flex-1 ${!hideNav ? 'pt-8 sm:pt-10' : ''}`}>
+    <main id="main-content" class={`page-content flex-1 ${appShell ? 'min-h-0' : ''} ${!hideNav ? 'pt-8 sm:pt-10' : ''}`}>
       <slot />
     </main>
     {!hideFooter && <Footer />}

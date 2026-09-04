@@ -1,40 +1,8 @@
 import { Resend } from 'resend';
 import type { APIRoute } from 'astro';
-
-function escapeHtml(unsafe: string): string {
-  return unsafe
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
+import { escapeHtml, getEnv, formatFrom } from '../../lib/emailHelpers';
 
 export const prerender = false;
-
-const getEnv = (key: string) => {
-  // Runtime (Node)
-  const nodeVal = (globalThis as any)?.process?.env?.[key];
-  if (typeof nodeVal === 'string' && nodeVal.trim()) return nodeVal.trim();
-
-  // Runtime (Edge / Deno)
-  const denoGet = (globalThis as any)?.Deno?.env?.get;
-  if (typeof denoGet === 'function') {
-    const denoVal = denoGet.call((globalThis as any).Deno.env, key);
-    if (typeof denoVal === 'string' && denoVal.trim()) return denoVal.trim();
-  }
-
-  // Build-time (Vite/Astro) fallback
-  const buildTime = (import.meta as any)?.env?.[key];
-  return typeof buildTime === 'string' ? buildTime.trim() : '';
-};
-
-const formatFrom = (emailOrFrom: string) => {
-  if (!emailOrFrom) return '';
-  // If already formatted like "Name <email@...>", keep it.
-  if (emailOrFrom.includes('<') && emailOrFrom.includes('>')) return emailOrFrom;
-  return `Contact Form <${emailOrFrom}>`;
-};
 
 export const POST: APIRoute = async ({ request }) => {
   const resendApiKey = getEnv('RESEND_API_KEY');

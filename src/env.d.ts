@@ -10,6 +10,9 @@ interface ImportMetaEnv {
   readonly MAILERLITE_GROUP_ID?: string;
   readonly MAILERLITE_API_BASE_URL?: string;
   readonly OPENROUTER_API_KEY?: string;
+  readonly CALENDLY_URL?: string;
+  /** Base URL of the standalone chat backend (server/) — must be PUBLIC_-prefixed to reach the client bundle. */
+  readonly PUBLIC_CHAT_API_BASE?: string;
 }
 
 interface ImportMeta {

@@ -2,6 +2,23 @@ import type { APIRoute } from 'astro';
 import { getCollection, getEntry, type CollectionEntry } from 'astro:content';
 import { z } from 'zod';
 import aboutPageSource from '../about.astro?raw';
+import {
+  QuoteFieldsSchema,
+  ContentFieldsSchema,
+  mergeFields,
+  PROJECT_TYPES,
+  BUDGET_BRACKETS_ZAR,
+  TIMELINE_OPTIONS,
+  PROJECT_TYPE_LABELS,
+  BUDGET_LABELS,
+  TIMELINE_LABELS,
+  QUOTE_FIELD_ORDER,
+  QUOTE_FIELD_LABELS,
+  CONTENT_FIELD_ORDER,
+  CONTENT_FIELD_LABELS,
+  type QuoteFields,
+  type ContentFields,
+} from '../../lib/intake';
 
 const ModelJsonSchema = z.object({
   answer: z.string().min(1),
@@ -18,6 +35,9 @@ const ModelJsonSchema = z.object({
   resource_cards: z.array(z.string().min(1)).optional(),
   blog_cards: z.array(z.string().min(1)).optional(),
   follow_ups: z.array(z.string().min(1).max(80)).max(3).optional(),
+  intent: z.enum(['qa', 'quote_intake', 'content_intake']).optional(),
+  quote_fields: QuoteFieldsSchema.optional(),
+  content_fields: ContentFieldsSchema.optional(),
 });
 
 type Chip = { label: string; href: string; kind?: string };
@@ -237,6 +257,21 @@ const sanitizeUserInput = (content: string): string => {
   return sanitized;
 };
 
+// Client-resent structured intake state ("collected") is a fresh prompt-injection
+// surface (it can be tampered with via devtools even without typing anything in
+// chat), so every string value goes through the same stripping as a real user
+// message before it's ever echoed back into the system prompt.
+const sanitizeIncomingFields = <T extends Record<string, unknown>>(raw: unknown): Partial<T> => {
+  if (!raw || typeof raw !== 'object') return {};
+  const out: Record<string, string> = {};
+  for (const [k, v] of Object.entries(raw as Record<string, unknown>)) {
+    if (typeof v === 'string' && v.trim()) {
+      out[k] = sanitizeUserInput(v);
+    }
+  }
+  return out as Partial<T>;
+};
+
 const tokenSet = (s: string) =>
   new Set(
     normalize(s)
@@ -274,6 +309,26 @@ const bigramDice = (a: string, b: string) => {
     }
   }
   return (2 * inter) / (ag.length + bg.length);
+};
+
+// Free text from the LLM (e.g. "maybe around 40k" for budget) is never trusted
+// as-is; it's fuzzy-resolved against a canonical enum for display/checklist
+// purposes, with the raw text kept as a fallback if nothing resolves.
+const resolveEnum = <T extends string>(
+  raw: string | undefined,
+  options: readonly T[],
+  labels: Record<T, string>
+): string | undefined => {
+  if (!raw) return undefined;
+  const low = raw.toLowerCase().trim();
+  const exact = options.find((o) => o === low || o.replace(/_/g, ' ') === low || labels[o].toLowerCase() === low);
+  if (exact) return labels[exact];
+  let best: { value: T; score: number } | null = null;
+  for (const o of options) {
+    const score = Math.max(bigramDice(raw, o.replace(/_/g, ' ')), bigramDice(raw, labels[o]));
+    if (!best || score > best.score) best = { value: o, score };
+  }
+  return best && best.score >= 0.45 ? labels[best.value] : raw;
 };
 
 const allowedChipHref = (href: string, projectSlugs: Set<string>, blogSlugs: Set<string>) => {
@@ -364,6 +419,28 @@ export const POST: APIRoute = async ({ request }) => {
         content: typeof msg?.content === 'string' ? sanitizeHistoryContent(msg.content) : ''
       }))
       .filter((m: any) => (m.role === 'user' || m.role === 'assistant') && m.content.length > 0);
+
+    // Client-resent structured intake state (server stays stateless per request,
+    // same pattern as `history`). Reject/ignore anything oversized or malformed
+    // rather than trusting it blindly.
+    const collectedRaw = body?.collected;
+    const collectedSize = (() => {
+      try {
+        return JSON.stringify(collectedRaw ?? {}).length;
+      } catch {
+        return Infinity;
+      }
+    })();
+    const collectedTrusted = collectedRaw && typeof collectedRaw === 'object' && collectedSize <= 8000;
+    if (collectedRaw && !collectedTrusted) {
+      console.warn('Ignoring oversized/malformed collected payload', { size: collectedSize });
+    }
+
+    const prevQuoteFields = sanitizeIncomingFields<QuoteFields>(collectedTrusted ? (collectedRaw as any).quoteFields : undefined);
+    const prevContentFields = sanitizeIncomingFields<ContentFields>(collectedTrusted ? (collectedRaw as any).contentFields : undefined);
+    const prevIntentRaw = collectedTrusted ? (collectedRaw as any).intent : undefined;
+    const prevIntent: 'quote_intake' | 'content_intake' | undefined =
+      prevIntentRaw === 'quote_intake' || prevIntentRaw === 'content_intake' ? prevIntentRaw : undefined;
 
     const wantsStream =
       request.headers.get('accept')?.includes('text/event-stream') ||
@@ -727,8 +804,12 @@ export const POST: APIRoute = async ({ request }) => {
     }
 
     // 3. LLM call via OpenRouter (paid)
-    const PRIMARY_MODEL = 'google/gemini-2.5-flash-lite';
-    const FALLBACK_MODEL = 'deepseek/deepseek-v4-flash';
+    const PRIMARY_MODEL = 'deepseek/deepseek-v4-flash-0731';
+    // deepseek-v4-flash-0731 has proven latency-inconsistent (2.9s-14s observed
+    // across a small local sample); fall back to a model with consistently
+    // fast, predictable latency so a slow primary attempt doesn't just become
+    // a hard user-facing error.
+    const FALLBACK_MODEL = 'google/gemini-2.5-flash-lite';
 
     const callOpenRouter = async (
       messages: { role: 'system' | 'user' | 'assistant'; content: string }[],
@@ -753,6 +834,12 @@ export const POST: APIRoute = async ({ request }) => {
             temperature: 0.4,
             max_tokens: 2048,
             response_format: { type: 'json_object' },
+            // Reasoning tokens add several extra seconds of latency for no
+            // quality benefit on this short-answer/JSON-mode task, and risk
+            // blowing the Netlify free-tier 9s function budget. Disabled here;
+            // note some models (e.g. glm-5.3-flash) reject this outright with
+            // "Reasoning is mandatory" — reconsider if the model changes again.
+            reasoning: { enabled: false },
           }),
           signal: controller.signal,
         });
@@ -791,8 +878,12 @@ export const POST: APIRoute = async ({ request }) => {
       messages: { role: 'system' | 'user' | 'assistant'; content: string }[],
       timeoutMs: number,
     ): Promise<string> => {
+      // Cap the primary attempt below the full budget so a slow/inconsistent
+      // primary model still leaves enough time for the fallback to actually
+      // fire, instead of the primary silently eating the whole deadline.
+      const primaryTimeoutMs = Math.min(timeoutMs, 4500);
       try {
-        return await callOpenRouter(messages, timeoutMs, PRIMARY_MODEL);
+        return await callOpenRouter(messages, primaryTimeoutMs, PRIMARY_MODEL);
       } catch (error: any) {
         const msg = error?.message || '';
         // Fall back to secondary model on rate limit, API error, or timeout
@@ -808,6 +899,13 @@ export const POST: APIRoute = async ({ request }) => {
         throw error;
       }
     };
+
+    const alreadyCollectedQuoteContext = Object.keys(prevQuoteFields).length
+      ? `\nContext - Already collected (quote_intake, do not re-ask for these):\n${JSON.stringify(prevQuoteFields).slice(0, 1000)}\n`
+      : '';
+    const alreadyCollectedContentContext = Object.keys(prevContentFields).length
+      ? `\nContext - Already collected (content_intake, do not re-ask for these):\n${JSON.stringify(prevContentFields).slice(0, 1000)}\n`
+      : '';
 
     const systemPrompt = `
 You are an AI assistant for Nasif Salaam.
@@ -879,7 +977,10 @@ CRITICAL RESPONSE FORMAT:
   "project_cards"?: string[],
   "resource_cards"?: string[],
   "blog_cards"?: string[],
-  "follow_ups"?: string[] // 2-3 contextual follow-up questions to guide the conversation deeper
+  "follow_ups"?: string[], // 2-3 contextual follow-up questions to guide the conversation deeper
+  "intent"?: "qa" | "quote_intake" | "content_intake", // see Intent detection rules below
+  "quote_fields"?: { name?, email?, phone?, company?, project_type?, goals?, budget_range?, timeline?, notes?, referral_source? }, // only fields just stated/corrected THIS turn
+  "content_fields"?: { name?, email?, project_name?, headline?, intro_text?, about_story?, team_bios?, services?, pricing_info?, testimonials?, business_info?, social_links?, seo_keywords?, additional_pages?, anything_else? } // only fields just stated/corrected THIS turn
 }
 
 Chips rules:
@@ -919,6 +1020,22 @@ Follow-up questions rules:
   - After explaining experience → "What was your role at Immersion Group?"
 - Keep each follow-up under 80 characters.
 - Always provide follow-ups unless it's a goodbye/closing statement.
+
+Intent detection:
+- Set "intent" to "quote_intake" if the user wants a project cost estimate, wants to hire Nasif, or describes a new website/branding/UX/app project they want built.
+- Set "intent" to "content_intake" if the user says a project has already been approved/scoped and they're providing copy/content for it (headline, about text, services, team bios, etc.), or explicitly says they're ready to send content.
+- Otherwise omit "intent" (default general Q&A) — do not force every message into a flow.
+- Once a flow starts, keep returning the same "intent" every turn until the user submits or clearly changes topic.
+
+Guided data collection (quote_intake / content_intake):
+- Ask for ONE or TWO missing fields per turn, conversationally — never a long form-like list of questions.
+- Check the "Already collected" reference block below before asking; never re-ask for a field already captured there.
+- In "quote_fields"/"content_fields", only include values the user JUST stated or corrected in THIS message — you do not need to repeat earlier fields, the server remembers them for you.
+- If the user says "I don't know" / "not sure" for budget or timeline, do NOT leave it blank and move on silently — offer 2-4 concrete options in your answer text (for budget, use South African Rand brackets: "Under R15k, R15k–R35k, R35k–R75k, R75k–R150k, R150k+") and let them pick one, or accept "not sure yet" as a valid answer and continue.
+- Every field is optional in the end. If the user wants to stop answering questions and submit with what they have, stop asking and acknowledge that's fine — do not block them.
+- Never invent or assume a field value the user didn't provide.
+- For content_intake, note that logos/photos/documents can't be uploaded in this chat — ask the user to email those files separately once you've collected the text content.
+- Stay focused during an active flow: don't attach "chips", "project_cards", "resource_cards", or "blog_cards" unless the user explicitly asks to see examples or past work. The goal is to move the intake forward, not to showcase the portfolio.
 
 EXAMPLES (for response style and format):
 
@@ -975,6 +1092,24 @@ Assistant: {
   "chips": [{"label": "Resources", "href": "/resources"}]
 }
 
+Example 8 - Quote intake, first turn:
+User: "I want a quote for a new website"
+Assistant: {
+  "answer": "Happy to help you get a quote started. First, what's your name and email so I can follow up, and what's the project mainly about?",
+  "intent": "quote_intake",
+  "quote_fields": { "project_type": "website" },
+  "follow_ups": ["What's the goal of the site?", "Do you have a budget range in mind?", "What's your timeline?"]
+}
+
+Example 9 - Quote intake, user unsure on budget (server already has name/email/project_type from prior turns):
+User: "Not sure on budget yet"
+Assistant: {
+  "answer": "No problem — here's a rough guide: Under R15k, R15k–R35k, R35k–R75k, R75k–R150k, or R150k+. Pick whichever feels closest, or we can leave it as 'not sure yet' for now. What's your timeline looking like?",
+  "intent": "quote_intake",
+  "quote_fields": { "budget_range": "not sure yet" },
+  "follow_ups": ["ASAP", "1-3 months", "Flexible timing"]
+}
+
 CRITICAL CONSTRAINT - Grounding in context:
 - NEVER mention resource names, book titles, tool names, or specific recommendations that are not explicitly listed in the Resources context below.
 - If asked for recommendations and nothing relevant exists in the Resources context, acknowledge this honestly rather than inventing resources.
@@ -1002,7 +1137,7 @@ ${blogContext}
 
 Context - Relevant Resources (top matches):
 ${resourceContext}
---- END REFERENCE DATA ---
+${alreadyCollectedQuoteContext}${alreadyCollectedContentContext}--- END REFERENCE DATA ---
 `;
 
     // Build chat history for Groq/OpenAI format
@@ -1134,6 +1269,13 @@ ${resourceContext}
       parsed = sanitizeOutput(parsed);
     }
 
+    // During an active intake flow, a message like "my PROJECT is..." shouldn't
+    // trip the plain-Q&A "show me your work" keyword heuristic below — the word
+    // "project" is just how people describe what they want built.
+    const inActiveIntakeFlow = Boolean(
+      parsed?.intent === 'quote_intake' || parsed?.intent === 'content_intake' || prevIntent
+    );
+
     const answer = parsed?.answer?.trim();
     const replyRaw = answer && answer.length ? answer : 'Could you share a bit more detail on what you’re looking for?';
     const reply = stripMarkdownLite(replyRaw);
@@ -1176,17 +1318,18 @@ ${resourceContext}
       lowerMsg.includes('read about');
 
     // If the model didn't return cards but the user clearly asked for portfolio/work, attach top matches.
-    const inferredCards = wantsWork
+    // Suppressed during an active intake flow (see inActiveIntakeFlow above).
+    const inferredCards = wantsWork && !inActiveIntakeFlow
       ? makeCardProjects(topProjects.map((p) => p.slug).slice(0, 4))
       : [];
 
     // If the model didn't return resources but user asked for recommendations, attach top matches.
-    const inferredResources = wantsResources && attachedResources.length === 0
+    const inferredResources = wantsResources && !inActiveIntakeFlow && attachedResources.length === 0
       ? makeCardResources(topResources.map((r) => r.title).slice(0, 4))
       : [];
 
     // If the model didn't return blog cards but user asked about writing/articles, attach top matches.
-    const inferredBlogs = wantsBlogs && attachedBlogs.length === 0
+    const inferredBlogs = wantsBlogs && !inActiveIntakeFlow && attachedBlogs.length === 0
       ? makeCardBlogs(topBlogs.map((b) => b.slug).slice(0, 4))
       : [];
 
@@ -1204,6 +1347,63 @@ ${resourceContext}
 
     const followUps = Array.isArray(parsed?.follow_ups) ? parsed.follow_ups.slice(0, 3) : [];
 
+    // Merge this turn's newly-stated fields onto the client-resent baseline —
+    // the server-side merged object is authoritative, never the LLM's own
+    // turn-to-turn memory. This is what prevents a turn that omits a field
+    // (or the model simply "forgetting" it was already captured) from ever
+    // erasing prior progress.
+    const llmQuoteFields = sanitizeIncomingFields<QuoteFields>(parsed?.quote_fields);
+    const llmContentFields = sanitizeIncomingFields<ContentFields>(parsed?.content_fields);
+    const mergedQuoteFields = mergeFields(prevQuoteFields, llmQuoteFields);
+    const mergedContentFields = mergeFields(prevContentFields, llmContentFields);
+
+    let intent: 'quote_intake' | 'content_intake' | undefined =
+      parsed?.intent === 'quote_intake' || parsed?.intent === 'content_intake' ? parsed.intent : undefined;
+    if (!intent) {
+      // Sticky fallback: the model isn't required to repeat "intent" every
+      // turn, so infer it from whichever flow already has data if it omits it.
+      if (Object.keys(mergedQuoteFields).length > 0) intent = 'quote_intake';
+      else if (Object.keys(mergedContentFields).length > 0) intent = 'content_intake';
+      else if (prevIntent) intent = prevIntent;
+    }
+
+    type IntakePayload = {
+      intent: 'quote_intake' | 'content_intake';
+      flow: 'quote' | 'content';
+      fields: Record<string, string>;
+      missingFields: string[];
+      readyToSubmit: boolean;
+    };
+
+    let intakePayload: IntakePayload | undefined;
+
+    if (intent === 'quote_intake') {
+      const resolvedProjectType = resolveEnum(mergedQuoteFields.project_type, PROJECT_TYPES, PROJECT_TYPE_LABELS);
+      const resolvedBudget = resolveEnum(mergedQuoteFields.budget_range, BUDGET_BRACKETS_ZAR, BUDGET_LABELS);
+      const resolvedTimeline = resolveEnum(mergedQuoteFields.timeline, TIMELINE_OPTIONS, TIMELINE_LABELS);
+      const displayFields: Record<string, string> = {};
+      for (const key of QUOTE_FIELD_ORDER) {
+        const raw = mergedQuoteFields[key];
+        if (!raw) continue;
+        if (key === 'project_type' && resolvedProjectType) displayFields[key] = resolvedProjectType;
+        else if (key === 'budget_range' && resolvedBudget) displayFields[key] = resolvedBudget;
+        else if (key === 'timeline' && resolvedTimeline) displayFields[key] = resolvedTimeline;
+        else displayFields[key] = raw;
+      }
+      const missingFields = QUOTE_FIELD_ORDER.filter((k) => !mergedQuoteFields[k]).map((k) => QUOTE_FIELD_LABELS[k]);
+      const readyToSubmit = Boolean(mergedQuoteFields.name && mergedQuoteFields.email);
+      intakePayload = { intent, flow: 'quote', fields: displayFields, missingFields, readyToSubmit };
+    } else if (intent === 'content_intake') {
+      const displayFields: Record<string, string> = {};
+      for (const key of CONTENT_FIELD_ORDER) {
+        const raw = mergedContentFields[key];
+        if (raw) displayFields[key] = raw;
+      }
+      const missingFields = CONTENT_FIELD_ORDER.filter((k) => !mergedContentFields[k]).map((k) => CONTENT_FIELD_LABELS[k]);
+      const readyToSubmit = Boolean(mergedContentFields.name && mergedContentFields.email);
+      intakePayload = { intent, flow: 'content', fields: displayFields, missingFields, readyToSubmit };
+    }
+
     const payload = {
       reply,
       chips,
@@ -1212,6 +1412,7 @@ ${resourceContext}
       blogs: blogsForPayload,
       followUps,
       mode: 'online',
+      ...(intakePayload ? { intake: intakePayload } : {}),
     };
 
     if (!wantsStream) return json(payload, 200);

@@ -1,0 +1,54 @@
+---
+export const prerender = true;
+import Layout from '../layouts/Layout.astro';
+import ChatInterface from '../components/Chat/ChatInterface';
+import { getCollection } from 'astro:content';
+
+const blogPosts = await getCollection('blog');
+const latestPostEntry = blogPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())[0];
+const latestPost = latestPostEntry
+  ? {
+      slug: latestPostEntry.slug,
+      data: {
+        title: latestPostEntry.data.title ?? '',
+        description: latestPostEntry.data.description ?? '',
+        pubDate: latestPostEntry.data.pubDate ?? new Date(),
+        tags: latestPostEntry.data.tags ?? [],
+      },
+    }
+  : undefined;
+
+const allProjects = await getCollection('projects');
+const projects = allProjects
+  .filter((project) => project.data.published !== false)
+  .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999))
+  .slice(0, 6)
+  .map((p) => ({
+    title: p.data.title,
+    description: p.data.description,
+    image: p.data.image,
+    tags: p.data.tags || [],
+    slug: p.slug,
+  }));
+
+const calendlyUrl = import.meta.env.CALENDLY_URL || undefined;
+---
+
+<Layout
+  title="AI Chat | Nasif Salaam"
+  description="Ask about projects, process, availability, or start a project quote — an AI assistant with full context on the work."
+  appShell
+  hideFooter
+>
+  <ChatInterface client:only="react" globalSiteNav={true} forceView="chat" latestPost={latestPost} projects={projects} calendlyUrl={calendlyUrl}>
+    <div slot="fallback" class="w-full py-16 px-4">
+      <div class="shell-wrap flex flex-col items-center gap-6">
+        <div class="h-3 w-28 bg-muted/25 animate-pulse"></div>
+        <div class="h-10 w-full max-w-[560px] bg-muted/20 animate-pulse"></div>
+        <div class="h-5 w-full max-w-[460px] bg-muted/15 animate-pulse"></div>
+        <div class="h-5 w-full max-w-[400px] bg-muted/10 animate-pulse"></div>
+        <div class="mt-4 h-11 w-40 bg-muted/20 animate-pulse"></div>
+      </div>
+    </div>
+  </ChatInterface>
+</Layout>
