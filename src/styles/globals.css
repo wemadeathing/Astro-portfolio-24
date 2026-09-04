@@ -219,6 +219,36 @@
     color: hsl(var(--background));
   }
 
+  /* Lead-action emphasis, stated in the same hairline language: the corner
+     marks and stripe pick up the accent instead of the neutral foreground.
+     data-tone="muted" (below) is only a 16%->9% shift in a sparse diagonal
+     hatch, which is invisible at button scale — so a "primary + two muted"
+     row still reads as three equal buttons. This raises the lead action
+     instead of dimming its neighbours, which also means no label loses
+     contrast to carry the hierarchy. */
+  .btn-stripe[data-tone="accent"] {
+    background-image: repeating-linear-gradient(
+      119deg,
+      color-mix(in srgb, hsl(var(--primary)) 34%, transparent) 0 1px,
+      transparent 1px 5px
+    );
+  }
+
+  .btn-stripe[data-tone="accent"]::before {
+    background-image:
+      linear-gradient(to right, hsl(var(--primary)) 8px, transparent 8px, transparent calc(100% - 8px), hsl(var(--primary)) calc(100% - 8px)),
+      linear-gradient(to right, hsl(var(--primary)) 8px, transparent 8px, transparent calc(100% - 8px), hsl(var(--primary)) calc(100% - 8px)),
+      linear-gradient(to bottom, hsl(var(--primary)) 8px, transparent 8px, transparent calc(100% - 8px), hsl(var(--primary)) calc(100% - 8px)),
+      linear-gradient(to bottom, hsl(var(--primary)) 8px, transparent 8px, transparent calc(100% - 8px), hsl(var(--primary)) calc(100% - 8px));
+    background-size: 100% 1px, 100% 1px, 1px 100%, 1px 100%;
+    background-position: 0 0, 0 100%, 0 0, 100% 0;
+    background-repeat: no-repeat;
+  }
+
+  .btn-stripe[data-tone="accent"]::after {
+    background: hsl(var(--primary));
+  }
+
   .btn-stripe[data-tone="muted"] {
     background-image: repeating-linear-gradient(
       119deg,

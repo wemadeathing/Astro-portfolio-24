@@ -19,6 +19,7 @@
         <div>
           <div class="footer-label">Start Here</div>
           <nav class="flex flex-wrap gap-x-4 gap-y-2 text-sm">
+            <a href="/chat" class="footer-link">Ask AI</a>
             <a href="/projects" class="footer-link">Work</a>
             <a href="https://ai.nasifsalaam.com" class="footer-link" rel="noopener noreferrer" target="_blank">AI Training</a>
             <a href="/about" class="footer-link">About</a>
@@ -65,6 +66,7 @@
         <div>
           <div class="footer-label">Start Here</div>
           <nav class="space-y-2">
+            <a href="/chat" class="footer-link block">Ask AI</a>
             <a href="/projects" class="footer-link block">Work</a>
             <a href="https://ai.nasifsalaam.com" class="footer-link block" rel="noopener noreferrer" target="_blank">AI Training</a>
             <a href="/about" class="footer-link block">About</a>
@@ -99,7 +101,12 @@
           </span>
         </div>
         <div class="flex items-center gap-3">
-          <a href="/contact" class="font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground transition-colors">Start a conversation</a>
+          <!-- Points at the chat, not the contact form: this label describes
+               what the chat does, and having two "conversation" CTAs land in
+               different places is the same collision the WhatsApp "start a
+               chat" wording caused. Email and WhatsApp stay one column over
+               for anyone who wants a direct line instead. -->
+          <a href="/chat" class="font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground transition-colors">Start a conversation</a>
         </div>
       </div>
     </div>

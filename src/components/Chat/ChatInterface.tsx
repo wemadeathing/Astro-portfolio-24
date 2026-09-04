@@ -136,6 +136,19 @@ const STARTER_CHIPS: { label: string; chipId: string; prompt: string }[] = [
   { label: 'Not sure yet', chipId: 'not_sure', prompt: "I'm not sure what I need yet — can you help me figure it out?" },
 ];
 
+// The "ask" half of the entry had no clickable affordance at all — the
+// headline invited a question and then left a blank box to compose it in,
+// while the only chips on screen jumped straight into project intake. These
+// send as ordinary messages (no chipId), so the router classifies them
+// normally. Ordered by how people actually behave on a portfolio: the first
+// one returns project cards, which is scannable in a few seconds and asks
+// nothing of a visitor who isn't ready to type yet.
+const ASK_STARTERS: { label: string; prompt: string }[] = [
+  { label: 'Show me your best work', prompt: 'Show me your best work.' },
+  { label: 'Worked in fintech?', prompt: 'Have you worked with fintech or financial services clients?' },
+  { label: 'Available for work?', prompt: 'Are you available for work right now?' },
+];
+
 // Web Speech API isn't in the standard lib.dom types yet, so this is typed loosely.
 type SpeechRecognitionLike = {
   continuous: boolean;
@@ -224,7 +237,6 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [lastUserText, setLastUserText] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [showTooltip, setShowTooltip] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [introMode] = useState<'chat' | 'portfolio'>(() => {
     if (forceView) return forceView;
@@ -435,35 +447,6 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
   }, [hasStarted]);
 
   useEffect(() => {
-    const hasSeenTooltip = sessionStorage.getItem('chat-tooltip-seen');
-    if (hasSeenTooltip || hasStarted) return;
-
-    const timer = setTimeout(() => {
-      setShowTooltip(true);
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, [hasStarted]);
-
-  useEffect(() => {
-    if (!showTooltip) return;
-
-    const timer = setTimeout(() => {
-      dismissTooltip();
-    }, 2600);
-
-    return () => clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showTooltip]);
-
-  useEffect(() => {
-    if (!hasStarted) return;
-    if (!showTooltip) return;
-    dismissTooltip();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasStarted]);
-
-  useEffect(() => {
     if (typeof document === 'undefined') return;
     const shouldUseChatShell = globalSiteNav && introMode === 'chat';
     document.body.classList.toggle('chat-landing-mode', shouldUseChatShell);
@@ -471,11 +454,6 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
       document.body.classList.remove('chat-landing-mode');
     };
   }, [globalSiteNav, introMode]);
-
-  const dismissTooltip = () => {
-    setShowTooltip(false);
-    sessionStorage.setItem('chat-tooltip-seen', 'true');
-  };
 
   const scrollToBottom = () => {
     const scroll = () => {
@@ -1059,11 +1037,29 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                     <motion.h1 variants={heroItem} className="text-3xl md:text-4xl font-medium leading-[1.02] tracking-[-0.03em] text-foreground/95">
                       Ask anything.<br />Get a real answer.
                     </motion.h1>
-                    <motion.p variants={heroItem} className="mx-auto mt-4 max-w-[48ch] text-sm leading-[1.8] text-muted-foreground/90">
-                      Ask about projects, process, tech stack, availability, or how I approach AI builds. The AI has full context on the work.
-                    </motion.p>
+                    {/* The subhead that used to sit here ("Ask about projects,
+                        process, tech stack…") was the third restatement of the
+                        same idea, after the headline above and the input
+                        placeholder below — and it was explaining what the
+                        chips now demonstrate. */}
 
-                    <motion.div variants={heroItem} className="mt-6 flex flex-col items-center gap-2">
+                    <motion.div variants={heroItem} className="mt-7 flex flex-col items-center gap-2">
+                      <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground/90">Try asking</div>
+                      <div className="flex flex-nowrap justify-start sm:justify-center gap-1.5 overflow-x-auto max-w-full px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                        {ASK_STARTERS.map((chip) => (
+                          <button
+                            key={chip.label}
+                            type="button"
+                            onClick={() => void sendPrompt(chip.prompt)}
+                            className="shrink-0 whitespace-nowrap border border-border/80 px-2.5 py-1 text-xs text-muted-foreground transition-colors hover:border-primary/35 hover:text-foreground"
+                          >
+                            {chip.label}
+                          </button>
+                        ))}
+                      </div>
+                    </motion.div>
+
+                    <motion.div variants={heroItem} className="mt-4 flex flex-col items-center gap-2">
                       <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground/90">Or start a project</div>
                       <div className="flex flex-nowrap justify-start sm:justify-center gap-1.5 overflow-x-auto max-w-full px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                         {STARTER_CHIPS.map((chip) => (
@@ -1076,16 +1072,6 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                             {chip.label}
                           </button>
                         ))}
-                        {calendlyUrl && (
-                          <a
-                            href={calendlyUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="shrink-0 whitespace-nowrap border border-border/80 px-2.5 py-1 text-xs text-muted-foreground transition-colors hover:border-primary/35 hover:text-foreground"
-                          >
-                            Book a call
-                          </a>
-                        )}
                       </div>
                     </motion.div>
 
@@ -1094,22 +1080,6 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                       onSubmit={handleSubmit}
                       className="relative mt-6 flex w-full max-w-[680px] items-center gap-2 border border-border/80 bg-background px-2 transition-colors focus-within:border-primary/50 focus-within:ring-4 focus-within:ring-primary/15"
                     >
-                      {showTooltip && (
-                        <div className="absolute top-full mt-3 left-1/2 -translate-x-1/2 z-10">
-                          <div className="relative bg-primary/92 px-4 py-2 text-sm font-medium text-primary-foreground shadow-lg whitespace-nowrap">
-                            <div className="absolute left-1/2 -translate-x-1/2 bottom-full w-0 h-0 border-l-8 border-r-8 border-b-8 border-l-transparent border-r-transparent border-b-primary/95" />
-                            Try asking me anything about my work!
-                            <button
-                              type="button"
-                              onClick={dismissTooltip}
-                              className="ml-2 opacity-70 hover:opacity-100 transition-opacity"
-                              aria-label="Dismiss tooltip"
-                            >
-                              ×
-                            </button>
-                          </div>
-                        </div>
-                      )}
                       <input
                         type="text"
                         value={input}
@@ -1144,6 +1114,24 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                         )}
                       </div>
                     </motion.form>
+
+                    {/* Kept as the standing escape hatch for anyone who'd
+                        rather skip the chat entirely, but out of the chip row
+                        — booking a call is a different kind of commitment to
+                        a conversation starter, and mixing them made the row
+                        read as one long undifferentiated menu. */}
+                    {calendlyUrl && (
+                      <motion.div variants={heroItem} className="mt-4 text-center">
+                        <a
+                          href={calendlyUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-xs text-muted-foreground/80 underline-offset-4 transition-colors hover:text-foreground hover:underline"
+                        >
+                          Prefer to talk? Book a call
+                        </a>
+                      </motion.div>
+                    )}
 
                   </motion.div>
                   </div>

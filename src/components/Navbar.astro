@@ -14,7 +14,11 @@ type NavItem = {
 const navItems: NavItem[] = [
   { href: '/projects', label: 'Work', description: 'Browse featured case studies' },
   { href: '/about', label: 'About', description: 'Background, experience, and what I am looking for' },
-  { href: '/chat', label: 'Chat', description: 'Ask questions or start a project with the AI' },
+  // "Chat" read as a live-support widget or WhatsApp — and the contact page
+  // already used "start a chat" for WhatsApp, so the word was taken. "Ask AI"
+  // says what it actually does on a desktop nav, where the description below
+  // never renders.
+  { href: '/chat', label: 'Ask AI', description: 'Get answers about the work, or start a project' },
   { href: '/contact', label: 'Contact', description: 'Send a message or start a conversation' },
 ];
 
