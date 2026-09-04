@@ -40,17 +40,17 @@ async function llmClassify(message: string): Promise<Mode> {
           messages: [
             {
               role: 'system',
-              // Tested against real (non-keyword) phrasings — the earlier,
-              // narrower prompt ("want a project quote, want to hire...")
-              // missed most of them, defaulting to "hiring" for anything
-              // short of an explicit ask. This version reads for intent
-              // rather than requiring specific words, without over-firing
-              // on genuine portfolio/employment questions (verified against
-              // recruiter and browsing phrasings too).
+              // Edit this with evals/router.ts open — `npm run evals:router`.
+              // Two failure directions pull against each other here, and
+              // fixing one has already broken the other: too narrow ("want a
+              // quote, want to hire") sends real enquiries to the portfolio
+              // side, while loosening it to read intent sent "show me your
+              // best work" into project intake. The explicit SEE/BROWSE
+              // carve-out below is load-bearing for that second case.
               content:
                 'Classify the user\'s message as exactly one word: "sop" or "hiring".\n' +
-                'Say "sop" if they seem to want Nasif to do work for them: a new project, freelance or commission work, a quote, revamping/redesigning/overhauling something, exploring getting something built, or submitting content for an already-approved project. Read for intent, not just literal words like "quote" or "hire".\n' +
-                'Say "hiring" for anything else: questions about his portfolio, process, background, skills, past clients, or availability for full-time/employee roles, or general browsing.\n' +
+                'Say "sop" only if they want Nasif to take on NEW work for them: starting a project, freelance or commission work, a quote, revamping/redesigning/overhauling something of theirs, exploring getting something built, or submitting content for an already-approved project. Read for intent, not just literal words like "quote" or "hire".\n' +
+                'Say "hiring" for everything else. That includes any request to SEE or BROWSE existing work — "show me your work", "show me your best work", "can I see examples", "any case studies?" — and questions about his process, background, skills, past clients, or availability for a full-time role.\n' +
                 'Reply with only that one word.',
             },
             { role: 'user', content: message.slice(0, 500) },

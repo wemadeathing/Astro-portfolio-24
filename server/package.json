@@ -12,6 +12,7 @@
     "db:studio": "drizzle-kit studio",
     "test": "node --import tsx --test test/**/*.test.ts",
     "evals": "tsx evals/run.ts",
+    "evals:router": "tsx --env-file=.env evals/router.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
