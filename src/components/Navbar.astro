@@ -71,9 +71,19 @@ const isHome = pathname === '/' || pathname === '';
             </a>
           );
         })}
+        {/* The stripe treatment makes this the loudest element on any page
+            it appears on. On /chat that inverts the hierarchy — the single
+            strongest signal on screen would navigate away from the one thing
+            the page exists to do — so it drops to a plain nav link there and
+            the composer stays the visual lead. */}
         <a
           href="/contact"
-          class="btn-stripe ml-1 min-h-[42px] px-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+          class:list={[
+            'ml-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30',
+            pathname.startsWith('/chat')
+              ? 'px-3 py-2 font-mono text-[11px] uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:text-foreground'
+              : 'btn-stripe min-h-[42px] px-4',
+          ]}
         >
           Contact
         </a>

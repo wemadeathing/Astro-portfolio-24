@@ -39,10 +39,14 @@ function DictationButton({ isListening, onClick }: { isListening: boolean; onCli
       type="button"
       onClick={onClick}
       aria-label={isListening ? 'Stop dictation' : 'Start dictation'}
-      className={`border p-2 transition-all ${
+      // Idle state carries no border: it sits inside the composer, which is
+      // now the screen's one bordered element, and a box within that box read
+      // as a second competing control rather than a tool on the field. The
+      // recording state still gets a frame, where being unmistakable matters.
+      className={`p-2 transition-all ${
         isListening
-          ? 'border-primary/60 bg-primary/10 text-primary'
-          : 'border-border/80 text-muted-foreground hover:border-primary/25 hover:text-foreground'
+          ? 'border border-primary/60 bg-primary/10 text-primary'
+          : 'text-muted-foreground hover:text-foreground'
       }`}
     >
       {isListening ? (
@@ -203,6 +207,9 @@ const messageEnter = {
 
 export default function ChatInterface({ latestPost, projects = [], globalSiteNav = false, forceView, calendlyUrl }: ChatInterfaceProps) {
   const [messages, setMessages] = useState<Message[]>([]);
+  // Swaps the single suggestion row between the two intents, rather than
+  // showing both sets at once (see the intro screen's comment on why).
+  const [showProjectTypes, setShowProjectTypes] = useState(false);
   // Every turn where the model calls propose_submission again (e.g. the
   // user keeps adding content after the card first appears) carries its
   // own ui.intake, attached to that turn's own message. Rendered
@@ -1027,7 +1034,15 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
               {/* ── Chat View ── */}
               {introMode === 'chat' && (
                 <div className="flex-1 w-full flex flex-col items-center text-center min-h-0">
-                  <div className="flex-1 flex flex-col items-center justify-center py-8 w-full min-h-0">
+                  {/* Bottom-weighted padding pulls the centred block above
+                      geometric centre. True centring measured out at 57% of
+                      the viewport — below even the mathematical middle, partly
+                      because the nav adds visual mass at the top and the
+                      removed footer left nothing anchoring the bottom. A vh
+                      unit rather than a fixed value so the correction holds
+                      its proportion across viewport heights instead of only
+                      being right on one screen. */}
+                  <div className="flex-1 flex flex-col items-center justify-center pt-8 pb-[18vh] w-full min-h-0">
                   <motion.div
                     className="w-full max-w-[700px] px-2 py-2 md:px-4 md:py-3"
                     variants={heroContainer}
@@ -1043,42 +1058,18 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                         placeholder below — and it was explaining what the
                         chips now demonstrate. */}
 
-                    <motion.div variants={heroItem} className="mt-7 flex flex-col items-center gap-2">
-                      <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground/90">Try asking</div>
-                      <div className="flex flex-nowrap justify-start sm:justify-center gap-1.5 overflow-x-auto max-w-full px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                        {ASK_STARTERS.map((chip) => (
-                          <button
-                            key={chip.label}
-                            type="button"
-                            onClick={() => void sendPrompt(chip.prompt)}
-                            className="shrink-0 whitespace-nowrap border border-border/80 px-2.5 py-1 text-xs text-muted-foreground transition-colors hover:border-primary/35 hover:text-foreground"
-                          >
-                            {chip.label}
-                          </button>
-                        ))}
-                      </div>
-                    </motion.div>
-
-                    <motion.div variants={heroItem} className="mt-4 flex flex-col items-center gap-2">
-                      <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground/90">Or start a project</div>
-                      <div className="flex flex-nowrap justify-start sm:justify-center gap-1.5 overflow-x-auto max-w-full px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                        {STARTER_CHIPS.map((chip) => (
-                          <button
-                            key={chip.label}
-                            type="button"
-                            onClick={() => startChatWithChip(chip.chipId, chip.prompt)}
-                            className="shrink-0 whitespace-nowrap border border-border/80 px-2.5 py-1 text-xs text-muted-foreground transition-colors hover:border-primary/35 hover:text-foreground"
-                          >
-                            {chip.label}
-                          </button>
-                        ))}
-                      </div>
-                    </motion.div>
-
+                    {/* The composer leads, and is deliberately the ONLY
+                        bordered thing on this screen — that alone makes it
+                        primary, without needing a filled button that would
+                        break the site's hairline language. Previously it
+                        carried the identical 0.55px border as eight chips, so
+                        the page's whole purpose was drawn at the same weight
+                        as its optional shortcuts. Everything below is now
+                        borderless text, one clear step down. */}
                     <motion.form
                       variants={heroItem}
                       onSubmit={handleSubmit}
-                      className="relative mt-6 flex w-full max-w-[680px] items-center gap-2 border border-border/80 bg-background px-2 transition-colors focus-within:border-primary/50 focus-within:ring-4 focus-within:ring-primary/15"
+                      className="relative mt-9 flex w-full max-w-[680px] items-center gap-2 border border-foreground/20 bg-background px-2 transition-colors focus-within:border-primary/60 focus-within:ring-4 focus-within:ring-primary/15"
                     >
                       <input
                         type="text"
@@ -1106,7 +1097,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                           <button
                             type="submit"
                             disabled={!input.trim() || isLoading}
-                            className="border border-border/80 bg-primary p-2 text-primary-foreground transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+                            className="bg-primary p-2 text-primary-foreground transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
                             aria-label="Send"
                           >
                             <ArrowUp size={20} />
@@ -1115,36 +1106,59 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                       </div>
                     </motion.form>
 
-                    {/* Kept as the standing escape hatch for anyone who'd
-                        rather skip the chat entirely, but out of the chip row
-                        — booking a call is a different kind of commitment to
-                        a conversation starter, and mixing them made the row
-                        read as one long undifferentiated menu. */}
-                    {calendlyUrl && (
-                      <motion.div variants={heroItem} className="mt-4 text-center">
+                    {/* Suggestions sit UNDER the composer and carry no border,
+                        so they read as prompts for the field above rather than
+                        as eight peer buttons competing with it. Only one set is
+                        ever on screen: the project types stay behind a single
+                        link until asked for, which keeps the chipId routing
+                        (and its project_type seed) without paying for it in
+                        permanent visual noise. */}
+                    <motion.div variants={heroItem} className="mt-5 flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+                      {showProjectTypes
+                        ? STARTER_CHIPS.map((chip) => (
+                            <button
+                              key={chip.label}
+                              type="button"
+                              onClick={() => startChatWithChip(chip.chipId, chip.prompt)}
+                              className="text-sm text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
+                            >
+                              {chip.label}
+                            </button>
+                          ))
+                        : ASK_STARTERS.map((chip) => (
+                            <button
+                              key={chip.label}
+                              type="button"
+                              onClick={() => void sendPrompt(chip.prompt)}
+                              className="text-sm text-muted-foreground underline-offset-4 transition-colors hover:text-foreground hover:underline"
+                            >
+                              {chip.label}
+                            </button>
+                          ))}
+                    </motion.div>
+
+                    <motion.div variants={heroItem} className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+                      <button
+                        type="button"
+                        onClick={() => setShowProjectTypes((v) => !v)}
+                        className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground/80 transition-colors hover:text-foreground"
+                      >
+                        {showProjectTypes ? '← Ask a question instead' : 'Start a project →'}
+                      </button>
+                      {calendlyUrl && (
                         <a
                           href={calendlyUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-xs text-muted-foreground/80 underline-offset-4 transition-colors hover:text-foreground hover:underline"
+                          className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground/80 transition-colors hover:text-foreground"
                         >
-                          Prefer to talk? Book a call
+                          Book a call
                         </a>
-                      </motion.div>
-                    )}
+                      )}
+                    </motion.div>
 
                   </motion.div>
                   </div>
-                  <footer className="w-full border-t border-border/30 py-4 px-4">
-                    <div className="max-w-[680px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground/90">
-                      <span>© 2026 Nasif Salaam · Cape Town</span>
-                      <div className="flex items-center gap-5">
-                        <a href="https://www.linkedin.com/in/nasifsalaam/" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">LinkedIn</a>
-                        <a href="https://github.com/wemadeathing" target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">GitHub</a>
-                        <a href="/contact" className="hover:text-foreground transition-colors">Contact</a>
-                      </div>
-                    </div>
-                  </footer>
                 </div>
               )}
 
@@ -1352,7 +1366,16 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                           </div>
                         ) : (
                           <>
-                            <p className={`whitespace-pre-wrap text-[15px] leading-8 text-foreground/92 ${
+                            {/* leading-8 resolved to 36px on 15px type — a 2.4
+                                ratio, well past the 1.5-1.75 body range, which
+                                stopped lines cohering into paragraphs and left
+                                answers reading as separate floating strips.
+                                max-w here rather than on the wrapper above so
+                                the measure lands near 70 characters (660px ran
+                                to ~81) without also narrowing the project
+                                cards, which share that wrapper and want the
+                                extra width. */}
+                            <p className={`whitespace-pre-wrap text-[15px] leading-[1.75] max-w-[600px] text-foreground/92 ${
                               msg.role === 'user' ? 'text-right' : ''
                             }`}>
                               {msg.role === 'assistant' && msg.streaming
@@ -1526,7 +1549,10 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                   New chat
                 </button>
               </div>
-              <form onSubmit={handleSubmit} className="relative flex items-center gap-2 border border-border/80 bg-background px-2 transition-colors focus-within:border-primary/50 focus-within:ring-4 focus-within:ring-primary/15">
+              {/* Same border weight as the intro composer — it's the same
+                  control, and the two states shouldn't disagree about how
+                  prominent the page's primary input is. */}
+              <form onSubmit={handleSubmit} className="relative flex items-center gap-2 border border-foreground/20 bg-background px-2 transition-colors focus-within:border-primary/60 focus-within:ring-4 focus-within:ring-primary/15">
                 <input
                   type="text"
                   value={input}
