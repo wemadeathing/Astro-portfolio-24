@@ -8,106 +8,48 @@
   <div class="footer-body">
     <div class="container max-w-[1100px] mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
 
-      <!-- Mobile layout -->
-      <div class="md:hidden mb-8 space-y-8">
-        <div>
-          <div class="footer-label">Who I Am</div>
-          <div class="footer-body-text">
-            Product designer and AI builder with fifteen plus years across brand, digital products, systems, and implementation.
-          </div>
-        </div>
-        <div>
-          <div class="footer-label">Start Here</div>
-          <nav class="flex flex-wrap gap-x-4 gap-y-2 text-sm">
-            <a href="/chat" class="footer-link">Ask AI</a>
-            <a href="/projects" class="footer-link">Work</a>
-            <a href="https://ai.nasifsalaam.com" class="footer-link" rel="noopener noreferrer" target="_blank">AI Training</a>
-            <a href="/about" class="footer-link">About</a>
-            <a href="/Nasif-Salaam-Resume.pdf" download class="footer-link">Download CV</a>
-          </nav>
-        </div>
-        <div>
-          <div class="footer-label">Get in Touch</div>
-          <nav class="flex flex-wrap gap-x-4 gap-y-2 text-sm">
-            <a href="mailto:hello@nasifsalaam.com" class="footer-link">hello@nasifsalaam.com</a>
-            <a href="https://wa.me/27814623628" class="footer-link" rel="noopener noreferrer" target="_blank">WhatsApp</a>
-          </nav>
-        </div>
-        <div>
-          <div class="footer-label">Find Me Elsewhere</div>
-          <nav class="flex flex-wrap gap-x-4 gap-y-2 text-sm">
-            <a href="https://github.com/wemadeathing" class="footer-link" rel="noopener noreferrer" target="_blank">GitHub</a>
-            <a href="https://www.linkedin.com/in/nasifsalaam/" class="footer-link" rel="noopener noreferrer" target="_blank">LinkedIn</a>
-            <a href="https://www.behance.net/nsalaam" class="footer-link" rel="noopener noreferrer" target="_blank">Behance</a>
-          </nav>
-        </div>
-        <div>
-          <div class="footer-label">More to Explore</div>
-          <nav class="flex flex-wrap gap-x-4 gap-y-2 text-sm">
-            <a href="/blog" class="footer-link">Insights</a>
-            <button type="button" id="footer-agent-toggle" class="footer-link cursor-pointer bg-transparent border-0 p-0 text-left">Agent View</button>
-          </nav>
-        </div>
-      </div>
-
-      <!-- Desktop layout -->
-      <div class="hidden md:grid grid-cols-[1.2fr_0.9fr_0.8fr_0.9fr] gap-10 mb-8">
+      <!-- One responsive grid rather than separate mobile and desktop trees.
+           The two had already drifted — mobile carried a "Get in Touch"
+           section desktop folded into the bio column, and every edit had to
+           be made twice or silently applied to one breakpoint only. -->
+      <!-- Two columns, not three: a wide bio against two narrow link stacks
+           left the row visibly lopsided and the column bottoms ragged. The
+           nav links that used to sit here (Ask AI / Work / About) are in the
+           sticky header on every page, so repeating them cost a column
+           without adding any reach. -->
+      <div class="grid gap-8 md:grid-cols-[1.5fr_1fr] md:gap-16 mb-8">
         <div class="max-w-[56ch]">
           <div class="footer-label">Who I Am</div>
           <div class="footer-body-text">
             Product designer and AI builder with fifteen plus years across brand, digital products, systems, and implementation.
           </div>
-          <nav class="mt-4 space-y-2">
-            <a href="mailto:hello@nasifsalaam.com" class="footer-link block">hello@nasifsalaam.com</a>
-            <a href="https://wa.me/27814623628" class="footer-link block" rel="noopener noreferrer" target="_blank">WhatsApp</a>
-          </nav>
         </div>
 
         <div>
-          <div class="footer-label">Start Here</div>
-          <nav class="space-y-2">
-            <a href="/chat" class="footer-link block">Ask AI</a>
-            <a href="/projects" class="footer-link block">Work</a>
-            <a href="https://ai.nasifsalaam.com" class="footer-link block" rel="noopener noreferrer" target="_blank">AI Training</a>
-            <a href="/about" class="footer-link block">About</a>
-            <a href="/Nasif-Salaam-Resume.pdf" download class="footer-link block">Download CV</a>
-          </nav>
-        </div>
-
-        <div>
-          <div class="footer-label">Find Me Elsewhere</div>
-          <nav class="space-y-2">
-            <a href="https://github.com/wemadeathing" class="footer-link block" rel="noopener noreferrer" target="_blank">GitHub</a>
-            <a href="https://www.linkedin.com/in/nasifsalaam/" class="footer-link block" rel="noopener noreferrer" target="_blank">LinkedIn</a>
-            <a href="https://www.behance.net/nsalaam" class="footer-link block" rel="noopener noreferrer" target="_blank">Behance</a>
-          </nav>
-        </div>
-
-        <div>
-          <div class="footer-label">More to Explore</div>
-          <nav class="space-y-2">
-            <a href="/blog" class="footer-link block">Insights</a>
-            <button type="button" id="footer-agent-toggle-desktop" class="footer-link block cursor-pointer bg-transparent border-0 p-0 text-left">Agent View</button>
+          <div class="footer-label">Get in Touch</div>
+          <nav class="flex flex-wrap gap-x-4 gap-y-2 md:block md:space-y-2">
+            <a href="mailto:hello@nasifsalaam.com" class="footer-link md:block">hello@nasifsalaam.com</a>
+            <a href="https://wa.me/27814623628" class="footer-link md:block" rel="noopener noreferrer" target="_blank">WhatsApp</a>
+            <a href="/Nasif-Salaam-Resume.pdf" download class="footer-link md:block">Download CV</a>
           </nav>
         </div>
       </div>
 
-      <!-- Bottom bar -->
-      <div class="pt-5 border-t border-border/30 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <div class="text-xs text-muted-foreground text-center sm:text-left leading-relaxed">
-          <span class="text-foreground/70">© {new Date().getFullYear()} Nasif Salaam.</span>
-          <span class="block sm:inline sm:ml-1">
-            Product designer and AI builder making thoughtful, AI-powered products for people.
-          </span>
+      <!-- Bottom bar doubles as the home for the things that don't warrant a
+           column of their own: two side destinations plus the view toggle.
+           The tagline that used to sit next to the copyright was a second
+           bio, three lines under the first one. -->
+      <div class="pt-5 border-t border-border/30 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="text-xs text-muted-foreground/80 text-center sm:text-left">
+          © {new Date().getFullYear()} Nasif Salaam
         </div>
-        <div class="flex items-center gap-3">
-          <!-- Points at the chat, not the contact form: this label describes
-               what the chat does, and having two "conversation" CTAs land in
-               different places is the same collision the WhatsApp "start a
-               chat" wording caused. Email and WhatsApp stay one column over
-               for anyone who wants a direct line instead. -->
-          <a href="/chat" class="font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground hover:text-foreground transition-colors">Start a conversation</a>
-        </div>
+        <nav class="flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
+          <a href="/blog" class="font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground/80 transition-colors hover:text-foreground">Insights</a>
+          <a href="https://ai.nasifsalaam.com" rel="noopener noreferrer" target="_blank" class="font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground/80 transition-colors hover:text-foreground">AI Training</a>
+          <button type="button" id="footer-agent-toggle" class="font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground/80 transition-colors hover:text-foreground">
+            Agent View
+          </button>
+        </nav>
       </div>
     </div>
   </div>
@@ -115,13 +57,13 @@
 
 <script is:inline>
   function initFooterAgentToggle() {
-    const trigger = document.getElementById('agent-view-toggle');
-    ['footer-agent-toggle', 'footer-agent-toggle-desktop'].forEach(function(id) {
-      var btn = document.getElementById(id);
-      if (btn && trigger) {
-        btn.onclick = function() { trigger.click(); };
-      }
-    });
+    // Single button now that the footer is one responsive tree — there used
+    // to be a separate mobile/desktop pair to keep in sync.
+    var trigger = document.getElementById('agent-view-toggle');
+    var btn = document.getElementById('footer-agent-toggle');
+    if (btn && trigger) {
+      btn.onclick = function() { trigger.click(); };
+    }
   }
   initFooterAgentToggle();
   document.addEventListener('astro:page-load', initFooterAgentToggle);

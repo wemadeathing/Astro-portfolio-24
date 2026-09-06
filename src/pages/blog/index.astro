@@ -58,7 +58,7 @@ const agentMarkdown = [
           <div class="insights-chip-row flex items-center gap-2 overflow-x-auto pb-1 whitespace-nowrap px-4 sm:px-0">
             <a
               href="/blog"
-              class="shrink-0 inline-flex items-center border px-3 py-1.5 font-mono text-xs uppercase tracking-[0.14em] transition-colors bg-primary/15 text-foreground border-primary/30"
+              class="shrink-0 inline-flex items-center rounded-md border px-3 py-1 font-mono text-[11px] uppercase tracking-[0.14em] transition-colors bg-primary/15 text-foreground border-primary/30"
               aria-current="true"
             >
               All
@@ -66,7 +66,7 @@ const agentMarkdown = [
             {allTags.map((tag) => (
               <a
                 href={`/blog/tags/${tagToSlug(tag)}`}
-                class="shrink-0 inline-flex items-center border px-3 py-1.5 font-mono text-xs uppercase tracking-[0.14em] transition-colors text-muted-foreground border-border/80 hover:border-primary/35 hover:text-foreground"
+                class="shrink-0 inline-flex items-center rounded-md border px-3 py-1 font-mono text-[11px] uppercase tracking-[0.14em] transition-colors text-muted-foreground border-border/80 hover:border-primary/35 hover:text-foreground"
               >
                 {tag}
               </a>

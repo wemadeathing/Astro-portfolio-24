@@ -58,4 +58,21 @@ export interface ModeDef {
   model: import('../llm/client').ModelSpec;
   maxIterations: number;
   uiCapabilities: ReadonlyArray<keyof UiPayload>;
+   /**
+   * Optional guard against a mode ending a turn without the state change it
+   * exists to make. Consulted twice per iteration — once when the model
+   * returns prose with no tool calls at all, and once after a round of tool
+   * calls has executed — so it catches both "answered instead of acting"
+   * and "called the wrong tools and still hasn't acted".
+   *
+   * Receives the tool names already dispatched this turn, so a mode can ask
+   * "did the thing that matters actually happen?" rather than only "were any
+   * tools called at all".
+   *
+   * Returning a string injects it as a system message and retries; it fires
+   * at most ONCE per turn, so a model that simply won't comply still gets
+   * its reply through rather than burning every iteration. Return null to
+   * let the turn proceed (the default when unset).
+   */
+  progressNudge?: (ctx: ToolContext, toolsCalledThisTurn: string[]) => string | null;
 }

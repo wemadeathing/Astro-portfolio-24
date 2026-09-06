@@ -39,7 +39,7 @@ const hatchStyle =
         {visibleArchiveProjects.map((project) => (
           <a
             href={`/archive/${project.slug}`}
-            class="group flex h-full flex-col border border-border/80 transition-colors hover:border-primary/35 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+            class="group flex h-full flex-col overflow-hidden rounded-lg border border-border/80 transition-colors hover:border-primary/35 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
           >
             {/* Folder well: 2x2 preview of the work inside */}
             <div class="bg-muted/20 p-3 sm:p-4">

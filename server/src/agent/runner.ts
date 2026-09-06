@@ -5,12 +5,20 @@
 // iterations (we need the complete tool-call block) followed by REAL token
 // streaming on the guaranteed-prose final iteration.
 import type OpenAI from 'openai';
-import { openrouter } from '../llm/client';
-import { scrubForbiddenOutput, containsForbiddenOutput } from '../safety/outputPolicy';
-import type { ModeDef, ToolContext, ToolDef, UiPayload } from './types';
+import { openrouter, modelTuning } from '../llm/client';
+import { sanitizeModelText, containsForbiddenOutput, containsToolCallMarkup } from '../safety/outputPolicy';
+import type { ModeDef, ToolContext, UiPayload } from './types';
+import { toOpenAiTools, zodHint } from './toolSchema';
 
 export type RunnerEvent =
-  | { type: 'tool_start'; id: string; label: string }
+  // Emitted around every model call so the UI can account for the silence.
+  // These models all reason before answering — measured time-to-first-token
+  // is 2.8s on glm and 5.9s on gemini-3.7-flash — and without this the chat
+  // just sits blank through it. Carries no reasoning TEXT on purpose: raw
+  // chain-of-thought routinely restates the system prompt and tool names,
+  // which this assistant is explicitly forbidden from revealing.
+  | { type: 'thinking'; active: boolean }
+  | { type: 'tool_start'; id: string; name: string; label: string }
   | { type: 'tool_end'; id: string; ok: boolean }
   | { type: 'delta'; text: string }
   | { type: 'done'; text: string; ui: UiPayload; promptTokens: number; completionTokens: number; model: string; toolCalls: ToolCallRecord[] };
@@ -31,64 +39,6 @@ const TOOL_RESULT_MAX_CHARS = 6_000;
 // lookbehind buffer, only emitting what's safely behind it. See plan
 // §Agent loop ("Denylist interaction, resolved").
 const STREAM_LOOKBEHIND_CHARS = 120;
-
-function toOpenAiTools(tools: ToolDef[]): OpenAI.Chat.Completions.ChatCompletionTool[] {
-  return tools.map((t) => ({
-    type: 'function',
-    function: {
-      name: t.name,
-      description: t.description,
-      // A hand-rolled minimal JSON Schema is sufficient here — the
-      // description IS the real prompt for a cheap model, and invalid args
-      // are recovered via the zod-error-feedback loop below regardless of
-      // how precise this declared schema is.
-      parameters: zodToLooseJsonSchema(t.params),
-    },
-  }));
-}
-
-function zodToLooseJsonSchema(schema: unknown): Record<string, unknown> {
-  const def = (schema as { _def?: Record<string, unknown> })?._def;
-  const typeName = def?.typeName as string | undefined;
-
-  switch (typeName) {
-    case 'ZodObject': {
-      const shape = (def!.shape as () => Record<string, unknown>)();
-      const properties: Record<string, unknown> = {};
-      const required: string[] = [];
-      for (const [key, value] of Object.entries(shape)) {
-        properties[key] = zodToLooseJsonSchema(value);
-        const inner = (value as { _def?: Record<string, unknown> })._def;
-        if (inner?.typeName !== 'ZodOptional' && inner?.typeName !== 'ZodDefault') required.push(key);
-      }
-      return { type: 'object', properties, required, additionalProperties: false };
-    }
-    case 'ZodString':
-      return { type: 'string' };
-    case 'ZodNumber':
-      return { type: 'number' };
-    case 'ZodBoolean':
-      return { type: 'boolean' };
-    case 'ZodArray':
-      return { type: 'array', items: zodToLooseJsonSchema(def!.type) };
-    case 'ZodEnum':
-      return { type: 'string', enum: def!.values };
-    case 'ZodOptional':
-    case 'ZodDefault':
-      return zodToLooseJsonSchema(def!.innerType);
-    case 'ZodUnion':
-      return { anyOf: (def!.options as unknown[]).map(zodToLooseJsonSchema) };
-    case 'ZodRecord':
-      return { type: 'object', additionalProperties: { type: 'string' } };
-    default:
-      return {};
-  }
-}
-
-function zodHint(error: unknown): string {
-  const issues = (error as { issues?: { path: (string | number)[]; message: string }[] })?.issues ?? [];
-  return issues.map((i) => `${i.path.join('.')}: ${i.message}`).join('; ') || 'Invalid arguments.';
-}
 
 async function withTimeout<T>(p: Promise<T>, ms: number): Promise<T> {
   return Promise.race([
@@ -124,10 +74,16 @@ function mergeUi(target: UiPayload, incoming: Partial<UiPayload>, allowed: Reado
 async function* streamProse(
   model: string,
   messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[],
-  signal: AbortSignal
-): AsyncGenerator<{ type: 'delta'; text: string } | { type: 'final'; text: string; promptTokens: number; completionTokens: number }> {
+  signal: AbortSignal,
+  tuning: Record<string, unknown>
+): AsyncGenerator<
+  | { type: 'thinking'; active: boolean }
+  | { type: 'delta'; text: string }
+  | { type: 'final'; text: string; promptTokens: number; completionTokens: number }
+> {
+  yield { type: 'thinking', active: true };
   const stream = await openrouter.chat.completions.create(
-    { model, messages, temperature: 0.4, max_tokens: 1024, stream: true, stream_options: { include_usage: true } },
+    { model, messages, temperature: 0.4, ...tuning, stream: true, stream_options: { include_usage: true } } as OpenAI.Chat.Completions.ChatCompletionCreateParamsStreaming,
     { signal }
   );
 
@@ -137,8 +93,16 @@ async function* streamProse(
   let completionTokens = 0;
   let denylistTripped = false;
 
+  let sawContent = false;
+
   for await (const chunk of stream) {
     const delta = chunk.choices?.[0]?.delta?.content ?? '';
+    if (delta && !sawContent) {
+      // First real answer token — the model has stopped thinking and
+      // started writing, whatever the reveal queue does with it downstream.
+      sawContent = true;
+      yield { type: 'thinking', active: false };
+    }
     if (chunk.usage) {
       promptTokens = chunk.usage.prompt_tokens ?? promptTokens;
       completionTokens = chunk.usage.completion_tokens ?? completionTokens;
@@ -152,7 +116,7 @@ async function* streamProse(
     if (held.length <= STREAM_LOOKBEHIND_CHARS) continue;
 
     const safeToFlush = held.slice(0, held.length - STREAM_LOOKBEHIND_CHARS);
-    if (containsForbiddenOutput(safeToFlush)) {
+    if (containsForbiddenOutput(safeToFlush) || containsToolCallMarkup(full)) {
       denylistTripped = true;
       held = '';
       continue;
@@ -161,9 +125,10 @@ async function* streamProse(
     held = held.slice(safeToFlush.length);
   }
 
-  const finalText = scrubForbiddenOutput(full.trim() || "Could you share a bit more detail on what you're looking for?");
+  const finalText =
+    sanitizeModelText(full).trim() || "Could you share a bit more detail on what you're looking for?";
 
-  if (!denylistTripped && held && !containsForbiddenOutput(held)) {
+  if (!denylistTripped && held && !containsForbiddenOutput(held) && !containsToolCallMarkup(held)) {
     yield { type: 'delta', text: held };
   }
   // If anything was scrubbed (denylist tripped, or the trailing `held`
@@ -188,6 +153,10 @@ export async function* runAgent(
 
   const openAiTools = toOpenAiTools(mode.tools);
   const toolCallRecords: ToolCallRecord[] = [];
+  // One-shot: a mode's toollessReplyNudge fires at most once per turn, so a
+  // model that simply refuses to call a tool still gets its prose through
+  // rather than burning every iteration on retries.
+  let nudged = false;
   let ui: UiPayload = {};
   let lastModel = mode.model.primary;
   let totalPromptTokens = 0;
@@ -204,13 +173,15 @@ export async function* runAgent(
   // result already sits in the transcript.
   async function* forcedProse(
     model: string
-  ): AsyncGenerator<{ type: 'delta'; text: string }, { finalText: string; model: string }> {
+  ): AsyncGenerator<{ type: 'delta'; text: string } | { type: 'thinking'; active: boolean }, { finalText: string; model: string }> {
     let finalText = '';
     let usedModel = model;
     try {
-      for await (const ev of streamProse(model, messages, ctx.signal)) {
+      for await (const ev of streamProse(model, messages, ctx.signal, modelTuning(mode.model, model))) {
         if (ev.type === 'delta') {
           yield { type: 'delta', text: ev.text };
+        } else if (ev.type === 'thinking') {
+          yield ev;
         } else {
           finalText = ev.text;
           totalPromptTokens += ev.promptTokens;
@@ -220,8 +191,9 @@ export async function* runAgent(
     } catch (err) {
       if (model !== mode.model.fallback && mode.model.fallback) {
         usedModel = mode.model.fallback;
-        for await (const ev of streamProse(mode.model.fallback, messages, ctx.signal)) {
+        for await (const ev of streamProse(mode.model.fallback, messages, ctx.signal, modelTuning(mode.model, mode.model.fallback))) {
           if (ev.type === 'delta') yield { type: 'delta', text: ev.text };
+          else if (ev.type === 'thinking') yield ev;
           else {
             finalText = ev.text;
             totalPromptTokens += ev.promptTokens;
@@ -255,9 +227,10 @@ export async function* runAgent(
     }
 
     let completion: OpenAI.Chat.Completions.ChatCompletion;
+    yield { type: 'thinking', active: true };
     try {
       completion = await openrouter.chat.completions.create(
-        { model, messages, tools: openAiTools, tool_choice: 'auto', temperature: 0.4, max_tokens: 1024 },
+        { model, messages, tools: openAiTools, tool_choice: 'auto', temperature: 0.4, ...modelTuning(mode.model, model) } as OpenAI.Chat.Completions.ChatCompletionCreateParamsNonStreaming,
         { signal: ctx.signal }
       );
       lastModel = model;
@@ -269,6 +242,8 @@ export async function* runAgent(
       }
       throw err;
     }
+
+    yield { type: 'thinking', active: false };
 
     totalPromptTokens += completion.usage?.prompt_tokens ?? 0;
     totalCompletionTokens += completion.usage?.completion_tokens ?? 0;
@@ -298,11 +273,30 @@ export async function* runAgent(
         return;
       }
 
-      // Model volunteered prose before the forced-final iteration. We
-      // already have the complete (non-streamed) text at this point, so
+      // Model volunteered prose before the forced-final iteration — but in
+      // some modes that IS the failure. SOP mode observed live answering
+      // "I'd have a design system project. Are you available?" with a
+      // deflection to the contact page and zero tool calls: no set_flow, no
+      // save_intake_fields, the whole lead dropped on the floor while the
+      // reply read as helpful. Nothing downstream can recover that, because
+      // the loop below accepts the first prose it is handed. So the mode
+      // gets one chance to reject it and retry with a pointed reminder.
+      const nudge = !nudged ? (mode.progressNudge?.(ctx, toolCallRecords.map((r) => r.name)) ?? null) : null;
+      if (nudge) {
+        nudged = true;
+        // The rejected prose is deliberately NOT pushed into `messages` —
+        // we want the model to answer afresh, not to defend the reply we
+        // just discarded. No iteration is consumed either (`i -= 1`): no
+        // tool ran, so nothing was accomplished that should cost a round.
+        messages.push({ role: 'system', content: nudge });
+        i -= 1;
+        continue;
+      }
+
+      // We already have the complete (non-streamed) text at this point, so
       // "streaming" it is chunking — same perceived-latency benefit as the
       // old fake typewriter, just over genuinely tool-informed output.
-      const text = scrubForbiddenOutput(volunteered);
+      const text = sanitizeModelText(volunteered);
       const chunkSize = 24;
       for (let j = 0; j < text.length; j += chunkSize) {
         yield { type: 'delta', text: text.slice(j, j + chunkSize) };
@@ -364,7 +358,7 @@ export async function* runAgent(
       }
 
       const label = tool.progressLabel(validated.data);
-      yield { type: 'tool_start', id: callId, label };
+      yield { type: 'tool_start', id: callId, name: tool.name, label };
 
       const startedAt = Date.now();
       let ok = true;
@@ -393,8 +387,22 @@ export async function* runAgent(
       messages.push({ role: 'tool', tool_call_id: callId, content });
     }
 
+    // Second nudge point. Tools ran, but a mode can still be no closer to
+    // the state change it exists to make — SOP mode was observed answering
+    // "I'd have a design system project" by calling search_knowledge and a
+    // no-op set_mode('sop'), never set_flow or save_intake_fields, so the
+    // toolless branch above never saw it and the lead was lost anyway.
+    // Unlike that branch this DOES consume an iteration, because real tool
+    // work happened and its results are now in the transcript.
+    const postToolNudge = !nudged ? (mode.progressNudge?.(ctx, toolCallRecords.map((r) => r.name)) ?? null) : null;
+    if (postToolNudge) {
+      nudged = true;
+      messages.push({ role: 'system', content: postToolNudge });
+      continue;
+    }
+
     if (contentAlongsideToolCalls) {
-      const text = scrubForbiddenOutput(contentAlongsideToolCalls);
+      const text = sanitizeModelText(contentAlongsideToolCalls);
       const chunkSize = 24;
       for (let j = 0; j < text.length; j += chunkSize) {
         yield { type: 'delta', text: text.slice(j, j + chunkSize) };

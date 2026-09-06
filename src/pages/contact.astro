@@ -67,7 +67,7 @@ If reaching out about a project: what you are trying to build or solve, timeline
 
         <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {contactTracks.map((track, index) => (
-            <div class="border border-border/80 p-4">
+            <div class="rounded-lg border border-border/80 p-4">
               <div class="mb-2 font-mono text-xs uppercase tracking-[0.18em] text-primary">0{index + 1}</div>
               <div class="text-sm font-semibold text-foreground leading-snug">{track.label}</div>
               <p class="mt-1.5 text-xs leading-[1.7] text-muted-foreground">{track.description}</p>
@@ -142,17 +142,17 @@ If reaching out about a project: what you are trying to build or solve, timeline
             </div>
 
             <div id="formStatus" class="hidden text-sm" role="status" aria-live="polite" aria-atomic="true">
-              <p class="error hidden border border-destructive/30 bg-destructive/15 px-4 py-3 text-destructive">
+              <p class="error hidden rounded-md border border-destructive/30 bg-destructive/15 px-4 py-3 text-destructive">
                 <span class="sr-only">Error:</span>
                 <span class="font-medium">⚠ </span>
                 <span data-error-text>There was an error sending your message. Please try again.</span>
               </p>
-              <p class="success hidden border border-green-500/30 bg-green-500/15 px-4 py-3 text-green-400">
+              <p class="success hidden rounded-md border border-green-500/30 bg-green-500/15 px-4 py-3 text-green-400">
                 <span class="sr-only">Success:</span>
                 <span class="font-medium">✓ </span>
                 Message sent successfully!
               </p>
-              <p class="loading hidden border border-primary/30 bg-primary/15 px-4 py-3 text-primary">
+              <p class="loading hidden rounded-md border border-primary/30 bg-primary/15 px-4 py-3 text-primary">
                 <span class="sr-only">Loading:</span>
                 <span class="animate-pulse">Sending message...</span>
               </p>
@@ -162,7 +162,7 @@ If reaching out about a project: what you are trying to build or solve, timeline
               <button
                 type="submit"
                 id="submitButton"
-                class="btn-stripe min-h-[48px] px-8 disabled:cursor-not-allowed disabled:opacity-60 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+                class="btn-stripe min-h-[44px] px-8 disabled:cursor-not-allowed disabled:opacity-60 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
                 aria-describedby="formStatus"
               >
                 Send message
@@ -171,7 +171,7 @@ If reaching out about a project: what you are trying to build or solve, timeline
                 href={whatsappHref}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="btn-stripe min-h-[48px] px-6"
+                class="btn-stripe min-h-[44px] px-6"
                 data-tone="muted"
               >
                 WhatsApp

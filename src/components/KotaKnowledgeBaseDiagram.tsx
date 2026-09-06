@@ -83,7 +83,7 @@ export default function KotaKnowledgeBaseDiagram() {
 
   return (
     <div style={{
-      width: '100%', borderRadius: 16,
+      width: '100%', borderRadius: 'var(--radius)',
       border: '1px solid rgba(255,255,255,0.08)',
       background: 'rgba(255,255,255,0.015)',
       padding: '28px 20px 20px',

@@ -25,7 +25,7 @@ const CHIP_SEEDS: Record<string, { project_type: string }> = {
 };
 
 const SOP_KEYWORDS =
-  /\b(quote|price|pricing|cost|how much|budget|hire|hire you|hire him|build me a|start a project|work with (you|him)|get started|need (a |an |some )?(website|app|logo|brand( identity)?|design help|redesign)|(need|want|looking for) help (with|on)|i'?m looking to (get|have|build)|can you (build|design|make)|(want|need) (to|a) (build|create|make|design)|i have a .{0,25}(project|idea)\b)\b/i;
+  /\b(quote|price|pricing|cost|how much|budget|your rates?|day rate|hourly rate|what do you charge|how much do you charge|hire|hire you|hire him|build me a|start a project|work with (you|him)|get started|need (a |an |some )?(website|app|logo|brand( identity)?|design help|redesign)|(need|want|looking for) help (with|on)|i'?m looking to (get|have|build)|can you (build|design|make)|(want|need) (to|a) (build|create|make|design)|i(?:'?d|'?ve)? ?have a .{0,25}(project|idea)\b)\b/i;
 
 async function llmClassify(message: string): Promise<Mode> {
   try {
@@ -34,6 +34,30 @@ async function llmClassify(message: string): Promise<Mode> {
     try {
       const res = await openrouter.chat.completions.create(
         {
+          // Deliberately the OLD flash-lite, and deliberately not any of
+          // the models the agent loop runs. This slot is a one-word
+          // classifier with max_tokens: 4 and a 1500ms abort, and EVERY
+          // current-generation candidate is a reasoning model that spends
+          // that entire budget thinking and returns content: null —
+          // measured, all of them, on 2026-09-05:
+          //
+          //   glm-5.3-flash        null (reasoning cannot be disabled at all)
+          //   deepseek-v4-flash-0731  null
+          //   gemini-3.1-flash-lite   null
+          //   gemini-3.7-flash        null
+          //   gemini-2.5-flash-lite   "hiring" / "sop"   p50 521ms
+          //
+          // null reads as "not sop" here, which would silently route EVERY
+          // message to hiring. Given a real token budget (512) instead, the
+          // reasoning models answer but blow the timeout: gemini-3.7-flash
+          // scored 9/9 correct at p50 2663ms / max 13031ms, over 1500ms on
+          // 9 of 9 calls — it would abort every time and default to hiring.
+          //
+          // So this is a latency-budget constraint, not a model-recency one.
+          // A one-word classifier has no use for reasoning, the prompt below
+          // does the actual work (26/26 on evals/router.ts), and this is the
+          // fastest thing measured that can answer at all. Revisit only
+          // alongside raising the 1500ms abort.
           model: 'google/gemini-2.5-flash-lite',
           temperature: 0,
           max_tokens: 4,
@@ -48,9 +72,26 @@ async function llmClassify(message: string): Promise<Mode> {
               // best work" into project intake. The explicit SEE/BROWSE
               // carve-out below is load-bearing for that second case.
               content:
-                'Classify the user\'s message as exactly one word: "sop" or "hiring".\n' +
-                'Say "sop" only if they want Nasif to take on NEW work for them: starting a project, freelance or commission work, a quote, revamping/redesigning/overhauling something of theirs, exploring getting something built, or submitting content for an already-approved project. Read for intent, not just literal words like "quote" or "hire".\n' +
-                'Say "hiring" for everything else. That includes any request to SEE or BROWSE existing work — "show me your work", "show me your best work", "can I see examples", "any case studies?" — and questions about his process, background, skills, past clients, or availability for a full-time role.\n' +
+                'Classify the user\'s message as exactly one word: "sop" or "hiring".\n\n' +
+                'The question is who would be doing work for whom.\n' +
+                '"sop" = the visitor wants to BUY work from Nasif. They have a project, a need, or a company, and they want him to do something for them: starting a project, contract/freelance/commission work, a quote, revamping or overhauling something of theirs, exploring getting something built, or submitting content for an already-approved project.\n' +
+                '"hiring" = the visitor is EVALUATING Nasif. Browsing his work, asking about his background, process, skills or past clients, or recruiting him for a job at their company.\n\n' +
+                'Two traps:\n' +
+                '1. "Available?" splits by what for. Available to take on a project, new clients, or contract work -> sop. Available for a job, role, or position -> hiring. A bare "are you available?" or "available for work right now?" with no project and no role attached is too thin to act on -> hiring, which is the safer default.\n' +
+                '2. Words like "work", "project" and "best" appear on both sides, so read the verb, not the noun. "Show me / can I see / do you have any" + work -> hiring. "Do you take on / are you taking / would you consider / we need" + work -> sop, even when the noun is literally "projects".\n\n' +
+                'Examples:\n' +
+                'sop: "We need some design work done for our site."\n' +
+                'sop: "Do you still take on contract work?"\n' +
+                'sop: "Are you taking on new clients at the moment?"\n' +
+                'sop: "We are looking at overhauling our website."\n' +
+                'sop: "Is building something like this something you would consider?"\n' +
+                'hiring: "Show me your strongest projects."\n' +
+                'hiring: "Can I see what you have built?"\n' +
+                'hiring: "Show me a project about healthcare."\n' +
+                'hiring: "What is your background in fintech?"\n' +
+                'hiring: "How do you normally run a project?"\n' +
+                'hiring: "We have an open Senior Designer role, would you be interested?"\n' +
+                'hiring: "Not sure what I need yet, just looking around."\n\n' +
                 'Reply with only that one word.',
             },
             { role: 'user', content: message.slice(0, 500) },

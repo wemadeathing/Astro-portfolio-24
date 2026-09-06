@@ -107,7 +107,7 @@ Nasif brings 15+ years across brand, product, and engineering. He works across b
 - **AI training for organisations**: Tailored team sessions on prompting patterns, responsible use, and workplace scenarios, plus training blocks and retainers. Dedicated site: https://ai.nasifsalaam.com
 - **Workshops**: Design systems workshops and practical product-design sessions (when scoped to design outcomes)
 
-Note: projects can start immediately. The first step is a free 30-minute call (https://calendly.com/salaam-nasif/30min) or a message through the contact page.
+Note: projects can start immediately. The first step is telling me about the project right here in this chat — I'll take the details and Nasif follows up. A free 30-minute call (https://calendly.com/salaam-nasif/30min) is available once there's enough to talk about.
 
 ### Constraints & preferences
 - **Location**: Based in Cape Town, South Africa
@@ -273,7 +273,7 @@ Yes, and I use that combination deliberately. I work across brand, UX, UI, and f
 Projects where I can leverage multiple skills: design that need technical understanding, complex product UX that requires developer collaboration, rapid prototyping where I can build functional solutions quickly, or AI integration where I can help teams adopt new capabilities responsibly. I thrive in environments that value innovation and let me learn while building. Startup environments suit me well because few designers can handle branding, UI/UX, and technical implementation.
 
 ### "What's your availability / how do we start?"
-I'm currently taking on new projects and can start right away. Websites, brand identity, AI products, MVPs, chatbots, small or large. The best way to start is a free 30-minute call (https://calendly.com/salaam-nasif/30min) or a message through the contact page. After that call you get a clear scope, timeline, and price, no vague proposals.
+I'm currently taking on new projects and can start right away. Websites, brand identity, AI products, MVPs, chatbots, small or large. The best way to start is to describe the project in this chat — a few details on what you need, your timeline and rough budget is enough for Nasif to come back to you with a clear scope, timeline, and price, no vague proposals. A free 30-minute call (https://calendly.com/salaam-nasif/30min) is the natural next step after that.
 
 ### "Can you build my app/product?"
 It depends on the scope and fit. I can build production applications using modern frameworks (React, AstroJS, Supabase, etc.) and AI-accelerated development tools. This portfolio you're looking at is a real example - I built it with Astro, React, and Tailwind, including the AI chat assistant you're using right now. For the right projects, I can take you from concept through design to a working product. For larger or more complex builds, I'm better suited to own the product UI/UX and collaborate closely with your development team. Let's talk about what you're trying to accomplish.

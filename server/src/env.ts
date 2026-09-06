@@ -41,6 +41,18 @@ function loadEnv(): Env {
     );
   }
 
+  // Lead email silently no-ops without this: sendLeadEmail refuses to fall
+  // back to Resend's shared test sender, because that sender can only
+  // deliver to the account owner's own address and 403s on everything else.
+  // Warn at boot rather than at the first real lead.
+  if (!parsed.data.RESEND_FROM_EMAIL) {
+    console.warn(
+      'WARNING: RESEND_FROM_EMAIL is not set. Lead emails WILL FAIL to send — ' +
+        'set it to an address on a domain verified at resend.com/domains. ' +
+        'Submitted leads are still persisted to the `leads` table with emailStatus="failed".'
+    );
+  }
+
   return parsed.data;
 }
 

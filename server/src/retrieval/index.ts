@@ -7,7 +7,7 @@ import { embeddings as embeddingsTable, type ChunkKind } from '../db/schema';
 import { loadContent } from '../content/load';
 import { chunkAll, type Chunk } from '../content/chunk';
 import { embedBatch, cosine, EMBEDDING_MODEL, EMBEDDING_DIM } from './embed';
-import { bigramDice, normalize } from './lexical';
+import { bigramDice, keywordCoverage, normalize } from './lexical';
 
 interface IndexedChunk extends Chunk {
   vector: number[];
@@ -109,10 +109,22 @@ export class RetrievalIndex {
   }
 
   /**
-   * Hybrid score: 0.7 cosine + 0.3 bigramDice on refId+heading. While the
-   * index is still warming (embeddings not yet built for this boot),
-   * degrades to pure lexical search over content+refId+heading rather than
-   * blocking — see plan §Retrieval ("must not block the healthcheck").
+   * Hybrid score: 0.6 cosine + 0.15 bigramDice(refId+heading) + 0.25
+   * keywordCoverage over heading AND content.
+   *
+   * The keyword term was added because the first two alone are both blind
+   * to chunk content in the way that matters here: bigramDice only ever saw
+   * `refId + heading`, and for knowledge chunks refId is the constant string
+   * 'knowledge', so a distinctive word appearing only in the body — a client
+   * name, a tool, a certification — could not influence the ranking at all.
+   * Cosine does read content, but every chunk in this corpus is
+   * semantically "about Nasif" and scores land within ~0.02 of each other,
+   * which is noise, not ranking. See keywordCoverage's doc comment for the
+   * measured failure this fixes.
+   *
+   * While the index is still warming (embeddings not yet built for this
+   * boot), degrades to lexical-only search rather than blocking — see plan
+   * §Retrieval ("must not block the healthcheck").
    */
   async search(query: string, opts: { kinds?: ChunkKind[]; k?: number } = {}): Promise<SearchHit[]> {
     const { kinds, k = 4 } = opts;
@@ -121,7 +133,12 @@ export class RetrievalIndex {
 
     if (!this.built) {
       return pool
-        .map((c) => ({ ...c, score: bigramDice(normalize(query), normalize(`${c.refId} ${c.heading ?? ''} ${c.content}`)) }))
+        .map((c) => ({
+          ...c,
+          score:
+            0.4 * bigramDice(normalize(query), normalize(`${c.refId} ${c.heading ?? ''} ${c.content}`)) +
+            0.6 * keywordCoverage(query, `${c.heading ?? ''} ${c.content}`),
+        }))
         .sort((a, b) => b.score - a.score)
         .slice(0, k);
     }
@@ -130,8 +147,9 @@ export class RetrievalIndex {
     return pool
       .map((c) => {
         const cosineScore = cosine(queryVec, c.vector);
-        const lexicalScore = bigramDice(normalize(query), normalize(`${c.refId} ${c.heading ?? ''}`));
-        return { ...c, score: 0.7 * cosineScore + 0.3 * lexicalScore };
+        const headingScore = bigramDice(normalize(query), normalize(`${c.refId} ${c.heading ?? ''}`));
+        const keywordScore = keywordCoverage(query, `${c.heading ?? ''} ${c.content}`);
+        return { ...c, score: 0.6 * cosineScore + 0.15 * headingScore + 0.25 * keywordScore };
       })
       .sort((a, b) => b.score - a.score)
       .slice(0, k);

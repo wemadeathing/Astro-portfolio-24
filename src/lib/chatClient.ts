@@ -81,6 +81,7 @@ export interface FinalPayload {
 export type ChatStreamEvent =
   | { type: 'start'; conversationId: string }
   | { type: 'mode'; mode: 'hiring' | 'sop' }
+  | { type: 'thinking'; active: boolean }
   | { type: 'tool_start'; id: string; label: string }
   | { type: 'tool_end'; id: string; ok: boolean }
   | { type: 'delta'; text: string }
@@ -141,6 +142,9 @@ export async function* streamChat(body: ChatRequestBody, signal: AbortSignal): A
             break;
           case 'mode':
             yield { type: 'mode', mode: parsed.mode };
+            break;
+          case 'thinking':
+            yield { type: 'thinking', active: Boolean(parsed.active) };
             break;
           case 'tool_start':
             yield { type: 'tool_start', id: parsed.id, label: parsed.label };

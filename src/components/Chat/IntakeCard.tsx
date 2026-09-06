@@ -1,5 +1,5 @@
 import React, { useId, useState } from 'react';
-import { submitReadinessReason } from '../../lib/intake';
+import { submitReadinessReason } from '../../../shared/intake';
 
 export interface IntakeState {
   intent: 'quote_intake' | 'content_intake';
@@ -54,8 +54,14 @@ function IntakeField({
     if (!trimmed) setDraft(value);
   };
 
+  // rounded-none is load-bearing, not redundant: globals.css @layer base
+  // gives every button/input/textarea/select a 12px border-radius, which on
+  // a bottom-border-only field curls both ends of the hairline upward into a
+  // shallow smile — and thickens into an obvious curve on focus, where
+  // border-b-2 doubles it. The radius is right for boxed controls and wrong
+  // for an underline, so this opts out rather than changing the global.
   const fieldClassName =
-    'mt-1 w-full border-b border-border/60 bg-transparent py-1.5 text-[15px] leading-relaxed text-foreground outline-none transition-colors focus:border-b-2 focus:border-primary';
+    'mt-1 w-full rounded-none border-b border-border/60 bg-transparent py-1 text-[15px] leading-relaxed text-foreground outline-none transition-colors focus:border-b-2 focus:border-primary';
 
   return (
     <div className="min-w-0 flex-1">
@@ -135,7 +141,7 @@ export default function IntakeCard({ intake, onFieldEdit, onSubmit, submitting, 
 
   if (intake.submitted) {
     return (
-      <div className="border border-border/80 p-4">
+      <div className="rounded-lg border border-border/80 p-4">
         <div className="font-mono text-xs uppercase tracking-[0.12em] text-primary">
           {FLOW_TITLES[intake.flow]} — Submitted
         </div>
@@ -158,7 +164,7 @@ export default function IntakeCard({ intake, onFieldEdit, onSubmit, submitting, 
   const totalCaptured = capturedEntries.length + nameEmailCaptured + gatingCaptured;
 
   return (
-    <div className="border border-border/80 p-4">
+    <div className="rounded-lg border border-border/80 p-4">
       <div className="flex items-baseline justify-between">
         <div className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
           {FLOW_TITLES[intake.flow]}
@@ -224,7 +230,7 @@ export default function IntakeCard({ intake, onFieldEdit, onSubmit, submitting, 
           type="button"
           onClick={onSubmit}
           disabled={!intake.readyToSubmit || submitting}
-          className="border border-border/80 px-3 py-1.5 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:border-primary/25 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
+          className="border border-border/80 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:border-primary/25 hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
         >
           {submitting
             ? 'Sending…'

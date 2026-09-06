@@ -13,7 +13,7 @@ const imageSrc = src.startsWith('/') ? src : `/${src}`;
 
 <figure class="my-8 group clickable-image-container">
   <div 
-    class="overflow-hidden border border-border/80 cursor-zoom-in"
+    class="overflow-hidden rounded-lg border border-border/80 cursor-zoom-in"
     data-image-src={imageSrc}
     data-image-alt={alt}
   >
@@ -39,9 +39,9 @@ const imageSrc = src.startsWith('/') ? src : `/${src}`;
       modal.id = 'imageModal';
       modal.className = 'fixed inset-0 bg-black/90 backdrop-blur-sm z-[100] hidden items-center justify-center transition-opacity duration-300 p-4';
       modal.innerHTML = `
-        <div class="absolute left-4 top-4 hidden bg-black/50 px-2.5 py-1.5 font-mono text-xs uppercase tracking-[0.18em] text-white/70 backdrop-blur-sm" id="modalCounter" aria-live="polite"></div>
+        <div class="absolute left-4 top-4 hidden bg-black/50 px-2.5 py-1 font-mono text-xs uppercase tracking-[0.18em] text-white/70 backdrop-blur-sm" id="modalCounter" aria-live="polite"></div>
         <div class="relative max-w-7xl w-full max-h-[90vh] flex items-center justify-center outline-none" tabindex="-1">
-          <img src="" alt="" class="max-h-[90vh] w-auto object-contain border border-border/80 shadow-2xl" />
+          <img src="" alt="" class="max-h-[90vh] w-auto object-contain rounded-lg border border-border/80 shadow-2xl" />
           <button class="absolute -top-12 right-0 text-white/70 hover:text-white transition-colors p-2" id="closeModalBtn" aria-label="Close modal">
             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M18 6 6 18"/><path d="m6 6 12 12"/>

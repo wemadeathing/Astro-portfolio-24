@@ -143,8 +143,10 @@ chatRoute.post('/chat', chatRateLimit, async (c) => {
       let modelUsed = modeDef.model.primary;
 
       for await (const ev of generator) {
-        if (ev.type === 'tool_start') {
-          await stream.writeSSE({ event: 'tool_start', data: JSON.stringify({ id: ev.id, label: ev.label }) });
+        if (ev.type === 'thinking') {
+          await stream.writeSSE({ event: 'thinking', data: JSON.stringify({ active: ev.active }) });
+        } else if (ev.type === 'tool_start') {
+          await stream.writeSSE({ event: 'tool_start', data: JSON.stringify({ id: ev.id, name: ev.name, label: ev.label }) });
         } else if (ev.type === 'tool_end') {
           await stream.writeSSE({ event: 'tool_end', data: JSON.stringify({ id: ev.id, ok: ev.ok }) });
         } else if (ev.type === 'delta') {

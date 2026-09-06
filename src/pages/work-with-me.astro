@@ -121,7 +121,7 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
             15+ years across brand, digital products, and systems. One person from brief to working product. Currently taking on new projects.
           </p>
           <div class="mt-8">
-            <a href={calLink} target="_blank" rel="noopener noreferrer" class="btn-stripe min-h-[48px] px-8">
+            <a href={calLink} target="_blank" rel="noopener noreferrer" class="btn-stripe min-h-[44px] px-8">
               Book a free 30-minute call
             </a>
           </div>
@@ -224,7 +224,7 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
                 </p>
               )}
               {service.image && (
-                <div class="mt-4 overflow-hidden border border-border/60">
+                <div class="mt-4 overflow-hidden rounded-md border border-border/60">
                   <img
                     src={service.image}
                     alt={service.imageAlt}
@@ -301,7 +301,7 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
         </p>
       </div>
 
-      <div class="grid gap-px bg-border/40 border border-border/40 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="grid gap-px overflow-hidden rounded-lg bg-border/40 border border-border/40 sm:grid-cols-2 lg:grid-cols-4">
         {steps.map((step, i) => (
           <div class={`scroll-reveal scroll-reveal-d${i + 1} bg-background p-5 sm:p-6`}>
             <div class="mb-4 font-mono text-[10px] uppercase tracking-[0.18em] text-primary/60">
@@ -327,7 +327,7 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
             </p>
           </div>
           <div class="flex flex-row sm:flex-col gap-3 sm:items-end flex-wrap">
-            <a href={calLink} target="_blank" rel="noopener noreferrer" class="btn-stripe min-h-[48px] px-8 whitespace-nowrap">
+            <a href={calLink} target="_blank" rel="noopener noreferrer" class="btn-stripe min-h-[44px] px-8 whitespace-nowrap">
               Book a free call
             </a>
             <a href={`mailto:${emailAddress}`} class="font-mono text-xs uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-foreground sm:text-right">
@@ -367,6 +367,7 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
   /* ── Hero image frame ── */
   .image-frame {
     border: 1px solid hsl(var(--border) / 0.8);
+    border-radius: var(--radius);
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -442,6 +443,7 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
   /* ── Service cards ── */
   .service-card {
     border: 1px solid hsl(var(--border) / 0.8);
+    border-radius: var(--radius);
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -450,6 +452,7 @@ ${steps.map((s) => `${s.number}. **${s.title}**: ${s.description}`).join('\n')}
   /* ── CTA box ── */
   .cta-box {
     border: 1px solid hsl(var(--border) / 0.8);
+    border-radius: var(--radius);
     overflow: hidden;
   }
 </style>

@@ -58,7 +58,7 @@ const FloatingAssistant: FC<FloatingAssistantProps> = () => {
   return (
     <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 w-full max-w-[600px] px-4 z-40 transition-all duration-500 ease-out ${isOpen ? 'translate-y-0' : 'translate-y-0'}`}>
       <div 
-        className={`relative overflow-hidden border border-border/80 bg-background/95 shadow-2xl transition-all duration-300 ${isOpen ? 'ring-4 ring-primary/10' : 'hover:border-primary/25'}`}
+        className={`relative overflow-hidden rounded-lg border border-border/80 bg-background/95 shadow-2xl transition-all duration-300 ${isOpen ? 'ring-4 ring-primary/10' : 'hover:border-primary/25'}`}
       >
         <div className="flex items-center px-4 h-14 gap-3">
           <div className="text-primary w-5 h-5 flex items-center justify-center">
@@ -101,7 +101,7 @@ const FloatingAssistant: FC<FloatingAssistantProps> = () => {
                      <button
                         key={s}
                         onClick={() => handleSearch(s)}
-                        className={`border px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.14em] transition-all ${
+                        className={`border px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.14em] transition-all ${
                             query.toLowerCase().includes(s.toLowerCase())
                             ? 'bg-primary/12 border-primary/40 text-primary' 
                             : 'bg-card/30 border-border/80 text-muted-foreground hover:border-primary/25 hover:text-foreground'

@@ -99,11 +99,87 @@ export const EVAL_CASES: EvalCase[] = [
     name: "explicit 'submit now' with name+email present should call propose_submission",
     turns: [
       { message: 'I want a website', chipId: 'website' },
-      { message: 'Jane Doe, jane@example.com, bakery online store. Please submit now, no more questions.' },
+      {
+        message:
+          'Jane Doe, jane@example.com, bakery online store, budget around R40k. Please submit now, no more questions.',
+      },
     ],
     expect: {
       mode: 'sop',
-      readyToSubmit: true, // known-flaky on gpt-4.1-mini — see plan §Risks
+      toolCalledAtLeastOnce: ['propose_submission'],
+      readyToSubmit: true,
+      // Guards the 2026-09-05 leak: on the forced-prose round the model
+      // wrote the tool call into the answer as text rather than emitting a
+      // tool_calls block, and the visitor would have read the raw markup.
+      replyMustNotContain: ['<tool_call>', 'arg_key', 'arg_value', '<function_call>'],
+    },
+    // The budget is in the message on purpose: propose_submission's bar is
+    // name + email + what the project is + ONE of goals/budget/timeline.
+    // Without that fourth item the tool correctly refuses, so the old
+    // version of this case asserted readyToSubmit on a turn where "not
+    // ready" was the right answer, and was written off as model flakiness.
+  },
+  {
+    // Regression, 2026-09-05: mid-intake, the visitor answered the budget
+    // question with "R10k under" and got back "Understood — budget under
+    // R10k. That's noted" — with zero tool calls behind it. Nothing was
+    // noted. The reply also ended without a question, so the conversation
+    // stopped dead. Terse, partial answers like these ARE the normal shape
+    // of an intake reply, so losing them loses most of the lead.
+    name: 'terse mid-intake answers are saved, not just acknowledged in prose',
+    turns: [
+      { message: 'i need a brand identity', chipId: 'brand_identity' },
+      { message: 'month end' },
+      { message: 'R10k under' },
+    ],
+    expect: {
+      mode: 'sop',
+      toolCalledAtLeastOnce: ['save_intake_fields'],
+      intakeFieldsPresent: ['project_type', 'timeline', 'budget_range'],
+      // An intake turn that ends without a question stalls and never restarts.
+      replyMustNotContain: ['get in touch', 'contact page'],
+    },
+  },
+  {
+    // Regression, 2026-09-05: answered "Nasif has worked with one specific
+    // South African bank ... While the specific name of the second
+    // institution isn't mentioned, it was a large financial organization."
+    // Two bugs at once — retrieval never surfaced the chunk naming the
+    // clients, and the prompt let the model narrate that gap to the visitor.
+    name: 'client-name question is answered, not hedged about missing source detail',
+    turns: [{ message: 'Which banks has Nasif worked with?' }],
+    expect: {
+      mode: 'hiring',
+      toolCalledAtLeastOnce: ['search_knowledge'],
+      replyMustNotContain: [
+        "isn't mentioned",
+        'is not mentioned',
+        "doesn't say",
+        'not specified',
+        "aren't specified",
+        'information available',
+        "don't have that detail",
+      ],
+    },
+  },
+  {
+    // Regression, 2026-09-05: replied "it would be best to get in touch
+    // directly. Would you like me to guide you on how to do that?" while in
+    // SOP mode — no set_flow, no save_intake_fields, lead lost. The intake
+    // deflecting to the contact page is the worst outcome this mode has.
+    name: 'stated project + availability question starts the intake instead of deflecting',
+    turns: [{ message: 'id have a design system project. are you available?' }],
+    expect: {
+      mode: 'sop',
+      toolCalledAtLeastOnce: ['set_flow', 'save_intake_fields'],
+      intakeFieldsPresent: ['project_type'],
+      replyMustNotContain: [
+        'get in touch',
+        'contact page',
+        'reach out',
+        'would you like me to',
+        'shall i',
+      ],
     },
   },
   {

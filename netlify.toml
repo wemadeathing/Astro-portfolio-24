@@ -19,25 +19,7 @@
   status = 301
   force = true
 
-# Rate limiting for chat API endpoint
-# Limits: 10 requests per minute per IP (reduced to prevent API quota exhaustion)
-[[rate_limit]]
-  path = "/api/chat"
-  window_limit = 10
-  window_size = 60
-  aggregator = "ip"
-  status_code = 429
-  custom_message = "Too many requests. Please wait a moment and try again."
 
-# Rate limiting for intake submission endpoint
-# Tighter than /api/chat since every allowed request sends a real email.
-[[rate_limit]]
-  path = "/api/submit-intake"
-  window_limit = 5
-  window_size = 60
-  aggregator = "ip"
-  status_code = 429
-  custom_message = "Too many submissions. Please wait a moment and try again."
 
 [[headers]]
   for = "/*"

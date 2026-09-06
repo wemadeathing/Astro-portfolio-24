@@ -194,43 +194,60 @@ const relatedPosts = sortedPosts
             />
           </div>
 
+          {/* This header had six stacked rows of mono uppercase in the same
+              size, tracking and grey — breadcrumb, series, a "Writing" kicker,
+              date, tags, share — so nothing announced which was navigation,
+              which was context and which was metadata. It now steps down
+              deliberately: accent series line, then title, then muted meta,
+              then bordered tags. The "Writing" kicker is gone because the
+              breadcrumb already says Insights, making it a third name for the
+              same section. Share moved below the article — offering it before
+              anyone has read a word is backwards, and it was the last of the
+              six rows standing between the title and the first sentence.
+
+              The series line carries colour only: as a filled, bordered pill
+              it outweighed the title beneath it, and two chip treatments in
+              one header (accent pill above, grey tag chips below) muddied
+              what a chip signifies. */}
           <div class="mb-10">
             {post.data.series && (
-              <div class="mb-4 inline-flex items-center gap-2 border-t border-primary/30 px-0 py-2 font-mono text-xs uppercase tracking-[0.14em] text-foreground">
-                <span class="font-bold">Series</span>
-                <span class="text-primary/40">|</span>
-                <span>{post.data.series} <span class="opacity-75">· Part {post.data.seriesOrder}</span></span>
-              </div>
+              <a
+                href="/blog"
+                class="mb-4 inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.14em] text-primary transition-colors hover:text-primary/70"
+              >
+                <span>{post.data.series}</span>
+                <span class="text-primary/50" aria-hidden="true">·</span>
+                <span>Part {post.data.seriesOrder}</span>
+              </a>
             )}
-            <div class="">
-              <div class="section-kicker">Writing</div>
-              <h1 class="type-h1 mb-4 mt-4">{post.data.title}</h1>
-            </div>
-            <p class="mb-3 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">
+
+            <h1 class="type-h1 mb-4">{post.data.title}</h1>
+
+            <p class="mb-5 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground/80">
               {formattedDate} • {rt.label}
               {formattedUpdated ? ` • Updated ${formattedUpdated}` : ''}
             </p>
 
             {(post.data.tags?.length || post.data.topics?.length) ? (
-              <div class="mb-6 hidden sm:flex flex-wrap gap-x-4 gap-y-2">
+              <div class="hidden sm:flex flex-wrap gap-2">
                 {(post.data.tags ?? []).map((t) => (
                   <a
                     href={`/blog/tags/${tagToSlug(String(t))}`}
-                    class="inline-flex items-center font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:text-foreground"
+                    class="inline-flex items-center rounded-md border border-border/80 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:border-primary/35 hover:text-foreground"
                   >
                     {t}
                   </a>
                 ))}
               </div>
             ) : null}
-
-            <div class="mt-4 hidden sm:block">
-              <ShareButtons title={post.data.title} />
-            </div>
           </div>
 
           <div class="prose max-w-none">
             <Content />
+          </div>
+
+          <div class="mt-10 hidden border-t border-border/80 pt-6 sm:block">
+            <ShareButtons title={post.data.title} />
           </div>
 
           {relatedPosts.length > 0 ? (
@@ -249,7 +266,7 @@ const relatedPosts = sortedPosts
                       href={`/blog/${item.post.slug}`}
                       class="group w-56 sm:w-60 md:w-64 flex-shrink-0 snap-start border-t border-border/80 pt-4 transition-colors hover:border-primary/35 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/30 first:ml-1"
                     >
-                      <div class="aspect-[16/11] overflow-hidden border-y border-border/80">
+                      <div class="aspect-[16/11] overflow-hidden rounded-lg border-y border-border/80">
                         <img
                           src={item.post.data.image}
                           alt={item.post.data.title}
@@ -348,11 +365,11 @@ const relatedPosts = sortedPosts
   }
 
   .prose img {
-    @apply my-12 border border-border/80;
+    @apply my-12 rounded-lg border border-border/80;
   }
 
   .prose pre {
-    @apply bg-black/20 border-y border-border/80 px-0 py-6 my-10 overflow-x-auto;
+    @apply bg-black/20 rounded-lg border-y border-border/80 px-0 py-6 my-10 overflow-x-auto;
   }
 
   .prose code {

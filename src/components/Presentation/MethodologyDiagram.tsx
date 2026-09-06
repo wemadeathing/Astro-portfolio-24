@@ -50,7 +50,7 @@ export const MethodologyDiagram: React.FC<MethodologyDiagramProps> = ({ stages, 
                 aria-label={`Select stage: ${stage.name}`}
               >
                 <div 
-                  className={`flex h-28 w-28 items-center justify-center border transition-all ${
+                  className={`flex h-28 w-28 items-center justify-center rounded-lg border transition-all ${
                     isActive 
                       ? 'bg-primary/10 border-primary/40' 
                       : 'bg-card/40 border-border/80'

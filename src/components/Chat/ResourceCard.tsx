@@ -36,7 +36,7 @@ export default function ResourceCard({ title, description, url, type, image, sit
       href={url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex h-full flex-col border border-border/80 transition-colors hover:border-primary/35 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+      className="group flex h-full flex-col overflow-hidden rounded-lg border border-border/80 transition-colors hover:border-primary/35 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
     >
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-muted/20">
         {image ? (
@@ -51,7 +51,7 @@ export default function ResourceCard({ title, description, url, type, image, sit
             <ExternalLink className="w-6 h-6 text-muted-foreground/30" />
           </div>
         )}
-        <div className="absolute left-2.5 top-2.5 inline-flex items-center border border-border/80 bg-background/88 px-2 py-0.5 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">
+        <div className="absolute left-2.5 top-2.5 inline-flex items-center rounded-md border border-border/80 bg-background/88 px-2 py-0.5 font-mono text-xs uppercase tracking-[0.14em] text-muted-foreground">
           {typeLabel(type)}
         </div>
       </div>

@@ -11,6 +11,19 @@ export const setMode: ToolDef = {
   params: z.object({ mode: z.enum(['hiring', 'sop']), reason: z.string().max(200) }),
   progressLabel: (a) => (a.mode === 'sop' ? 'Switching to project intake…' : 'Switching to Q&A…'),
   execute: async ({ mode }, ctx) => {
+    // Observed live: the SOP mode calling set_mode('sop') while already in
+    // SOP, burning one of only three iterations on a no-op and reading the
+    // `ok: true` back as "handled, my work here is done". Say so plainly
+    // instead — the model needs to know it has not made any progress.
+    if (ctx.state.mode === mode) {
+      return {
+        forModel: {
+          ok: false,
+          mode,
+          note: `Already in "${mode}" mode — this call changed nothing. Do not call set_mode again this turn; use the tools for this mode instead.`,
+        },
+      };
+    }
     ctx.state.mode = mode;
     return { forModel: { ok: true, mode }, stateChanged: true };
   },

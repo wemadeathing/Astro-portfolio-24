@@ -71,7 +71,7 @@ const agent = buildArchiveProjectAgentMarkdown(project.slug)!;
               data-image-alt={alt}
               data-gallery={project.slug}
               aria-label={`View ${alt}`}
-              class="group relative block w-full cursor-zoom-in overflow-hidden border border-border/80 bg-muted/20 transition-colors hover:border-primary/35 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+              class="group relative block w-full cursor-zoom-in overflow-hidden rounded-lg border border-border/80 bg-muted/20 transition-colors hover:border-primary/35 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
               style={`aspect-ratio: ${project.width} / ${project.height}`}
             >
               <div class="absolute inset-0 skeleton-image" aria-hidden="true"></div>
@@ -109,7 +109,7 @@ const agent = buildArchiveProjectAgentMarkdown(project.slug)!;
                 {nextProject.description}
               </p>
             </div>
-            <div class="hidden overflow-hidden border border-border/70 sm:block">
+            <div class="hidden overflow-hidden rounded-lg border border-border/70 sm:block">
               <img
                 src={nextProject.images[0]}
                 alt={nextProject.name}

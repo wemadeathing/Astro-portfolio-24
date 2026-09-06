@@ -54,3 +54,52 @@ export function scrubForbiddenOutput(text: string): string {
     .replace(/postgres(ql)?/gi, 'the database')
     .replace(/railway/gi, 'the hosting platform');
 }
+
+// Structured tool-call syntax leaking into user-visible TEXT. Observed live
+// on 2026-09-05 with glm-5.3-flash on the forced-prose final round
+// (tool_choice: 'none'): the model still wanted propose_submission, could
+// not emit a real tool_calls block, and wrote the harness markup into the
+// answer instead —
+//   <tool_call>propose_submission<arg_key>summary</arg_key><arg_value>…
+// which the visitor would have read as the reply. Different model families
+// use different markers (glm/Qwen <tool_call>, DeepSeek's ▁-delimited
+// forms, generic <function_call>), so this covers the shapes rather than
+// one vendor's.
+//
+// Note this MUST run before scrubForbiddenOutput: that denylist rewrites
+// /tool[\s-]call(ing|s)?/ to "lookup", which would turn the leak into
+// "<lookup>propose_submission<arg_key>…" — still garbage, now unsearchable.
+const TOOL_BLOCK_RE =
+  /<\|?(?:tool_call|tool_calls|function_call|tool▁call[s]?)[^>|]*\|?>[\s\S]*?<\/?\|?(?:tool_call|tool_calls|function_call|tool▁call[s]?)[^>|]*\|?>/gi;
+const TOOL_TAG_RE =
+  /<\/?\|?(?:tool_call|tool_calls|function_call|tool_response|arg_key|arg_value|tool▁call[s]?|tool▁calls▁(?:begin|end)|tool▁sep)[^>|]*\|?>/gi;
+/** An opening marker with no close — a truncated stream; everything after it is markup. */
+const TOOL_OPEN_RE = /<\|?(?:tool_call|tool_calls|function_call|tool▁call[s]?)[^>|]*\|?>/i;
+
+export function containsToolCallMarkup(text: string): boolean {
+  return TOOL_OPEN_RE.test(text) || /<arg_key>|<arg_value>/i.test(text);
+}
+
+/**
+ * Removes leaked tool-call markup from model output. Complete blocks go
+ * first, then any stray tags, then an unterminated opener takes the rest of
+ * the string with it. Returns '' if nothing survives — callers substitute
+ * their own fallback rather than showing an empty bubble.
+ */
+export function stripToolCallMarkup(text: string): string {
+  // Order matters. Complete blocks go first; then an unterminated opener
+  // takes the rest of the string with it — that check has to happen BEFORE
+  // stray tags are removed, or stripping the opener destroys the very
+  // marker that says "everything past here is machine syntax", and the
+  // half-written call gets flattened into the answer as loose words.
+  let out = text.replace(TOOL_BLOCK_RE, ' ');
+  const open = out.match(TOOL_OPEN_RE);
+  if (open && open.index !== undefined) out = out.slice(0, open.index);
+  out = out.replace(TOOL_TAG_RE, ' ');
+  return out.replace(/[ \t]{2,}/g, ' ').replace(/\n{3,}/g, '\n\n').trim();
+}
+
+/** Strip leaked tool syntax, then apply the provider/architecture denylist. */
+export function sanitizeModelText(text: string): string {
+  return scrubForbiddenOutput(stripToolCallMarkup(text));
+}

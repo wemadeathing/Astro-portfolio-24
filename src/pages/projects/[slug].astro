@@ -205,10 +205,10 @@ ${project.body}`;
           One person from brief to working product. Clear scope, honest timeline, and a fixed price after a free 30-minute call.
         </p>
         <div class="mt-7 flex flex-wrap items-center gap-3">
-          <a href="https://calendly.com/salaam-nasif/30min" target="_blank" rel="noopener noreferrer" class="btn-stripe min-h-[46px] px-7">
+          <a href="https://calendly.com/salaam-nasif/30min" target="_blank" rel="noopener noreferrer" class="btn-stripe min-h-[42px] px-7">
             Book a free call
           </a>
-          <a href="/contact" class="btn-stripe min-h-[46px] px-7" data-tone="muted">
+          <a href="/contact" class="btn-stripe min-h-[42px] px-7" data-tone="muted">
             Get in touch
           </a>
         </div>
@@ -229,7 +229,7 @@ ${project.body}`;
               {nextProject.data.description}
             </p>
           </div>
-          <div class="hidden overflow-hidden border border-border/70 sm:block">
+          <div class="hidden overflow-hidden rounded-lg border border-border/70 sm:block">
             <img
               src={nextProject.data.image}
               alt={nextProject.data.title}
@@ -296,9 +296,10 @@ ${project.body}`;
   .case-btn {
     display: inline-flex;
     align-items: center;
-    min-height: 44px;
+    min-height: 40px;
     padding: 0 1.5rem;
     border: 1px solid color-mix(in srgb, var(--case-fg) 45%, transparent);
+    border-radius: calc(var(--radius) - 4px);
     color: var(--case-fg);
     font-family: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
     font-size: 0.75rem;
@@ -315,6 +316,7 @@ ${project.body}`;
 
   .case-hero-img {
     border: 1px solid hsl(var(--border) / 0.7);
+    border-radius: var(--radius);
     background: hsl(var(--background));
   }
 
@@ -375,7 +377,7 @@ ${project.body}`;
   }
 
   .prose img {
-    @apply my-12 border border-border/80;
+    @apply my-12 rounded-lg border border-border/80;
   }
   
   .prose figure {
@@ -425,7 +427,7 @@ ${project.body}`;
   }
 
   .prose pre {
-    @apply my-10 overflow-x-auto border-y border-border/80 bg-black/20 px-0 py-6;
+    @apply my-10 overflow-x-auto rounded-lg border-y border-border/80 bg-black/20 px-0 py-6;
   }
 
   .prose code {

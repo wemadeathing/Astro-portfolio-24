@@ -23,7 +23,7 @@ export default function BlogCard({ title, description, slug, pubDate, tags }: Bl
   return (
     <a
       href={`/blog/${slug}`}
-      className="group flex h-full flex-col border border-border/80 transition-colors hover:border-primary/35 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+      className="group flex h-full flex-col rounded-lg border border-border/80 transition-colors hover:border-primary/35 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
     >
       <div className="flex flex-1 flex-col p-4">
         <div className="flex-1">
@@ -39,15 +39,15 @@ export default function BlogCard({ title, description, slug, pubDate, tags }: Bl
           {visibleTags.map((tag) => (
             <span
               key={tag}
-              className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground"
+              className="min-w-0 flex-1 truncate text-xs text-muted-foreground"
             >
               {tag}
             </span>
           ))}
           {tags.length > 2 && (
-            <span className="font-mono text-xs text-muted-foreground">+{tags.length - 2}</span>
+            <span className="shrink-0 text-xs text-muted-foreground">+{tags.length - 2}</span>
           )}
-          <span className="ml-auto font-mono text-xs text-muted-foreground">
+          <span className="ml-auto shrink-0 font-mono text-xs text-muted-foreground">
             {formatDate(pubDate)}
           </span>
         </div>

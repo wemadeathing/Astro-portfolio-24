@@ -49,3 +49,53 @@ export function bigramDice(a: string, b: string): number {
   }
   return (2 * inter) / (ag.length + bg.length);
 }
+
+// Words that appear in almost every chunk of a portfolio knowledge base and
+// therefore carry no ranking signal here ("work", "project", "design"...),
+// plus ordinary English function words. Deliberately aggressive: what's left
+// after filtering is what should actually discriminate between chunks.
+const STOPWORDS = new Set([
+  'the', 'and', 'for', 'with', 'has', 'have', 'had', 'you', 'your', 'yours', 'his', 'her', 'their', 'they', 'them',
+  'what', 'which', 'who', 'whom', 'whose', 'does', 'did', 'are', 'was', 'were', 'been', 'being', 'that', 'this',
+  'these', 'those', 'from', 'about', 'can', 'could', 'would', 'should', 'will', 'shall', 'how', 'why', 'when',
+  'where', 'into', 'over', 'under', 'out', 'any', 'all', 'some', 'more', 'most', 'much', 'many', 'other', 'than',
+  'then', 'she', 'him', 'its', 'our', 'ours', 'not', 'but', 'also', 'just', 'get', 'got', 'use', 'used', 'using',
+  'like', 'want', 'need', 'tell', 'give', 'show', 'say', 'said', 'know',
+  // Corpus-specific: true of nearly every chunk, so useless for ranking.
+  'nasif', 'work', 'works', 'worked', 'working', 'project', 'projects', 'design', 'designs', 'designed',
+  'designer', 'experience', 'client', 'clients',
+]);
+
+/** Crude singular-ising stem — enough to match "banks"→"bank", "systems"→"system". */
+function stem(token: string): string {
+  if (token.length > 4 && token.endsWith('ies')) return `${token.slice(0, -3)}y`;
+  if (token.length > 4 && token.endsWith('es')) return token.slice(0, -2);
+  if (token.length > 3 && token.endsWith('s')) return token.slice(0, -1);
+  return token;
+}
+
+/**
+ * Fraction of the query's *discriminative* terms that actually appear in the
+ * target text. Unlike bigramDice this reads chunk CONTENT, and unlike cosine
+ * it can't be diluted by a long chunk — a query for "banks" scores 1.0
+ * against the one chunk that names them, and 0 against the forty that don't.
+ *
+ * This exists because cosine alone could not separate them: measured against
+ * the live index, "which banks has he worked with" ranked the chunk holding
+ * "ABSA, Old Mutual, Standard Bank" *fourth* (0.2568) behind three chunks
+ * that never mention a bank, and "what financial institutions has Nasif
+ * worked with" dropped it out of the top 6 entirely. Every chunk in this
+ * corpus is semantically "about Nasif", so embeddings score them all within
+ * ~0.02 of each other and the ranking is effectively noise.
+ */
+export function keywordCoverage(query: string, target: string): number {
+  const queryTerms = [...tokenSet(query)].map(stem).filter((t) => !STOPWORDS.has(t));
+  if (queryTerms.length === 0) return 0;
+
+  const targetTokens = [...tokenSet(target)].map(stem);
+  let hits = 0;
+  for (const term of queryTerms) {
+    if (targetTokens.some((t) => t === term || t.startsWith(term) || term.startsWith(t))) hits += 1;
+  }
+  return hits / queryTerms.length;
+}

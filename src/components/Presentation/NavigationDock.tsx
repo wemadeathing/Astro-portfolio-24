@@ -58,7 +58,7 @@ export const NavigationDock: React.FC = () => {
   return (
     <div className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 transition-all duration-300">
       <div className="relative">
-        <div className="flex items-center gap-1 border border-border/80 bg-background/95 px-2 py-2">
+        <div className="flex items-center gap-1 rounded-lg border border-border/80 bg-background/95 px-2 py-2">
           {sections.map((section) => (
             <div key={section.name} className="relative">
               <button
@@ -81,7 +81,7 @@ export const NavigationDock: React.FC = () => {
               </button>
 
               {section.hasSubmenu && showProjectsMenu && (
-                <div className="absolute bottom-full left-0 mb-2 w-[220px] overflow-hidden border border-border/80 bg-background shadow-2xl">
+                <div className="absolute bottom-full left-0 mb-2 w-[220px] overflow-hidden rounded-lg border border-border/80 bg-background shadow-2xl">
                   <div className="px-3 py-2 font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
                     Projects
                   </div>

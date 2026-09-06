@@ -1,209 +1,27 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence, MotionConfig } from 'framer-motion';
-import { ArrowUp, Check, Copy, Menu, Mic, StopCircle, X } from 'lucide-react';
+import { Check, Copy, Menu, X } from 'lucide-react';
 import ProjectCard from './ProjectCard';
 import ResourceCard from './ResourceCard';
 import BlogCard from './BlogCard';
 import IntakeCard, { type IntakeState } from './IntakeCard';
-import type { ToolTraceItem } from './ToolTrace';
+import ToolTrace, { type ToolTraceItem } from './ToolTrace';
 import ModeBadge from './ModeBadge';
 import { streamChat, fetchConversation, submitIntake, editIntakeField, resetConversation } from '../../lib/chatClient';
-import { QUOTE_FIELD_ORDER, QUOTE_FIELD_LABELS, CONTENT_FIELD_ORDER, CONTENT_FIELD_LABELS, isReadyToSubmit } from '../../lib/intake';
 
-function computeMissingFields(flow: 'quote' | 'content', fields: Record<string, string>): string[] {
-  const order = flow === 'content' ? CONTENT_FIELD_ORDER : QUOTE_FIELD_ORDER;
-  const labels = flow === 'content' ? CONTENT_FIELD_LABELS : QUOTE_FIELD_LABELS;
-  return order.filter((k) => !fields[k]).map((k) => labels[k as keyof typeof labels]);
-}
-
-// Splits into "word + trailing whitespace" chunks so each one can mount as
-// its own animated span. Index-as-key is safe here specifically because
-// content only ever grows during streaming: earlier chunks never change
-// once a word is followed by whitespace, so only the last (still-growing)
-// chunk updates in place per render — the reveal animation fires once per
-// completed word, not once per character.
-function splitIntoWordChunks(content: string): string[] {
-  return content.match(/\S+\s*/g) ?? [];
-}
-
-// The "you're recording" affordance for voice dictation — an audio-level-
-// meter metaphor (bars, not a generic pulse) so it's unambiguous at a
-// glance that the mic is live, not just highlighted. Bars are decorative
-// (no real audio analysis), just staggered so they don't move in lockstep.
-const RECORDING_BAR_DELAYS_MS = [0, 150, 300, 450];
-const RECORDING_BAR_HEIGHTS = ['40%', '100%', '60%', '80%'];
-
-function DictationButton({ isListening, onClick }: { isListening: boolean; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-label={isListening ? 'Stop dictation' : 'Start dictation'}
-      // Idle state carries no border: it sits inside the composer, which is
-      // now the screen's one bordered element, and a box within that box read
-      // as a second competing control rather than a tool on the field. The
-      // recording state still gets a frame, where being unmistakable matters.
-      className={`p-2 transition-all ${
-        isListening
-          ? 'border border-primary/60 bg-primary/10 text-primary'
-          : 'text-muted-foreground hover:text-foreground'
-      }`}
-    >
-      {isListening ? (
-        <span className="flex h-[18px] w-[18px] items-end justify-center gap-[2px]" aria-hidden="true">
-          {RECORDING_BAR_DELAYS_MS.map((delay, i) => (
-            <span
-              key={delay}
-              className="recording-bar w-[3px] rounded-[1px] bg-primary"
-              style={{ height: RECORDING_BAR_HEIGHTS[i], animationDelay: `${delay}ms` }}
-            />
-          ))}
-        </span>
-      ) : (
-        <Mic size={18} />
-      )}
-    </button>
-  );
-}
-
-interface ProjectData {
-  title: string;
-  description: string;
-  image: string;
-  tags: string[];
-  slug: string;
-}
-
-interface ResourceData {
-  title: string;
-  description: string;
-  url: string;
-  type: string;
-  tags: string[];
-  image?: string;
-  siteName?: string;
-}
-
-interface BlogData {
-  title: string;
-  description: string;
-  slug: string;
-  pubDate: string;
-  tags: string[];
-}
-
-interface Message {
-  id: string;
-  role: 'user' | 'assistant';
-  content: string;
-  /** True only while this message is actively receiving 'delta' events —
-   * drives the per-word reveal animation. Cleared on 'final' (or error), so
-   * completed/rehydrated messages render as plain static text with no
-   * per-word span overhead. */
-  streaming?: boolean;
-  mode?: 'hiring' | 'sop';
-  tools?: ToolTraceItem[];
-  projects?: ProjectData[];
-  resources?: ResourceData[];
-  blogs?: BlogData[];
-  chips?: { label: string; href: string; kind?: string }[];
-  followUps?: string[];
-  intake?: IntakeState;
-}
-
-interface LatestPostData {
-  slug: string;
-  data: {
-    title: string;
-    description: string;
-    pubDate: Date;
-    tags: string[];
-  };
-}
-
-interface ChatInterfaceProps {
-  latestPost?: LatestPostData;
-  projects?: ProjectData[];
-  /** When true, Layout provides Navbar + backdrop; skip duplicate chrome here. */
-  globalSiteNav?: boolean;
-  /** Overrides the `?view=` URL param — use for a page dedicated to one mode. */
-  forceView?: 'chat' | 'portfolio';
-  /** Calendly (or similar) booking link, offered as an escape hatch from the intake flow. */
-  calendlyUrl?: string;
-}
-
-const STARTER_CHIPS: { label: string; chipId: string; prompt: string }[] = [
-  { label: 'Website', chipId: 'website', prompt: "I'm looking to get a website built." },
-  { label: 'Brand Identity', chipId: 'brand_identity', prompt: 'I need help with my brand identity.' },
-  { label: 'Product / UX Design', chipId: 'product_ux_design', prompt: 'I have a product or UX design project.' },
-  { label: 'App Development', chipId: 'app_development', prompt: 'I want to build an app.' },
-  { label: 'Not sure yet', chipId: 'not_sure', prompt: "I'm not sure what I need yet — can you help me figure it out?" },
-];
-
-// The "ask" half of the entry had no clickable affordance at all — the
-// headline invited a question and then left a blank box to compose it in,
-// while the only chips on screen jumped straight into project intake. These
-// send as ordinary messages (no chipId), so the router classifies them
-// normally. Ordered by how people actually behave on a portfolio: the first
-// one returns project cards, which is scannable in a few seconds and asks
-// nothing of a visitor who isn't ready to type yet.
-const ASK_STARTERS: { label: string; prompt: string }[] = [
-  { label: 'Show me your best work', prompt: 'Show me your best work.' },
-  { label: 'Worked in fintech?', prompt: 'Have you worked with fintech or financial services clients?' },
-  { label: 'Available for work?', prompt: 'Are you available for work right now?' },
-];
-
-// Web Speech API isn't in the standard lib.dom types yet, so this is typed loosely.
-type SpeechRecognitionLike = {
-  continuous: boolean;
-  interimResults: boolean;
-  lang: string;
-  onresult: ((event: any) => void) | null;
-  onerror: ((event: any) => void) | null;
-  onend: (() => void) | null;
-  start: () => void;
-  stop: () => void;
-};
-
-// ─── Animation config ────────────────────────────────────────────────────────
-
-const ease = [0.25, 0, 0, 1] as const;
-
-const heroContainer = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.1, delayChildren: 0.05 },
-  },
-};
-
-const heroItem = {
-  hidden: { opacity: 0, y: 16 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease } },
-};
-
-const sectionReveal = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease } },
-};
-
-const cardGrid = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.07, delayChildren: 0.1 },
-  },
-};
-
-const cardItem = {
-  hidden: { opacity: 0, y: 12 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease } },
-};
-
-const messageEnter = {
-  hidden: { opacity: 0, y: 10, scale: 0.985 },
-  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.32, ease } },
-};
-
-// ─────────────────────────────────────────────────────────────────────────────
+import { isReadyToSubmit } from '../../../shared/intake';
+import ComposerControls from './ComposerControls';
+import { computeMissingFields, splitIntoWordChunks } from './messageFormat';
+import { STARTER_CHIPS, ASK_STARTERS } from './starters';
+import { ease, heroContainer, heroItem, sectionReveal, cardGrid, cardItem, messageEnter } from './motion';
+import type {
+  ProjectData,
+  ResourceData,
+  BlogData,
+  Message,
+  ChatInterfaceProps,
+  SpeechRecognitionLike,
+} from './types';
 
 export default function ChatInterface({ latestPost, projects = [], globalSiteNav = false, forceView, calendlyUrl }: ChatInterfaceProps) {
   const [messages, setMessages] = useState<Message[]>([]);
@@ -654,6 +472,11 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
           continue;
         }
 
+        if (ev.type === 'thinking') {
+          applyAssistantPatch({ thinking: ev.active });
+          continue;
+        }
+
         if (ev.type === 'tool_start') {
           setMessages((curr) =>
             curr.map((m) =>
@@ -705,6 +528,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
           const finalPatch: Partial<Message> = {
             content: typeof parsed.reply === 'string' ? parsed.reply : '',
             streaming: false,
+            thinking: false,
             mode: parsed.mode,
             projects: Array.isArray(parsed.projects) ? parsed.projects : undefined,
             resources: Array.isArray(parsed.resources) ? parsed.resources : undefined,
@@ -725,7 +549,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
       if (e?.name === 'AbortError') {
         if (revealTimer) clearTimeout(revealTimer);
         if (assistantId) {
-          setMessages((curr) => curr.map((m) => (m.id === assistantId ? { ...m, streaming: false } : m)));
+          setMessages((curr) => curr.map((m) => (m.id === assistantId ? { ...m, streaming: false, thinking: false } : m)));
         }
         return;
       }
@@ -734,7 +558,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
         setMessages((curr) =>
           curr.map((m) =>
             m.id === assistantId
-              ? { ...m, content: 'Sorry, I had trouble connecting. You can retry.', streaming: false }
+              ? { ...m, content: 'Sorry, I had trouble connecting. You can retry.', streaming: false, thinking: false }
               : m
           )
         );
@@ -917,7 +741,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
           <div className="sticky top-0 z-40 pt-3">
             <div className="shell-wrap relative">
               <nav
-                className={`flex min-h-[63px] items-center justify-between border px-4 py-3 transition-all duration-300 ${
+                className={`flex min-h-[63px] items-center justify-between rounded-lg border px-4 py-3 transition-all duration-300 ${
                   isScrolled ? 'border-border/80 bg-background' : 'border-border/80 bg-background'
                 }`}
               >
@@ -955,7 +779,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                 <div
                   ref={menuPanelRef}
                   className={[
-                    'origin-top-right border border-border/80 bg-background',
+                    'origin-top-right rounded-lg border border-border/80 bg-background',
                     'w-full max-w-[560px] overflow-hidden',
                     'transition-all duration-300 ease-out',
                     isMenuOpen ? 'opacity-100 translate-y-0 scale-100' : 'opacity-0 -translate-y-2 scale-[0.98]',
@@ -1069,41 +893,19 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                     <motion.form
                       variants={heroItem}
                       onSubmit={handleSubmit}
-                      className="relative mt-9 flex w-full max-w-[680px] items-center gap-2 border border-foreground/20 bg-background px-2 transition-colors focus-within:border-primary/60 focus-within:ring-4 focus-within:ring-primary/15"
+                      className="relative mt-9 flex w-full max-w-[680px] items-center gap-2 rounded-lg border border-foreground/20 bg-background px-2 transition-colors focus-within:border-primary/60 focus-within:ring-4 focus-within:ring-primary/15"
                     >
-                      <input
-                        type="text"
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        ref={inputRef}
-                        placeholder={isListening ? 'Listening…' : 'Ask me about my projects, skills, or experience...'}
-                        className="w-full bg-transparent py-3.5 pl-4 pr-14 text-base outline-none transition-all placeholder:text-muted-foreground/90 placeholder:font-normal md:py-4 md:pl-5"
-                        disabled={isLoading}
+                      <ComposerControls
+                        variant="intro"
+                        input={input}
+                        onInputChange={setInput}
+                        inputRef={inputRef}
+                        isLoading={isLoading}
+                        isListening={isListening}
+                        voiceSupported={voiceSupported}
+                        onToggleListening={toggleListening}
+                        onStop={stopRequest}
                       />
-                      <div className="absolute inset-y-0 right-2 flex items-center gap-1">
-                        {voiceSupported && !isLoading && (
-                          <DictationButton isListening={isListening} onClick={toggleListening} />
-                        )}
-                        {isLoading ? (
-                          <button
-                            type="button"
-                            onClick={stopRequest}
-                            className="border border-border/80 p-2 text-foreground transition-all hover:border-primary/25"
-                            aria-label="Stop"
-                          >
-                            <StopCircle size={20} />
-                          </button>
-                        ) : (
-                          <button
-                            type="submit"
-                            disabled={!input.trim() || isLoading}
-                            className="bg-primary p-2 text-primary-foreground transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
-                            aria-label="Send"
-                          >
-                            <ArrowUp size={20} />
-                          </button>
-                        )}
-                      </div>
                     </motion.form>
 
                     {/* Suggestions sit UNDER the composer and carry no border,
@@ -1277,7 +1079,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                         Currently available for project work. If you are building an AI-powered product, or need a website or brand that earns trust, I would love to hear about it.
                       </p>
                       <div className="mt-6 flex flex-wrap items-center gap-3">
-                        <a href="/contact" className="btn-stripe min-h-[48px] px-8">
+                        <a href="/contact" className="btn-stripe min-h-[44px] px-8">
                           Get in touch
                         </a>
                         <a
@@ -1357,7 +1159,20 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                       <div
                         className={`relative group ${msg.role === 'user' ? 'max-w-[560px]' : 'max-w-[660px]'} text-foreground`}
                       >
-                        {msg.role === 'assistant' && msg.id === typingMessageId && !msg.content ? (
+                        {/* Agent progress. ToolTrace self-hides when there
+                            is nothing to report, and stands in for the
+                            bouncing-dots placeholder whenever it can say
+                            something more specific than "working". */}
+                        {msg.role === 'assistant' && (msg.thinking || (msg.tools?.length ?? 0) > 0) && (
+                          <div className="mb-2">
+                            <ToolTrace tools={msg.tools ?? []} thinking={msg.thinking} />
+                          </div>
+                        )}
+                        {msg.role === 'assistant' &&
+                        msg.id === typingMessageId &&
+                        !msg.content &&
+                        !msg.thinking &&
+                        (msg.tools?.length ?? 0) === 0 ? (
                           <div className="flex items-center gap-2 px-1 py-2" role="status" aria-live="polite">
                             <span className="sr-only">Assistant is typing a response...</span>
                             <div className="h-2 w-2 bg-foreground/50 animate-bounce" aria-hidden="true" />
@@ -1375,32 +1190,53 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                                 to ~81) without also narrowing the project
                                 cards, which share that wrapper and want the
                                 extra width. */}
-                            <p className={`whitespace-pre-wrap text-[15px] leading-[1.75] max-w-[600px] text-foreground/92 ${
-                              msg.role === 'user' ? 'text-right' : ''
-                            }`}>
-                              {msg.role === 'assistant' && msg.streaming
-                                ? splitIntoWordChunks(msg.content).map((chunk, i) => (
-                                    <span key={i} className="animate-stream-word">
-                                      {chunk}
-                                    </span>
-                                  ))
-                                : msg.content}
-                            </p>
-                            {msg.role === 'assistant' && msg.content && (
-                              <button
-                                type="button"
-                                onClick={() => copyToClipboard(msg.content, msg.id)}
-                                className="absolute -top-1 right-0 border border-border/80 bg-background p-2 opacity-40 transition-all hover:border-primary/25 hover:opacity-100 focus-visible:opacity-100 group-hover:opacity-100"
-                                aria-label="Copy response"
-                                title="Copy to clipboard"
-                              >
-                                {copiedId === msg.id ? (
-                                  <Check size={14} className="text-green-600" />
-                                ) : (
-                                  <Copy size={14} className="text-muted-foreground" />
-                                )}
-                              </button>
-                            )}
+                            {/* The copy button anchors to THIS box, not the
+                                outer wrapper. Two reasons it has to: the
+                                wrapper is 660px (project cards want that
+                                width) while the text measure is 600px, so
+                                `right-0` on the wrapper parked the button ~60px
+                                clear of the text it belongs to; and the
+                                wrapper's top is now the tool-trace row, so
+                                `-top-1` floated it up beside "1 STEP" instead
+                                of the first line of the answer. Anchoring to
+                                the paragraph keeps it correct however many
+                                rows appear above. */}
+                            <div className="relative max-w-[600px]">
+                              {/* pr-10 reserves the gutter the copy button sits
+                                  in. The button is absolutely positioned at
+                                  right-0 of a box that shrinks to fit its
+                                  content, so on a short reply "right-0" lands
+                                  exactly on the last word rather than out in
+                                  open space — the padding is part of the box,
+                                  so it reserves that room whether the text is
+                                  one line or twenty. */}
+                              <p className={`whitespace-pre-wrap text-[15px] leading-[1.75] text-foreground/92 ${
+                                msg.role === 'user' ? 'text-right' : 'pr-10'
+                              }`}>
+                                {msg.role === 'assistant' && msg.streaming
+                                  ? splitIntoWordChunks(msg.content).map((chunk, i) => (
+                                      <span key={i} className="animate-stream-word">
+                                        {chunk}
+                                      </span>
+                                    ))
+                                  : msg.content}
+                              </p>
+                              {msg.role === 'assistant' && msg.content && (
+                                <button
+                                  type="button"
+                                  onClick={() => copyToClipboard(msg.content, msg.id)}
+                                  className="absolute -top-1 right-0 border border-border/80 bg-background p-2 opacity-40 transition-all hover:border-primary/25 hover:opacity-100 focus-visible:opacity-100 group-hover:opacity-100"
+                                  aria-label="Copy response"
+                                  title="Copy to clipboard"
+                                >
+                                  {copiedId === msg.id ? (
+                                    <Check size={14} className="text-green-600" />
+                                  ) : (
+                                    <Copy size={14} className="text-muted-foreground" />
+                                  )}
+                                </button>
+                              )}
+                            </div>
                           </>
                         )}
                       </div>
@@ -1411,7 +1247,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                         <button
                           type="button"
                           onClick={retryLast}
-                          className="border border-border/80 px-3 py-1.5 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:border-primary/25 hover:text-foreground"
+                          className="border border-border/80 px-3 py-1 font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:border-primary/25 hover:text-foreground"
                         >
                           Retry
                         </button>
@@ -1430,7 +1266,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                         </div>
                         <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory">
                           {msg.projects.map((project) => (
-                            <div key={project.slug} className="min-w-[220px] sm:min-w-[240px] md:min-w-[260px] snap-start">
+                            <div key={project.slug} className="w-[220px] flex-shrink-0 sm:w-[240px] md:w-[260px] snap-start">
                               <ProjectCard {...project} />
                             </div>
                           ))}
@@ -1446,7 +1282,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                         </div>
                         <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory">
                           {msg.resources.map((resource) => (
-                            <div key={resource.url} className="min-w-[220px] sm:min-w-[240px] md:min-w-[260px] snap-start">
+                            <div key={resource.url} className="w-[220px] flex-shrink-0 sm:w-[240px] md:w-[260px] snap-start">
                               <ResourceCard {...resource} />
                             </div>
                           ))}
@@ -1462,7 +1298,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                         </div>
                         <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory">
                           {msg.blogs.map((blog) => (
-                            <div key={blog.slug} className="min-w-[220px] sm:min-w-[240px] md:min-w-[260px] snap-start">
+                            <div key={blog.slug} className="w-[220px] flex-shrink-0 sm:w-[240px] md:w-[260px] snap-start">
                               <BlogCard {...blog} />
                             </div>
                           ))}
@@ -1477,7 +1313,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                             <a
                               key={`${chip.label}-${chip.href}`}
                               href={chip.href}
-                              className="border border-border/80 px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-primary/25 hover:text-foreground md:text-sm"
+                              className="rounded-md border border-border/80 px-3 py-1 text-xs text-muted-foreground transition-colors hover:border-primary/25 hover:text-foreground md:text-sm"
                             >
                               {chip.label}
                             </a>
@@ -1513,7 +1349,7 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
                                   inputRef.current?.parentElement?.querySelector<HTMLButtonElement>('button[type="submit"]')?.click();
                                 }, 100);
                               }}
-                              className="inline-flex items-center border border-border/80 px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:border-primary/25 hover:text-foreground"
+                              className="inline-flex items-center border border-border/80 px-3 py-1 text-sm text-muted-foreground transition-colors hover:border-primary/25 hover:text-foreground"
                             >
                               {followUp}
                             </button>
@@ -1552,40 +1388,18 @@ export default function ChatInterface({ latestPost, projects = [], globalSiteNav
               {/* Same border weight as the intro composer — it's the same
                   control, and the two states shouldn't disagree about how
                   prominent the page's primary input is. */}
-              <form onSubmit={handleSubmit} className="relative flex items-center gap-2 border border-foreground/20 bg-background px-2 transition-colors focus-within:border-primary/60 focus-within:ring-4 focus-within:ring-primary/15">
-                <input
-                  type="text"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  ref={inputRef}
-                  placeholder={isListening ? 'Listening…' : 'Ask me about my projects, skills, or experience...'}
-                  className="w-full bg-transparent py-4 md:py-4 pl-4 md:pl-5 pr-14 text-base outline-none transition-all placeholder:text-muted-foreground/90 placeholder:font-normal"
-                  disabled={isLoading}
+              <form onSubmit={handleSubmit} className="relative flex items-center gap-2 rounded-lg border border-foreground/20 bg-background px-2 transition-colors focus-within:border-primary/60 focus-within:ring-4 focus-within:ring-primary/15">
+                <ComposerControls
+                  variant="bar"
+                  input={input}
+                  onInputChange={setInput}
+                  inputRef={inputRef}
+                  isLoading={isLoading}
+                  isListening={isListening}
+                  voiceSupported={voiceSupported}
+                  onToggleListening={toggleListening}
+                  onStop={stopRequest}
                 />
-                <div className="absolute inset-y-0 right-2 flex items-center gap-1">
-                  {voiceSupported && !isLoading && (
-                    <DictationButton isListening={isListening} onClick={toggleListening} />
-                  )}
-                  {isLoading ? (
-                    <button
-                      type="button"
-                      onClick={stopRequest}
-                      className="border border-border/80 p-2 text-foreground transition-all hover:border-primary/25"
-                      aria-label="Stop"
-                    >
-                      <StopCircle size={20} />
-                    </button>
-                  ) : (
-                    <button
-                      type="submit"
-                      disabled={!input.trim() || isLoading}
-                      className="border border-border/80 bg-primary p-2 text-primary-foreground transition-all hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
-                      aria-label="Send"
-                    >
-                      <ArrowUp size={20} />
-                    </button>
-                  )}
-                </div>
               </form>
             </div>
           </motion.div>

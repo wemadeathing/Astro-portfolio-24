@@ -90,7 +90,7 @@ const typeIconPaths = (t: unknown) => {
   data-type={normalizeType(type)}
   data-tags={normalizedTags.join(',')}
   style={`animation-delay: ${animationDelay}`}
-  class="group flex h-full flex-col border border-border/80 transition-colors hover:border-primary/35 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+  class="group flex h-full flex-col overflow-hidden rounded-lg border border-border/80 transition-colors hover:border-primary/35 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
 >
   <div class="relative aspect-[16/10] w-full overflow-hidden bg-secondary/20">
     {image ? (
@@ -123,7 +123,7 @@ const typeIconPaths = (t: unknown) => {
       </div>
     )}
 
-    <div class="absolute left-2.5 top-2.5 inline-flex items-center border border-border/80 bg-background/88 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+    <div class="absolute left-2.5 top-2.5 inline-flex items-center rounded-md border border-border/80 bg-background/88 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
       {typeLabel(type)}
     </div>
   </div>

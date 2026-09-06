@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function KotaBetaBanner() {
   return (
-    <div className="not-prose my-14 border border-border/90 bg-card/15 p-6 sm:p-8 lg:p-10">
+    <div className="not-prose my-14 rounded-lg border border-border/90 bg-card/15 p-6 sm:p-8 lg:p-10">
       <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex-1">
           <div className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">

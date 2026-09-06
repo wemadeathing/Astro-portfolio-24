@@ -27,7 +27,6 @@ async function runTurn(sessionId: string, message: string, chipId?: string): Pro
   let buffer = '';
   let finalPayload: Record<string, unknown> = {};
   const toolsCalled: string[] = [];
-  const toolLabelById = new Map<string, string>();
 
   while (true) {
     const { value, done } = await reader.read();
@@ -46,30 +45,41 @@ async function runTurn(sessionId: string, message: string, chipId?: string): Pro
       }
       if (!event || !data) continue;
       const parsed = JSON.parse(data);
-      if (event === 'tool_start') toolLabelById.set(parsed.id, parsed.label);
-      if (event === 'tool_end') {
-        // We don't get the tool name directly from tool_end; approximate
-        // via debug trace lookup is overkill for this harness — instead
-        // infer from the label text set at tool_start (good enough for
-        // eval assertions, which check "was some knowledge/search/save
-        // tool used", not exact tool identity).
-      }
+      if (event === 'tool_start' && parsed.name) toolsCalled.push(String(parsed.name));
       if (event === 'final') finalPayload = parsed;
     }
   }
 
-  // Tool identity: re-fetch via /debug/trace using the conversationId isn't
-  // wired to turnId here without extra plumbing; instead this harness
-  // treats any tool_start firing as evidence *a* tool was called, and
-  // cases only assert on tool categories broad enough for that to be a
-  // meaningful check (see cases.ts comments for the ones that need exact
-  // identity — those are checked manually, not automated, for now).
-  for (const label of toolLabelById.values()) toolsCalled.push(label);
+  // Intake state comes from the SERVER, not from the `intake` UI payload.
+  // The payload is only populated once propose_submission has fired (see
+  // routes/chat.ts — one deliberate summary, not a live accumulator), so
+  // asserting on it silently made every "was this field captured?" case
+  // untestable until the very last turn of a conversation. What we
+  // actually want to know is whether save_intake_fields persisted it.
+  let intake: TurnResult['intake'];
+  try {
+    const stateRes = await fetch(`${BASE_URL}/session/${sessionId}/conversation`, {
+      headers: { 'X-Session-Id': sessionId },
+    });
+    if (stateRes.ok) {
+      const { conversation } = (await stateRes.json()) as {
+        conversation: { flow?: string; quoteFields?: Record<string, string>; contentFields?: Record<string, string>; readyToSubmit?: boolean } | null;
+      };
+      if (conversation) {
+        intake = {
+          fields: (conversation.flow === 'content' ? conversation.contentFields : conversation.quoteFields) ?? {},
+          readyToSubmit: Boolean(conversation.readyToSubmit),
+        };
+      }
+    }
+  } catch {
+    // Leave `intake` undefined — the assertion will report it as missing.
+  }
 
   return {
     reply: String(finalPayload.reply ?? ''),
     mode: String(finalPayload.mode ?? ''),
-    intake: finalPayload.intake as TurnResult['intake'],
+    intake,
     toolsCalled,
   };
 }
@@ -113,13 +123,24 @@ async function main() {
         if (!fields[f]) problems.push(`expected intake field "${f}" to be present`);
       }
     }
-    // toolCalledAtLeastOnce / toolNotCalledOnLastTurn use label text
-    // heuristically (see runTurn note) — approximate, not exact.
+    // Exact tool identity, off the `name` field the server now puts on every
+    // tool_start event. This previously matched the human-readable progress
+    // LABEL against the first word of the tool name — which meant
+    // `search_knowledge` was checked as "does any label contain 'search'",
+    // and its label is `Looking up "…"`. The assertion could therefore
+    // never pass on its own merits; it only ever went green by accident
+    // when the model also happened to call search_projects ("Searching
+    // projects for…"). Three cases were failing for that reason alone.
     if (e.toolCalledAtLeastOnce) {
-      const labelsText = allToolsCalled.join(' ').toLowerCase();
       for (const t of e.toolCalledAtLeastOnce) {
-        const keyword = t.replace(/_/g, ' ').split(' ')[0]; // crude but workable for this small tool set
-        if (!labelsText.includes(keyword)) problems.push(`expected a tool call resembling "${t}" (no matching progress label seen)`);
+        if (!allToolsCalled.includes(t)) {
+          problems.push(`expected tool "${t}" to be called (called: ${allToolsCalled.join(', ') || 'none'})`);
+        }
+      }
+    }
+    if (e.toolNotCalledOnLastTurn) {
+      for (const t of e.toolNotCalledOnLastTurn) {
+        if (last!.toolsCalled.includes(t)) problems.push(`tool "${t}" should not have been called on the last turn`);
       }
     }
 

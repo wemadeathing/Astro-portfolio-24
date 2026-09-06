@@ -14,7 +14,7 @@ export default function ProjectCard({ title, description, image, tags, slug }: P
   return (
     <a
       href={`/projects/${slug}`}
-      className="group block h-full border border-border/80 transition-colors hover:border-primary/35 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
+      className="group block h-full overflow-hidden rounded-lg border border-border/80 transition-colors hover:border-primary/35 focus:outline-none focus-visible:ring-4 focus-visible:ring-primary/20"
     >
       {/* Image */}
       <div className="relative aspect-[16/10] w-full overflow-hidden bg-muted/20">
@@ -40,13 +40,13 @@ export default function ProjectCard({ title, description, image, tags, slug }: P
           {visibleTags.map((tag) => (
             <span
               key={tag}
-              className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground"
+              className="min-w-0 flex-1 truncate text-xs text-muted-foreground"
             >
               {tag}
             </span>
           ))}
           {tags.length > 2 && (
-            <span className="font-mono text-xs text-muted-foreground">+{tags.length - 2}</span>
+            <span className="shrink-0 text-xs text-muted-foreground">+{tags.length - 2}</span>
           )}
           <svg
             className="ml-auto h-3 w-3 -translate-x-1 text-primary opacity-0 transition-all group-hover:translate-x-0 group-hover:opacity-100"
