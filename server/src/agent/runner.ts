@@ -125,8 +125,11 @@ async function* streamProse(
     held = held.slice(safeToFlush.length);
   }
 
-  const finalText =
-    sanitizeModelText(full).trim() || "Could you share a bit more detail on what you're looking for?";
+  // Deliberately NOT defaulted to a canned line here: an empty round is a
+  // signal the caller acts on (forcedProse retries on the other model), and
+  // substituting text at this level would hide it. The canned reply is
+  // forcedProse's last resort once both models have come up empty.
+  const finalText = sanitizeModelText(full).trim();
 
   if (!denylistTripped && held && !containsForbiddenOutput(held) && !containsToolCallMarkup(held)) {
     yield { type: 'delta', text: held };
@@ -176,8 +179,10 @@ export async function* runAgent(
   ): AsyncGenerator<{ type: 'delta'; text: string } | { type: 'thinking'; active: boolean }, { finalText: string; model: string }> {
     let finalText = '';
     let usedModel = model;
-    try {
-      for await (const ev of streamProse(model, messages, ctx.signal, modelTuning(mode.model, model))) {
+
+    type ProseEvent = { type: 'delta'; text: string } | { type: 'thinking'; active: boolean };
+    async function* attempt(m: string): AsyncGenerator<ProseEvent> {
+      for await (const ev of streamProse(m, messages, ctx.signal, modelTuning(mode.model, m))) {
         if (ev.type === 'delta') {
           yield { type: 'delta', text: ev.text };
         } else if (ev.type === 'thinking') {
@@ -188,24 +193,49 @@ export async function* runAgent(
           totalCompletionTokens += ev.completionTokens;
         }
       }
+    }
+
+    /** The configured pair has exactly two members; this is the one we are not on. */
+    const otherModel = (m: string) => (m === mode.model.primary ? mode.model.fallback : mode.model.primary);
+
+    try {
+      yield* attempt(model);
     } catch (err) {
       if (ctx.signal.aborted) throw err; // see the loop's catch below
-      if (model !== mode.model.fallback && mode.model.fallback) {
-        usedModel = mode.model.fallback;
-        for await (const ev of streamProse(mode.model.fallback, messages, ctx.signal, modelTuning(mode.model, mode.model.fallback))) {
-          if (ev.type === 'delta') yield { type: 'delta', text: ev.text };
-          else if (ev.type === 'thinking') yield ev;
-          else {
-            finalText = ev.text;
-            totalPromptTokens += ev.promptTokens;
-            totalCompletionTokens += ev.completionTokens;
-          }
-        }
+      const other = otherModel(model);
+      if (other && other !== model) {
+        usedModel = other;
+        yield* attempt(other);
       } else {
         throw err;
       }
     }
-    return { finalText, model: usedModel };
+
+    // An empty round is a FAILURE, not an answer, and it does not throw — so
+    // the catch above never sees it. Measured 2026-09-06: gemini-3.7-flash
+    // returned zero text on 7 of 8 forced-prose rounds, emitting a tool_calls
+    // block despite the request carrying no tools at all (streamProse omits
+    // the param, and tool_choice:'none' is not accepted without it, so there
+    // is no stronger lever to pull). Retrying on the other model costs one
+    // call on the round that exists specifically to guarantee an answer, and
+    // nothing has been shown to the user yet — an empty round emits no deltas
+    // — so the retry is invisible rather than a visible correction.
+    if (!finalText && !ctx.signal.aborted) {
+      const other = otherModel(usedModel);
+      if (other && other !== usedModel) {
+        try {
+          usedModel = other;
+          yield* attempt(other);
+        } catch {
+          // Both models are now spent; the canned reply below is all that is left.
+        }
+      }
+    }
+
+    return {
+      finalText: finalText || "Could you share a bit more detail on what you're looking for?",
+      model: usedModel,
+    };
   }
 
   for (let i = 0; i < mode.maxIterations; i++) {

@@ -25,18 +25,38 @@ import { setMode } from '../tools/mode';
 //   deepseek-v4-flash              2701ms /  2922ms  20466ms / 30377ms   $0.000243
 //   gemini-3.7-flash               2708ms /  3424ms   6930ms /  7282ms   $0.001895
 //
-// glm is primary: best p50 on both, and cheapest once pinned. It is pinned
-// to Together — see ModelSpec.primaryProvider — because unpinned routing
-// across Z.AI/Together produced 18.6s and 35.2s single-call outliers.
+// glm is primary: best p50 on both. The fallback is gemini-3.7-flash, not the
+// cheaper deepseek: it is the only candidate measured that never exceeded
+// ~7.3s on EITHER call type, whereas deepseek-v4-flash-0731's generation tail
+// hit 43s on one of five — which alone exceeds the whole 25s turn budget, on
+// the code path that only runs when something has already gone wrong. It
+// costs ~9x per call, but a fallback fires rarely enough that predictability
+// is worth far more than unit price here. Cheapness is the primary's job; the
+// fallback's job is to not fail.
 //
-// The fallback is gemini-3.7-flash, not the cheaper deepseek: it is the only
-// candidate measured that never exceeded ~7.3s on EITHER call type, whereas
-// deepseek-v4-flash-0731's generation tail hit 43s on one of five — which
-// alone exceeds the whole 25s turn budget, on the code path that only runs
-// when something has already gone wrong. It costs ~9x per call, but a
-// fallback fires rarely enough that predictability is worth far more than
-// unit price here. Cheapness is the primary's job; the fallback's job is to
-// not fail.
+// --- Re-measured 2026-09-06. Both models kept; two things around them moved.
+//
+// 1. The pin moved from Together to Z.AI. Together now hard-429s EVERY
+//    request on this account — 4/4 with SDK retries off, in 424-748ms. With
+//    the SDK's default two retries each of those became 5-8s of backoff
+//    before surfacing, inside a 25s budget, on a loop that makes up to four
+//    calls. It also spent a third of live turns failing outright, and it is
+//    what exposed the retry-loop DoS since fixed in runner.ts. Re-measured
+//    tool-selection p50: Z.AI 5017ms, unpinned 4816ms (routing Z.AI /
+//    SiliconFlow), Together unavailable. Z.AI over unpinned keeps the
+//    original intent — one deterministic provider, allow_fallbacks off, so a
+//    dead provider yields a fast clean error rather than silent re-routing.
+//    The 859ms Together figure above is historical; nothing serves that now.
+//
+// 2. gemini-3.7-flash cannot be trusted to produce prose on the forced-final
+//    round: 7 of 8 samples returned ZERO text, emitting a tool_calls block
+//    with no tools in the request (finish_reason 'tool_calls', 28 completion
+//    tokens). streamProse omits the `tools` param entirely and the API will
+//    not accept tool_choice:'none' without it, so omission is the only lever
+//    and Gemini ignores it. That is handled in runner.ts rather than by
+//    swapping the model — forcedProse now retries an empty round on the other
+//    model before falling through to the canned reply. Worth knowing if the
+//    fallback ever becomes the primary, where it would fire every turn.
 //
 // Stale exclusion lifted: deepseek-v4-flash-0731 was previously ruled out of
 // both modes for "measured 2.9-14s latency variance" (plan §Models). It is
@@ -44,7 +64,7 @@ import { setMode } from '../tools/mode';
 // so this is deliberate, not oversight.
 const AGENT_MODEL = {
   primary: 'z-ai/glm-5.3-flash',
-  primaryProvider: 'Together',
+  primaryProvider: 'Z.AI',
   fallback: 'google/gemini-3.7-flash',
   reasoningEffort: 'minimal',
   maxTokens: 2048,

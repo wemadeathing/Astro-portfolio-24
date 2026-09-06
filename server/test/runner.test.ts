@@ -144,3 +144,66 @@ test('a first call that fails then succeeds on the fallback stays on the fallbac
     stub.restore();
   }
 });
+
+/** An async-iterable stand-in for the SDK's streaming response. */
+function proseStream(text: string) {
+  return (async function* () {
+    for (const piece of text.match(/[\s\S]{1,20}/g) ?? []) {
+      yield { choices: [{ delta: { content: piece } }] };
+    }
+    yield { choices: [{ delta: {}, finish_reason: 'stop' }], usage: { prompt_tokens: 10, completion_tokens: 5 } };
+  })();
+}
+
+/** What a model that answers a forced-prose round with a tool_calls block looks like. */
+function emptyStream() {
+  return (async function* () {
+    yield { choices: [{ delta: { content: '' }, finish_reason: 'tool_calls' }], usage: { prompt_tokens: 10, completion_tokens: 28 } };
+  })();
+}
+
+test('an empty forced-prose round retries on the other model instead of the canned reply', { timeout: 5000 }, async () => {
+  // The tool-selection rounds return prose-free dead ends so the loop reaches
+  // forcedProse; the primary then produces no text there, as gemini-3.7-flash
+  // does on 7 of 8 real samples.
+  const completions = openrouter.chat.completions as unknown as Record<string, unknown>;
+  const original = completions.create;
+  const models: string[] = [];
+  completions.create = async (body: { model: string; stream?: boolean }) => {
+    models.push(body.model + (body.stream ? ':prose' : ':select'));
+    if (!body.stream) {
+      return { choices: [{ message: { role: 'assistant', content: '', tool_calls: [] } }], usage: { prompt_tokens: 1, completion_tokens: 1 } };
+    }
+    return body.model === PRIMARY ? emptyStream() : proseStream('Here is the real answer about his design process, at length.');
+  };
+  try {
+    const controller = new AbortController();
+    const events = await drain(runAgent(mode(), [], 'hello', ctx(controller.signal)));
+    const done = events.find((e) => (e as { type: string }).type === 'done') as { text: string; model: string };
+    assert.ok(done, 'turn should complete');
+    assert.match(done.text, /the real answer/, 'must surface the fallback prose, not the canned line');
+    assert.doesNotMatch(done.text, /share a bit more detail/);
+    assert.equal(done.model, FALLBACK);
+    assert.ok(models.includes(PRIMARY + ':prose'), 'primary should have been tried first');
+    assert.ok(models.includes(FALLBACK + ':prose'), 'fallback should have been retried');
+  } finally {
+    completions.create = original;
+  }
+});
+
+test('the canned reply still stands when both models come up empty', { timeout: 5000 }, async () => {
+  const completions = openrouter.chat.completions as unknown as Record<string, unknown>;
+  const original = completions.create;
+  completions.create = async (body: { stream?: boolean }) =>
+    body.stream
+      ? emptyStream()
+      : { choices: [{ message: { role: 'assistant', content: '', tool_calls: [] } }], usage: { prompt_tokens: 1, completion_tokens: 1 } };
+  try {
+    const controller = new AbortController();
+    const events = await drain(runAgent(mode(), [], 'hello', ctx(controller.signal)));
+    const done = events.find((e) => (e as { type: string }).type === 'done') as { text: string };
+    assert.match(done.text, /share a bit more detail/);
+  } finally {
+    completions.create = original;
+  }
+});

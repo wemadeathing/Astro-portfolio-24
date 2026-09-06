@@ -15,7 +15,7 @@ brand
 - Positioning: "Product Designer + AI Builder", one person from brief to working product, speed with craft (App Store in 30 days, brand + site in 3 weeks).
 - Voice: plain, confident, specific. Proof over adjectives. No hype.
 - Voice bans: never the word "shipped"; no em dashes anywhere in copy.
-- Visual identity (existing, committed): dark-first theme, near-black background with light text, single primary accent used sparingly, Geist Mono uppercase kickers/labels with wide tracking, hairline borders (border/60-80), square corners, diagonal-stripe motifs (btn-stripe, frame-stripe), scroll-reveal entrances. The site already has a voice; case studies should deepen it, not replace it.
+- Visual identity (existing, committed): dark-first theme, near-black background with light text, single primary accent used sparingly, Geist Mono uppercase kickers/labels with wide tracking, hairline borders (border/60-80), softly rounded corners (--radius, 0.75rem; the site moved off square corners in 2026-09), diagonal-stripe motifs (btn-stripe, frame-stripe), scroll-reveal entrances. The site already has a voice; case studies should deepen it, not replace it.
 
 ## Strategic Principles
 - Every case study must work at two scroll speeds: images + captions alone tell the problem-solution story for skimmers; the narrative column rewards readers.
