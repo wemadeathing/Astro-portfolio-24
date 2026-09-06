@@ -189,6 +189,7 @@ export async function* runAgent(
         }
       }
     } catch (err) {
+      if (ctx.signal.aborted) throw err; // see the loop's catch below
       if (model !== mode.model.fallback && mode.model.fallback) {
         usedModel = mode.model.fallback;
         for await (const ev of streamProse(mode.model.fallback, messages, ctx.signal, modelTuning(mode.model, mode.model.fallback))) {
@@ -209,7 +210,17 @@ export async function* runAgent(
 
   for (let i = 0; i < mode.maxIterations; i++) {
     const isLastIteration = i === mode.maxIterations - 1;
-    const model = i === 0 ? mode.model.primary : lastModel;
+    // `lastModel`, NOT `i === 0 ? primary : lastModel`. The catch below
+    // switches to the fallback and replays the same iteration index, so
+    // hardcoding the primary on i === 0 made that replay re-pick the model
+    // that had just failed — and since the catch only rethrows once it is
+    // ALREADY on the fallback, the first tool-selection failure of a turn
+    // spun an unkillable retry loop: no throw, no yield, ~1.4M requests
+    // observed, each re-serialising the transcript, pinning the event loop
+    // at 99% CPU. One client disconnecting mid-turn took the whole process
+    // down with it, /health included. lastModel starts as the primary, so
+    // the intended "first call uses the primary" behaviour is unchanged.
+    const model = lastModel;
 
     if (isLastIteration) {
       const result = yield* forcedProse(model);
@@ -235,6 +246,10 @@ export async function* runAgent(
       );
       lastModel = model;
     } catch (err) {
+      // An aborted signal (turn budget blown, or the client hung up) is not
+      // a model problem and no other model can serve it — every retry would
+      // reject instantly on the same dead signal. Bail before the fallback.
+      if (ctx.signal.aborted) throw err;
       if (model !== mode.model.fallback && mode.model.fallback) {
         lastModel = mode.model.fallback;
         i -= 1; // retry this same iteration index with the fallback model
